@@ -1,5 +1,10 @@
 package ingsoft.util;
 
+import ingsoft.luoghi.Luogo;
+import ingsoft.luoghi.Visita;
+import ingsoft.persone.Configuratore;
+import ingsoft.persone.Fruitore;
+import ingsoft.persone.Persona;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,19 +12,18 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import ingsoft.luoghi.Luogo;
-import ingsoft.luoghi.Visita;
-import ingsoft.persone.Configuratore;
-import ingsoft.persone.Persona;
-
 public class DBUtils {
-    private String basePath = "./data/";
+    private final String basePath = "./V1/data/";
+
     private boolean hasToRefreshConfiguratori = true;
-    private ArrayList<Configuratore> configuratori = new ArrayList<Configuratore>();
+    private ArrayList<Configuratore> configuratori = new ArrayList<>();
+
+    private boolean hasToRefreshFruitori = true;
+    private ArrayList<Fruitore> fruitori = new ArrayList<>();
 
     private boolean hasToRefreshLuoghi = true;
-    private ArrayList<Luogo> luoghi = new ArrayList<Luogo>();
-    private ArrayList<Visita> visite = new ArrayList<Visita>();
+    private ArrayList<Luogo> luoghi = new ArrayList<>();
+    private ArrayList<Visita> visite = new ArrayList<>();
 
     public ArrayList<Configuratore> getDBconfiguratori(){
         if(hasToRefreshConfiguratori){
@@ -28,10 +32,23 @@ public class DBUtils {
         return this.configuratori;
     }
 
+    public ArrayList<Configuratore> getDBfruitori(){
+        if(hasToRefreshFruitori){
+            refreshFruitori();
+        }
+        return this.configuratori;
+    }
+
     private void refreshConfiguratori(){
         String configuratoriFilePath = "configuratori";
         configuratori.clear();
         this.configuratori = getPersone(configuratoriFilePath, Configuratore.class);
+    }
+
+    private void refreshFruitori(){
+        String fruitoriFilePath = "fruitori";
+        fruitori.clear();
+        this.fruitori = getPersone(fruitoriFilePath, Fruitore.class);
     }
 
     public boolean addConfiguratoreToDB(Configuratore toAdd) {
@@ -48,9 +65,9 @@ public class DBUtils {
                 properties.setProperty("configuratori." + index + ".psw", toAdd.getPsw());
                 try {
                     // Scrive le proprietà nel file
-                    properties.store(new FileOutputStream(configuratoriFilePath), null);
+                    storeProperties(basePath, properties);
+                    //properties.store(new FileOutputStream(configuratoriFilePath), null);
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return false; // Operazione fallita
                 }
 
@@ -81,11 +98,20 @@ public class DBUtils {
         return false;
     }
 
-    private String securePsw(String user, String psw) {
+    public boolean checkFruitore(String user, String psw) {
+        for (Fruitore fruitore : fruitori) {
+            if(fruitore.getUsername().equals(user)){
+                return fruitore.getPsw().equals(securePsw(user, psw));
+            }
+        }
+        return false;
+    }
+
+    public static String securePsw(String user, String psw) {
         return Integer.toHexString(user.hashCode() + psw.hashCode());
     }
 
-    public Configuratore getonfiguratoreFromDB(String user) {
+    public Configuratore getConfiguratoreFromDB(String user) {
         for (Configuratore configuratore : configuratori) {
             if(configuratore.getUsername().equals(user)){
                 return configuratore;
@@ -93,7 +119,6 @@ public class DBUtils {
         }
         return null;
     }
-
 
     public ArrayList<Luogo> getDBLuoghi(){
         if(hasToRefreshLuoghi){
@@ -108,9 +133,18 @@ public class DBUtils {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             properties.load(fis);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return properties;
+    }
+
+    private static void storeProperties(String filePath, Properties properties) throws IOException {
+        try {
+            // Scrive le proprietà nel file
+            properties.store(new FileOutputStream(filePath), null);
+        } catch (IOException e) {
+            throw e;
+        }
     }
 
     private <T extends Persona> ArrayList<T> getPersone(String filePath, Class<T> personaClass) {
@@ -130,7 +164,7 @@ public class DBUtils {
                 T persona = constructor.newInstance(username, psw);
                 persone.add(persona);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             index++;
         }
@@ -233,16 +267,14 @@ public class DBUtils {
             }
         }
     }
-    
 
     public ArrayList<Visita> getlistaVisiteFromLuogo(String luogo){
         String cerca = luogo.toLowerCase().strip().replaceAll(" ", "");
-        ArrayList<Visita> out = new ArrayList<Visita>();
+        ArrayList<Visita> out = new ArrayList<>();
         for (Visita visita : visite) {
             if(visita.getIDVisita().contains(cerca))
                 out.add(visita);
         }
-
         return out;
     }
     

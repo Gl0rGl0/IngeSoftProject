@@ -22,9 +22,11 @@ public class Visita {
     StatusLuoghi stato = StatusLuoghi.VISITA_PROPOSTA;
 
     // Costruttore
-    public Visita(String idVisita, String titolo, String descrizione, GPS puntoIncontro, 
-                  Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, 
-                  int durataVisita, boolean free, int numMinPartecipants, int numMaxPartecipants) {
+    public Visita(
+            String idVisita, String titolo, String descrizione, GPS puntoIncontro,
+            Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
+            boolean free, int numMinPartecipants, int numMaxPartecipants)
+    {
         this.idVisita = idVisita;
         this.titolo = titolo;
         this.descrizione = descrizione;
@@ -54,6 +56,7 @@ public class Visita {
         return this.idVisita;
     }
 
+    @Override
     public String toString() {
         return "Visita {" +
                 "Titolo='" + titolo + '\'' +

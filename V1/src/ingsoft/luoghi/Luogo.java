@@ -1,8 +1,7 @@
 package ingsoft.luoghi;
 
-import java.util.ArrayList;
-
 import ingsoft.util.GPS;
+import java.util.ArrayList;
 
 public class Luogo {
     String nomeLuogo;
@@ -10,13 +9,14 @@ public class Luogo {
     GPS posizione;
     ArrayList<Visita> visite;
 
-   public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, ArrayList<Visita> visite) {
-    this.nomeLuogo = nomeLuogo;
-    this.descrizioneLuogo = descrizioneLuogo;
-    this.posizione = posizione;
-    this.visite = visite;
-   }
+    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, ArrayList<Visita> visite) {
+        this.nomeLuogo = nomeLuogo;
+        this.descrizioneLuogo = descrizioneLuogo;
+        this.posizione = posizione;
+        this.visite = visite;
+    }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Luogo {")

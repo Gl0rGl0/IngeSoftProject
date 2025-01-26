@@ -15,5 +15,7 @@ public class Main {
         System.out.println(app.login("nonesisto", "1234")); //ERRORE CREDENZIALI
 
         //System.out.println(app.getLuoghiList());
-    } 
+
+        app.start();
+    }
 }

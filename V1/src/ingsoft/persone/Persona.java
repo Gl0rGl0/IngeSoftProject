@@ -20,4 +20,9 @@ public abstract class Persona {
     public void setPsw(String psw) {
         this.psw = psw;
     }
+
+    @Override
+    public String toString() {
+        return "Username: " + getUsername() + " - Password: *****";
+    }
 }
