@@ -107,7 +107,7 @@ public class DBUtils {
             if (existingUsername == null) {
                 // Fine del file, aggiungiamo la nuova persona
                 properties.setProperty(personaType.getFilePath() + "." + index + ".username", toAdd.getUsername());
-                properties.setProperty(personaType.getFilePath() + "." + index + ".psw", securePsw(toAdd.getUsername(), toAdd.getPsw()));
+                properties.setProperty(personaType.getFilePath() + "." + index + ".psw", toAdd.getPsw());
                 try {
                     // Scrive le proprietà nel file
                     storeProperties(personaFilePath, properties);

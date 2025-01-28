@@ -27,8 +27,13 @@ public abstract class Persona {
         return this.personaType;
     }
 
+    // @Override
+    // public String toString() {
+    //     return "Username: " + getUsername() + " - Password: *****";
+    // }
+
     @Override
     public String toString() {
-        return "Username: " + getUsername() + " - Password: *****";
+        return "Username: " + getUsername() + " - Password: " + getPsw();
     }
 }
