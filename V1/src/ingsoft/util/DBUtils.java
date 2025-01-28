@@ -90,7 +90,7 @@ public class DBUtils {
         return removePersonaFromDB(toRemove, PersonaType.VOLONTARIO);
     }
 
-    public <T extends Persona> boolean addPersonaToDB(T toAdd, PersonaType personaType) {
+    public boolean addPersonaToDB(Persona toAdd, PersonaType personaType) {
         String personaFilePath = basePath + personaType.getFilePath() + ".properties";
         Properties properties;
         try {
@@ -130,7 +130,7 @@ public class DBUtils {
         }
     }
 
-    public <T extends Persona> boolean removePersonaFromDB(String username, PersonaType personaType) {
+    public boolean removePersonaFromDB(String username, PersonaType personaType) {
         String personaFilePath = basePath + personaType.getFilePath() + ".properties";
         Properties properties;
         try {
@@ -176,9 +176,24 @@ public class DBUtils {
     }
     
 
-    // public boolean changePsw(Persona p, String psw){
+    public boolean changePsw(Persona p, String psw) {
+        // Rimuove la persona con la vecchia password
+        removePersonaFromDB(p.getUsername(), PersonaType.valueOf(p.getClass().getSimpleName().toUpperCase()));
+    
+        // Aggiunge la persona con la nuova password
+        String newPassword = securePsw(p.getUsername(), psw); // Sicurezza della password
+        Persona nuovaPersona;
+        switch(p.type()){
+            case CONFIGURATORE -> nuovaPersona = new Configuratore(p.getUsername(), newPassword);
+            case FRUITORE -> nuovaPersona = new Fruitore(p.getUsername(), newPassword);
+            case VOLONTARIO -> nuovaPersona = new Volontario(p.getUsername(), newPassword);
+            default ->  {return false;}
+        }
 
-    // }
+        // Aggiungi la nuova persona al DB
+        addPersonaToDB(nuovaPersona, p.type());
+        return true; // Operazione riuscita
+    }
 
     public boolean addConfiguratoreToDB(String user, String psw){
         return addConfiguratoreToDB(new Configuratore(user, psw));
@@ -397,5 +412,4 @@ public class DBUtils {
         }
         return out;
     }
-    
 }

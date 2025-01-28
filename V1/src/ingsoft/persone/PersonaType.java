@@ -3,7 +3,8 @@ package ingsoft.persone;
 public enum PersonaType {
         CONFIGURATORE("configuratori", Configuratore.class),
         FRUITORE("fruitori", Fruitore.class),
-        VOLONTARIO("volontari", Volontario.class);
+        VOLONTARIO("volontari", Volontario.class),
+        ERROR("error", Persona.class);
 
         private final String filePath;
         private final Class<? extends Persona> personaClass;

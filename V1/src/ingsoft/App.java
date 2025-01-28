@@ -2,8 +2,8 @@ package ingsoft;
 
 import ingsoft.luoghi.Luogo;
 import ingsoft.persone.Configuratore;
+import ingsoft.persone.PersonaType;
 import ingsoft.util.DBUtils;
-import ingsoft.util.StatusLogin;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,15 +25,15 @@ public class App {
         scanner = new Scanner(System.in);
     }
 
-    public StatusLogin login(String user, String psw){
+    public PersonaType login(String user, String psw){
         if (db.checkConfiguratore(user, psw)) {
-            return StatusLogin.CONFIGURATORE;
+            return PersonaType.CONFIGURATORE;
         }
 
         if (db.checkFruitore(user,psw)){
-            return StatusLogin.FRUITORE;
+            return PersonaType.FRUITORE;
         }
-        return StatusLogin.ERROR_CREDENTIALS;
+        return PersonaType.ERROR;
     }
 
     public String getConfiguratoriListString(){
@@ -58,20 +58,15 @@ public class App {
 
     private boolean running = true;
     public void start() {
-        System.out.println("Benvenuto!");
+        System.out.println(MESSAGGIO_START);
 
-        StatusLogin status = initLogin();
-        if (status == StatusLogin.ERROR_CREDENTIALS)
+        PersonaType status = initLogin();
+        if (status == PersonaType.ERROR)
             return;
 
         while (running) {
             // Mostra il menu
-            System.out.println("""
-                1. Stampa un messaggio
-                2. Esegui un'operazione
-                3. Mostra il tempo corrente
-                0. Esci
-            """);
+            System.out.println(MESSAGGIO_MENU);
 
             // Legge l'input dell'utente
             System.out.print("Inserisci la tua scelta: ");
@@ -86,6 +81,7 @@ public class App {
             switch(status){
                 case CONFIGURATORE -> switchCONFIGURATORE(scelta);
                 case FRUITORE -> switchFRUITORE(scelta);
+                case VOLONTARIO -> switchVOLONTARIO(scelta);
             }
             
         }
@@ -107,7 +103,11 @@ public class App {
         
     }
 
-    private StatusLogin initLogin() {
+    private void switchVOLONTARIO(int s){
+        
+    }
+
+    private PersonaType initLogin() {
         final int MAX_TENTATIVI = 5;
         int tentativiRimasti = MAX_TENTATIVI;
 
@@ -117,7 +117,7 @@ public class App {
             System.out.print("Inserisci password: ");
             String psw = scanner.nextLine();
 
-            if (login(user, psw) != StatusLogin.ERROR_CREDENTIALS) {
+            if (login(user, psw) != PersonaType.ERROR) {
                 System.out.println("Login riuscito! Ciao " + user + " (" +(login(user, psw) + ")"));
                 return login(user, psw);
             } else {
@@ -126,7 +126,7 @@ public class App {
             }
         }
         System.out.println("Hai esaurito i tentativi. Accesso negato.");
-        return StatusLogin.ERROR_CREDENTIALS;
+        return PersonaType.ERROR;
     }
 
     private void stampaMessaggio() {

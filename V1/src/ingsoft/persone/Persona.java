@@ -3,10 +3,12 @@ package ingsoft.persone;
 public abstract class Persona {
     private String username;
     private String psw;
+    private PersonaType personaType;
 
-    public Persona(String username, String psw) {
+    public Persona(String username, String psw, PersonaType personaType) {
         this.username = username;
         this.psw = psw;
+        this.personaType = personaType;
     }
 
     public String getUsername() {
@@ -19,6 +21,10 @@ public abstract class Persona {
 
     public void setPsw(String psw) {
         this.psw = psw;
+    }
+
+    public PersonaType type(){
+        return this.personaType;
     }
 
     @Override
