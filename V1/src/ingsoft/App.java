@@ -2,6 +2,7 @@ package ingsoft;
 
 import ingsoft.luoghi.Luogo;
 import ingsoft.persone.Configuratore;
+import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.DBUtils;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 public class App {
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate";
-    private static final String MESSAGGIO_LOGIN = "Esegui il primo login da Configuratore";
+    private static final String MESSAGGIO_LOGIN_FIRST_CONFIGURATORE = "Esegui il primo login da Configuratore";
     private static final String MESSAGGIO_MENU = """
             1. Stampa un messaggio
             2. Esegui un'operazione
@@ -27,12 +28,38 @@ public class App {
 
     public PersonaType login(String user, String psw){
         if (db.checkConfiguratore(user, psw)) {
+            System.out.println("AAA");
             return PersonaType.CONFIGURATORE;
         }
 
         if (db.checkFruitore(user,psw)){
+            System.out.println("BBBB");
             return PersonaType.FRUITORE;
         }
+        return PersonaType.ERROR;
+    }
+
+    public PersonaType login(){
+        final int MAX_TENTATIVI = 5;
+        int tentativiRimasti = MAX_TENTATIVI;
+
+        while (tentativiRimasti > 0) {
+            System.out.print("Inserisci username: ");
+            String user = scanner.nextLine();
+            System.out.print("Inserisci password: ");
+            String psw = scanner.nextLine();
+
+            PersonaType log = login(user, psw);
+            if (log != PersonaType.ERROR) {
+                System.out.println("Login riuscito! Ciao " + user + " (" + log + ")");
+                this.persona = db.getConfiguratoreFromDB(user);
+                return log;
+            } else {
+                tentativiRimasti--;
+                System.out.println("Login fallito. Tentativi rimasti: " + tentativiRimasti);
+            }
+        }
+        System.out.println("Hai esaurito i tentativi. Accesso negato.");
         return PersonaType.ERROR;
     }
 
@@ -57,14 +84,20 @@ public class App {
     }
 
     private boolean running = true;
+    private Persona persona;
     public void start() {
         System.out.println(MESSAGGIO_START);
 
-        PersonaType status = initLogin();
-        if (status == PersonaType.ERROR)
+        System.out.println(MESSAGGIO_LOGIN_FIRST_CONFIGURATORE);
+        if (login() != PersonaType.CONFIGURATORE){
+            System.out.println("Primo accesso necessario un configuratore!");
             return;
+        }
 
         while (running) {
+            if(persona == null)
+                login();
+
             // Mostra il menu
             System.out.println(MESSAGGIO_MENU);
 
@@ -78,7 +111,7 @@ public class App {
                 continue;
             }
 
-            switch(status){
+            switch(persona.type()){
                 case CONFIGURATORE -> switchCONFIGURATORE(scelta);
                 case FRUITORE -> switchFRUITORE(scelta);
                 case VOLONTARIO -> switchVOLONTARIO(scelta);
@@ -94,40 +127,20 @@ public class App {
             case 1 -> stampaMessaggio();
             case 2 -> eseguiOperazione();
             case 3 -> mostraTempoCorrente();
+            case 4 -> logout();
             case 0 -> terminaProgramma();
             default -> System.out.println("Scelta non valida. Riprova.");
         }
     }
 
-    private void switchFRUITORE(int s){
-        
+    private void logout(){
+        System.out.println("Log out effettuato, riaccedere...");
+        persona = null;
     }
 
-    private void switchVOLONTARIO(int s){
-        
-    }
+    private void switchFRUITORE(int s){}
 
-    private PersonaType initLogin() {
-        final int MAX_TENTATIVI = 5;
-        int tentativiRimasti = MAX_TENTATIVI;
-
-        while (tentativiRimasti > 0) {
-            System.out.print("Inserisci username: ");
-            String user = scanner.nextLine();
-            System.out.print("Inserisci password: ");
-            String psw = scanner.nextLine();
-
-            if (login(user, psw) != PersonaType.ERROR) {
-                System.out.println("Login riuscito! Ciao " + user + " (" +(login(user, psw) + ")"));
-                return login(user, psw);
-            } else {
-                tentativiRimasti--;
-                System.out.println("Login fallito. Tentativi rimasti: " + tentativiRimasti);
-            }
-        }
-        System.out.println("Hai esaurito i tentativi. Accesso negato.");
-        return PersonaType.ERROR;
-    }
+    private void switchVOLONTARIO(int s){}
 
     private void stampaMessaggio() {
         System.out.println("Hai selezionato: Stampa un messaggio!");
@@ -135,7 +148,6 @@ public class App {
 
     private void eseguiOperazione() {
         System.out.println("Hai selezionato: Esegui un'operazione!");
-        // Logica per eseguire l'operazione
     }
 
     private void mostraTempoCorrente() {

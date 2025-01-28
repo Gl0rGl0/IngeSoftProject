@@ -7,6 +7,7 @@ import ingsoft.persone.Fruitore;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.persone.Volontario;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,6 +30,13 @@ public class DBUtils {
     private boolean hasToRefreshLuoghi = true;
     private ArrayList<Luogo> luoghi = new ArrayList<>();
     private ArrayList<Visita> visite = new ArrayList<>();
+
+    public DBUtils(){
+        refreshConfiguratori();
+        refreshFruitori();
+        refreshVolontari();
+        refreshLuoghi();
+    }
 
     public ArrayList<Configuratore> getDBconfiguratori(){
         if(hasToRefreshConfiguratori){
@@ -70,12 +78,24 @@ public class DBUtils {
         return addPersonaToDB(toAdd, PersonaType.CONFIGURATORE);
     }
 
+    public boolean addConfiguratoreToDB(String user, String psw){
+        return addConfiguratoreToDB(new Configuratore(user, psw));
+    }
+
     public boolean addFruitoreToDB(Fruitore toAdd) {
         return addPersonaToDB(toAdd, PersonaType.FRUITORE);
     }
 
+    public boolean addFruitoreToDB(String user, String psw) {
+        return addFruitoreToDB(new Fruitore(user, psw));
+    }
+
     public boolean addVolontarioToDB(Volontario toAdd) {
         return addPersonaToDB(toAdd, PersonaType.VOLONTARIO);
+    }
+
+    public boolean addVolontarioToDB(String user, String psw) {
+        return addVolontarioToDB(new Volontario(user, psw));
     }
 
     public boolean removeConfiguratoreFromDB(String toRemove) {
@@ -90,16 +110,39 @@ public class DBUtils {
         return removePersonaFromDB(toRemove, PersonaType.VOLONTARIO);
     }
 
-    public boolean addPersonaToDB(Persona toAdd, PersonaType personaType) {
+    private boolean addPersonaToDB(Persona toAdd, PersonaType personaType) {
         String personaFilePath = basePath + personaType.getFilePath() + ".properties";
-        Properties properties;
+        Properties properties = new Properties();
+        File personaFile = new File(personaFilePath);
+
         try {
-            properties = loadProperties(personaFilePath);
+            // Verifica se la directory esiste, altrimenti la crea
+            File directory = personaFile.getParentFile();
+            if (directory != null && !directory.exists()) {
+                if (!directory.mkdirs()) {
+                    System.out.println("Errore: impossibile creare la directory " + directory.getAbsolutePath());
+                    return false;
+                }
+            }
+
+            // Verifica se il file esiste, altrimenti lo crea
+            if (!personaFile.exists()) {
+                if (!personaFile.createNewFile()) {
+                    System.out.println("Errore: impossibile creare il file " + personaFilePath);
+                    return false;
+                }
+            }
+
+            // Carica le proprietà esistenti (se il file contiene dati)
+            try (FileInputStream fis = new FileInputStream(personaFile)) {
+                properties.load(fis);
+            }
         } catch (IOException e) {
+            // Gestione errore durante la verifica/creazione di directory o file
             //e.printStackTrace();
             return false;
         }
-    
+
         // Verifica se l'username esiste già nel file
         int index = 1;
         while (true) {
@@ -107,25 +150,26 @@ public class DBUtils {
             if (existingUsername == null) {
                 // Fine del file, aggiungiamo la nuova persona
                 properties.setProperty(personaType.getFilePath() + "." + index + ".username", toAdd.getUsername());
-                properties.setProperty(personaType.getFilePath() + "." + index + ".psw", toAdd.getPsw());
+                properties.setProperty(personaType.getFilePath() + "." + index + ".psw", securePsw(toAdd.getUsername(), toAdd.getPsw()));
+
                 try {
                     // Scrive le proprietà nel file
                     storeProperties(personaFilePath, properties);
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                     return false; // Operazione fallita
                 }
-    
+
                 // Forza il refresh della lista
                 hasToRefreshConfiguratori = true;
                 return true; // Operazione riuscita
             }
-    
+
             // Se troviamo un username uguale, non aggiungiamo
             if (existingUsername.equals(toAdd.getUsername())) {
                 return false; // Persona già presente
             }
-    
+
             index++;
         }
     }
@@ -181,22 +225,17 @@ public class DBUtils {
         removePersonaFromDB(p.getUsername(), PersonaType.valueOf(p.getClass().getSimpleName().toUpperCase()));
     
         // Aggiunge la persona con la nuova password
-        String newPassword = securePsw(p.getUsername(), psw); // Sicurezza della password
         Persona nuovaPersona;
         switch(p.type()){
-            case CONFIGURATORE -> nuovaPersona = new Configuratore(p.getUsername(), newPassword);
-            case FRUITORE -> nuovaPersona = new Fruitore(p.getUsername(), newPassword);
-            case VOLONTARIO -> nuovaPersona = new Volontario(p.getUsername(), newPassword);
+            case CONFIGURATORE -> nuovaPersona = new Configuratore(p.getUsername(), psw);
+            case FRUITORE -> nuovaPersona = new Fruitore(p.getUsername(), psw);
+            case VOLONTARIO -> nuovaPersona = new Volontario(p.getUsername(), psw);
             default ->  {return false;}
         }
 
         // Aggiungi la nuova persona al DB
         addPersonaToDB(nuovaPersona, p.type());
         return true; // Operazione riuscita
-    }
-
-    public boolean addConfiguratoreToDB(String user, String psw){
-        return addConfiguratoreToDB(new Configuratore(user, psw));
     }
 
     public boolean checkConfiguratore(String user, String psw) {

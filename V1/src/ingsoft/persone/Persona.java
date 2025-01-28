@@ -4,6 +4,7 @@ public abstract class Persona {
     private String username;
     private String psw;
     private PersonaType personaType;
+    private boolean firstAccess = true;
 
     public Persona(String username, String psw, PersonaType personaType) {
         this.username = username;
@@ -27,13 +28,12 @@ public abstract class Persona {
         return this.personaType;
     }
 
-    // @Override
-    // public String toString() {
-    //     return "Username: " + getUsername() + " - Password: *****";
-    // }
-
+    boolean testPsw = true;
     @Override
     public String toString() {
-        return "Username: " + getUsername() + " - Password: " + getPsw();
+        if(testPsw)
+            return "Username: " + getUsername() + " - Password: " + getPsw();
+        return "Username: " + getUsername() + " - Password: *****";
     }
+
 }

@@ -1,16 +1,22 @@
 package ingsoft;
 
+import ingsoft.persone.Configuratore;
+import ingsoft.persone.Fruitore;
+import ingsoft.persone.Volontario;
+
 public class Main {
     public static void main(String[] args) {
         App app = new App();
         Test(app);
-        //app.start();
+        app.start();
     }
 
 
     public static void Test(App app){
         //System.out.println(app.getConfiguratoriListString());
         //System.out.println(app.getConfiguratoriList());
+
+        initPersone(app);
 
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1"));
@@ -28,5 +34,18 @@ public class Main {
         //System.out.println(app.getConfiguratoriListString());
     
         //System.out.println(app.getLuoghiList());
+        
+    }
+
+    public static void initPersone(App app){
+        System.out.println(app.db.addConfiguratoreToDB("config1", "pass1C"));
+        System.out.println(app.db.addConfiguratoreToDB(new Configuratore("config2", "pass2C")));
+
+        System.out.println(app.db.addFruitoreToDB("fruit1", "pass1F"));
+        System.out.println(app.db.addFruitoreToDB("fruit2", "pass2F"));
+        System.out.println(app.db.addFruitoreToDB(new Fruitore("fruit3", "pass3F")));
+
+        System.out.println(app.db.addVolontarioToDB("volont1", "pass1V"));
+        System.out.println(app.db.addVolontarioToDB(new Volontario("volont2", "pass2V")));
     }
 }
