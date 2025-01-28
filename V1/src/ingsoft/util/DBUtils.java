@@ -5,6 +5,8 @@ import ingsoft.luoghi.Visita;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Persona;
+import ingsoft.persone.PersonaType;
+import ingsoft.persone.Volontario;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +23,9 @@ public class DBUtils {
     private boolean hasToRefreshFruitori = true;
     private ArrayList<Fruitore> fruitori = new ArrayList<>();
 
+    private boolean hasToRefreshVolontari = true;
+    private ArrayList<Volontario> volontari = new ArrayList<>();
+
     private boolean hasToRefreshLuoghi = true;
     private ArrayList<Luogo> luoghi = new ArrayList<>();
     private ArrayList<Visita> visite = new ArrayList<>();
@@ -32,58 +37,148 @@ public class DBUtils {
         return this.configuratori;
     }
 
-    public ArrayList<Configuratore> getDBfruitori(){
+    public ArrayList<Fruitore> getDBfruitori(){
         if(hasToRefreshFruitori){
             refreshFruitori();
         }
-        return this.configuratori;
+        return this.fruitori;
+    }
+
+    public ArrayList<Volontario> getDBvolontari(){
+        if(hasToRefreshVolontari){
+            refreshVolontari();
+        }
+        return this.volontari;
     }
 
     private void refreshConfiguratori(){
-        String configuratoriFilePath = "configuratori";
         configuratori.clear();
-        this.configuratori = getPersone(configuratoriFilePath, Configuratore.class);
+        this.configuratori = getPersoneDB(PersonaType.CONFIGURATORE);
     }
 
     private void refreshFruitori(){
-        String fruitoriFilePath = "fruitori";
         fruitori.clear();
-        this.fruitori = getPersone(fruitoriFilePath, Fruitore.class);
+        this.fruitori = getPersoneDB(PersonaType.FRUITORE);
+    }
+
+    private void refreshVolontari(){
+        volontari.clear();
+        this.volontari = getPersoneDB(PersonaType.VOLONTARIO);
     }
 
     public boolean addConfiguratoreToDB(Configuratore toAdd) {
-        String configuratoriFilePath = basePath + "configuratori.properties";
-        Properties properties = loadProperties(configuratoriFilePath);
+        return addPersonaToDB(toAdd, PersonaType.CONFIGURATORE);
+    }
 
+    public boolean addFruitoreToDB(Fruitore toAdd) {
+        return addPersonaToDB(toAdd, PersonaType.FRUITORE);
+    }
+
+    public boolean addVolontarioToDB(Volontario toAdd) {
+        return addPersonaToDB(toAdd, PersonaType.VOLONTARIO);
+    }
+
+    public boolean removeConfiguratoreFromDB(String toRemove) {
+        return removePersonaFromDB(toRemove, PersonaType.CONFIGURATORE);
+    }
+
+    public boolean removeFruitoreFromDB(String toRemove) {
+        return removePersonaFromDB(toRemove, PersonaType.FRUITORE);
+    }
+
+    public boolean removeVolontarioFromDB(String toRemove) {
+        return removePersonaFromDB(toRemove, PersonaType.VOLONTARIO);
+    }
+
+    public <T extends Persona> boolean addPersonaToDB(T toAdd, PersonaType personaType) {
+        String personaFilePath = basePath + personaType.getFilePath() + ".properties";
+        Properties properties;
+        try {
+            properties = loadProperties(personaFilePath);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            return false;
+        }
+    
         // Verifica se l'username esiste già nel file
         int index = 1;
         while (true) {
-            String existingUsername = properties.getProperty("configuratori." + index + ".username");
+            String existingUsername = properties.getProperty(personaType.getFilePath() + "." + index + ".username");
             if (existingUsername == null) {
-                // Fine del file, aggiungiamo il nuovo configuratore
-                properties.setProperty("configuratori." + index + ".username", toAdd.getUsername());
-                properties.setProperty("configuratori." + index + ".psw", toAdd.getPsw());
+                // Fine del file, aggiungiamo la nuova persona
+                properties.setProperty(personaType.getFilePath() + "." + index + ".username", toAdd.getUsername());
+                properties.setProperty(personaType.getFilePath() + "." + index + ".psw", securePsw(toAdd.getUsername(), toAdd.getPsw()));
                 try {
                     // Scrive le proprietà nel file
-                    storeProperties(basePath, properties);
-                    //properties.store(new FileOutputStream(configuratoriFilePath), null);
+                    storeProperties(personaFilePath, properties);
                 } catch (IOException e) {
+                    //e.printStackTrace();
                     return false; // Operazione fallita
                 }
-
-                // Forza il refresh della lista configuratori
+    
+                // Forza il refresh della lista
                 hasToRefreshConfiguratori = true;
                 return true; // Operazione riuscita
             }
-
+    
             // Se troviamo un username uguale, non aggiungiamo
             if (existingUsername.equals(toAdd.getUsername())) {
-                return false; // Configuratore già presente
+                return false; // Persona già presente
             }
-
+    
             index++;
         }
     }
+
+    public <T extends Persona> boolean removePersonaFromDB(String username, PersonaType personaType) {
+        String personaFilePath = basePath + personaType.getFilePath() + ".properties";
+        Properties properties;
+        try {
+            properties = loadProperties(personaFilePath);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            return false;
+        }
+    
+        // Verifica se l'username esiste già nel file
+        int index = 1;
+        boolean removed = false;
+    
+        while (true) {
+            String existingUsername = properties.getProperty(personaType.getFilePath() + "." + index + ".username");
+    
+            if (existingUsername == null) {
+                break; // Fine del file
+            }
+    
+            if (existingUsername.equals(username)) {
+                // Se l'username corrisponde, rimuoviamo la persona
+                properties.remove(personaType.getFilePath() + "." + index + ".username");
+                properties.remove(personaType.getFilePath() + "." + index + ".psw");
+                removed = true;  
+            }
+    
+            index++;
+        }
+        
+        if (removed) {
+            try {
+                // Scrive le proprietà nel file aggiornato
+                storeProperties(personaFilePath, properties);
+                hasToRefreshConfiguratori = true; // Forza il refresh della lista
+                return true; // Operazione riuscita
+            } catch (IOException e) {
+                //e.printStackTrace();
+                return false; // Operazione fallita
+            }
+        }
+        return false; // Persona non trovata
+    }
+    
+
+    // public boolean changePsw(Persona p, String psw){
+
+    // }
 
     public boolean addConfiguratoreToDB(String user, String psw){
         return addConfiguratoreToDB(new Configuratore(user, psw));
@@ -128,12 +223,13 @@ public class DBUtils {
     }
 
     // Funzione per caricare il file .properties
-    private static Properties loadProperties(String filePath) {
+    private static Properties loadProperties(String filePath) throws IOException{
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(filePath)) {
             properties.load(fis);
         } catch (IOException e) {
             //e.printStackTrace();
+            throw e;
         }
         return properties;
     }
@@ -147,34 +243,50 @@ public class DBUtils {
         }
     }
 
-    private <T extends Persona> ArrayList<T> getPersone(String filePath, Class<T> personaClass) {
-        Properties properties = loadProperties(basePath + filePath + ".properties");
+    private <T extends Persona> ArrayList<T> getPersoneDB(PersonaType personaType) {
+        String filePath = personaType.getFilePath();
+        Class<T> personaClass = (Class<T>) personaType.getPersonaClass();
+        Properties properties;
+        try {
+            properties = loadProperties(basePath + filePath + ".properties");
+        } catch (IOException e) {
+            //e.printStackTrace();
+            return new ArrayList<>();
+        }
+    
         ArrayList<T> persone = new ArrayList<>();
         int index = 1;
         while (true) {
             // Leggiamo username e psw per ogni persona
-            String username = properties.getProperty(filePath+ "." + index + ".username");
+            String username = properties.getProperty(filePath + "." + index + ".username");
             String psw = properties.getProperty(filePath + "." + index + ".psw");
-
+    
             // Se non ci sono più dati, usciamo dal ciclo
             if (username == null || psw == null) break;
-
+    
             try {
                 Constructor<T> constructor = personaClass.getConstructor(String.class, String.class);
                 T persona = constructor.newInstance(username, psw);
                 persone.add(persona);
             } catch (Exception e) {
                 //e.printStackTrace();
+                return new ArrayList<>();
             }
             index++;
         }
         return persone;
-    }
+    }    
 
-    private void refreshLuoghi() {
+    private boolean refreshLuoghi() {
         refreshVisite();
         luoghi.clear();
-        Properties properties = loadProperties(basePath + "luoghi" + ".properties");
+        Properties properties;
+        try {
+            properties = loadProperties(basePath + "luoghi" + ".properties");
+        } catch (IOException e) {
+            //e.printStackTrace();
+            return false;
+        }
         int index = 1;
         while (true) {
             // Leggiamo il nome e la descrizione di ogni luogo
@@ -193,11 +305,18 @@ public class DBUtils {
     
             index++;
         }
+        return true;
     }
     
 
-    private void refreshVisite() {
-        Properties properties = loadProperties(basePath + "visite" + ".properties");
+    private boolean refreshVisite() {
+        Properties properties;
+        try {
+            properties = loadProperties(basePath + "visite" + ".properties");
+        } catch (IOException e) {
+            //e.printStackTrace();
+            return false;
+        }
         visite.clear(); // Pulisce la lista delle visite prima di aggiornarla
     
         // Itera su tutte le chiavi nel file
@@ -266,6 +385,7 @@ public class DBUtils {
                 visite.add(visita);
             }
         }
+        return true;
     }
 
     public ArrayList<Visita> getlistaVisiteFromLuogo(String luogo){
