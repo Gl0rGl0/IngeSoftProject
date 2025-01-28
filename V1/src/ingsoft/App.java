@@ -15,6 +15,7 @@ public class App {
             1. Stampa un messaggio
             2. Esegui un'operazione
             3. Mostra il tempo corrente
+            4. Log Out
             0. Esci
             """;
     private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
@@ -27,15 +28,15 @@ public class App {
     }
 
     public PersonaType login(String user, String psw){
-        if (db.checkConfiguratore(user, psw)) {
+        if (db.loginCheckConfiguratore(user, psw)) {
             System.out.println("AAA");
             return PersonaType.CONFIGURATORE;
         }
 
-        if (db.checkFruitore(user,psw)){
-            System.out.println("BBBB");
-            return PersonaType.FRUITORE;
-        }
+        // if (db.loginCheckFruitore(user,psw)){
+        //     System.out.println("BBBB");
+        //     return PersonaType.FRUITORE;
+        // }
         return PersonaType.ERROR;
     }
 

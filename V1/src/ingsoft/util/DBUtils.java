@@ -41,6 +41,7 @@ public class DBUtils {
     public ArrayList<Configuratore> getDBconfiguratori(){
         if(hasToRefreshConfiguratori){
             refreshConfiguratori();
+            hasToRefreshConfiguratori = false;
         }
         return this.configuratori;
     }
@@ -48,6 +49,7 @@ public class DBUtils {
     public ArrayList<Fruitore> getDBfruitori(){
         if(hasToRefreshFruitori){
             refreshFruitori();
+            hasToRefreshFruitori = false;
         }
         return this.fruitori;
     }
@@ -55,6 +57,7 @@ public class DBUtils {
     public ArrayList<Volontario> getDBvolontari(){
         if(hasToRefreshVolontari){
             refreshVolontari();
+            hasToRefreshVolontari = false;
         }
         return this.volontari;
     }
@@ -111,6 +114,8 @@ public class DBUtils {
     }
 
     private boolean addPersonaToDB(Persona toAdd, PersonaType personaType) {
+        if(esisteConfiguratore(toAdd.getUsername()) )
+            return false;
         String personaFilePath = basePath + personaType.getFilePath() + ".properties";
         Properties properties = new Properties();
         File personaFile = new File(personaFilePath);
@@ -156,7 +161,7 @@ public class DBUtils {
                     // Scrive le proprietà nel file
                     storeProperties(personaFilePath, properties);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     return false; // Operazione fallita
                 }
 
@@ -174,7 +179,7 @@ public class DBUtils {
         }
     }
 
-    public boolean removePersonaFromDB(String username, PersonaType personaType) {
+    private boolean removePersonaFromDB(String username, PersonaType personaType) {
         String personaFilePath = basePath + personaType.getFilePath() + ".properties";
         Properties properties;
         try {
@@ -238,7 +243,7 @@ public class DBUtils {
         return true; // Operazione riuscita
     }
 
-    public boolean checkConfiguratore(String user, String psw) {
+    public boolean loginCheckConfiguratore(String user, String psw) {
         for (Configuratore configuratore : configuratori) {
             if(configuratore.getUsername().equals(user)){
                 return configuratore.getPsw().equals(securePsw(user, psw));
@@ -247,10 +252,19 @@ public class DBUtils {
         return false;
     }
 
-    public boolean checkFruitore(String user, String psw) {
-        for (Fruitore fruitore : fruitori) {
-            if(fruitore.getUsername().equals(user)){
-                return fruitore.getPsw().equals(securePsw(user, psw));
+    // public boolean loginCheckFruitore(String user, String psw) {
+    //     for (Fruitore fruitore : fruitori) {
+    //         if(fruitore.getUsername().equals(user)){
+    //             return fruitore.getPsw().equals(securePsw(user, psw));
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    public boolean esisteConfiguratore(String user){
+        for (Configuratore configuratore : configuratori) {
+            if(configuratore.getUsername().equals(user)){
+                return true;
             }
         }
         return false;
