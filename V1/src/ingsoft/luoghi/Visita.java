@@ -3,7 +3,6 @@ package ingsoft.luoghi;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
-import ingsoft.util.StatusLuoghi;
 
 public class Visita {
     private String idVisita;
@@ -19,7 +18,7 @@ public class Visita {
     int numMinPartecipants;
     int numMaxPartecipants;
 
-    StatusLuoghi stato = StatusLuoghi.VISITA_PROPOSTA;
+    StatusLuoghi stato = StatusLuoghi.PROPOSTA;
 
     // Costruttore
     public Visita(
@@ -72,5 +71,4 @@ public class Visita {
                 ", Stato=" + stato +
                 '}';
     }
-
 }

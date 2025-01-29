@@ -11,6 +11,7 @@ public class Date {
         this.aa = aa;
     }
 
+    @Override
     public String toString(){
         return String.format("%d/%d/%d", gg, mm, aa);
     }

@@ -5,8 +5,12 @@ import ingsoft.persone.Configuratore;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.DBUtils;
+import ingsoft.util.FunctionList;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class App {
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate";
@@ -22,6 +26,7 @@ public class App {
 
     DBUtils db = new DBUtils();
     private Scanner scanner;
+    private Persona user;
 
     public App(){
         scanner = new Scanner(System.in);
@@ -53,7 +58,7 @@ public class App {
             PersonaType log = login(user, psw);
             if (log != PersonaType.ERROR) {
                 System.out.println("Login riuscito! Ciao " + user + " (" + log + ")");
-                this.persona = db.getConfiguratoreFromDB(user);
+                this.user = db.getConfiguratoreFromDB(user);
                 return log;
             } else {
                 tentativiRimasti--;
@@ -85,18 +90,18 @@ public class App {
     }
 
     private boolean running = true;
-    private Persona persona;
     public void start() {
         System.out.println(MESSAGGIO_START);
 
-        System.out.println(MESSAGGIO_LOGIN_FIRST_CONFIGURATORE);
-        if (login() != PersonaType.CONFIGURATORE){
-            System.out.println("Primo accesso necessario un configuratore!");
-            return;
-        }
+        // System.out.println(MESSAGGIO_LOGIN_FIRST_CONFIGURATORE);
+        // if (login() != PersonaType.CONFIGURATORE){
+        //     System.out.println("Primo accesso necessario un configuratore!");
+        //     return;
+        // }
 
+        running = !running; //invertiFlusso
         while (running) {
-            if(persona == null)
+            if(user == null)
                 login();
 
             // Mostra il menu
@@ -112,12 +117,15 @@ public class App {
                 continue;
             }
 
-            switch(persona.type()){
+            switch(user.type()){
                 case CONFIGURATORE -> switchCONFIGURATORE(scelta);
                 case FRUITORE -> switchFRUITORE(scelta);
                 case VOLONTARIO -> switchVOLONTARIO(scelta);
             }
-            
+        }
+
+        while(!running){
+            interpreter(scanner.nextLine());
         }
 
         scanner.close(); // Chiude lo scanner solo alla fine
@@ -136,7 +144,7 @@ public class App {
 
     private void logout(){
         System.out.println("Log out effettuato, riaccedere...");
-        persona = null;
+        user = null;
     }
 
     private void switchFRUITORE(int s){}
@@ -159,4 +167,77 @@ public class App {
         System.out.println(MESSAGGIO_CHIUSURA);
         running = false;
     }
+
+
+
+    private void interpreter(String prompt) {
+        ArrayList<String> args = new ArrayList<>(Arrays.asList(prompt.split(" ")));
+        if (args.isEmpty()) {
+            System.out.println("Errore: nessun comando fornito.");
+            return;
+        }
+    
+        String cmd = args.remove(0); // Usa remove(0) per ottenere e rimuovere il primo elemento
+    
+        Set<Character> opzioni = new HashSet<>(); // Usa HashSet per opzioni univoche
+        ArrayList<String> elementi = new ArrayList<>();
+    
+        for (String string : args) {
+            if (string.startsWith("-") && string.length() > 1) {
+                opzioni.add(string.charAt(1));
+            } else {
+                elementi.add(string);
+            }
+        }
+        
+        char[] option = new char[opzioni.size()];
+        int i = 0;
+        for (char c : opzioni) {
+            option[i++] = c;
+        }
+    
+        switch (cmd) {
+            case "add" -> {
+                System.out.println("ADD");
+                add(option, elementi);
+            }
+            case "remove" -> {
+                System.out.println("REMOVE");
+                remove(option, elementi);
+            }
+            case "help" -> System.out.println(FunctionList.HELP);
+            default -> System.out.println("\"" + cmd + "\" non è riconosciuto come comando interno");
+        }
+    }
+
+    private void add(char[] opzioni, ArrayList<String> args) {
+        if(opzioni.length < 1){
+            System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
+            return;
+        }
+        switch(opzioni[0]){
+            case 'c' -> System.out.println("CONFIGURATORE");
+            case 'f' -> System.out.println("FRUITORE");
+            case 'v' -> System.out.println("VOLONTARIO");
+            case 'V' -> System.out.println("VISITA");
+            case 'L' -> System.out.println("LUOGO");
+            default -> System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
+        }
+    }
+
+    private void remove(char[] opzioni, ArrayList<String> args){
+        if(opzioni.length < 1){
+            System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
+            return;
+        }
+        switch(opzioni[0]){
+            case 'c' -> System.out.println("CONFIGURATORE");
+            case 'f' -> System.out.println("FRUITORE");
+            case 'v' -> System.out.println("VOLONTARIO");
+            case 'V' -> System.out.println("VISITA");
+            case 'L' -> System.out.println("LUOGO");
+            default -> System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
+        }
+    }
+
 }
