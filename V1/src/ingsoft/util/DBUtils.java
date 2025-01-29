@@ -125,7 +125,7 @@ public class DBUtils {
             File directory = personaFile.getParentFile();
             if (directory != null && !directory.exists()) {
                 if (!directory.mkdirs()) {
-                    System.out.println("Errore: impossibile creare la directory " + directory.getAbsolutePath());
+                    ViewSE.log("Errore: impossibile creare la directory " + directory.getAbsolutePath());
                     return false;
                 }
             }
@@ -133,7 +133,7 @@ public class DBUtils {
             // Verifica se il file esiste, altrimenti lo crea
             if (!personaFile.exists()) {
                 if (!personaFile.createNewFile()) {
-                    System.out.println("Errore: impossibile creare il file " + personaFilePath);
+                    ViewSE.log("Errore: impossibile creare il file " + personaFilePath);
                     return false;
                 }
             }

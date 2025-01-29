@@ -6,10 +6,10 @@ import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.DBUtils;
 import ingsoft.util.FunctionList;
+import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class App {
@@ -25,21 +25,18 @@ public class App {
     private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
 
     DBUtils db = new DBUtils();
-    private Scanner scanner;
     private Persona user;
 
     public App(){
-        scanner = new Scanner(System.in);
     }
 
     public PersonaType login(String user, String psw){
         if (db.loginCheckConfiguratore(user, psw)) {
-            System.out.println("AAA");
             return PersonaType.CONFIGURATORE;
         }
 
         // if (db.loginCheckFruitore(user,psw)){
-        //     System.out.println("BBBB");
+        //     ViewSE.log("BBBB");
         //     return PersonaType.FRUITORE;
         // }
         return PersonaType.ERROR;
@@ -50,22 +47,22 @@ public class App {
         int tentativiRimasti = MAX_TENTATIVI;
 
         while (tentativiRimasti > 0) {
-            System.out.print("Inserisci username: ");
-            String user = scanner.nextLine();
-            System.out.print("Inserisci password: ");
-            String psw = scanner.nextLine();
+            ViewSE.log("Inserisci username: ");
+            String user = ViewSE.read();
+            ViewSE.log("Inserisci password: ");
+            String psw = ViewSE.read();
 
             PersonaType log = login(user, psw);
             if (log != PersonaType.ERROR) {
-                System.out.println("Login riuscito! Ciao " + user + " (" + log + ")");
+                ViewSE.log("Login riuscito! Ciao " + user + " (" + log + ")");
                 this.user = db.getConfiguratoreFromDB(user);
                 return log;
             } else {
                 tentativiRimasti--;
-                System.out.println("Login fallito. Tentativi rimasti: " + tentativiRimasti);
+                ViewSE.log("Login fallito. Tentativi rimasti: " + tentativiRimasti);
             }
         }
-        System.out.println("Hai esaurito i tentativi. Accesso negato.");
+        ViewSE.log("Hai esaurito i tentativi. Accesso negato.");
         return PersonaType.ERROR;
     }
 
@@ -91,11 +88,11 @@ public class App {
 
     private boolean running = true;
     public void start() {
-        System.out.println(MESSAGGIO_START);
+        ViewSE.log(MESSAGGIO_START);
 
-        // System.out.println(MESSAGGIO_LOGIN_FIRST_CONFIGURATORE);
+        // ViewSE.log(MESSAGGIO_LOGIN_FIRST_CONFIGURATORE);
         // if (login() != PersonaType.CONFIGURATORE){
-        //     System.out.println("Primo accesso necessario un configuratore!");
+        //     ViewSE.log("Primo accesso necessario un configuratore!");
         //     return;
         // }
 
@@ -105,15 +102,15 @@ public class App {
                 login();
 
             // Mostra il menu
-            System.out.println(MESSAGGIO_MENU);
+            ViewSE.log(MESSAGGIO_MENU);
 
             // Legge l'input dell'utente
-            System.out.print("Inserisci la tua scelta: ");
+            ViewSE.log("Inserisci la tua scelta: ");
             int scelta;
             try {
-                scelta = Integer.parseInt(scanner.nextLine());
+                scelta = Integer.parseInt(ViewSE.read());
             } catch (NumberFormatException e) {
-                System.out.println("Input non valido. Inserisci un numero.");
+                ViewSE.log("Input non valido. Inserisci un numero.");
                 continue;
             }
 
@@ -125,10 +122,8 @@ public class App {
         }
 
         while(!running){
-            interpreter(scanner.nextLine());
+            interpreter(ViewSE.read());
         }
-
-        scanner.close(); // Chiude lo scanner solo alla fine
     }
 
     private void switchCONFIGURATORE(int s){
@@ -138,12 +133,12 @@ public class App {
             case 3 -> mostraTempoCorrente();
             case 4 -> logout();
             case 0 -> terminaProgramma();
-            default -> System.out.println("Scelta non valida. Riprova.");
+            default -> ViewSE.log("Scelta non valida. Riprova.");
         }
     }
 
     private void logout(){
-        System.out.println("Log out effettuato, riaccedere...");
+        ViewSE.log("Log out effettuato, riaccedere...");
         user = null;
     }
 
@@ -152,19 +147,19 @@ public class App {
     private void switchVOLONTARIO(int s){}
 
     private void stampaMessaggio() {
-        System.out.println("Hai selezionato: Stampa un messaggio!");
+        ViewSE.log("Hai selezionato: Stampa un messaggio!");
     }
 
     private void eseguiOperazione() {
-        System.out.println("Hai selezionato: Esegui un'operazione!");
+        ViewSE.log("Hai selezionato: Esegui un'operazione!");
     }
 
     private void mostraTempoCorrente() {
-        System.out.println("Tempo corrente: " + java.time.LocalTime.now());
+        ViewSE.log("Tempo corrente: " + java.time.LocalTime.now());
     }
 
     private void terminaProgramma() {
-        System.out.println(MESSAGGIO_CHIUSURA);
+        ViewSE.log(MESSAGGIO_CHIUSURA);
         running = false;
     }
 
@@ -173,7 +168,7 @@ public class App {
     private void interpreter(String prompt) {
         ArrayList<String> args = new ArrayList<>(Arrays.asList(prompt.split(" ")));
         if (args.isEmpty()) {
-            System.out.println("Errore: nessun comando fornito.");
+            ViewSE.log("Errore: nessun comando fornito.");
             return;
         }
     
@@ -198,45 +193,45 @@ public class App {
     
         switch (cmd) {
             case "add" -> {
-                System.out.println("ADD");
+                ViewSE.log("ADD");
                 add(option, elementi);
             }
             case "remove" -> {
-                System.out.println("REMOVE");
+                ViewSE.log("REMOVE");
                 remove(option, elementi);
             }
-            case "help" -> System.out.println(FunctionList.HELP);
-            default -> System.out.println("\"" + cmd + "\" non è riconosciuto come comando interno");
+            case "help" -> ViewSE.log(FunctionList.HELP);
+            default -> ViewSE.log("\"" + cmd + "\" non è riconosciuto come comando interno");
         }
     }
 
     private void add(char[] opzioni, ArrayList<String> args) {
         if(opzioni.length < 1){
-            System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
+            ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
             return;
         }
         switch(opzioni[0]){
-            case 'c' -> System.out.println("CONFIGURATORE");
-            case 'f' -> System.out.println("FRUITORE");
-            case 'v' -> System.out.println("VOLONTARIO");
-            case 'V' -> System.out.println("VISITA");
-            case 'L' -> System.out.println("LUOGO");
-            default -> System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
+            case 'c' -> ViewSE.log("CONFIGURATORE");
+            case 'f' -> ViewSE.log("FRUITORE");
+            case 'v' -> ViewSE.log("VOLONTARIO");
+            case 'V' -> ViewSE.log("VISITA");
+            case 'L' -> ViewSE.log("LUOGO");
+            default -> ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
         }
     }
 
     private void remove(char[] opzioni, ArrayList<String> args){
         if(opzioni.length < 1){
-            System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
+            ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
             return;
         }
         switch(opzioni[0]){
-            case 'c' -> System.out.println("CONFIGURATORE");
-            case 'f' -> System.out.println("FRUITORE");
-            case 'v' -> System.out.println("VOLONTARIO");
-            case 'V' -> System.out.println("VISITA");
-            case 'L' -> System.out.println("LUOGO");
-            default -> System.out.println("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
+            case 'c' -> ViewSE.log("CONFIGURATORE");
+            case 'f' -> ViewSE.log("FRUITORE");
+            case 'v' -> ViewSE.log("VOLONTARIO");
+            case 'V' -> ViewSE.log("VISITA");
+            case 'L' -> ViewSE.log("LUOGO");
+            default -> ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
         }
     }
 

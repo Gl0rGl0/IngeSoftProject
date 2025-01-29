@@ -42,12 +42,12 @@ public enum FunctionList {
             -V\t\tRimuove una visita
             -L\t\tRimuove un luogo
             titolo\tSpecifica il titolo della visita o del luogo da rimuovere
-        """),
+    """),
 
     HELP("""
         ADD aggiunge una Persona/Visita/Luogo al database
         REMOVE rimuove una Persona/Visita/Luogo dal database
-        """);
+    """);
 
     private final String errorMessage;
 
