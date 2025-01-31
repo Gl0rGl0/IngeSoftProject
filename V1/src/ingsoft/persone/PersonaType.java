@@ -1,24 +1,31 @@
 package ingsoft.persone;
 
 public enum PersonaType {
-        CONFIGURATORE("configuratori", Configuratore.class),
-        FRUITORE("fruitori", Fruitore.class),
-        VOLONTARIO("volontari", Volontario.class),
-        ERROR("error", Persona.class);
+        CONFIGURATORE("configuratori", Configuratore.class, 4),
+        FRUITORE("fruitori", Fruitore.class, 3),
+        VOLONTARIO("volontari", Volontario.class, 2),
+        GUEST("nessuna", Persona.class, 0),
+        ERROR("error", Persona.class, 0);
 
+        private final int priorita;
         private final String filePath;
         private final Class<? extends Persona> personaClass;
 
-        PersonaType(String filePath, Class<? extends Persona> personaClass) {
+        PersonaType(String filePath, Class<? extends Persona> personaClass, int priorita) {
                 this.filePath = filePath;
                 this.personaClass = personaClass;
+                this.priorita = priorita;
         }
 
         public String getFilePath() {
-                return filePath;
+                return this.filePath;
         }
 
         public Class<? extends Persona> getPersonaClass() {
-                return personaClass;
+                return this.personaClass;
+        }
+
+        public int getPriorita(){
+                return this.priorita;
         }
 }

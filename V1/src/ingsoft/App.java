@@ -2,6 +2,7 @@ package ingsoft;
 
 import ingsoft.luoghi.Luogo;
 import ingsoft.persone.Configuratore;
+import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.DBUtils;
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class App {
-    private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate";
+    private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivere help per aiuto";
     private static final String MESSAGGIO_LOGIN_FIRST_CONFIGURATORE = "Esegui il primo login da Configuratore";
     private static final String MESSAGGIO_MENU = """
             1. Stampa un messaggio
@@ -25,13 +26,14 @@ public class App {
     private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
 
     DBUtils db = new DBUtils();
-    private Persona user;
+    private Persona user = new Guest();
 
     public App(){
     }
 
     public PersonaType login(String user, String psw){
         if (db.loginCheckConfiguratore(user, psw)) {
+            this.user = db.getConfiguratoreFromDB(user);
             return PersonaType.CONFIGURATORE;
         }
 
@@ -48,14 +50,14 @@ public class App {
 
         while (tentativiRimasti > 0) {
             ViewSE.log("Inserisci username: ");
-            String user = ViewSE.read();
+            String username = ViewSE.read();
             ViewSE.log("Inserisci password: ");
             String psw = ViewSE.read();
 
-            PersonaType log = login(user, psw);
+            PersonaType log = login(username, psw);
             if (log != PersonaType.ERROR) {
-                ViewSE.log("Login riuscito! Ciao " + user + " (" + log + ")");
-                this.user = db.getConfiguratoreFromDB(user);
+                ViewSE.log("Login riuscito! Ciao " + username + " (" + log + ")");
+                this.user = db.getConfiguratoreFromDB(username);
                 return log;
             } else {
                 tentativiRimasti--;
@@ -75,11 +77,7 @@ public class App {
     }
 
     public ArrayList<Configuratore> getConfiguratoriList(){
-        ArrayList<Configuratore> out = new ArrayList<>();
-        for (Configuratore configuratore : db.getDBconfiguratori()) {
-            out.add(new Configuratore(configuratore.getUsername(), "*****"));
-        }
-        return out;
+        return db.getDBconfiguratori();
     }
 
     public ArrayList<Luogo> getLuoghiList(){
@@ -96,7 +94,7 @@ public class App {
         //     return;
         // }
 
-        running = !running; //invertiFlusso
+        running = !running; //invertiFlussoPerTest
         while (running) {
             if(user == null)
                 login();
@@ -122,7 +120,7 @@ public class App {
         }
 
         while(!running){
-            interpreter(ViewSE.read());
+            interpreter(ViewSE.read(user.getUsername() + "> "));
         }
     }
 
@@ -190,22 +188,32 @@ public class App {
         for (char c : opzioni) {
             option[i++] = c;
         }
+
+        String[] elements = new String[elementi.size()];
+        i = 0;
+        for (String s : elementi) {
+            elements[i++] = s;
+        }
     
         switch (cmd) {
             case "add" -> {
                 ViewSE.log("ADD");
-                add(option, elementi);
+                add(option, elements);
             }
             case "remove" -> {
                 ViewSE.log("REMOVE");
-                remove(option, elementi);
+                remove(option, elements);
+            }
+            case "login" -> {
+                ViewSE.log("LOGIN");
+                login(option, elements);
             }
             case "help" -> ViewSE.log(FunctionList.HELP);
             default -> ViewSE.log("\"" + cmd + "\" non è riconosciuto come comando interno");
         }
     }
 
-    private void add(char[] opzioni, ArrayList<String> args) {
+    private void add(char[] opzioni, String[] args) {
         if(opzioni.length < 1){
             ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.ADD);
             return;
@@ -220,7 +228,7 @@ public class App {
         }
     }
 
-    private void remove(char[] opzioni, ArrayList<String> args){
+    private void remove(char[] opzioni, String[] args){
         if(opzioni.length < 1){
             ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.REMOVE);
             return;
@@ -235,4 +243,11 @@ public class App {
         }
     }
 
+    private void login(char[] opzioni, String[] args) {
+        if(args.length < 2){
+            ViewSE.log("Errore nell'utilizzo del prompt: " + FunctionList.LOGIN);
+            return;
+        }
+        login(args[0], args[1]);
+    }
 }

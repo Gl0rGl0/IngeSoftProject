@@ -3,60 +3,87 @@ package ingsoft.util;
 public enum FunctionList {
     ADD("""
         add [-c] [-f] [-v] [String: username] [String: psw]
-            -c\t\tAggiunge un configuratore
-            -f\t\tAggiunge un fruitore
-            -v\t\tAggiunge un volontario
-            username\tSpecifica l'username della persona inserita
-            psw\t\tSpecifica la password della persona inserita
+            -c        Aggiunge un configuratore
+            -f        Aggiunge un fruitore
+            -v        Aggiunge un volontario
+            username  Specifica l'username della persona inserita
+            psw       Specifica la password della persona inserita
 
-        add [-V] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Ora: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
-            -V\t\t\tAggiunge una visita
-            titolo\t\t\tIl titolo della visita
-            descrizione\t\tUna breve descrizione della visita
-            puntoIncontro\t\tIl punto di incontro per la visita [latitudine,longitudine]
-            dataInizioPeriodo\tLa data di inizio del periodo della visita [GG:MM:AA]
-            dataFinePeriodo\t\tLa data di fine del periodo della visita [GG:MM:AA]
-            oraInizio\t\tL'orario di inizio della visita [HH:MM]
-            durataVisita\t\tLa durata della visita in minuti
-            free\t\t\tIndica se la visita è gratuita [True/False]
-            numMinPartecipants\tIl numero minimo di partecipanti
-            numMaxPartecipants\tIl numero massimo di partecipanti
-            stato\t\t\tLo stato della visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
+        add [-V] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Time: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
+            -V                 Aggiunge una visita
+            titolo              Il titolo della visita
+            descrizione         Una breve descrizione della visita
+            puntoIncontro       Il punto di incontro per la visita [latitudine,longitudine]
+            dataInizioPeriodo   Data di inizio del periodo della visita [YYYY-MM-DD]
+            dataFinePeriodo     Data di fine del periodo della visita [YYYY-MM-DD]
+            oraInizio           L'orario di inizio della visita [HH:MM]
+            durataVisita        Durata della visita in minuti
+            free                Indica se la visita è gratuita [true/false]
+            numMinPartecipants  Numero minimo di partecipanti
+            numMaxPartecipants  Numero massimo di partecipanti
+            stato               Stato della visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
 
-        add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Visita>: visite]
-            -L\t\t\tAggiunge un luogo
-            nomeLuogo\t\tIl nome del luogo
-            descrizioneLuogo\tUna breve descrizione del luogo
-            posizione\t\tLa posizione GPS del luogo [latitudine,longitudine]
-            visite\t\t\tLa lista delle visite programmate per questo luogo [ids (id1,id2...)]
-    """),
+        add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Integer>: visite]
+            -L                 Aggiunge un luogo
+            nomeLuogo          Nome del luogo
+            descrizioneLuogo   Breve descrizione del luogo
+            posizione          Posizione GPS [latitudine,longitudine]
+            visite             Lista degli ID delle visite associate [id1,id2,...]
+    """,
+        "Aggiunge una Persona/Visita/Luogo al database"),
 
     REMOVE("""
         remove [-c] [-f] [-v] [String: username]
-            -c\t\tRimuove un configuratore
-            -f\t\tRimuove un fruitore
-            -v\t\tRimuove un volontario
-            username\tSpecifica l'username della persona da rimuovere
+            -c        Rimuove un configuratore
+            -f        Rimuove un fruitore
+            -v        Rimuove un volontario
+            username  Specifica l'username della persona da rimuovere
         
         remove [-V] [-L] [String: titolo]
-            -V\t\tRimuove una visita
-            -L\t\tRimuove un luogo
-            titolo\tSpecifica il titolo della visita o del luogo da rimuovere
-    """),
+            -V        Rimuove una visita
+            -L        Rimuove un luogo
+            titolo    Specifica il titolo della visita o del luogo da rimuovere
+    """,
+        "Rimuove una Persona/Visita/Luogo dal database"),
 
-    HELP("""
-        ADD aggiunge una Persona/Visita/Luogo al database
-        REMOVE rimuove una Persona/Visita/Luogo dal database
-    """);
+    LOGIN("""
+        login [String: username] [String: password]
+            username  Specifica l'username con cui fare il login
+            password  Specifica la password con cui fare il login
+    """,
+        "Esegui il login immettendo le credenziali"),
 
-    private final String errorMessage;
+    HELP(null, "Fornisce informazioni sui comandi disponibili.");
 
-    FunctionList(String errorMessage) {
-        this.errorMessage = errorMessage;
+    static {
+        HELP.message = getHelpMessage();
+    }
+
+    private static String getHelpMessage() {
+        StringBuilder out = new StringBuilder();
+        for (FunctionList element : FunctionList.values()) {
+            if (element != HELP) {
+                out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
+            }
+        }
+        return out.toString();
+    }
+
+    private String message;
+    private final String lineInfo;
+
+    FunctionList(String message, String lineInfo) {
+        this.message = message;
+        this.lineInfo = lineInfo;
     }
 
     @Override
     public String toString() {
-        return errorMessage;
+        return this == HELP ? this.message : (this.lineInfo + "\n" + this.message);
+    }
+
+
+    public String getInfo(){
+        return this.lineInfo;
     }
 }

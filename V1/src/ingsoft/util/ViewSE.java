@@ -10,6 +10,11 @@ public class ViewSE {
         System.out.println(out);
     }
 
+    public static String read(String out){
+        System.out.print(out);
+        return scanner.nextLine();
+    }
+
     public static String read(){
         return scanner.nextLine();
     }

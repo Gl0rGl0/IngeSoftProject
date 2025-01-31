@@ -38,13 +38,16 @@ public class Main {
 
     public static void initPersone(App app){
         System.out.println(app.db.addConfiguratoreToDB("config1", "pass1C"));
-        System.out.println(app.db.addConfiguratoreToDB(new Configuratore("config2", "pass2C")));
+        System.out.println(app.db.addConfiguratoreToDB(new Configuratore("config2", "pass2C", "1")));
 
         System.out.println(app.db.addFruitoreToDB("fruit1", "pass1F"));
-        System.out.println(app.db.addFruitoreToDB("fruit2", "pass2F"));
-        System.out.println(app.db.addFruitoreToDB(new Fruitore("fruit3", "pass3F")));
+        System.out.println(app.db.addFruitoreToDB("fruit2", "pass2F, 0"));
+        System.out.println(app.db.addFruitoreToDB(new Fruitore("fruit3", "pass3F", "1")));
 
         System.out.println(app.db.addVolontarioToDB("volont1", "pass1V"));
-        System.out.println(app.db.addVolontarioToDB(new Volontario("volont2", "pass2V")));
+        System.out.println(app.db.addVolontarioToDB(new Volontario("volont2", "pass2V", "1")));
+
+        System.out.println("AA");
+        app.db.getDBconfiguratori().forEach(c -> System.out.println(c.firstAccess()));
     }
 }
