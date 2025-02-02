@@ -10,6 +10,17 @@ public class HelpCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] options, String[] args) {
-        ViewSE.log(super.commandInfo.getHelpMessage(app.user.type().getPriorita()));
+        if (args.length > 0) {
+            try {
+                CommandList cl = CommandList.valueOf(args[0].toUpperCase());
+                ViewSE.log(cl.toString());
+                return;
+            } catch (IllegalArgumentException ex) {
+                // Il valore non corrisponde a nessun CommandList
+            }
+        }
+        // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al livello dell'utente
+        ViewSE.log(super.commandInfo.getHelpMessage(app.getCurrentUser().type().getPriorita()));
     }
+
 }

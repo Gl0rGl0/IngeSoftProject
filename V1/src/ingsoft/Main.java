@@ -8,6 +8,9 @@ public class Main {
     public static void main(String[] args) {
         App app = new App();
         Test(app);
+
+        app.interpreter("login config1 pass1");
+
         app.start();
     }
 
@@ -19,7 +22,7 @@ public class Main {
         initPersone(app);
 
         //System.out.println(app.db.getDBconfiguratori());
-        //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1"));
+        //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1C"));
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.login("config1", "pass1")); //CONFIGURATORE
         //System.out.println(app.login("config1", "pass1")); //CONFIGURATORE
@@ -41,7 +44,7 @@ public class Main {
         System.out.println(app.db.addConfiguratoreToDB(new Configuratore("config2", "pass2C", "1")));
 
         System.out.println(app.db.addFruitoreToDB("fruit1", "pass1F"));
-        System.out.println(app.db.addFruitoreToDB("fruit2", "pass2F, 0"));
+        System.out.println(app.db.addFruitoreToDB("fruit2", "pass2F"));
         System.out.println(app.db.addFruitoreToDB(new Fruitore("fruit3", "pass3F", "1")));
 
         System.out.println(app.db.addVolontarioToDB("volont1", "pass1V"));

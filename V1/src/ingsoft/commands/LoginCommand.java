@@ -1,7 +1,6 @@
 package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.persone.Guest;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
 
@@ -14,7 +13,7 @@ public class LoginCommand extends AbstractCommand{
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 2) {
-            ViewSE.log("Errore nell'utilizzo del prompt: " + CommandList.LOGIN);
+            ViewSE.log("Errore nell'utilizzo del prompt");
             return;
         }
         if (app.user.type() != PersonaType.GUEST) {
@@ -38,8 +37,8 @@ public class LoginCommand extends AbstractCommand{
             return PersonaType.CONFIGURATORE;
         }
 
-        app.user = app.db.cercaInDB(username);
-        if (app.user == null) app.user = new Guest();
+        app.setUser(username);
+        
         // Potrebbero essere aggiunti ulteriori casi per altri tipi di utente
         return PersonaType.ERROR;
     }

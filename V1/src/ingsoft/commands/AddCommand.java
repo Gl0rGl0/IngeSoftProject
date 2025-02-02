@@ -19,7 +19,7 @@ public class AddCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per configuratore)
         if (options.length < 1) {
-            ViewSE.log("Errore nell'utilizzo del comando 'add': " + CommandList.ADD);
+            ViewSE.log("Errore nell'utilizzo del comando 'add'");
             return;
         }
         char option = options[0].charAt(0);
@@ -30,7 +30,7 @@ public class AddCommand extends AbstractCommand {
             // Logica per aggiungere un fruitore
             case 'v' -> ViewSE.log("Eseguo: Aggiunta volontario");
             // Logica per aggiungere un volontario
-            default -> ViewSE.log("Opzione non riconosciuta per 'add'. Uso: " + CommandList.ADD);
+            default -> ViewSE.log("Opzione non riconosciuta per 'add'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
     }

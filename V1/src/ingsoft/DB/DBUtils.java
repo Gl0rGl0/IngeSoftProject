@@ -373,6 +373,8 @@ public class DBUtils {
     }
 
     public boolean changePsw(Persona persona, String newPsw) {
+        if(persona == null)
+            return false;
         // Rimuove la persona con la vecchia password
         if (!removePersonaFromDB(persona.getUsername(), persona.type())) {
             return false;

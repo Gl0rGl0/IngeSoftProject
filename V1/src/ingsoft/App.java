@@ -19,7 +19,7 @@ import java.util.Map;
 public class App {
 
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
-    private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
+    //private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
 
     public DBUtils db = new DBUtils();
     // Inizialmente l'utente è un Guest (non loggato)
@@ -41,7 +41,7 @@ public class App {
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
 
         // Puoi aggiungere altri comandi
-        commandRegistry.put("exit", new ExitCommand(null)); //implementare
+        commandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
     }
 
     /**
@@ -51,7 +51,7 @@ public class App {
      *
      * @param prompt la stringa di comando immessa
      */
-    private void interpreter(String prompt) {
+    void interpreter(String prompt) {
         String[] tokens = prompt.trim().split("\\s+");
         if (tokens.length == 0 || tokens[0].isEmpty()) {
             ViewSE.log("Errore: nessun comando fornito.");
@@ -102,5 +102,14 @@ public class App {
             String input = ViewSE.read("\n" + user.getUsername() + "> ");
             interpreter(input);
         }
+    }
+
+    public Persona getCurrentUser() {
+        return this.user;
+    }
+
+    public void setUser(String username) {
+        this.user = db.cercaInDB(username);
+        if (this.user == null) this.user = new Guest();
     }
 }
