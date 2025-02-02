@@ -12,11 +12,15 @@ public abstract class Persona {
         this.psw = psw;
         this.personaType = personaType;
 
-        nuovo = n.equals(1);
+        nuovo = n.equals("1");
     }
 
     public String getUsername() {
         return this.username;
+    }
+
+    public void notNew(){
+        this.nuovo = false;
     }
 
     public String getPsw() {

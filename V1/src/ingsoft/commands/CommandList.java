@@ -1,6 +1,8 @@
-package ingsoft.util;
+package ingsoft.commands;
 
-public enum FunctionList {
+import ingsoft.persone.PersonaType;
+
+public enum CommandList {
     ADD("""
         add [-c] [-f] [-v] [String: username] [String: psw]
             -c        Aggiunge un configuratore
@@ -30,7 +32,7 @@ public enum FunctionList {
             posizione          Posizione GPS [latitudine,longitudine]
             visite             Lista degli ID delle visite associate [id1,id2,...]
     """,
-        "Aggiunge una Persona/Visita/Luogo al database"),
+        "Aggiunge una Persona/Visita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     REMOVE("""
         remove [-c] [-f] [-v] [String: username]
@@ -44,46 +46,58 @@ public enum FunctionList {
             -L        Rimuove un luogo
             titolo    Specifica il titolo della visita o del luogo da rimuovere
     """,
-        "Rimuove una Persona/Visita/Luogo dal database"),
+        "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     LOGIN("""
         login [String: username] [String: password]
             username  Specifica l'username con cui fare il login
             password  Specifica la password con cui fare il login
     """,
-        "Esegui il login immettendo le credenziali"),
+        "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo (0)
 
-    HELP(null, "Fornisce informazioni sui comandi disponibili.");
+    LOGOUT("""
+        logout
+    """,
+        "Esegui il logout dal sistema", PersonaType.VOLONTARIO.getPriorita()),  // Devi essere almeno loggato (0)
 
-    static {
-        HELP.message = getHelpMessage();
-    }
+    
+    EXIT("""
+        exit
+    """,
+        "Chiude il programma", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo (0)
 
-    private static String getHelpMessage() {
+    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita());
+        
+    public String getHelpMessage(int permission) {
         StringBuilder out = new StringBuilder();
-        for (FunctionList element : FunctionList.values()) {
-            if (element != HELP) {
+        for (CommandList element : CommandList.values()) {
+            if (element != HELP && permission >= element.requiredPermission) {
                 out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
             }
         }
-        return out.toString();
+        return out.toString().substring(0, out.length() - 2); //toglie l'ultimo "\n" cosi da non avere troppi spazi ma non appesantendo la logica del for
     }
-
+        
     private String message;
     private final String lineInfo;
+    private final int requiredPermission;  // livello minimo richiesto
 
-    FunctionList(String message, String lineInfo) {
+    CommandList(String message, String lineInfo, int requiredPermission) {
         this.message = message;
         this.lineInfo = lineInfo;
+        this.requiredPermission = requiredPermission;
     }
 
     @Override
     public String toString() {
-        return this == HELP ? this.message : (this.lineInfo + "\n" + this.message);
+        return this == HELP ? getHelpMessage(requiredPermission) : (this.lineInfo + "\n" + this.message);
     }
-
 
     public String getInfo(){
         return this.lineInfo;
+    }
+
+    public int getRequiredPermission() {
+        return this.requiredPermission;
     }
 }

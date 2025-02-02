@@ -47,7 +47,6 @@ public class Main {
         System.out.println(app.db.addVolontarioToDB("volont1", "pass1V"));
         System.out.println(app.db.addVolontarioToDB(new Volontario("volont2", "pass2V", "1")));
 
-        System.out.println("AA");
-        app.db.getDBconfiguratori().forEach(c -> System.out.println(c.firstAccess()));
+        app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
     }
 }
