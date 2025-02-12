@@ -32,7 +32,7 @@ public abstract class Persona {
     }
 
     public String getNew(){
-        return this.nuovo ? "0" : "1";
+        return this.nuovo ? "1" : "0";
     }
 
     public boolean firstAccess(){

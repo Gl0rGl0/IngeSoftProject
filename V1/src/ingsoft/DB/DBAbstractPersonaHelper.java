@@ -131,22 +131,22 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         }
         return true;
     }
-    
 
     @SuppressWarnings("UseSpecificCatch")
     public boolean changePassword(String username, String newPsw) {
         ArrayList<T> persons = getPersonList();
-        T found = null;
+        boolean found = false;
         for (T persona : persons) {
             if (persona.getUsername().equals(username)) {
-                found = persona;
+                found = true;
                 break;
             }
         }
-        if (found == null) {
+        
+        if (found == false) {
             return false;
         }
-    
+
         if (!removePersona(username))
             return false;
     
@@ -170,8 +170,8 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         return null;
     }
 
-    public boolean login(String user, String psw){
+    public Persona login(String user, String psw){
         //IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
-        return false;
+        return null;
     }
 }

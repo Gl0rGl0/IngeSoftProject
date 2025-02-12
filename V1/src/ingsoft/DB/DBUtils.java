@@ -4,6 +4,7 @@ import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
+import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.persone.Volontario;
@@ -104,8 +105,17 @@ public class DBUtils {
         return null;
     }
 
-    public boolean login(String user, String psw){
+    public Persona login(String user, String psw){
+        Persona out;
+        out = dbConfiguratoreHelper.login(user, psw);
+        if(out != null) return out;
+
+        out = dbVolontarioHelper.login(user, psw);
+        if(out != null) return out;
+
+        out = dbFruitoreHelper.login(user, psw);
+        if(out != null) return out;
         //VALUTAZIONE IN CORTO CIRCUITO A PARTIRE DAL CONFIGURATORE
-        return dbConfiguratoreHelper.login(user, psw) || dbVolontarioHelper.login(user, psw) || dbFruitoreHelper.login(user, psw);
+        return new Guest();
     }
 }

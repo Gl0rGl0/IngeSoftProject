@@ -4,6 +4,7 @@ public enum PersonaType {
         CONFIGURATORE("configuratori", Configuratore.class, 4),
         FRUITORE("fruitori", Fruitore.class, 3),
         VOLONTARIO("volontari", Volontario.class, 2),
+        CAMBIOPSW("nessuna", Persona.class, 1),
         GUEST("nessuna", Persona.class, 0),
         ERROR("error", Persona.class, 0);
 

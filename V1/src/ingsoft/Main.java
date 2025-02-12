@@ -9,7 +9,7 @@ public class Main {
         App app = new App();
         Test(app);
 
-        app.interpreter("login config1 pass1");
+        app.interpreter("login config1 pass1C");
 
         app.start();
     }

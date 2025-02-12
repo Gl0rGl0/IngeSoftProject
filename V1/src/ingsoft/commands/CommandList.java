@@ -53,13 +53,17 @@ public enum CommandList {
             username  Specifica l'username con cui fare il login
             password  Specifica la password con cui fare il login
     """,
-        "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo (0)
+        "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo se non loggati(0)
 
     LOGOUT("""
         logout
     """,
-        "Esegui il logout dal sistema", PersonaType.VOLONTARIO.getPriorita()),  // Devi essere almeno loggato (0)
+        "Esegui il logout dal sistema", PersonaType.VOLONTARIO.getPriorita()),  // Devi essere almeno loggato (2)
 
+    CHANGEPSW("""
+        changepsw [String: nuovapsw]
+            nuovapsw  Specifica la nuova password per l'account
+            """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita()), // Devi essere almeno loggato ma devi cambiare psw perche GUEST non puo... (1)
     
     EXIT("""
         exit

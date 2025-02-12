@@ -10,11 +10,13 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
     }
     
     @Override
-    public boolean login(String user, String psw){
+    public Persona login(String user, String psw){
         for (Persona p : cachedPersons) {
-            if(p.getUsername().equals(user))
-                return p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw));
+            if(p.getUsername().equals(user)){
+                if(p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw)))
+                    return p;
+            }
         }
-        return false;
+        return null;
     }
 }

@@ -1,7 +1,6 @@
 package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
@@ -28,7 +27,8 @@ public class LoginCommand extends AbstractCommand{
         if (app.user.type() != PersonaType.GUEST) {
             ViewSE.print("Login effettuato con successo (" + app.user.type() + ")");
             if(app.user.firstAccess()){
-                changePsw();
+                ViewSE.print("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire del servizio");
+                //changePsw();
             }
         } else {
             ViewSE.print("Errore di login, riprova");
@@ -36,8 +36,7 @@ public class LoginCommand extends AbstractCommand{
     }
 
     private Persona login(String username, String psw) {
-        app.db.login(username, psw);
-        return new Guest();
+        return app.db.login(username, psw);
     }
 
     private void changePsw(){

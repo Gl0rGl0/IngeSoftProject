@@ -2,6 +2,7 @@ package ingsoft;
 
 import ingsoft.DB.DBUtils;
 import ingsoft.commands.AddCommand;
+import ingsoft.commands.ChangePswCommand;
 import ingsoft.commands.Command;
 import ingsoft.commands.CommandList;
 import ingsoft.commands.ExitCommand;
@@ -11,6 +12,7 @@ import ingsoft.commands.LogoutCommand;
 import ingsoft.commands.RemoveCommand;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
+import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ public class App {
         commandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
         commandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT)); //implementare
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
+        commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
 
         // Puoi aggiungere altri comandi
         commandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
@@ -83,6 +86,10 @@ public class App {
             int userPerm = user.type().getPriorita();
             if (userPerm < command.getRequiredPermission()) {
                 ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
+                return;
+            }
+            if(user.firstAccess() && command.getRequiredPermission() > PersonaType.CAMBIOPSW.getPriorita()){ //Priorita guest = 0
+                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "' finche' non viene cambiata la password con 'changepsw [nuovapsw]'.");
                 return;
             }
             command.execute(options, args);
