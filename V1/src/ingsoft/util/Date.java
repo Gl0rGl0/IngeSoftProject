@@ -1,9 +1,9 @@
 package ingsoft.util;
 
 public class Date {
-    int gg;
-    int mm;
-    int aa;
+    private final int gg;
+    private final int mm;
+    private final int aa;
 
     public Date(int gg, int mm, int aa){
         this.gg = gg;
@@ -18,8 +18,14 @@ public class Date {
         this.aa = Integer.parseInt(sub[2]);
     }
 
+    public Date getNotAnno(){
+        return new Date(gg,mm,-1);
+    }
+
     @Override
     public String toString(){
-        return String.format("%d/%d/%d", gg, mm, aa);
+        if(aa != -1)
+            return String.format("%d/%d/%d", gg, mm, aa);
+        return String.format("%d/%d", gg, mm);
     }
 }

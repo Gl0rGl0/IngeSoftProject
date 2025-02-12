@@ -25,6 +25,7 @@ public class DBUtils {
         dbLuoghiHelper = new DBLuoghiHelper(dbVisiteHelper);
     }
 
+    //Getter per tutti gli helper
     public ArrayList<Configuratore> getConfiguratori() {
         return dbConfiguratoreHelper.getPersonList();
     }
@@ -45,6 +46,7 @@ public class DBUtils {
         return dbVisiteHelper.getVisite();
     }
 
+    //Adder con persone già create
     public boolean addConfiguratore(Configuratore c) {
         return dbConfiguratoreHelper.addPersona(c);
     }
@@ -57,6 +59,9 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(v);
     }
 
+    //TOADD adderVisite/adderLuoghi
+
+    //Adder di persone da creare tramite username e psw
     public boolean addConfiguratore(String user, String psw) {
         return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, "1"));
     }
@@ -69,6 +74,7 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
     }
 
+    //Remover dato l'username [sufficiente e necessario]
     public boolean removeConfiguratore(String username) {
         return dbConfiguratoreHelper.removePersona(username);
     }
@@ -81,6 +87,8 @@ public class DBUtils {
         return dbVolontarioHelper.removePersona(username);
     }
 
+    //Come prima ogni persona ha il suo Helper che gestisce le chiamate ai giusti ArrayList
+    //Return true se il cambio ha successo, false viceversa
     public boolean changePassword(String username, String newPsw, PersonaType tipoPersona) {
         return switch (tipoPersona) {
             case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(username, newPsw);
@@ -90,6 +98,7 @@ public class DBUtils {
         };
     }
 
+    //Dato che qui non si può trovare direttamente il tipo si usa una ricerca di priorità C->V->F ritornando la persona trovata o null
     public Persona findUser(String username) {
         Persona out;
 
@@ -105,6 +114,8 @@ public class DBUtils {
         return null;
     }
 
+    //Come in find si scorrono tutte le persone per priorità C->V->F, implementabile loginIstantaneo con uso del finder + switch e chiamata a (ex) correttohelper.directLogin(user,psw)
+    //ritorna la persona che ha effettuato il login o guest in caso di nessun utente trovato
     public Persona login(String user, String psw){
         Persona out;
         out = dbConfiguratoreHelper.login(user, psw);
@@ -115,7 +126,16 @@ public class DBUtils {
 
         out = dbFruitoreHelper.login(user, psw);
         if(out != null) return out;
-        //VALUTAZIONE IN CORTO CIRCUITO A PARTIRE DAL CONFIGURATORE
+        
         return new Guest();
     }
+
+
+    //IMPLEMENTARE
+    // public ArrayList<Visita> getlistaVisiteFromLuogo(String luogo) {
+    //     String cerca = luogo.toLowerCase().strip().replaceAll(" ", "");
+    //     return visite.stream()
+    //             .filter(v -> v.getIDVisita().contains(cerca))
+    //             .collect(Collectors.toCollection(ArrayList::new));
+    // }
 }

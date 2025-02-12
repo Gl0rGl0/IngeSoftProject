@@ -19,10 +19,6 @@ public abstract class Persona {
         return this.username;
     }
 
-    public void notNew(){
-        this.nuovo = false;
-    }
-
     public String getPsw() {
         return this.psw;
     }
@@ -31,7 +27,7 @@ public abstract class Persona {
         this.psw = psw;
     }
 
-    public String getNew(){
+    public String getNew(){ //come firstAccess ma in stringa...
         return this.nuovo ? "1" : "0";
     }
 
@@ -39,10 +35,15 @@ public abstract class Persona {
         return this.nuovo;
     }
 
+    public void notNew(){
+        this.nuovo = false;
+    }
+
     public PersonaType type(){
         return this.personaType;
     }
 
+    //se si disattiva non si potranno vedere le psw del database dall'app (come giusto che sia)
     boolean testPsw = true;
     @Override
     public String toString() {

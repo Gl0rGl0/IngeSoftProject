@@ -21,7 +21,6 @@ import java.util.Map;
 public class App {
 
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
-    //private static final String MESSAGGIO_CHIUSURA = "Programma terminato. Arrivederci!";
 
     public DBUtils db = new DBUtils();
     // Inizialmente l'utente è un Guest (non loggato)
@@ -34,8 +33,9 @@ public class App {
         registerCommands();
     }
 
+    //Ogni nuovo comando va inserito nella mappa in modo da poterlo riconoscere e in CommandList per avere le informazioni
     private void registerCommands() {
-        // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa
+        // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
         commandRegistry.put("add", new AddCommand(this, CommandList.ADD));
         commandRegistry.put("remove", new RemoveCommand(this, CommandList.REMOVE));
         commandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
@@ -76,23 +76,26 @@ public class App {
                 argsList.add(token);
             }
         }
-    
+
+        //RIMPIAZZA new String[0] (java11+) senza creare un array inutilmente
         String[] options = optionsList.toArray(String[]::new);
-        String[] args = argsList.toArray(String[]::new); //RIMPIAZZA new String[0] (java11+) senza creare un array inutilmente
+        String[] args = argsList.toArray(String[]::new); 
     
         Command command = commandRegistry.get(cmd);
         if (command != null) {
             // Controllo del permesso: confronta il livello dell'utente con quello richiesto dal comando.
             int userPerm = user.type().getPriorita();
+            //Se l'utente non dispone dei permessi viene rifiutata la query subito
             if (userPerm < command.getRequiredPermission()) {
                 ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
                 return;
             }
+            //se l'utente deve cambiare la psw viene messo in uno stato intermedio ma gli permette di eseguire i comandi con priorita guest
             if(user.firstAccess() && command.getRequiredPermission() > PersonaType.CAMBIOPSW.getPriorita()){ //Priorita guest = 0
                 ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "' finche' non viene cambiata la password con 'changepsw [nuovapsw]'.");
                 return;
             }
-            command.execute(options, args);
+            command.execute(options, args); //OGNI comando ha execute dato che è una discendenza abstract+interface da implementare
         } else {
             ViewSE.print("\"" + cmd + "\" non è riconosciuto come comando interno.");
         }
@@ -119,5 +122,5 @@ public class App {
     public void setUser(String username) {
         this.user = db.findUser(username);
         if (this.user == null) this.user = new Guest();
-    }
+    }//INUTILE, TOREMOVE?
 }

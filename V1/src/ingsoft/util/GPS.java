@@ -9,6 +9,7 @@ public class GPS {
         this.latitudine = latitudine;
     }
 
+    @Override
     public String toString(){
         return "(" + longitudine + "," + latitudine + ")";
     }

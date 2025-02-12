@@ -9,9 +9,10 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
         super(PersonaType.CONFIGURATORE, Configuratore.class);
     }
     
+    //la psw è salvata con una cifratura hash semplicissima + salting con user dato che è univoco...
     @Override
     public Persona login(String user, String psw){
-        for (Persona p : cachedPersons) {
+        for (Persona p : getPersonList()) {
             if(p.getUsername().equals(user)){
                 if(p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw)))
                     return p;

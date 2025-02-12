@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+//Letteralmente gestione input/output...
 public class ViewSE {
     
     private static final Scanner scanner = new Scanner(System.in);

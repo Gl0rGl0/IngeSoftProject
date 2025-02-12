@@ -5,8 +5,8 @@ public class PeriodoAnno {
     private Date finePeriodo;
     
     public PeriodoAnno(Date inizioPeriodo, Date finePeriodo){
-        this.inizioPeriodo = new Date(inizioPeriodo.gg, inizioPeriodo.mm, -1);
-        this.inizioPeriodo = new Date(finePeriodo.gg, finePeriodo.mm, -1);
+        this.inizioPeriodo = inizioPeriodo.getNotAnno();
+        this.inizioPeriodo = finePeriodo.getNotAnno();
     }
 
     public Date inizio(){
@@ -15,5 +15,10 @@ public class PeriodoAnno {
     
     public Date fine(){
         return this.finePeriodo;
+    }
+
+    @Override
+    public String toString(){
+        return inizioPeriodo + "-" + finePeriodo;
     }
 }

@@ -4,22 +4,31 @@ import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
 
+
+//UTILIZZO TIPO
+
+//init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'app
+//app: MessaggioBenvenuto -> while(Interpreter)
+//Interpreter: [comando] [-opzioni] [argomenti], ogni comando è passato al suo Command(>Abstract|Interface) dove viene gestito
+//DB: Crea 5 sotto helper che gestiscono ognuno una parte di dati, Configuratori,ecc
+//Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
+
 public class Main {
     public static void main(String[] args) {
         App app = new App();
         Test(app);
 
+        //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
+        // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
         app.interpreter("login config1 pass1C");
 
+        //Inizia l'interazione con l'utente da tastiera
         app.start();
     }
 
 
     public static void Test(App app){
-        //System.out.println(app.getConfiguratoriListString());
-        //System.out.println(app.getConfiguratoriList());
-
-        initPersone(app);
+        initPersone(app); //Inizializza il database in caso sia il primo accesso
 
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1C"));
@@ -40,6 +49,7 @@ public class Main {
     }
 
     public static void initPersone(App app){
+        //Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un elemento
         System.out.println(app.db.addConfiguratore("config1", "pass1C"));
         System.out.println(app.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
 
@@ -49,7 +59,9 @@ public class Main {
 
         System.out.println(app.db.addVolontario("volont1", "pass1V"));
         System.out.println(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
-
-        app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
+        System.out.println("\n\n\n---------------------------");
+        //Testa se è il primo accesso per tutti i configuratori
+        //app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
+        //System.out.println(app.db.getConfiguratori());
     }
 }
