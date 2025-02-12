@@ -28,4 +28,9 @@ public enum PersonaType {
         public int getPriorita(){
                 return this.priorita;
         }
+
+        @Override
+        public String toString(){
+                return this.filePath;
+        }
 }

@@ -7,12 +7,12 @@ public abstract class Persona {
     private final PersonaType personaType;
     private boolean nuovo;
 
-    public Persona(String username, String psw, PersonaType personaType, String n) {
+    public Persona(String username, String psw, PersonaType personaType, String nuovo) {
         this.username = username;
         this.psw = psw;
         this.personaType = personaType;
 
-        nuovo = n.equals("1");
+        this.nuovo = nuovo.equals("1");
     }
 
     public String getUsername() {

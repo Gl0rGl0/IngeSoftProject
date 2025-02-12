@@ -1,6 +1,8 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.persone.Guest;
+import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
 
@@ -20,9 +22,11 @@ public class LoginCommand extends AbstractCommand{
             ViewSE.print("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
-        PersonaType tipo = login(args[0], args[1]);
-        if (tipo != PersonaType.GUEST && tipo != PersonaType.ERROR) {
-            ViewSE.print("Login effettuato con successo (" + tipo + ")");
+
+        app.user = login(args[0], args[1]);
+
+        if (app.user.type() != PersonaType.GUEST) {
+            ViewSE.print("Login effettuato con successo (" + app.user.type() + ")");
             if(app.user.firstAccess()){
                 changePsw();
             }
@@ -31,16 +35,9 @@ public class LoginCommand extends AbstractCommand{
         }
     }
 
-    private PersonaType login(String username, String psw) {
-        if (app.db.loginCheckConfiguratore(username, psw)) {
-            app.user = app.db.getConfiguratoreFromDB(username);
-            return PersonaType.CONFIGURATORE;
-        }
-
-        app.setUser(username);
-        
-        // Potrebbero essere aggiunti ulteriori casi per altri tipi di utente
-        return PersonaType.ERROR;
+    private Persona login(String username, String psw) {
+        app.db.login(username, psw);
+        return new Guest();
     }
 
     private void changePsw(){
@@ -48,6 +45,6 @@ public class LoginCommand extends AbstractCommand{
         String newPsw;
         do { 
             newPsw = ViewSE.read("Questo e' il tuo primo accesso, cambia la psw inserendo quella nuova: ");
-        } while (app.db.changePsw(app.db.cercaInDB(user), newPsw));
+        } while (app.db.changePassword(user, newPsw, app.db.findUser(user).type()));
     }
 }

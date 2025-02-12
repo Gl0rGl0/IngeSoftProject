@@ -25,7 +25,7 @@ public class App {
     // Inizialmente l'utente è un Guest (non loggato)
     public Persona user = new Guest();
 
-    private Map<String, Command> commandRegistry = new HashMap<>();
+    private final Map<String, Command> commandRegistry = new HashMap<>();
 
     public App() {
         // Registra i comandi nel costruttore
@@ -74,8 +74,8 @@ public class App {
             }
         }
     
-        String[] options = optionsList.toArray(new String[0]);
-        String[] args = argsList.toArray(new String[0]);
+        String[] options = optionsList.toArray(String[]::new);
+        String[] args = argsList.toArray(String[]::new); //RIMPIAZZA new String[0] (java11+) senza creare un array inutilmente
     
         Command command = commandRegistry.get(cmd);
         if (command != null) {
@@ -110,7 +110,7 @@ public class App {
     }
 
     public void setUser(String username) {
-        this.user = db.cercaInDB(username);
+        this.user = db.findUser(username);
         if (this.user == null) this.user = new Guest();
     }
 }

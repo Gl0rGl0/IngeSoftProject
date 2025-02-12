@@ -34,7 +34,8 @@ public class ViewSE {
             fw.write(type + " | " + msg + System.lineSeparator());
         } catch (IOException e) {
             // In caso di errore, stampiamo lo stack trace
-            e.printStackTrace();
+            // e.printStackTrace();
+            print(e.getMessage());
         }
     }
 }
