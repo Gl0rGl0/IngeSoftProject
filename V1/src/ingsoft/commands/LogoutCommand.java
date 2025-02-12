@@ -17,9 +17,9 @@ public class LogoutCommand extends AbstractCommand {
      */
     public void execute(String[] options, String[] args) {
         if (app.user.type() == PersonaType.GUEST) {
-            ViewSE.log("Nessun utente loggato, effettua il login prima.");
+            ViewSE.print("Nessun utente loggato, effettua il login prima.");
         } else {
-            ViewSE.log("Logout effettuato con successo.");
+            ViewSE.print("Logout effettuato con successo.");
             app.user = new Guest();
         }
     }

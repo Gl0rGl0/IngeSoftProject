@@ -19,18 +19,18 @@ public class RemoveCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per configuratore)
         if (options.length < 1) {
-            ViewSE.log("Errore nell'utilizzo del comando 'add'");
+            ViewSE.print("Errore nell'utilizzo del comando 'add'");
             return;
         }
         char option = options[0].charAt(0);
         switch (option) {
-            case 'c' -> ViewSE.log("Eseguo: Rimuovo configuratore");
+            case 'c' -> ViewSE.print("Eseguo: Rimuovo configuratore");
             // Qui inserisci la logica per rimuovere un configuratore
-            case 'f' -> ViewSE.log("Eseguo: Rimuovo fruitore");
+            case 'f' -> ViewSE.print("Eseguo: Rimuovo fruitore");
             // Logica per rimuovere un fruitore
-            case 'v' -> ViewSE.log("Eseguo: Rimuovo volontario");
+            case 'v' -> ViewSE.print("Eseguo: Rimuovo volontario");
             // Logica per rimuovere un volontario
-            default -> ViewSE.log("Opzione non riconosciuta per 'add'.");
+            default -> ViewSE.print("Opzione non riconosciuta per 'add'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
     }

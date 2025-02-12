@@ -13,14 +13,14 @@ public class HelpCommand extends AbstractCommand{
         if (args.length > 0) {
             try {
                 CommandList cl = CommandList.valueOf(args[0].toUpperCase());
-                ViewSE.log(cl.toString());
+                ViewSE.print(cl.toString());
                 return;
             } catch (IllegalArgumentException ex) {
                 // Il valore non corrisponde a nessun CommandList
             }
         }
         // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al livello dell'utente
-        ViewSE.log(super.commandInfo.getHelpMessage(app.getCurrentUser().type().getPriorita()));
+        ViewSE.print(super.commandInfo.getHelpMessage(app.getCurrentUser().getPriorita()));
     }
 
 }

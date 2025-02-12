@@ -10,7 +10,7 @@ public class ExitCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] options, String[] args) {
-        ViewSE.log("Programma terminato. Arrivederci!");
+        ViewSE.print("Programma terminato. Arrivederci!");
         System.exit(0);
     } 
 }

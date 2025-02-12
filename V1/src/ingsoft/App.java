@@ -54,7 +54,8 @@ public class App {
     void interpreter(String prompt) {
         String[] tokens = prompt.trim().split("\\s+");
         if (tokens.length == 0 || tokens[0].isEmpty()) {
-            ViewSE.log("Errore: nessun comando fornito.");
+            ViewSE.print("Errore: nessun comando fornito.");
+            ViewSE.log("V1 ERRORE NESSUN COMANDO", "GRAVE");
             return;
         }
         String cmd = tokens[0];
@@ -81,12 +82,12 @@ public class App {
             // Controllo del permesso: confronta il livello dell'utente con quello richiesto dal comando.
             int userPerm = user.type().getPriorita();
             if (userPerm < command.getRequiredPermission()) {
-                ViewSE.log("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
+                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
                 return;
             }
             command.execute(options, args);
         } else {
-            ViewSE.log("\"" + cmd + "\" non è riconosciuto come comando interno.");
+            ViewSE.print("\"" + cmd + "\" non è riconosciuto come comando interno.");
         }
     }        
 
@@ -96,7 +97,7 @@ public class App {
      * che attende l'immissione di un comando.
      */
     public void start() {
-        ViewSE.log(MESSAGGIO_START);
+        ViewSE.print(MESSAGGIO_START);
 
         while (true) {
             String input = ViewSE.read("\n" + user.getUsername() + "> ");

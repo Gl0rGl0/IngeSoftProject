@@ -13,21 +13,21 @@ public class LoginCommand extends AbstractCommand{
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 2) {
-            ViewSE.log("Errore nell'utilizzo del prompt");
+            ViewSE.print("Errore nell'utilizzo del prompt");
             return;
         }
         if (app.user.type() != PersonaType.GUEST) {
-            ViewSE.log("Accesso già effettuato, effettua il logout se vuoi cambiare account");
+            ViewSE.print("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
         PersonaType tipo = login(args[0], args[1]);
         if (tipo != PersonaType.GUEST && tipo != PersonaType.ERROR) {
-            ViewSE.log("Login effettuato con successo (" + tipo + ")");
+            ViewSE.print("Login effettuato con successo (" + tipo + ")");
             if(app.user.firstAccess()){
                 changePsw();
             }
         } else {
-            ViewSE.log("Errore di login, riprova");
+            ViewSE.print("Errore di login, riprova");
         }
     }
 

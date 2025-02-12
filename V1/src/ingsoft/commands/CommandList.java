@@ -78,7 +78,7 @@ public enum CommandList {
         return out.toString().substring(0, out.length() - 2); //toglie l'ultimo "\n" cosi da non avere troppi spazi ma non appesantendo la logica del for
     }
         
-    private String message;
+    private final String message;
     private final String lineInfo;
     private final int requiredPermission;  // livello minimo richiesto
 

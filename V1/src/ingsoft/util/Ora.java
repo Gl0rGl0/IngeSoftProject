@@ -9,6 +9,13 @@ public class Ora {
         this.mm = mm;
     }
 
+    public Ora(String o){
+        String[] sub = o.split(":");
+        this.hh = Integer.parseInt(sub[0]);
+        this.mm = Integer.parseInt(sub[1]);
+    }
+
+    @Override
     public String toString(){
         return String.format("(%d:%d)", hh, mm);
     }

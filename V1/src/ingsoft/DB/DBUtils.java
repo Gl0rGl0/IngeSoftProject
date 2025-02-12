@@ -102,7 +102,7 @@ public class DBUtils {
         try {
             properties = loadProperties(basePath + "luoghi.properties");
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento dei luoghi: " + e.getMessage());
+            ViewSE.print("Errore durante il caricamento dei luoghi: " + e.getMessage());
             return false;
         }
         int index = 1;
@@ -120,7 +120,7 @@ public class DBUtils {
             try {
                 gps = new GPS(Double.parseDouble(latitudine), Double.parseDouble(longitudine));
             } catch (NumberFormatException ex) {
-                ViewSE.log("Errore nel parsing delle coordinate GPS per il luogo " + nomeLuogo + ": " + ex.getMessage());
+                ViewSE.print("Errore nel parsing delle coordinate GPS per il luogo " + nomeLuogo + ": " + ex.getMessage());
                 index++;
                 continue;
             }
@@ -137,7 +137,7 @@ public class DBUtils {
         try {
             properties = loadProperties(basePath + "visite.properties");
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento delle visite: " + e.getMessage());
+            ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
             return false;
         }
         visite.clear();
@@ -168,7 +168,7 @@ public class DBUtils {
                 try {
                     gps = new GPS(Double.parseDouble(latitudine), Double.parseDouble(longitudine));
                 } catch (NumberFormatException ex) {
-                    ViewSE.log("Errore nel parsing delle coordinate GPS per la visita " + visitaID + ": " + ex.getMessage());
+                    ViewSE.print("Errore nel parsing delle coordinate GPS per la visita " + visitaID + ": " + ex.getMessage());
                     continue;
                 }
                 Date inizioPeriodo, finePeriodo;
@@ -186,7 +186,7 @@ public class DBUtils {
                             Integer.parseInt(endParts[0])
                     );
                 } catch (Exception e) {
-                    ViewSE.log("Errore nel parsing delle date per la visita " + visitaID + ": " + e.getMessage());
+                    ViewSE.print("Errore nel parsing delle date per la visita " + visitaID + ": " + e.getMessage());
                     continue;
                 }
                 Ora ora;
@@ -194,7 +194,7 @@ public class DBUtils {
                     String[] oraParts = oraInizio.split(":");
                     ora = new Ora(Integer.parseInt(oraParts[0]), Integer.parseInt(oraParts[1]));
                 } catch (Exception e) {
-                    ViewSE.log("Errore nel parsing dell'ora per la visita " + visitaID + ": " + e.getMessage());
+                    ViewSE.print("Errore nel parsing dell'ora per la visita " + visitaID + ": " + e.getMessage());
                     continue;
                 }
                 try {
@@ -213,7 +213,7 @@ public class DBUtils {
                     );
                     visite.add(visita);
                 } catch (Exception ex) {
-                    ViewSE.log("Errore nella creazione della visita " + visitaID + ": " + ex.getMessage());
+                    ViewSE.print("Errore nella creazione della visita " + visitaID + ": " + ex.getMessage());
                 }
             }
         }
@@ -277,7 +277,7 @@ public class DBUtils {
         File directory = file.getParentFile();
         if (directory != null && !directory.exists()) {
             if (!directory.mkdirs()) {
-                ViewSE.log("Errore: impossibile creare la directory " + directory.getAbsolutePath());
+                ViewSE.print("Errore: impossibile creare la directory " + directory.getAbsolutePath());
                 return false;
             }
         }
@@ -285,7 +285,7 @@ public class DBUtils {
         try {
             if (!file.exists()) {
                 if (!file.createNewFile()) {
-                    ViewSE.log("Errore: impossibile creare il file " + filePath);
+                    ViewSE.print("Errore: impossibile creare il file " + filePath);
                     return false;
                 }
             }
@@ -293,7 +293,7 @@ public class DBUtils {
                 properties.load(fis);
             }
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
 
@@ -309,7 +309,7 @@ public class DBUtils {
                 try {
                     storeProperties(filePath, properties);
                 } catch (IOException e) {
-                    ViewSE.log("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
                 // Forza il refresh della lista appropriata
@@ -333,7 +333,7 @@ public class DBUtils {
         try {
             properties = loadProperties(filePath);
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento delle proprietà: " + e.getMessage());
+            ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return false;
         }
 
@@ -365,7 +365,7 @@ public class DBUtils {
                 }
                 return true;
             } catch (IOException e) {
-                ViewSE.log("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                 return false;
             }
         }
@@ -467,7 +467,7 @@ public class DBUtils {
         try {
             properties = loadProperties(basePath + fileName + ".properties");
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento delle proprietà: " + e.getMessage());
+            ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return new ArrayList<>();
         }
 
@@ -488,7 +488,7 @@ public class DBUtils {
                 T persona = constructor.newInstance(username, psw, firstAccess);
                 persone.add(persona);
             } catch (Exception e) {
-                ViewSE.log("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": " + e.getMessage());
+                ViewSE.print("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": " + e.getMessage());
                 return new ArrayList<>();
             }
             index++;

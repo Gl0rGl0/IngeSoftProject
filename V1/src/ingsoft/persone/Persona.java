@@ -51,4 +51,8 @@ public abstract class Persona {
         return "Username: " + getUsername() + " - Password: *****";
     }
 
+    public int getPriorita() {
+        return this.personaType.getPriorita();
+    }
+
 }
