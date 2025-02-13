@@ -18,28 +18,23 @@ public class TimeCommand extends AbstractCommand {
         }
         int g = 0;
         if(options.length > 0){
+            try{
             switch (options[0]) {
                 case "s" -> app.date = new Date(args[0]);
+                case "d" -> g = Integer.parseInt(args[0]);
                 case "m" -> g = Integer.parseInt(args[0]) * 30;
                 case "a" -> g = Integer.parseInt(args[0]) * 365;
                 case "n" -> {app.addSpecialDate(args[0], args[1]); return;}
                 case "l" -> {ViewSE.print(app.getDate()); return;}
-                default ->  {try {
-                    g = Integer.parseInt(args[0]);
-                } catch (NumberFormatException e) {
-                    ViewSE.print("Uso sbagliato del prompt");
-                    return;
-                }}
-            }
-        }else{
-            try {
-                g = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
+            }}catch (NumberFormatException e ){
                 ViewSE.print("Uso sbagliato del prompt");
                 return;
             }
-           
+        }else{
+            ViewSE.print(app.date);
+            return;
         }
+        
         app.date.modifica(g);
         if(g > 0){
             ViewSE.print("Saltati con successo " + g + " giorni.");

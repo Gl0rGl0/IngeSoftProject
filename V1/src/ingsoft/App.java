@@ -15,11 +15,15 @@ import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.Date;
+import ingsoft.util.TimeHelper;
 import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class App {
 
@@ -30,11 +34,20 @@ public class App {
     public Persona user = new Guest();
     public Date date = new Date(1,1,1);
 
+
     private final Map<String, Command> commandRegistry = new HashMap<>();
 
     public App() {
         // Registra i comandi nel costruttore
+        initTimer();
         registerCommands();
+    }
+
+    private void initTimer(){
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        TimeHelper timeHelper = new TimeHelper(this);
+        // Supponiamo che ogni secondo di tempo reale rappresenti un intervallo di aggiornamento
+        scheduler.scheduleAtFixedRate(timeHelper, 0, 1, TimeUnit.SECONDS);
     }
 
     //Ogni nuovo comando va inserito nella mappa in modo da poterlo riconoscere e in CommandList per avere le informazioni
