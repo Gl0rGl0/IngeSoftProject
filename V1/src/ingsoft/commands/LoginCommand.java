@@ -27,8 +27,7 @@ public class LoginCommand extends AbstractCommand{
         if (app.user.type() != PersonaType.GUEST) {
             ViewSE.print("Login effettuato con successo (" + app.user.type() + ")");
             if(app.user.firstAccess()){
-                ViewSE.print("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire del servizio");
-                //changePsw();
+                ViewSE.print("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }
         } else {
             ViewSE.print("Errore di login, riprova");
@@ -39,11 +38,4 @@ public class LoginCommand extends AbstractCommand{
         return app.db.login(username, psw);
     }
 
-    private void changePsw(){
-        String user = app.user.getUsername();
-        String newPsw;
-        do { 
-            newPsw = ViewSE.read("Questo e' il tuo primo accesso, cambia la psw inserendo quella nuova: ");
-        } while (app.db.changePassword(user, newPsw, app.db.findUser(user).type()));
-    }
 }

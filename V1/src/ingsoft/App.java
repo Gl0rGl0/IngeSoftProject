@@ -10,12 +10,15 @@ import ingsoft.commands.HelpCommand;
 import ingsoft.commands.LoginCommand;
 import ingsoft.commands.LogoutCommand;
 import ingsoft.commands.RemoveCommand;
+import ingsoft.commands.TimeCommand;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
+import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class App {
@@ -25,6 +28,7 @@ public class App {
     public DBUtils db = new DBUtils();
     // Inizialmente l'utente è un Guest (non loggato)
     public Persona user = new Guest();
+    public Date date = new Date(1,1,1);
 
     private final Map<String, Command> commandRegistry = new HashMap<>();
 
@@ -42,6 +46,8 @@ public class App {
         commandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT)); //implementare
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
         commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
+        commandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
+        
 
         // Puoi aggiungere altri comandi
         commandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
@@ -123,4 +129,12 @@ public class App {
         this.user = db.findUser(username);
         if (this.user == null) this.user = new Guest();
     }//INUTILE, TOREMOVE?
+
+    public void addSpecialDate(String d, String comment) {
+        db.addDateToDB(new Date(d + "-" + comment));
+    }
+
+    public HashSet<Date> getDate(){
+        return db.getSpecialDates();
+    }
 }

@@ -64,6 +64,19 @@ public enum CommandList {
         changepsw [String: nuovapsw]
             nuovapsw  Specifica la nuova password per l'account
             """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita()), // Devi essere almeno loggato ma devi cambiare psw perche GUEST non puo... (1)
+
+    TIME("""
+        time [[-d] [-m] [-a]] [int: giorni]
+            giorni  Specifica il numero di giorni da saltare
+            opzionalmente -d: numero di giorni
+                          -m: numero di mesi
+                          -a: numero di anni
+        time -s [Date gg/mm/aa]
+            Imposta la data attuale a gg/mm/aa
+        time
+            Mostra la data attuale
+    """,
+        "Gestione della data del sistema", PersonaType.GUEST.getPriorita()),
     
     EXIT("""
         exit

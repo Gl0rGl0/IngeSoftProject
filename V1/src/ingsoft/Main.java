@@ -21,6 +21,7 @@ public class Main {
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
         app.interpreter("login config1 pass1C");
+        app.interpreter("time -s 12/02/2025");
 
         //Inizia l'interazione con l'utente da tastiera
         app.start();

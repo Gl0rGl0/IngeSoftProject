@@ -10,10 +10,12 @@ public class ChangePswCommand extends AbstractCommand {
     }
 
     @Override
-    /**
-     * Effettua il logout impostando l'utente corrente come Guest.
-     */
     public void execute(String[] options, String[] args) {
+        if (args.length < 1) {
+            ViewSE.print("Errore nell'utilizzo del prompt");
+            return;
+        }
+
         if(app.db.changePassword(app.user.getUsername(), args[0], app.user.type())){
             app.user.notNew();
             ViewSE.print("Password cambiata con successo!");

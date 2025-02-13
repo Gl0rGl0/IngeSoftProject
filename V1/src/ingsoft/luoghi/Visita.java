@@ -5,7 +5,7 @@ import ingsoft.util.GPS;
 import ingsoft.util.Ora;
 
 public class Visita {
-    private String idVisita;
+    private final String idVisita;
 
     String titolo;
     String descrizione;
@@ -18,7 +18,7 @@ public class Visita {
     int numMinPartecipants;
     int numMaxPartecipants;
 
-    StatusLuoghi stato = StatusLuoghi.PROPOSTA;
+    StatusVisita stato = StatusVisita.PROPOSTA;
 
     // Costruttore
     public Visita(
