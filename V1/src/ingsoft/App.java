@@ -34,7 +34,6 @@ public class App {
     public Persona user = new Guest();
     public Date date = new Date(1,1,1);
 
-
     private final Map<String, Command> commandRegistry = new HashMap<>();
 
     public App() {

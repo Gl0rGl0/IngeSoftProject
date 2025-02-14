@@ -2,6 +2,7 @@ package ingsoft.persone;
 
 public enum PersonaType {
         //Priorita tutte in un unico posto in caso si aggiungano altre persone...
+        MAX("nessuna", Persona.class, 100),
         CONFIGURATORE("configuratori", Configuratore.class, 4),
         FRUITORE("fruitori", Fruitore.class, 3),
         VOLONTARIO("volontari", Volontario.class, 2),

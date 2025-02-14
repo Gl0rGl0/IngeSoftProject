@@ -24,7 +24,7 @@ public class AddCommand extends AbstractCommand {
         }
         char option = options[0].charAt(0);
         switch (option) {
-            case 'c' -> ViewSE.print("Eseguo: Aggiunta configuratore");
+            case 'c' -> ViewSE.print("Eseguo: Aggiunta Configuratore");
             // Qui inserisci la logica per aggiungere un configuratore
             case 'f' -> ViewSE.print("Eseguo: Aggiunta fruitore");
             // Logica per aggiungere un fruitore

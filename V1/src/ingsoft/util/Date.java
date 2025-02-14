@@ -1,9 +1,10 @@
 package ingsoft.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Date {
-    private LocalDate localDate;
+    private LocalDateTime localDate;
     private String comment;
 
     /**
@@ -14,7 +15,7 @@ public class Date {
      * @param aa  anno
      */
     public Date(int gg, int mm, int aa) {
-        this.localDate = LocalDate.of(aa, mm, gg);
+        this.localDate = LocalDate.of(aa, mm, gg).atStartOfDay();
     }
 
     /**
@@ -27,7 +28,7 @@ public class Date {
      */
     public Date(int gg, int mm, String comment) {
         // Utilizziamo -1 come anno sentinella per indicare che non è specificato
-        this.localDate = LocalDate.of(-1, mm, gg);
+        this.localDate = LocalDate.of(-1, mm, gg).atStartOfDay();
         this.comment = comment;
     }
 
@@ -39,15 +40,17 @@ public class Date {
      */
     public Date(String d) {
         String[] tmp = d.split("=");
+
         String datePart = tmp[0];
         String[] parts = datePart.split("/");
         int day = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int year = -1; // Anno non specificato
+
         if (parts.length == 3) {
             year = Integer.parseInt(parts[2]);
         }
-        this.localDate = LocalDate.of(year, month, day);
+        this.localDate = LocalDate.of(year, month, day).atStartOfDay();
         if (tmp.length == 2) {
             this.comment = tmp[1];
         }
@@ -80,10 +83,12 @@ public class Date {
     @Override
     public String toString() {
         if (this.localDate.getYear() != -1)
-            return String.format("%d/%d/%d",
+            return String.format("%d/%d/%d %2d:%2d",
                     this.localDate.getDayOfMonth(),
                     this.localDate.getMonthValue(),
-                    this.localDate.getYear());
+                    this.localDate.getYear(),
+                    this.localDate.getHour(),
+                    this.localDate.getMinute());
         if (this.comment != null)
             return String.format("%d/%d: %s",
                     this.localDate.getDayOfMonth(),
@@ -101,5 +106,14 @@ public class Date {
      */
     public String getDataMessage() {
         return this.comment;
+    }
+
+    public void incrementa(){
+        this.localDate = localDate.plusMinutes(2);
+        System.out.println(this.localDate);
+    }
+
+    public int getGiorno() {
+        return this.localDate.getDayOfMonth();
     }
 }
