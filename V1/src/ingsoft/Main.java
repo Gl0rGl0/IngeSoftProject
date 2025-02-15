@@ -1,5 +1,6 @@
 package ingsoft;
 
+import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
@@ -15,7 +16,8 @@ import ingsoft.persone.Volontario;
 
 public class Main {
     public static void main(String[] args) {
-        App app = new App();
+        DBUtils db = new DBUtils();
+        App app = new App(db);
         Test(app);
 
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente

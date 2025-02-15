@@ -38,14 +38,15 @@ public class App {
     public String ambitoTerritoriale = new String();
     public int maxPrenotazioniPerPersona;
 
-    public DBUtils db = new DBUtils();
+    public DBUtils db;
     // Inizialmente l'utente è un Guest (non loggato)
     public Persona user = new Guest();
     public Date date = new Date(1,1,1);
 
     private final Map<String, Command> commandRegistry = new HashMap<>();
 
-    public App() {
+    public App(DBUtils db) {
+        this.db = db;
         // Registra i comandi nel costruttore
         initTimer();
         registerCommands();
