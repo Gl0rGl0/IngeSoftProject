@@ -28,6 +28,15 @@ import java.util.concurrent.TimeUnit;
 public class App {
 
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
+    private static final String MESSAGGIO_PRIMO_ACCESSO = "PRIMO ACCESSO ESEGUITOindicare l'ambito territoriale di appartenenza";
+    private static final String AMBITO_TERRITORIALE = "Indicare l'ambito territoriale di appartenenza";
+    private static final String AMBITO_SCELTO = "Ambito territoriale scelto correttamente: ";
+    private static final String MESSAGGIO_MAX_PERSONE = "Impostare quante persone possono iscriversi ad un evento in una sola operazione da parte di un visitatore";
+    private static final String MAX_PRENOTAZIONI_SCELTO = "Numero correttamente impostato: ";
+    public boolean primoAccessoEffettuato = false;
+
+    public String ambitoTerritoriale = new String();
+    public int maxPrenotazioniPerPersona;
 
     public DBUtils db = new DBUtils();
     // Inizialmente l'utente è un Guest (non loggato)
@@ -117,7 +126,54 @@ public class App {
         } else {
             ViewSE.print("\"" + cmd + "\" non è riconosciuto come comando interno.");
         }
-    }        
+    } 
+
+    public void sceltaAmbitoTerritoriale() {
+        ViewSE.print(AMBITO_TERRITORIALE);
+        
+        String input;
+        do {
+            input = ViewSE.read();
+        } while (input.length() <= 0 || !(input.matches("[\\p{L}\\p{N}]+"))); // gpt: controllo che contenga solo lettere anche accentate o numeri, da provare
+        
+        ambitoTerritoriale = input;
+        
+        ViewSE.print(AMBITO_SCELTO + input);
+    }
+
+    public void sceltaMaxPersone() {
+        ViewSE.print(MESSAGGIO_MAX_PERSONE);
+        
+        int input;
+
+        do {
+            input = ViewSE.readInt();
+        } while (input < 1);
+        
+        maxPrenotazioniPerPersona = input;
+        
+        ViewSE.print(MAX_PRENOTAZIONI_SCELTO + input);
+    }
+
+    public void sceltaLuoghi() {
+
+    }
+    
+    public void primoAccesso() {
+        primoAccessoEffettuato = false;
+
+        clear
+
+        ViewSE.print(MESSAGGIO_PRIMO_ACCESSO);
+
+        sceltaAmbitoTerritoriale();
+
+        sceltaMaxPersone();
+
+        sceltaLuoghi();
+
+        primoAccessoEffettuato = true;
+    }
 
     /**
      * Avvia l'interprete dei comandi.

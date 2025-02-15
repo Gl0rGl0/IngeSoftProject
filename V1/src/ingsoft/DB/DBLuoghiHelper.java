@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 public class DBLuoghiHelper extends DBAbstractHelper {
     private final String fileName = "luoghi.properties";
-    private final ArrayList<Luogo> luoghi = new ArrayList<>();
+    private ArrayList<Luogo> luoghi = new ArrayList<>();
+    private boolean finalized = false;
     private final DBVisiteHelper visiteHelper;
 
     public DBLuoghiHelper(DBVisiteHelper visiteHelper) {
@@ -21,6 +22,14 @@ public class DBLuoghiHelper extends DBAbstractHelper {
     public ArrayList<Luogo> getLuoghi() {
         refreshLuoghi();
         return luoghi;
+    }
+
+    public void finalizeLuoghi() {
+        finalized = true;
+    }
+
+    public void addLuogo() {
+        
     }
 
     private void refreshLuoghi() {

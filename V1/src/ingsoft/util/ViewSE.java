@@ -23,6 +23,15 @@ public class ViewSE {
     public static String read(){
         return scanner.nextLine();
     }
+
+    public static int readInt(){
+        try {
+            return scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Richiesto un intero");
+            return readInt(); // penso vada bene così ricorsivo, se hai altre idee fai pure
+        }
+    }
     
     /**
      * Aggiunge il messaggio passato al file di log in modalità append.

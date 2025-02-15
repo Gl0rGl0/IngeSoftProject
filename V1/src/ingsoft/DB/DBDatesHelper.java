@@ -1,5 +1,7 @@
-package ingsoft.db;
+package ingsoft.DB;
 
+import ingsoft.util.Date;
+import ingsoft.util.ViewSE;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,9 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
-
-import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
 
 public class DBDatesHelper {
     private final String filePath = "./V1/data/dateSpeciali.txt";
