@@ -1,6 +1,7 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 
 public class AddCommand extends AbstractCommand {
@@ -24,14 +25,44 @@ public class AddCommand extends AbstractCommand {
         }
         char option = options[0].charAt(0);
         switch (option) {
-            case 'c' -> ViewSE.print("Eseguo: Aggiunta Configuratore");
+            case 'c' -> addConfiguratore(args);
             // Qui inserisci la logica per aggiungere un configuratore
-            case 'f' -> ViewSE.print("Eseguo: Aggiunta fruitore");
+            case 'f' -> addFruitore(args);
             // Logica per aggiungere un fruitore
-            case 'v' -> ViewSE.print("Eseguo: Aggiunta volontario");
+            case 'v' -> addVolontario(args);
+            case 'L' -> addLuoghi(args);
+            case 'V' -> addVisite(args);
             // Logica per aggiungere un volontario
             default -> ViewSE.print("Opzione non riconosciuta per 'add'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
+    }
+
+    private void addConfiguratore(String[] args){
+        app.db.addConfiguratore(args[0], args[1]);
+    }
+
+    private void addFruitore(String[] args){
+        app.db.addFruitore(args[0], args[1]);
+    }
+
+    private void addVolontario(String[] args){
+        app.db.addVolontario(args[0], args[1]);
+    }
+
+    private void addVisite(String[] args){
+        String[] a = StringUtils.joinQuotedArguments(args);
+        //app.db.addVisite
+    }
+
+    private void addLuoghi(String[] args){
+        String[] a = StringUtils.joinQuotedArguments(args);
+        
+        if (app.db.dbLuoghiHelper.finalized){
+            ViewSE.print("Non puoi eseguire questa azione adesso, il DB è già inizializzato.");
+            return;
+        }
+
+        //app.db addLuoghi
     }
 }

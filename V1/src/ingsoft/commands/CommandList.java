@@ -58,7 +58,7 @@ public enum CommandList {
     LOGOUT("""
         logout
     """,
-        "Esegui il logout dal sistema", PersonaType.VOLONTARIO.getPriorita()),  // Devi essere almeno loggato (2)
+        "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriorita()),  // Devi essere almeno loggato (2)
 
     CHANGEPSW("""
         changepsw [String: nuovapsw]

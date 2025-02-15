@@ -162,8 +162,6 @@ public class App {
     public void primoAccesso() {
         primoAccessoEffettuato = false;
 
-        clear
-
         ViewSE.print(MESSAGGIO_PRIMO_ACCESSO);
 
         sceltaAmbitoTerritoriale();

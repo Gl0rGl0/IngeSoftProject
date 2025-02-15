@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class DBLuoghiHelper extends DBAbstractHelper {
     private final String fileName = "luoghi.properties";
     private ArrayList<Luogo> luoghi = new ArrayList<>();
-    private boolean finalized = false;
+    public boolean finalized = false;
     private final DBVisiteHelper visiteHelper;
 
     public DBLuoghiHelper(DBVisiteHelper visiteHelper) {

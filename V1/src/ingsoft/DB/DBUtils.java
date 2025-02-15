@@ -17,7 +17,7 @@ public class DBUtils {
     private final DBFruitoreHelper dbFruitoreHelper;
     private final DBVolontarioHelper dbVolontarioHelper;
     private final DBVisiteHelper dbVisiteHelper;
-    private final DBLuoghiHelper dbLuoghiHelper;
+    public final DBLuoghiHelper dbLuoghiHelper;
     private final DBDatesHelper dbDatesHelper;
 
     public DBUtils() {

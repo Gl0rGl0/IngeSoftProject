@@ -110,7 +110,6 @@ public class Date {
 
     public void incrementa(){
         this.localDate = localDate.plusMinutes(2);
-        System.out.println(this.localDate);
     }
 
     public int getGiorno() {
