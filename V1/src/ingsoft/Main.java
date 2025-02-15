@@ -19,6 +19,7 @@ public class Main {
         DBUtils db = new DBUtils();
         App app = new App(db);
         Test(app);
+        // ajhdkjad
 
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
