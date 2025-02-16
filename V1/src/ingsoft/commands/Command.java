@@ -9,8 +9,5 @@ public interface Command {
      */
     void execute(String[] options, String[] args);
 
-    /**
-         * Restituisce il livello minimo di permesso richiesto per eseguire questo comando.
-         */
-    int getRequiredPermission();
+    boolean canPermission(int userPerm);
 }

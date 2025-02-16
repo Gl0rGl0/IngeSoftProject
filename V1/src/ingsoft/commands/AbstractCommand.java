@@ -12,7 +12,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     @Override
-    public int getRequiredPermission() {
-        return commandInfo.getRequiredPermission();
+    public boolean canPermission(int userPerm){
+        return commandInfo.canPermission(userPerm);
     }
 }

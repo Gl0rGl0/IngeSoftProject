@@ -32,7 +32,7 @@ public enum CommandList {
             posizione          Posizione GPS [latitudine,longitudine]
             visite             Lista degli ID delle visite associate [id1,id2,...]
     """,
-        "Aggiunge una Persona/Visita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
+        "Aggiunge una Persona/Visita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     REMOVE("""
         remove [-c] [-f] [-v] [String: username]
@@ -46,24 +46,24 @@ public enum CommandList {
             -L        Rimuove un luogo
             titolo    Specifica il titolo della visita o del luogo da rimuovere
     """,
-        "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
+        "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     LOGIN("""
         login [String: username] [String: password]
             username  Specifica l'username con cui fare il login
             password  Specifica la password con cui fare il login
     """,
-        "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo se non loggati(0)
+        "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita(), PersonaType.GUEST.getPriorita()),  // SOLO GUEST (0,0)
 
     LOGOUT("""
         logout
     """,
-        "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriorita()),  // Devi essere almeno loggato (2)
+        "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()),  // Devi essere almeno nel sistema (1,100)
 
     CHANGEPSW("""
         changepsw [String: nuovapsw]
             nuovapsw  Specifica la nuova password per l'account
-            """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita()), // Devi essere almeno loggato ma devi cambiare psw perche GUEST non puo... (1)
+            """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()), // Devi essere almeno loggato ma devi cambiare psw perche GUEST non puo... (1,100)
 
     TIME("""
         time [[-d] [-m] [-a]] [int: giorni]
@@ -76,19 +76,19 @@ public enum CommandList {
         time
             Mostra la data attuale
     """,
-        "Gestione della data del sistema", PersonaType.GUEST.getPriorita()),
+        "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
     
     EXIT("""
         exit
     """,
-        "Chiude il programma", PersonaType.GUEST.getPriorita()),  // Tutti possono usarlo (0)
+        "Chiude il programma", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()),  // TUTTI (0,100)
 
-    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita());
+    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()); //TUTTI (0,100)
         
-    public String getHelpMessage(int permission) {
+    public String getHelpMessage(int userPerm) {
         StringBuilder out = new StringBuilder();
         for (CommandList element : CommandList.values()) {
-            if (element != HELP && permission >= element.requiredPermission) {
+            if (element != HELP && canPermission(userPerm)) {
                 out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
             }
         }
@@ -97,24 +97,26 @@ public enum CommandList {
         
     private final String message;
     private final String lineInfo;
-    private final int requiredPermission;  // livello minimo richiesto
+    private final int minRequiredPermission;  // livello minimo richiesto
+    private final int maxRequiredPermission;  // livello massimo richiesto
 
-    CommandList(String message, String lineInfo, int requiredPermission) {
+    CommandList(String message, String lineInfo, int minRequiredPermission, int maxRequiredPermission) {
         this.message = message;
         this.lineInfo = lineInfo;
-        this.requiredPermission = requiredPermission;
+        this.minRequiredPermission = minRequiredPermission;
+        this.maxRequiredPermission = maxRequiredPermission;
     }
 
     @Override
     public String toString() {
-        return this == HELP ? getHelpMessage(requiredPermission) : (this.lineInfo + "\n" + this.message);
+        return this == HELP ? getHelpMessage(minRequiredPermission) : (this.lineInfo + "\n" + this.message);
     }
 
     public String getInfo(){
         return this.lineInfo;
     }
 
-    public int getRequiredPermission() {
-        return this.requiredPermission;
+    public boolean canPermission(int userPerm){
+        return minRequiredPermission <= userPerm && userPerm <= maxRequiredPermission;
     }
 }

@@ -114,12 +114,13 @@ public class App {
             // Controllo del permesso: confronta il livello dell'utente con quello richiesto dal comando.
             int userPerm = user.type().getPriorita();
             //Se l'utente non dispone dei permessi viene rifiutata la query subito
-            if (userPerm < command.getRequiredPermission()) {
+            if (!command.canPermission(userPerm)) {
+                
                 ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
                 return;
             }
             //se l'utente deve cambiare la psw viene messo in uno stato intermedio ma gli permette di eseguire i comandi con priorita guest
-            if(user.firstAccess() && command.getRequiredPermission() > PersonaType.CAMBIOPSW.getPriorita()){ //Priorita guest = 0
+            if(user.firstAccess() && !command.canPermission(PersonaType.CAMBIOPSW.getPriorita())){ //Priorita guest = 0
                 ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "' finche' non viene cambiata la password con 'changepsw [nuovapsw]'.");
                 return;
             }
