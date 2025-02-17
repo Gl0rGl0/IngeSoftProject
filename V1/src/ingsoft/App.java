@@ -9,6 +9,7 @@ import ingsoft.commands.running.ExitCommand;
 import ingsoft.commands.running.HelpCommand;
 import ingsoft.commands.running.LoginCommand;
 import ingsoft.commands.running.LogoutCommand;
+import ingsoft.commands.running.PrecludeCommand;
 import ingsoft.commands.running.RemoveCommand;
 import ingsoft.commands.running.TimeCommand;
 import ingsoft.commands.setup.AddCommandSETUP;
@@ -19,8 +20,8 @@ import ingsoft.util.Date;
 import ingsoft.util.Interpreter;
 import ingsoft.util.TimeHelper;
 import ingsoft.util.ViewSE;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -77,6 +78,7 @@ public class App {
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
         commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
         commandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
+        commandRegistry.put("preclude", new PrecludeCommand(this, CommandList.PRECLUDE));
         
         // Puoi aggiungere altri comandi
         commandRegistry.put("exit", new ExitCommand(CommandList.EXIT));
@@ -179,11 +181,11 @@ public class App {
         if (this.user == null) this.user = new Guest();
     }//INUTILE, TOREMOVE?
 
-    public void addSpecialDate(String d, String comment) {
-        db.addDateToDB(new Date(d + "-" + comment));
+    public void addPrecludedDate(String d) {
+        db.addPrecludedDate(new Date(d));
     }
 
-    public HashSet<Date> getDate(){
-        return db.getSpecialDates();
+    public ArrayList<Date> getDate(){
+        return db.getPrecludedDates();
     }
 }

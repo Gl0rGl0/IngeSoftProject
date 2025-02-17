@@ -91,7 +91,11 @@ public enum CommandList implements ListInterface{
                                                 [-C]  Lista delle visite Cancellate
                                                 [-e]  Lista delle visite Effettuate (passate)
     """,
-        "Visualizza la lista desiderata", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
+        "Visualizza la lista desiderata", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)ù
+
+    PRECLUDE("""
+            
+            """, "Aggiunge/rimuove data da precludere", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.MAX.getPriorita()),
     
     EXIT("""
         exit

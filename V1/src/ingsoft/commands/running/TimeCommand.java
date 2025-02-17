@@ -23,8 +23,8 @@ public class TimeCommand extends AbstractCommand {
                 case "d" -> saltaG(args[0], 1);
                 case "m" -> saltaG(args[0], 30);
                 case "a" -> saltaG(args[0], 365);
-                case "n" -> {app.addSpecialDate(args[0], args[1]); return;}
-                case "l" -> {ViewSE.print(app.getDate()); return;}
+                case "n" -> app.addPrecludedDate(args[0]);
+                case "l" -> ViewSE.print(app.getDate());
             }
         }else{
             ViewSE.print(app.date);

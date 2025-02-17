@@ -1,8 +1,6 @@
 package ingsoft.commands.setup;
 
 import ingsoft.commands.ListInterface;
-import ingsoft.commands.running.CommandList;
-import ingsoft.commands.running.ListCommand;
 import ingsoft.persone.PersonaType;
 
 public enum CommandListSETUP implements ListInterface{
@@ -50,8 +48,6 @@ public enum CommandListSETUP implements ListInterface{
         setmax [int: max]
             max     Specifica il numero massimo di fruitori per una visita
     """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
-    
-    CommandList.REMOVE,
 
     EXIT("""
         exit
@@ -82,9 +78,9 @@ public enum CommandListSETUP implements ListInterface{
         this.maxRequiredPermission = maxRequiredPermission;
     }
 
-    CommandListSETUP(CommandList l){
-        this.message = 
-    }
+    // CommandListSETUP(CommandList l){
+    //     this.message = 
+    // }
 
     @Override
     public String toString() {

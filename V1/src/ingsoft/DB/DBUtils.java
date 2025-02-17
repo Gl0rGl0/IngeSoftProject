@@ -10,7 +10,6 @@ import ingsoft.persone.PersonaType;
 import ingsoft.persone.Volontario;
 import ingsoft.util.Date;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class DBUtils {
     private final DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -134,12 +133,16 @@ public class DBUtils {
         return new Guest();
     }
 
-    public HashSet<Date> getSpecialDates(){
-        return dbDatesHelper.getSpecialDates();
+    public ArrayList<Date> getPrecludedDates() {
+        return dbDatesHelper.getPrecludedDates();
     }
 
-    public void addDateToDB(Date date) {
-        dbDatesHelper.addDateToDB(date);
+    public void addPrecludedDate(Date date) {
+        dbDatesHelper.addPrecludedDate(date);
+    }
+
+    public void removePrecludedDate(Date date) {
+        dbDatesHelper.removePrecludedDate(date);
     }
 
 

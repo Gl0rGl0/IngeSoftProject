@@ -4,7 +4,6 @@ import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
-import ingsoft.util.Date;
 
 
 //UTILIZZO TIPO
@@ -17,13 +16,12 @@ import ingsoft.util.Date;
 
 public class Main {
     public static void main(String[] args) {
-
-
-        Date.cheGiornoE(new Date("17/02/2025").localDate);
+        
+        //Date.cheGiornoE(new Date("17/02/2025").localDate);
 
         //String[] d = LocalDateTime.now().toString().substring(0, 10).split("-"); //GIORNO IN CUI AVVII IL MAIN
         //String da = d[2] + "/" + d[1] + "/" + d[0];
-        String da = "17/02/2025";
+        String da = "16/02/2025";
 
         DBUtils db = new DBUtils();
         App app = new App(db);
@@ -38,14 +36,14 @@ public class Main {
 
         //Inizia l'interazione con l'utente da tastiera
 
-        Volontario v = new Volontario("a", "a", "0");
-        v.setDisponibilita(app.date, new Date("16/03/2025"));
-        v.setDisponibilita(app.date, new Date("20/03/2025"));
-        v.setDisponibilita(app.date, new Date("24/03/2025"));
-        v.setDisponibilita(app.date, new Date("26/03/2025"));
-        v.setDisponibilita(app.date, new Date("28/03/2025"));
-        v.printDisponibilita();
-        //app.start();
+        // Volontario v = new Volontario("a", "a", "0");
+        // v.setDisponibilita(app.date, new Date("16/03/2025"));
+        // v.setDisponibilita(app.date, new Date("20/03/2025"));
+        // v.setDisponibilita(app.date, new Date("24/03/2025"));
+        // v.setDisponibilita(app.date, new Date("26/03/2025"));
+        // v.setDisponibilita(app.date, new Date("28/03/2025"));
+        // v.printDisponibilita();
+        app.start();
     }
 
 

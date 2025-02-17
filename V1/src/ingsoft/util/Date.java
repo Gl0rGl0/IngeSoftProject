@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 
 public class Date {
     public LocalDateTime localDate;
-    private String comment;
-
+    
     /**
      * Costruisce una data completa (giorno, mese e anno).
      * 
@@ -18,19 +17,19 @@ public class Date {
         this.localDate = LocalDate.of(aa, mm, gg).atStartOfDay();
     }
 
-    /**
-     * Costruisce una data senza anno (utilizzando -1 come valore sentinella) e
-     * associa un commento.
-     * 
-     * @param gg      giorno
-     * @param mm      mese
-     * @param comment commento associato alla data
-     */
-    public Date(int gg, int mm, String comment) {
-        // Utilizziamo -1 come anno sentinella per indicare che non è specificato
-        this.localDate = LocalDate.of(-1, mm, gg).atStartOfDay();
-        this.comment = comment;
-    }
+    // /**
+    //  * Costruisce una data senza anno (utilizzando -1 come valore sentinella) e
+    //  * associa un commento.
+    //  * 
+    //  * @param gg      giorno
+    //  * @param mm      mese
+    //  * @param comment commento associato alla data
+    //  */
+    // public Date(int gg, int mm, String comment) {
+    //     // Utilizziamo -1 come anno sentinella per indicare che non è specificato
+    //     this.localDate = LocalDate.of(-1, mm, gg).atStartOfDay();
+    //     this.comment = comment;
+    // }
 
     /**
      * Costruisce una data partendo da una stringa nel formato "gg/mm[/aa][=comment]".
@@ -51,9 +50,6 @@ public class Date {
             year = Integer.parseInt(parts[2]);
         }
         this.localDate = LocalDate.of(year, month, day).atStartOfDay();
-        if (tmp.length == 2) {
-            this.comment = tmp[1];
-        }
     }
 
     /**
@@ -89,23 +85,9 @@ public class Date {
                     this.localDate.getYear(),
                     this.localDate.getHour(),
                     this.localDate.getMinute());
-        if (this.comment != null)
-            return String.format("%d/%d: %s",
-                    this.localDate.getDayOfMonth(),
-                    this.localDate.getMonthValue(),
-                    this.comment);
         return String.format("%d/%d",
                 this.localDate.getDayOfMonth(),
                 this.localDate.getMonthValue());
-    }
-
-    /**
-     * Restituisce il commento associato alla data, se presente.
-     * 
-     * @return il commento o null se non presente
-     */
-    public String getDataMessage() {
-        return this.comment;
     }
 
     public void incrementa(){
