@@ -78,7 +78,7 @@ public class Interpreter {
     public boolean haveAllBeenExecuted(){
         boolean out = false;
         for (Command c : commandRegistry.values()) {
-            out &= c.hasBeenExecuted;
+            out &= c.hasBeenExecuted();
         }
         return out;
     }

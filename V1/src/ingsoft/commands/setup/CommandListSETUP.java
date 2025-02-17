@@ -1,31 +1,9 @@
-package ingsoft.commands.running;
+package ingsoft.commands.setup;
 
-import ingsoft.commands.ListInterface;
 import ingsoft.persone.PersonaType;
 
-public enum CommandList implements ListInterface{
+public enum CommandListSETUP {
     ADD("""
-        add [-c] [-f] [-v] [String: username] [String: psw]
-            -c        Aggiunge un configuratore
-            -f        Aggiunge un fruitore
-            -v        Aggiunge un volontario
-            username  Specifica l'username della persona inserita
-            psw       Specifica la password della persona inserita
-
-        add [-V] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Time: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
-            -V                 Aggiunge una visita
-            titolo              Il titolo della visita
-            descrizione         Una breve descrizione della visita
-            puntoIncontro       Il punto di incontro per la visita [latitudine,longitudine]
-            dataInizioPeriodo   Data di inizio del periodo della visita [YYYY-MM-DD]
-            dataFinePeriodo     Data di fine del periodo della visita [YYYY-MM-DD]
-            oraInizio           L'orario di inizio della visita [HH:MM]
-            durataVisita        Durata della visita in minuti
-            free                Indica se la visita è gratuita [true/false]
-            numMinPartecipants  Numero minimo di partecipanti
-            numMaxPartecipants  Numero massimo di partecipanti
-            stato               Stato della visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
-
         add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Integer>: visite]
             -L                 Aggiunge un luogo
             nomeLuogo          Nome del luogo
@@ -33,21 +11,7 @@ public enum CommandList implements ListInterface{
             posizione          Posizione GPS [latitudine,longitudine]
             visite             Lista degli ID delle visite associate [id1,id2,...]
     """,
-        "Aggiunge una Persona/Visita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
-
-    REMOVE("""
-        remove [-c] [-f] [-v] [String: username]
-            -c        Rimuove un configuratore
-            -f        Rimuove un fruitore
-            -v        Rimuove un volontario
-            username  Specifica l'username della persona da rimuovere
-        
-        remove [-V] [-L] [String: titolo]
-            -V        Rimuove una visita
-            -L        Rimuove un luogo
-            titolo    Specifica il titolo della visita o del luogo da rimuovere
-    """,
-        "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
+        "Aggiunge un Luogo al database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     LOGIN("""
         login [String: username] [String: password]
@@ -79,19 +43,10 @@ public enum CommandList implements ListInterface{
     """,
         "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
 
-    LIST("""
-        list [-l] [-v]
-            -l(L):  Lista dei luoghi visitabili
-            -v:     Lista dei volontari disponibili
-        list [-V] [[-a] [-p] [-c] [-C] [-e]]
-            -V: Lista delle visite disponibili
-                Opzionalmente ([-p] default):   [-a]  All, tutte le visite (anche passate)
-                                                [-p]  Lista delle visite Proposte
-                                                [-c]  Lista delle visite Complete
-                                                [-C]  Lista delle visite Cancellate
-                                                [-e]  Lista delle visite Effettuate (passate)
-    """,
-        "Visualizza la lista desiderata", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
+    SETMAX("""
+        setmax [int: max]
+            max     Specifica il numero massimo di fruitori per una visita
+    """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
     
     EXIT("""
         exit
@@ -102,7 +57,7 @@ public enum CommandList implements ListInterface{
         
     public String getHelpMessage(int userPerm) {
         StringBuilder out = new StringBuilder();
-        for (CommandList element : CommandList.values()) {
+        for (CommandListSETUP element : CommandListSETUP.values()) {
             if (element != HELP && canPermission(userPerm)) {
                 out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
             }
@@ -115,7 +70,7 @@ public enum CommandList implements ListInterface{
     private final int minRequiredPermission;  // livello minimo richiesto
     private final int maxRequiredPermission;  // livello massimo richiesto
 
-    CommandList(String message, String lineInfo, int minRequiredPermission, int maxRequiredPermission) {
+    CommandListSETUP(String message, String lineInfo, int minRequiredPermission, int maxRequiredPermission) {
         this.message = message;
         this.lineInfo = lineInfo;
         this.minRequiredPermission = minRequiredPermission;

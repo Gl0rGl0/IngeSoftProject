@@ -11,6 +11,8 @@ import ingsoft.commands.running.LoginCommand;
 import ingsoft.commands.running.LogoutCommand;
 import ingsoft.commands.running.RemoveCommand;
 import ingsoft.commands.running.TimeCommand;
+import ingsoft.commands.setup.AddCommandSETUP;
+import ingsoft.commands.setup.CommandListSETUP;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.util.Date;
@@ -71,27 +73,26 @@ public class App {
         commandRegistry.put("add", new AddCommand(this, CommandList.ADD));
         commandRegistry.put("remove", new RemoveCommand(this, CommandList.REMOVE));
         commandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
-        commandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT)); //implementare
+        commandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT));
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
         commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
         commandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
         
         // Puoi aggiungere altri comandi
-        commandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
+        commandRegistry.put("exit", new ExitCommand(CommandList.EXIT));
     }
 
     private void setupRegisterCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
-        setupCommandRegistry.put("add", new AddCommand(this, CommandList.ADD));
-        setupCommandRegistry.put("remove", new RemoveCommand(this, CommandList.REMOVE));
+        setupCommandRegistry.put("add", new AddCommandSETUP(this, CommandListSETUP.ADD));
         setupCommandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
-        setupCommandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT)); //implementare
         setupCommandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
         setupCommandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
         setupCommandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
+        setupCommandRegistry.put("done", new RemoveCommand(this, CommandList.REMOVE));
         
         // Puoi aggiungere altri comandi
-        setupCommandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
+        setupCommandRegistry.put("exit", new ExitCommand(CommandList.EXIT));
     }
 
     /**
