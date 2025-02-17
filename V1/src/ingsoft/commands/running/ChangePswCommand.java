@@ -6,8 +6,10 @@ import ingsoft.util.ViewSE;
 
 public class ChangePswCommand extends AbstractCommand {
 
-    public ChangePswCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public ChangePswCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.CHANGEPSW;
     }
 
     @Override

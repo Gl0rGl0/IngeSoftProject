@@ -5,8 +5,11 @@ import ingsoft.commands.AbstractCommand;
 import ingsoft.util.ViewSE;
 public class SetAmbitoCommandSETUP extends AbstractCommand {
 
-    public SetAmbitoCommandSETUP(App app, CommandListSETUP commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+
+    public SetAmbitoCommandSETUP(App app) {
+        this.app = app;
+        super.commandInfo = CommandListSETUP.SETAMBITO;
     }
 
     @Override

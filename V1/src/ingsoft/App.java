@@ -4,7 +4,6 @@ import ingsoft.DB.DBUtils;
 import ingsoft.commands.Command;
 import ingsoft.commands.running.AddCommand;
 import ingsoft.commands.running.ChangePswCommand;
-import ingsoft.commands.running.CommandList;
 import ingsoft.commands.running.ExitCommand;
 import ingsoft.commands.running.HelpCommand;
 import ingsoft.commands.running.LoginCommand;
@@ -13,7 +12,6 @@ import ingsoft.commands.running.PrecludeCommand;
 import ingsoft.commands.running.RemoveCommand;
 import ingsoft.commands.running.TimeCommand;
 import ingsoft.commands.setup.AddCommandSETUP;
-import ingsoft.commands.setup.CommandListSETUP;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.util.Date;
@@ -43,8 +41,8 @@ public class App {
     public DBUtils db;
     // Inizialmente l'utente è un Guest (non loggato)
     public Persona user = new Guest();
-    private Interpreter interpreter;
-    private Interpreter setupInterpreter;
+    private final Interpreter interpreter;
+    private final Interpreter setupInterpreter;
     public Date date = new Date(1,1,1);
 
     private final Map<String, Command> commandRegistry = new HashMap<>();
@@ -71,30 +69,30 @@ public class App {
     //Ogni nuovo comando va inserito nella mappa in modo da poterlo riconoscere e in CommandList per avere le informazioni
     private void registerCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
-        commandRegistry.put("add", new AddCommand(this, CommandList.ADD));
-        commandRegistry.put("remove", new RemoveCommand(this, CommandList.REMOVE));
-        commandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
-        commandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT));
-        commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
-        commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
-        commandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
-        commandRegistry.put("preclude", new PrecludeCommand(this, CommandList.PRECLUDE));
+        commandRegistry.put("add", new AddCommand(this));
+        commandRegistry.put("remove", new RemoveCommand(this));
+        commandRegistry.put("login", new LoginCommand(this));
+        commandRegistry.put("logout", new LogoutCommand(this));
+        commandRegistry.put("help", new HelpCommand(this));
+        commandRegistry.put("changepsw", new ChangePswCommand(this));
+        commandRegistry.put("time", new TimeCommand(this));
+        commandRegistry.put("preclude", new PrecludeCommand(this));
         
         // Puoi aggiungere altri comandi
-        commandRegistry.put("exit", new ExitCommand(CommandList.EXIT));
+        setupCommandRegistry.put("exit", new ExitCommand());
     }
 
     private void setupRegisterCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
-        setupCommandRegistry.put("add", new AddCommandSETUP(this, CommandListSETUP.ADD));
-        setupCommandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
-        setupCommandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
-        setupCommandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
-        setupCommandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
-        setupCommandRegistry.put("done", new RemoveCommand(this, CommandList.REMOVE));
+        setupCommandRegistry.put("add", new AddCommandSETUP(this));
+        setupCommandRegistry.put("login", new LoginCommand(this));
+        setupCommandRegistry.put("help", new HelpCommand(this));
+        setupCommandRegistry.put("changepsw", new ChangePswCommand(this));
+        setupCommandRegistry.put("time", new TimeCommand(this));
+        setupCommandRegistry.put("done", new RemoveCommand(this));
         
         // Puoi aggiungere altri comandi
-        setupCommandRegistry.put("exit", new ExitCommand(CommandList.EXIT));
+        setupCommandRegistry.put("exit", new ExitCommand());
     }
 
     /**
@@ -106,6 +104,10 @@ public class App {
      */
     void interpreter(String prompt) {
         interpreter.interpret(prompt, user);
+    }
+
+    void intepreterSETUP(String prompt){
+        setupInterpreter.interpret(prompt, user);
     }
 
     public void sceltaAmbitoTerritoriale() {
@@ -165,6 +167,8 @@ public class App {
             String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
             setupInterpreter.interpret(input, user);
         }
+
+        System.out.println("SETUP COMPLETATO");
 
         while (true) {
             String input = ViewSE.read("\n" + user.getUsername() + "> ");

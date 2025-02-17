@@ -8,8 +8,10 @@ import ingsoft.util.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
 
-    public LogoutCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public LogoutCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.LOGOUT;
     }
 
     @Override

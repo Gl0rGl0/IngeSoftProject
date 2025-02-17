@@ -55,6 +55,10 @@ public class Visita {
         return this.idVisita;
     }
 
+    public boolean isName(String altroTitolo){
+        return this.titolo.equalsIgnoreCase(altroTitolo);
+    }
+
     @Override
     public String toString() {
         return "Visita {" +

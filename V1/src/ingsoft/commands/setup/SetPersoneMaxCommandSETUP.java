@@ -4,10 +4,12 @@ import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.util.ViewSE;
 
-public class personeMax extends AbstractCommand {
+public class SetPersoneMaxCommandSETUP extends AbstractCommand {
 
-    public personeMax(App app) {
-        super(app, null);
+    private final App app;
+    public SetPersoneMaxCommandSETUP(App app) {
+        this.app = app;
+        super.commandInfo = CommandListSETUP.SETMAX;
     }
 
     @Override
@@ -17,7 +19,7 @@ public class personeMax extends AbstractCommand {
             return;
         }
         try {
-            super.app.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
+            app.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             //
         }

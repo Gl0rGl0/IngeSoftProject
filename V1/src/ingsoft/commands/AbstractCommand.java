@@ -1,16 +1,8 @@
 package ingsoft.commands;
 
-import ingsoft.App;
-
 public abstract class AbstractCommand implements Command {
-    protected final ListInterface commandInfo;
-    protected final App app;
+    protected ListInterface commandInfo;
     protected boolean hasBeenExecuted = false;
-
-    protected AbstractCommand(App app, ListInterface commandInfo) {
-        this.app = app;
-        this.commandInfo = commandInfo;
-    }
 
     @Override
     public boolean canPermission(int userPerm){

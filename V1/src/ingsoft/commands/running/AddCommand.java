@@ -7,8 +7,10 @@ import ingsoft.util.ViewSE;
 
 public class AddCommand extends AbstractCommand {
 
-    public AddCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public AddCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.ADD;
     }
 
     @Override
@@ -55,12 +57,8 @@ public class AddCommand extends AbstractCommand {
 
     private void addLuoghi(String[] args){
         String[] a = StringUtils.joinQuotedArguments(args);
-        
-        if (app.db.dbLuoghiHelper.finalized){
-            ViewSE.print("Non puoi eseguire questa azione adesso, il DB è già inizializzato.");
-            return;
-        }
 
         //app.db addLuoghi
+        //SOLO DA V3 per ora niente...
     }
 }

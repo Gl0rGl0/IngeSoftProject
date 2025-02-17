@@ -3,6 +3,7 @@ package ingsoft.luoghi;
 public enum StatusVisita {
     PROPOSTA,
     CONFERMATA,
+    COMPLETA,
     CANCELLATA,
     EFFETTUATA;
 

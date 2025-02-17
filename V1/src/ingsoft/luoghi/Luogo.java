@@ -37,4 +37,20 @@ public class Luogo {
         return sb.toString();
     }
 
+    public boolean isEqualNome(String nome){
+        return this.nomeLuogo.equalsIgnoreCase(nome);
+    }
+
+    public String getNome(){
+        return this.nomeLuogo;
+    }
+
+    public String getDescrizione(){
+        return this.descrizioneLuogo;
+    }
+
+    public GPS getGps(){
+        return this.posizione;
+    }
+
 }

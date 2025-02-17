@@ -7,8 +7,10 @@ import ingsoft.util.ViewSE;
 
 public class PrecludeCommand extends AbstractCommand{
     
-    public PrecludeCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public PrecludeCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.PRECLUDE;
     }
 
     @Override

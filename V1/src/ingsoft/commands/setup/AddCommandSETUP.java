@@ -2,13 +2,17 @@ package ingsoft.commands.setup;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.util.GPS;
 import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
+import java.util.Arrays;
 
 public class AddCommandSETUP extends AbstractCommand {
 
-    public AddCommandSETUP(App app, CommandListSETUP commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public AddCommandSETUP(App app) {
+        this.app = app;
+        super.commandInfo = CommandListSETUP.ADD;
     }
 
     @Override
@@ -33,9 +37,13 @@ public class AddCommandSETUP extends AbstractCommand {
     }
 
 
-    private void addLuoghi(String[] args){
+    public void addLuoghi(String[] args){
         String[] a = StringUtils.joinQuotedArguments(args);
-
-        //app.db addLuoghi
+        System.out.println(Arrays.toString(a));
+        String[] vc = new String[args.length - 3];
+        for(int i = 3; i < args.length; i++){
+            vc[i-3] = args[i];
+        }
+        app.db.addLuogo(args[0], args[1], new GPS(args[2]), vc);
     }
 }

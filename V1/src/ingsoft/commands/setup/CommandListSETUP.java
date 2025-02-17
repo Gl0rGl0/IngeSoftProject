@@ -48,7 +48,16 @@ public enum CommandListSETUP implements ListInterface{
         setmax [int: max]
             max     Specifica il numero massimo di fruitori per una visita
     """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
-
+    
+    SETAMBITO("""
+        setambito [String: max]
+            max     Specifica l'ambito territoriale del programma
+    """, "(SETUP) Assegna il nome del territorio", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+        
+    DONE("""
+    
+            """, "Termina il turno di setup", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+    
     EXIT("""
         exit
     """,

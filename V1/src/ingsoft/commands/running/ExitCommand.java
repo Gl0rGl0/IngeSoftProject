@@ -5,8 +5,8 @@ import ingsoft.util.ViewSE;
 
 public class ExitCommand extends AbstractCommand {
 
-    public ExitCommand(CommandList commandInfo) {
-        super(null, commandInfo);
+    public ExitCommand() {
+        super.commandInfo = CommandList.EXIT;
     }
 
     @Override

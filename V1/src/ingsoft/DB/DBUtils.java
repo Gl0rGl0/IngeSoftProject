@@ -9,6 +9,7 @@ import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.persone.Volontario;
 import ingsoft.util.Date;
+import ingsoft.util.GPS;
 import java.util.ArrayList;
 
 public class DBUtils {
@@ -24,7 +25,7 @@ public class DBUtils {
         dbFruitoreHelper = new DBFruitoreHelper();
         dbVolontarioHelper = new DBVolontarioHelper();
         dbVisiteHelper = new DBVisiteHelper();
-        dbLuoghiHelper = new DBLuoghiHelper(dbVisiteHelper);
+        dbLuoghiHelper = new DBLuoghiHelper();
         dbDatesHelper = new DBDatesHelper();
     }
 
@@ -75,6 +76,19 @@ public class DBUtils {
 
     public boolean addVolontario(String user, String psw) {
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
+    }
+
+    public boolean addLuogo(String nome, String descrizione, GPS gps, String[] visiteCollegate){
+        ArrayList<Visita> vc = new ArrayList<>();
+        for (String nomeVisita : visiteCollegate) {
+            for (Visita visita : getVisite()) {
+                if(visita.isName(nomeVisita)){
+                    vc.add(visita);
+                    break;
+                }
+            }
+        }
+        return dbLuoghiHelper.addLuogo(nome, descrizione, gps, vc);
     }
 
     //Remover dato l'username [sufficiente e necessario]

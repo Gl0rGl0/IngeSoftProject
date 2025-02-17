@@ -6,8 +6,10 @@ import ingsoft.util.ViewSE;
 
 public class RemoveCommand extends AbstractCommand {
 
-    public RemoveCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    private final App app;
+    public RemoveCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.REMOVE;
     }
 
     @Override

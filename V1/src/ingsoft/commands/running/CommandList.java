@@ -104,6 +104,7 @@ public enum CommandList implements ListInterface{
 
     HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()); //TUTTI (0,100)
         
+    @Override
     public String getHelpMessage(int userPerm) {
         StringBuilder out = new StringBuilder();
         for (CommandList element : CommandList.values()) {
@@ -131,10 +132,12 @@ public enum CommandList implements ListInterface{
         return this == HELP ? getHelpMessage(minRequiredPermission) : (this.lineInfo + "\n" + this.message);
     }
 
+    @Override
     public String getInfo(){
         return this.lineInfo;
     }
 
+    @Override
     public boolean canPermission(int userPerm){
         return minRequiredPermission <= userPerm && userPerm <= maxRequiredPermission;
     }

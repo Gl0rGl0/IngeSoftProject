@@ -6,9 +6,11 @@ import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
 
 public class TimeCommand extends AbstractCommand {
+    App app;
 
-    public TimeCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+    public TimeCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.TIME;
     }
 
     @Override

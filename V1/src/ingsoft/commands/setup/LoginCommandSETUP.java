@@ -1,4 +1,4 @@
-package ingsoft.commands.running;
+package ingsoft.commands.setup;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
@@ -6,12 +6,12 @@ import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
 
-public class LoginCommand extends AbstractCommand{
+public class LoginCommandSETUP extends AbstractCommand{
 
     private final App app;
-    public LoginCommand(App app) {
+    public LoginCommandSETUP(App app) {
         this.app = app;
-        super.commandInfo = CommandList.LOGIN;
+        super.commandInfo = CommandListSETUP.LOGIN;
     }
 
     @Override
@@ -24,10 +24,10 @@ public class LoginCommand extends AbstractCommand{
             ViewSE.print("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
-
+        Persona p = login(args[0], args[1]);
         app.user = login(args[0], args[1]);
 
-        if (app.user.type() != PersonaType.GUEST) {
+        if (app.user.type() == PersonaType.CONFIGURATORE) {
             ViewSE.print("Login effettuato con successo (" + app.user.type() + ")");
             if(app.user.firstAccess()){
                 ViewSE.print("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");

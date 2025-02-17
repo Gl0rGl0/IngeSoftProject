@@ -3,7 +3,6 @@ package ingsoft.util;
 import ingsoft.commands.Command;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
-
 import java.util.ArrayList;
 import java.util.Map;
 

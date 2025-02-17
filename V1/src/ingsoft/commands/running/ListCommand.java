@@ -8,8 +8,11 @@ import ingsoft.util.ViewSE;
 
 public class ListCommand extends AbstractCommand {
 
+    private final App app;
+
     public ListCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+        this.app = app;
+        super.commandInfo = CommandList.LIST;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class ListCommand extends AbstractCommand {
             case 'v' -> listVolontari();
             case 'L' -> listLuoghi();
             case 'l' -> listLuoghi();
-            case 'V' -> listVisite();
+            case 'V' -> listVisite(options);
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
@@ -49,10 +52,52 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    private void listVisite(){
+    private void listVisite(String[] s){
+        char option = 'a';
+        try {
+            option = s[1].charAt(0);
+        } catch (Exception e) {
+            //
+        }
+        
+        switch (option) {
+            case 'a' -> printAll();
+            case 'p' -> printProposte();
+            case 'c' -> printComplete();
+            case 'C' -> printCancellate();
+            case 'e' -> printEffettuate();
+            default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
+        }
+
+
         for (Visita v : app.db.getVisite()) {
             ViewSE.print(v);
         }
     }
 
+
+    // [-a]  All, tutte le visite (anche passate)       le faccio passare tutte
+    // [-p]  Lista delle visite Proposte                Guardo nelle visite attuali quelle con stato PROPOSTE
+    // [-c]  Lista delle visite Complete                Guardo nelle visite attuali quelle con stato COMPLETE
+    // [-C]  Lista delle visite Cancellate              Guardo nelle visite attuali quelle con stato CANCELLATE
+    // [-e]  Lista delle visite Effettuate (passate)    Prendo l'array della cronologia e le filtro con effettuate
+    private void printAll(){
+        //
+    }
+
+    private void printProposte() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private void printComplete() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private void printCancellate() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private void printEffettuate() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

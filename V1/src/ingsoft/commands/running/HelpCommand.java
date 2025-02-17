@@ -5,8 +5,12 @@ import ingsoft.commands.AbstractCommand;
 import ingsoft.util.ViewSE;
 
 public class HelpCommand extends AbstractCommand{
-    public HelpCommand(App app, CommandList commandInfo) {
-        super(app, commandInfo);
+
+    private final App app;
+
+    public HelpCommand(App app) {
+        this.app = app;
+        super.commandInfo = CommandList.HELP;
     }
 
     @Override
