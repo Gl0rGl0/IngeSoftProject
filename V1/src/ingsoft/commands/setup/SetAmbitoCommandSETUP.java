@@ -23,7 +23,7 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
         try {
             StringBuilder set = new StringBuilder();
             for (String s : args) {
-                set.append(s + " ");
+                set.append(s).append(" ");
             }
             app.ambitoTerritoriale = set.toString();
         } catch (Exception e) {

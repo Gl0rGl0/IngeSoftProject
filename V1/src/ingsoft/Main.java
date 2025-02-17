@@ -17,6 +17,10 @@ import ingsoft.util.Date;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        Date.cheGiornoE(new Date("17/02/2025").localDate);
+
         //String[] d = LocalDateTime.now().toString().substring(0, 10).split("-"); //GIORNO IN CUI AVVII IL MAIN
         //String da = d[2] + "/" + d[1] + "/" + d[0];
         String da = "17/02/2025";

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Date {
-    private LocalDateTime localDate;
+    public LocalDateTime localDate;
     private String comment;
 
     /**
@@ -135,5 +135,9 @@ public class Date {
             case 12 -> 31;
             default -> 31; //boh non si sa mai
         };
+    }
+
+    public static void cheGiornoE(LocalDateTime d){
+        System.out.println(d.getDayOfWeek());
     }
 }

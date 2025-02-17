@@ -1,8 +1,11 @@
 package ingsoft.commands.setup;
 
+import ingsoft.commands.ListInterface;
+import ingsoft.commands.running.CommandList;
+import ingsoft.commands.running.ListCommand;
 import ingsoft.persone.PersonaType;
 
-public enum CommandListSETUP {
+public enum CommandListSETUP implements ListInterface{
     ADD("""
         add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Integer>: visite]
             -L                 Aggiunge un luogo
@@ -41,13 +44,15 @@ public enum CommandListSETUP {
         time
             Mostra la data attuale
     """,
-        "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
+        "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI ma solo in demo (tempo virtuale)... (0,100)
 
     SETMAX("""
         setmax [int: max]
             max     Specifica il numero massimo di fruitori per una visita
     """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
     
+    CommandList.REMOVE,
+
     EXIT("""
         exit
     """,
@@ -75,6 +80,10 @@ public enum CommandListSETUP {
         this.lineInfo = lineInfo;
         this.minRequiredPermission = minRequiredPermission;
         this.maxRequiredPermission = maxRequiredPermission;
+    }
+
+    CommandListSETUP(CommandList l){
+        this.message = 
     }
 
     @Override

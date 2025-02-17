@@ -2,15 +2,13 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
-import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.Volontario;
-import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 
-public class AddCommand extends AbstractCommand {
+public class ListCommand extends AbstractCommand {
 
-    public AddCommand(App app, CommandList commandInfo) {
+    public ListCommand(App app, CommandList commandInfo) {
         super(app, commandInfo);
     }
 
@@ -29,28 +27,29 @@ public class AddCommand extends AbstractCommand {
         }
         char option = options[0].charAt(0);
         switch (option) {
-            case 'v' -> listVolontari(args);
-            case 'L' -> listLuoghi(args);
-            case 'l' -> listLuoghi(args);
-            case 'V' -> listVisite(args);
+            case 'v' -> listVolontari();
+            case 'L' -> listLuoghi();
+            case 'l' -> listLuoghi();
+            case 'V' -> listVisite();
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
     }
 
-    private void listLuoghi(String[] args){
-        for (Luogo l : app.db.getLuoghi()) {
-            ViewSE.print(l);
-        }
+    private void listLuoghi(){
+        //for (Luogo l : app.db.getLuoghi()) {
+        //    ViewSE.print(l);
+        //}
+        app.db.getLuoghi().forEach(l -> ViewSE.print(l)); //boh sono uguali
     }
 
-    private void listVolontari(String[] args){
+    private void listVolontari(){
         for (Volontario v : app.db.getVolontari()) {
             ViewSE.print(v);
         }
     }
 
-    private void listVisite(String[] args){
+    private void listVisite(){
         for (Visita v : app.db.getVisite()) {
             ViewSE.print(v);
         }
