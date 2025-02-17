@@ -1,6 +1,7 @@
-package ingsoft.commands;
+package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.commands.AbstractCommand;
 import ingsoft.util.ViewSE;
 
 public class ChangePswCommand extends AbstractCommand {

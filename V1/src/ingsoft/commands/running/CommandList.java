@@ -1,4 +1,4 @@
-package ingsoft.commands;
+package ingsoft.commands.running;
 
 import ingsoft.persone.PersonaType;
 

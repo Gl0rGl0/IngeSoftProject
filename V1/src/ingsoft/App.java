@@ -1,23 +1,22 @@
 package ingsoft;
 
 import ingsoft.DB.DBUtils;
-import ingsoft.commands.AddCommand;
-import ingsoft.commands.ChangePswCommand;
 import ingsoft.commands.Command;
-import ingsoft.commands.CommandList;
-import ingsoft.commands.ExitCommand;
-import ingsoft.commands.HelpCommand;
-import ingsoft.commands.LoginCommand;
-import ingsoft.commands.LogoutCommand;
-import ingsoft.commands.RemoveCommand;
-import ingsoft.commands.TimeCommand;
+import ingsoft.commands.running.AddCommand;
+import ingsoft.commands.running.ChangePswCommand;
+import ingsoft.commands.running.CommandList;
+import ingsoft.commands.running.ExitCommand;
+import ingsoft.commands.running.HelpCommand;
+import ingsoft.commands.running.LoginCommand;
+import ingsoft.commands.running.LogoutCommand;
+import ingsoft.commands.running.RemoveCommand;
+import ingsoft.commands.running.TimeCommand;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
-import ingsoft.persone.PersonaType;
 import ingsoft.util.Date;
+import ingsoft.util.Interpreter;
 import ingsoft.util.TimeHelper;
 import ingsoft.util.ViewSE;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,15 +40,22 @@ public class App {
     public DBUtils db;
     // Inizialmente l'utente è un Guest (non loggato)
     public Persona user = new Guest();
+    private Interpreter interpreter;
+    private Interpreter setupInterpreter;
     public Date date = new Date(1,1,1);
 
     private final Map<String, Command> commandRegistry = new HashMap<>();
+    private final Map<String, Command> setupCommandRegistry = new HashMap<>();
+    private boolean setupCompleted;
 
     public App(DBUtils db) {
         this.db = db;
         // Registra i comandi nel costruttore
         initTimer();
         registerCommands();
+        setupRegisterCommands();
+        interpreter = new Interpreter(commandRegistry);
+        setupInterpreter = new Interpreter(setupCommandRegistry);
     }
 
     private void initTimer(){
@@ -70,9 +76,22 @@ public class App {
         commandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
         commandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
         
-
         // Puoi aggiungere altri comandi
         commandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
+    }
+
+    private void setupRegisterCommands() {
+        // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
+        setupCommandRegistry.put("add", new AddCommand(this, CommandList.ADD));
+        setupCommandRegistry.put("remove", new RemoveCommand(this, CommandList.REMOVE));
+        setupCommandRegistry.put("login", new LoginCommand(this, CommandList.LOGIN));
+        setupCommandRegistry.put("logout", new LogoutCommand(this, CommandList.LOGOUT)); //implementare
+        setupCommandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
+        setupCommandRegistry.put("changepsw", new ChangePswCommand(this, CommandList.CHANGEPSW));
+        setupCommandRegistry.put("time", new TimeCommand(this, CommandList.TIME));
+        
+        // Puoi aggiungere altri comandi
+        setupCommandRegistry.put("exit", new ExitCommand(CommandList.EXIT)); //implementare
     }
 
     /**
@@ -83,52 +102,8 @@ public class App {
      * @param prompt la stringa di comando immessa
      */
     void interpreter(String prompt) {
-        String[] tokens = prompt.trim().split("\\s+");
-        if (tokens.length == 0 || tokens[0].isEmpty()) {
-            ViewSE.print("Errore: nessun comando fornito.");
-            ViewSE.log("V1 ERRORE NESSUN COMANDO", "GRAVE");
-            return;
-        }
-        String cmd = tokens[0];
-    
-        // Liste per opzioni e argomenti
-        ArrayList<String> optionsList = new ArrayList<>();
-        ArrayList<String> argsList = new ArrayList<>();
-    
-        // Analizza i token rimanenti: se iniziano con '-' li considera opzioni, altrimenti argomenti.
-        for (int i = 1; i < tokens.length; i++) {
-            String token = tokens[i];
-            if (token.startsWith("-") && token.length() > 1) {
-                optionsList.add(token.substring(1));
-            } else {
-                argsList.add(token);
-            }
-        }
-
-        //RIMPIAZZA new String[0] (java11+) senza creare un array inutilmente
-        String[] options = optionsList.toArray(String[]::new);
-        String[] args = argsList.toArray(String[]::new); 
-    
-        Command command = commandRegistry.get(cmd);
-        if (command != null) {
-            // Controllo del permesso: confronta il livello dell'utente con quello richiesto dal comando.
-            int userPerm = user.type().getPriorita();
-            //Se l'utente non dispone dei permessi viene rifiutata la query subito
-            if (!command.canPermission(userPerm)) {
-                
-                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
-                return;
-            }
-            //se l'utente deve cambiare la psw viene messo in uno stato intermedio ma gli permette di eseguire i comandi con priorita guest
-            if(user.firstAccess() && !command.canPermission(PersonaType.CAMBIOPSW.getPriorita())){ //Priorita guest = 0
-                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "' finche' non viene cambiata la password con 'changepsw [nuovapsw]'.");
-                return;
-            }
-            command.execute(options, args); //OGNI comando ha execute dato che è una discendenza abstract+interface da implementare
-        } else {
-            ViewSE.print("\"" + cmd + "\" non è riconosciuto come comando interno.");
-        }
-    } 
+        interpreter.interpret(prompt, user);
+    }
 
     public void sceltaAmbitoTerritoriale() {
         ViewSE.print(AMBITO_TERRITORIALE);
@@ -183,9 +158,14 @@ public class App {
     public void start() {
         ViewSE.print(MESSAGGIO_START);
 
+        while(!setupCompleted){
+            String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
+            setupInterpreter.interpret(input, user);
+        }
+
         while (true) {
             String input = ViewSE.read("\n" + user.getUsername() + "> ");
-            interpreter(input);
+            interpreter.interpret(input, user);
         }
     }
 

@@ -1,6 +1,7 @@
-package ingsoft.commands;
+package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.commands.AbstractCommand;
 import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 
@@ -26,28 +27,25 @@ public class AddCommand extends AbstractCommand {
         char option = options[0].charAt(0);
         switch (option) {
             case 'c' -> addConfiguratore(args);
-            // Qui inserisci la logica per aggiungere un configuratore
             case 'f' -> addFruitore(args);
-            // Logica per aggiungere un fruitore
             case 'v' -> addVolontario(args);
             case 'L' -> addLuoghi(args);
             case 'V' -> addVisite(args);
-            // Logica per aggiungere un volontario
             default -> ViewSE.print("Opzione non riconosciuta per 'add'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
     }
 
     private void addConfiguratore(String[] args){
-        app.db.addConfiguratore(args[0], args[1]);
+        app.db.addConfiguratore(args[0], args[1]);  //aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
     }
 
     private void addFruitore(String[] args){
-        app.db.addFruitore(args[0], args[1]);
+        app.db.addFruitore(args[0], args[1]);   //aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
     }
 
     private void addVolontario(String[] args){
-        app.db.addVolontario(args[0], args[1]);
+        app.db.addVolontario(args[0], args[1]);     //aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
     }
 
     private void addVisite(String[] args){

@@ -1,6 +1,7 @@
-package ingsoft.commands;
+package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.commands.AbstractCommand;
 import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
 
@@ -28,8 +29,6 @@ public class TimeCommand extends AbstractCommand {
         }else{
             ViewSE.print(app.date);
         }
-        
-        
     }
 
     private void saltaG(String d, int mult){

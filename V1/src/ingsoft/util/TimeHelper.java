@@ -5,6 +5,7 @@ import ingsoft.App;
 public class TimeHelper implements Runnable {
 
     private final App app; // o la classe che contiene il tempo simulato
+    private boolean eseguita = false;
 
     public TimeHelper(App app) {
         this.app = app;
@@ -16,11 +17,15 @@ public class TimeHelper implements Runnable {
         app.date.incrementa(); // implementa il metodo incrementa() come preferisci
         // Controlla se è il 16 del mese
         if(app.date.getGiorno() == 16) {
-            eseguiAzioniDel16();
+            if(!eseguita)
+                eseguiAzioniDel16();
+        }else{
+            eseguita = false;
         }
     }
 
     private void eseguiAzioniDel16() {
+        eseguita = true;
         // Logica per le azioni da eseguire
         System.out.println("Esecuzione azioni del 16 del mese!");
     }

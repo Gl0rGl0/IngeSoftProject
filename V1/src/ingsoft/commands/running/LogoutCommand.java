@@ -1,6 +1,7 @@
-package ingsoft.commands;
+package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.commands.AbstractCommand;
 import ingsoft.persone.Guest;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
