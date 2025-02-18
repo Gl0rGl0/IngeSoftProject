@@ -138,6 +138,10 @@ public class App {
         while(!setupCompleted){
             String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
             setupInterpreter.interpret(input, user);
+            setupCompleted = setupCommandRegistry.values().stream().allMatch(action -> action.hasBeenExecuted()); //nuovo
+            // controlla che ognuno dei comandi di setup sia stato eseguito, non ho trovato dove tu facessi il controllo, anche perché effettivamente non va
+            // ma se lo fai più dentro secondo me è meglio qua
+
         }
 
         System.out.println("SETUP COMPLETATO");

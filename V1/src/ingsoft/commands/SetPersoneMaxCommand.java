@@ -10,6 +10,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
     public SetPersoneMaxCommand(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.SETMAX;
+        hasBeenExecuted = false;
     }
 
     @Override

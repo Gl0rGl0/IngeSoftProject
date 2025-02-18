@@ -6,10 +6,12 @@ public class DoneCommandSETUP extends AbstractCommand {
 
     public DoneCommandSETUP() {
         super.commandInfo = CommandListSETUP.DONE;
+        hasBeenExecuted = false;
     }
 
     @Override
     public void execute(String[] options, String[] args) {
         super.hasBeenExecuted = true;
+        System.out.println("finitooooo");
     }
 }
