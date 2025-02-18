@@ -1,7 +1,7 @@
-package ingsoft.commands.running;
+package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.running.CommandList;
 import ingsoft.persone.Guest;
 import ingsoft.persone.PersonaType;
 import ingsoft.util.ViewSE;
@@ -12,6 +12,8 @@ public class LogoutCommand extends AbstractCommand {
     public LogoutCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.LOGOUT;
+
+        this.hasBeenExecuted = true;
     }
 
     @Override

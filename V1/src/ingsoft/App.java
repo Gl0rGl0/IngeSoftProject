@@ -1,17 +1,24 @@
 package ingsoft;
 
 import ingsoft.DB.DBUtils;
+import ingsoft.commands.ChangePswCommand;
 import ingsoft.commands.Command;
+import ingsoft.commands.ExitCommand;
+import ingsoft.commands.HelpCommand;
+import ingsoft.commands.LogoutCommand;
+import ingsoft.commands.SetPersoneMaxCommand;
+import ingsoft.commands.TimeCommand;
 import ingsoft.commands.running.AddCommand;
-import ingsoft.commands.running.ChangePswCommand;
-import ingsoft.commands.running.ExitCommand;
-import ingsoft.commands.running.HelpCommand;
+import ingsoft.commands.running.CommandList;
+import ingsoft.commands.running.ListCommand;
 import ingsoft.commands.running.LoginCommand;
-import ingsoft.commands.running.LogoutCommand;
 import ingsoft.commands.running.PrecludeCommand;
 import ingsoft.commands.running.RemoveCommand;
-import ingsoft.commands.running.TimeCommand;
 import ingsoft.commands.setup.AddCommandSETUP;
+import ingsoft.commands.setup.CommandListSETUP;
+import ingsoft.commands.setup.DoneCommandSETUP;
+import ingsoft.commands.setup.LoginCommandSETUP;
+import ingsoft.commands.setup.SetAmbitoCommandSETUP;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Persona;
 import ingsoft.util.Date;
@@ -47,6 +54,11 @@ public class App {
 
     private final Map<String, Command> commandRegistry = new HashMap<>();
     private final Map<String, Command> setupCommandRegistry = new HashMap<>();
+    private final Command TimeC = new TimeCommand(this);
+    private final Command LogoutC = new LogoutCommand(this);
+    private final Command ChangeC = new ChangePswCommand(this);
+    private final Command ExitC = new ExitCommand();
+    private final Command SetMaxC = new SetPersoneMaxCommand(this);     //COSI DA NON CREARE DOPPIONI INUTILI
     private boolean setupCompleted;
 
     public App(DBUtils db) {
@@ -70,29 +82,34 @@ public class App {
     private void registerCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
         commandRegistry.put("add", new AddCommand(this));
-        commandRegistry.put("remove", new RemoveCommand(this));
+        commandRegistry.put("list", new ListCommand(this));
         commandRegistry.put("login", new LoginCommand(this));
-        commandRegistry.put("logout", new LogoutCommand(this));
-        commandRegistry.put("help", new HelpCommand(this));
-        commandRegistry.put("changepsw", new ChangePswCommand(this));
-        commandRegistry.put("time", new TimeCommand(this));
         commandRegistry.put("preclude", new PrecludeCommand(this));
+        commandRegistry.put("remove", new RemoveCommand(this));
+        commandRegistry.put("logout", LogoutC);
+        commandRegistry.put("changepsw", ChangeC);
+        commandRegistry.put("time", TimeC);
+        commandRegistry.put("setmax", SetMaxC);
+        commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
         
         // Puoi aggiungere altri comandi
-        setupCommandRegistry.put("exit", new ExitCommand());
+        commandRegistry.put("exit", ExitC);
     }
 
     private void setupRegisterCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
         setupCommandRegistry.put("add", new AddCommandSETUP(this));
-        setupCommandRegistry.put("login", new LoginCommand(this));
-        setupCommandRegistry.put("help", new HelpCommand(this));
-        setupCommandRegistry.put("changepsw", new ChangePswCommand(this));
-        setupCommandRegistry.put("time", new TimeCommand(this));
-        setupCommandRegistry.put("done", new RemoveCommand(this));
+        setupCommandRegistry.put("done", new DoneCommandSETUP());
+        setupCommandRegistry.put("login", new LoginCommandSETUP(this));
+        setupCommandRegistry.put("setAmbito", new SetAmbitoCommandSETUP(this));
+        setupCommandRegistry.put("logout", LogoutC);
+        setupCommandRegistry.put("changepsw", ChangeC);
+        setupCommandRegistry.put("time", TimeC);
+        setupCommandRegistry.put("setmax", SetMaxC);
+        setupCommandRegistry.put("help", new HelpCommand(this, CommandListSETUP.HELP));
         
         // Puoi aggiungere altri comandi
-        setupCommandRegistry.put("exit", new ExitCommand());
+        setupCommandRegistry.put("exit", ExitC);
     }
 
     /**
@@ -108,51 +125,6 @@ public class App {
 
     void intepreterSETUP(String prompt){
         setupInterpreter.interpret(prompt, user);
-    }
-
-    public void sceltaAmbitoTerritoriale() {
-        ViewSE.print(AMBITO_TERRITORIALE);
-        
-        String input;
-        do {
-            input = ViewSE.read();
-        } while (input.length() <= 0 || !(input.matches("[\\p{L}\\p{N}]+"))); // gpt: controllo che contenga solo lettere anche accentate o numeri, da provare
-        
-        ambitoTerritoriale = input;
-        
-        ViewSE.print(AMBITO_SCELTO + input);
-    }
-
-    public void sceltaMaxPersone() {
-        ViewSE.print(MESSAGGIO_MAX_PERSONE);
-        
-        int input;
-
-        do {
-            input = ViewSE.readInt();
-        } while (input < 1);
-        
-        maxPrenotazioniPerPersona = input;
-        
-        ViewSE.print(MAX_PRENOTAZIONI_SCELTO + input);
-    }
-
-    public void sceltaLuoghi() {
-
-    }
-    
-    public void primoAccesso() {
-        primoAccessoEffettuato = false;
-
-        ViewSE.print(MESSAGGIO_PRIMO_ACCESSO);
-
-        sceltaAmbitoTerritoriale();
-
-        sceltaMaxPersone();
-
-        sceltaLuoghi();
-
-        primoAccessoEffettuato = true;
     }
 
     /**

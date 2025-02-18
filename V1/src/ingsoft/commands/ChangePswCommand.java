@@ -1,7 +1,7 @@
-package ingsoft.commands.running;
+package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.running.CommandList;
 import ingsoft.util.ViewSE;
 
 public class ChangePswCommand extends AbstractCommand {
@@ -10,6 +10,8 @@ public class ChangePswCommand extends AbstractCommand {
     public ChangePswCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.CHANGEPSW;
+
+        this.hasBeenExecuted = true;
     }
 
     @Override
@@ -22,6 +24,7 @@ public class ChangePswCommand extends AbstractCommand {
         if(app.db.changePassword(app.user.getUsername(), args[0], app.user.type())){
             app.user.notNew();
             ViewSE.print("Password cambiata con successo!");
+            this.hasBeenExecuted = true;
         }else{
             ViewSE.print("Errore nel cambio psw riprova...");
         }

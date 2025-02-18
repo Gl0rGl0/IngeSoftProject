@@ -24,16 +24,22 @@ public class LoginCommandSETUP extends AbstractCommand{
             ViewSE.print("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
+        
         Persona p = login(args[0], args[1]);
-        app.user = login(args[0], args[1]);
+        app.user = p;
 
-        if (app.user.type() == PersonaType.CONFIGURATORE) {
+        if (app.user.type() == PersonaType.CONFIGURATORE) { //SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
             ViewSE.print("Login effettuato con successo (" + app.user.type() + ")");
             if(app.user.firstAccess()){
                 ViewSE.print("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }
+            this.hasBeenExecuted = true;
         } else {
-            ViewSE.print("Errore di login, riprova");
+            if(app.user.type() != PersonaType.GUEST){
+                ViewSE.print("Errore di login, riprova.");
+            }else{
+                ViewSE.print("Solo i configuratori possono accedere, riprova.");
+            }
         }
     }
 

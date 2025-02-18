@@ -1,16 +1,18 @@
-package ingsoft.commands.running;
+package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.running.CommandList;
 import ingsoft.util.ViewSE;
 
 public class HelpCommand extends AbstractCommand{
 
     private final App app;
 
-    public HelpCommand(App app) {
+    public HelpCommand(App app, ListInterface commandInfo) {
         this.app = app;
-        super.commandInfo = CommandList.HELP;
+        super.commandInfo = commandInfo;
+
+        this.hasBeenExecuted = true;
     }
 
     @Override

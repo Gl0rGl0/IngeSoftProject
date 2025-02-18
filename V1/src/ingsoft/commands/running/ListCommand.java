@@ -10,7 +10,7 @@ public class ListCommand extends AbstractCommand {
 
     private final App app;
 
-    public ListCommand(App app, CommandList commandInfo) {
+    public ListCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.LIST;
     }
@@ -48,7 +48,7 @@ public class ListCommand extends AbstractCommand {
 
     private void listVolontari(){
         for (Volontario v : app.db.getVolontari()) {
-            ViewSE.print(v);
+            ViewSE.print(v);    //DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE app.db.trovaVisite(volontario)?
         }
     }
 
@@ -75,14 +75,16 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-
     // [-a]  All, tutte le visite (anche passate)       le faccio passare tutte
     // [-p]  Lista delle visite Proposte                Guardo nelle visite attuali quelle con stato PROPOSTE
     // [-c]  Lista delle visite Complete                Guardo nelle visite attuali quelle con stato COMPLETE
     // [-C]  Lista delle visite Cancellate              Guardo nelle visite attuali quelle con stato CANCELLATE
-    // [-e]  Lista delle visite Effettuate (passate)    Prendo l'array della cronologia e le filtro con effettuate
+    // [-e]  Lista delle visite Effettuate (passate)    Prendo l'array della cronologia e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
     private void printAll(){
-        //
+        printProposte();
+        printComplete();
+        printCancellate();
+        printEffettuate();
     }
 
     private void printProposte() {

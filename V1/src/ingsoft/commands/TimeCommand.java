@@ -1,7 +1,7 @@
-package ingsoft.commands.running;
+package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.running.CommandList;
 import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
 
@@ -11,6 +11,8 @@ public class TimeCommand extends AbstractCommand {
     public TimeCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.TIME;
+
+        this.hasBeenExecuted = true;
     }
 
     @Override

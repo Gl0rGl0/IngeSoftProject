@@ -2,6 +2,7 @@ package ingsoft.commands.setup;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 public class SetAmbitoCommandSETUP extends AbstractCommand {
 
@@ -21,16 +22,18 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
      */
     public void execute(String[] options, String[] args) {
         if(args.length < 1){
-            ViewSE.print("Errore nell'utilizzo del comando, richiesto almeno un nome.");
+            ViewSE.print("Errore nell'utilizzo del comando, richiesto almeno un nome. Utilizzo: \"Nome nome nome\"");
         }
         try {
-            StringBuilder set = new StringBuilder();
-            for (String s : args) {
-                set.append(s).append(" ");
-            }
-            app.ambitoTerritoriale = set.toString();
+            String[] a = StringUtils.joinQuotedArguments(args);
+                                            // StringBuilder set = new StringBuilder();
+                                            // for (String s : args) {
+                                            //     set.append(s).append(" ");
+                                            // }    
+            app.ambitoTerritoriale = a[0];  // set.toString();                          //BOH NEL CASO L'INPUT NON FOSSE [setambito "Parco grotta del..."] mas [setambito Parco grotta del...]
         } catch (Exception e) {
-            //
+            return;
         }
+        this.hasBeenExecuted = true;
     }
 }

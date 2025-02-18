@@ -1,5 +1,6 @@
 package ingsoft.util;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -102,24 +103,32 @@ public class Date {
         return this.localDate.getMonthValue();
     }
 
-    public int lunghezzaMese(){
-        return switch(localDate.getMonthValue()){
-            case 1 -> 31;
-            case 2 -> 28;
-            case 3 -> 31;
-            case 4 -> 30;
-            case 5 -> 31;
-            case 6 -> 30;
-            case 7 -> 31;
-            case 9 -> 30;
-            case 10 -> 31;
-            case 11 -> 30;
-            case 12 -> 31;
-            default -> 31; //boh non si sa mai
-        };
-    }
+    // public int lunghezzaMese(){
+    //     return switch(localDate.getMonthValue()){
+    //         case 1 -> 31;
+    //         case 2 -> 28;
+    //         case 3 -> 31;
+    //         case 4 -> 30;
+    //         case 5 -> 31;
+    //         case 6 -> 30;
+    //         case 7 -> 31;
+    //         case 9 -> 30;
+    //         case 10 -> 31;
+    //         case 11 -> 30;
+    //         case 12 -> 31;
+    //         default -> 31; //boh non si sa mai
+    //     };
+    // } Per ora non serve a niente
 
     public static void cheGiornoE(LocalDateTime d){
         System.out.println(d.getDayOfWeek());
+    }
+
+    public int giornoDellAnno(){
+        return localDate.getDayOfYear();
+    }
+
+    public boolean festivo(){
+        return this.localDate.getDayOfWeek() == DayOfWeek.SUNDAY || this.localDate.getDayOfWeek() == DayOfWeek.SATURDAY;
     }
 }

@@ -56,7 +56,7 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addLuoghi(String[] args){
-        String[] a = StringUtils.joinQuotedArguments(args);
+        //String[] a = StringUtils.joinQuotedArguments(args);
 
         //app.db addLuoghi
         //SOLO DA V3 per ora niente...

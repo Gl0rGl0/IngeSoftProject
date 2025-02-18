@@ -1,12 +1,14 @@
-package ingsoft.commands.running;
+package ingsoft.commands;
 
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.running.CommandList;
 import ingsoft.util.ViewSE;
 
 public class ExitCommand extends AbstractCommand {
 
     public ExitCommand() {
         super.commandInfo = CommandList.EXIT;
+
+        this.hasBeenExecuted = true;
     }
 
     @Override

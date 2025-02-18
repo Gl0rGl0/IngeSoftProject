@@ -30,7 +30,7 @@ public class Main {
 
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
-        app.interpreter("login config1 pass1C");
+        app.interpreter("login config1 pass1C");    //da errore perchè non è finito il setup?
         //app.interpreter("time -s 12/02/2025");
         app.interpreter("time -s " + da);
         app.interpreter("time");

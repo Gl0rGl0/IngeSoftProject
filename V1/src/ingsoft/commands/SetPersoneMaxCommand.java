@@ -1,13 +1,13 @@
-package ingsoft.commands.setup;
+package ingsoft.commands;
 
 import ingsoft.App;
-import ingsoft.commands.AbstractCommand;
+import ingsoft.commands.setup.CommandListSETUP;
 import ingsoft.util.ViewSE;
 
-public class SetPersoneMaxCommandSETUP extends AbstractCommand {
+public class SetPersoneMaxCommand extends AbstractCommand {
 
     private final App app;
-    public SetPersoneMaxCommandSETUP(App app) {
+    public SetPersoneMaxCommand(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.SETMAX;
     }
@@ -21,7 +21,9 @@ public class SetPersoneMaxCommandSETUP extends AbstractCommand {
         try {
             app.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            //
+            return;
         }
+
+        this.hasBeenExecuted = true;        //DEVE ESSERE ESEGUITO ANCHE A SETUP
     }
 }
