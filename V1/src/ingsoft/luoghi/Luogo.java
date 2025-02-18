@@ -37,10 +37,6 @@ public class Luogo {
         return sb.toString();
     }
 
-    public boolean isEqualNome(String nome){
-        return this.nomeLuogo.equalsIgnoreCase(nome);
-    }
-
     public String getNome(){
         return this.nomeLuogo;
     }
@@ -51,6 +47,10 @@ public class Luogo {
 
     public GPS getGps(){
         return this.posizione;
+    }
+
+    public void aggiungiVisita(Visita v){
+        visite.add(v);
     }
 
 }

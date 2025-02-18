@@ -16,7 +16,7 @@ public class DBUtils {
     private final DBConfiguratoreHelper dbConfiguratoreHelper;
     private final DBFruitoreHelper dbFruitoreHelper;
     private final DBVolontarioHelper dbVolontarioHelper;
-    private final DBVisiteHelper dbVisiteHelper;
+    public final DBVisiteHelper dbVisiteHelper;
     public final DBLuoghiHelper dbLuoghiHelper;
     private final DBDatesHelper dbDatesHelper;
 
@@ -131,6 +131,10 @@ public class DBUtils {
         return null;
     }
 
+    public Volontario findVolontario(String username){
+        return dbVolontarioHelper.findPersona(username);
+    }
+
     //Come in find si scorrono tutte le persone per priorità C->V->F, implementabile loginIstantaneo con uso del finder + switch e chiamata a (ex) correttohelper.directLogin(user,psw)
     //ritorna la persona che ha effettuato il login o guest in caso di nessun utente trovato
     public Persona login(String user, String psw){
@@ -159,7 +163,13 @@ public class DBUtils {
         dbDatesHelper.removePrecludedDate(date);
     }
 
+    public Visita getVisitaByName(String titoloVisita){
+        return dbVisiteHelper.findVisita(titoloVisita);
+    }
 
+    public Luogo getLuogoByName(String nomeLuogo){
+        return dbLuoghiHelper.findLuogo(nomeLuogo);
+    }
     //IMPLEMENTARE
     // public ArrayList<Visita> getlistaVisiteFromLuogo(String luogo) {
     //     String cerca = luogo.toLowerCase().strip().replaceAll(" ", "");

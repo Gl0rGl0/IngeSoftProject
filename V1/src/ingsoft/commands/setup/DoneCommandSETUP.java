@@ -6,7 +6,7 @@ public class DoneCommandSETUP extends AbstractCommand {
 
     public DoneCommandSETUP() {
         super.commandInfo = CommandListSETUP.DONE;
-        hasBeenExecuted = false;
+        this.hasBeenExecuted = false;
     }
 
     @Override

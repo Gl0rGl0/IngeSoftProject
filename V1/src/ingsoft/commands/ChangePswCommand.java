@@ -10,8 +10,6 @@ public class ChangePswCommand extends AbstractCommand {
     public ChangePswCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.CHANGEPSW;
-
-        this.hasBeenExecuted = true;
     }
 
     @Override

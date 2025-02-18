@@ -1,6 +1,9 @@
 package ingsoft.persone;
 
+import ingsoft.luoghi.StatusVisita;
+import ingsoft.luoghi.Visita;
 import ingsoft.util.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Volontario extends Persona {
@@ -15,6 +18,21 @@ public class Volontario extends Persona {
     // Il cutoff: il giorno 15 (il periodo inizia il giorno 16)
     private static final int CUTOFF = 15;
     
+    private final ArrayList<Visita> visitePresentabili = new ArrayList<>();
+    
+    public void aggiungiVisita(Visita v){
+        visitePresentabili.add(v);
+    }
+
+    public ArrayList<Visita> getVisite(StatusVisita s){
+        ArrayList<Visita> out = new ArrayList<>();
+        for (Visita v : visitePresentabili) {
+            if(v.getStatus() == s)
+                out.add(v);
+        }
+        return out;
+    }
+
     /**
      * Costruttore.
      * È utile passare la data corrente per inizializzare correttamente il periodo modificabile.

@@ -11,8 +11,6 @@ public class TimeCommand extends AbstractCommand {
     public TimeCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.TIME;
-
-        this.hasBeenExecuted = true;
     }
 
     @Override

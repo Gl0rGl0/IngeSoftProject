@@ -79,6 +79,10 @@ public enum CommandList implements ListInterface{
     """,
         "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), //TUTTI (0,100)
 
+    ASSING("""
+        assing ...
+    """, "Assegna una visita ad un luogo o un volontario ad una visita", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+
     LIST("""
         list [-l] [-v]
             -l(L):  Lista dei luoghi visitabili

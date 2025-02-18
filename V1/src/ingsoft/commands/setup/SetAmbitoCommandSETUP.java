@@ -11,7 +11,7 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
     public SetAmbitoCommandSETUP(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.SETAMBITO;
-        hasBeenExecuted = false;
+        this.hasBeenExecuted = false;
     }
 
     @Override

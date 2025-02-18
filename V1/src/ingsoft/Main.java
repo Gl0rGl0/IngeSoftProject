@@ -26,14 +26,14 @@ public class Main {
         DBUtils db = new DBUtils();
         //
         App app = new App(db);
-        //Test(app);
+        Test(app);
 
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
-        app.interpreter("login config1 pass1C");    //da errore perchè non è finito il setup?
+        //app.interpreter("login config1 pass1C");    //da errore perchè non è finito il setup?
         //app.interpreter("time -s 12/02/2025");
         app.interpreter("time -s " + da);
-        app.interpreter("time");
+        //app.interpreter("time");
 
         //Inizia l'interazione con l'utente da tastiera
 
@@ -49,11 +49,12 @@ public class Main {
 
 
     public static void Test(App app){
+        app.db.removeConfiguratore("config1");
         initPersone(app); //Inizializza il database in caso sia il primo accesso
 
-        app.intepreterSETUP("login config1 pass1C");
+        //app.intepreterSETUP("login config1 pass1C");
         String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1 Visita1 Visita2 Visita3 ";
-        app.intepreterSETUP("add -L" + prompt);
+        //app.intepreterSETUP("add -L" + prompt);
 
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1C"));

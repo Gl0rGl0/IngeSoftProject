@@ -11,11 +11,11 @@ import java.util.Properties;
 
 public class DBVisiteHelper extends DBAbstractHelper {
     private final String fileName = "visite.properties";
-    private final ArrayList<Visita> visite = new ArrayList<>();
+    private final ArrayList<Visita> visite_disponibili = new ArrayList<>();
 
     public ArrayList<Visita> getVisite() {
         refreshVisite();
-        return visite;
+        return visite_disponibili;
     }
 
     @SuppressWarnings("UseSpecificCatch")
@@ -27,7 +27,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
             ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
             return;
         }
-        visite.clear();
+        visite_disponibili.clear();
 
         for (String key : properties.stringPropertyNames()) {
             if (key.endsWith(".titolo")) {
@@ -98,11 +98,19 @@ public class DBVisiteHelper extends DBAbstractHelper {
                             Integer.parseInt(numMinPartecipants),
                             Integer.parseInt(numMaxPartecipants)
                     );
-                    visite.add(visita);
+                    visite_disponibili.add(visita);
                 } catch (Exception ex) {
                     ViewSE.print("Errore nella creazione della visita " + visitaID + ": " + ex.getMessage());
                 }
             }
         }
+    }
+
+    public Visita findVisita(String nomeVisita) {
+        for (Visita visita : visite_disponibili) {
+            if(visita.getTitolo().equalsIgnoreCase(nomeVisita))
+                return visita;
+        }
+        return null;
     }
 }

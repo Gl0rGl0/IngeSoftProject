@@ -53,7 +53,11 @@ public enum CommandListSETUP implements ListInterface{
         setambito [String: max]
             max     Specifica l'ambito territoriale del programma
     """, "(SETUP) Assegna il nome del territorio", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
-        
+    
+    ASSING("""
+        assing ...
+    """, "Assegna una visita ad un luogo o un volontario ad una visita", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+
     DONE("""
     
             """, "Termina il turno di setup", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),

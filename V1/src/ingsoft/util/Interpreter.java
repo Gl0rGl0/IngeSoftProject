@@ -75,10 +75,10 @@ public class Interpreter {
     }
 
     public boolean haveAllBeenExecuted(){
-        boolean out = false;
+        boolean out = true;
         for (Command c : commandRegistry.values()) {
             out &= c.hasBeenExecuted();
         }
-        return out;
+        return out;     //Ne basta una false per dare false come risultato
     }
 }

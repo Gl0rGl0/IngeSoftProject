@@ -7,8 +7,6 @@ public class ExitCommand extends AbstractCommand {
 
     public ExitCommand() {
         super.commandInfo = CommandList.EXIT;
-
-        this.hasBeenExecuted = true;
     }
 
     @Override

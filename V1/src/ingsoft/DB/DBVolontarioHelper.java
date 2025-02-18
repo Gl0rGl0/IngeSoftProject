@@ -1,7 +1,7 @@
 package ingsoft.DB;
 
-import ingsoft.persone.Volontario;
 import ingsoft.persone.PersonaType;
+import ingsoft.persone.Volontario;
 
 public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
     public DBVolontarioHelper() {

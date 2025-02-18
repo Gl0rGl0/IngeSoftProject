@@ -35,12 +35,11 @@ import java.util.concurrent.TimeUnit;
 public class App {
 
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
-    private static final String MESSAGGIO_PRIMO_ACCESSO = "PRIMO ACCESSO ESEGUITOindicare l'ambito territoriale di appartenenza";
-    private static final String AMBITO_TERRITORIALE = "Indicare l'ambito territoriale di appartenenza";
-    private static final String AMBITO_SCELTO = "Ambito territoriale scelto correttamente: ";
-    private static final String MESSAGGIO_MAX_PERSONE = "Impostare quante persone possono iscriversi ad un evento in una sola operazione da parte di un visitatore";
-    private static final String MAX_PRENOTAZIONI_SCELTO = "Numero correttamente impostato: ";
-    public boolean primoAccessoEffettuato = false;
+    // private static final String MESSAGGIO_PRIMO_ACCESSO = "PRIMO ACCESSO ESEGUITOindicare l'ambito territoriale di appartenenza";
+    // private static final String AMBITO_TERRITORIALE = "Indicare l'ambito territoriale di appartenenza";
+    // private static final String AMBITO_SCELTO = "Ambito territoriale scelto correttamente: ";
+    // private static final String MESSAGGIO_MAX_PERSONE = "Impostare quante persone possono iscriversi ad un evento in una sola operazione da parte di un visitatore";
+    // private static final String MAX_PRENOTAZIONI_SCELTO = "Numero correttamente impostato: ";
 
     public String ambitoTerritoriale = new String();
     public int maxPrenotazioniPerPersona;
@@ -67,6 +66,7 @@ public class App {
         initTimer();
         registerCommands();
         setupRegisterCommands();
+
         interpreter = new Interpreter(commandRegistry);
         setupInterpreter = new Interpreter(setupCommandRegistry);
     }
@@ -98,14 +98,14 @@ public class App {
 
     private void setupRegisterCommands() {
         // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa (praticamente tutti)
-        setupCommandRegistry.put("add", new AddCommandSETUP(this));
-        setupCommandRegistry.put("done", new DoneCommandSETUP());
-        setupCommandRegistry.put("login", new LoginCommandSETUP(this));
-        setupCommandRegistry.put("setAmbito", new SetAmbitoCommandSETUP(this));
+        setupCommandRegistry.put("add", new AddCommandSETUP(this));                 //DA ESEGUIRE
+        setupCommandRegistry.put("done", new DoneCommandSETUP());                   //DA ESEGUIRE
+        setupCommandRegistry.put("login", new LoginCommandSETUP(this));             //DA ESEGUIRE
+        setupCommandRegistry.put("setambito", new SetAmbitoCommandSETUP(this));     //DA ESEGUIRE
         setupCommandRegistry.put("logout", LogoutC);
-        setupCommandRegistry.put("changepsw", ChangeC);
+        setupCommandRegistry.put("changepsw", ChangeC);                             //DA ESEGUIRE
         setupCommandRegistry.put("time", TimeC);
-        setupCommandRegistry.put("setmax", SetMaxC);
+        setupCommandRegistry.put("setmax", SetMaxC);                                //DA ESEGUIRE
         setupCommandRegistry.put("help", new HelpCommand(this, CommandListSETUP.HELP));
         
         // Puoi aggiungere altri comandi
@@ -135,13 +135,14 @@ public class App {
     public void start() {
         ViewSE.print(MESSAGGIO_START);
 
-        while(!setupCompleted){
+        while(!setupInterpreter.haveAllBeenExecuted()){
             String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
             setupInterpreter.interpret(input, user);
-            setupCompleted = setupCommandRegistry.values().stream().allMatch(action -> action.hasBeenExecuted()); //nuovo
+            //setupCompleted = setupCommandRegistry.values().stream().allMatch(action -> action.hasBeenExecuted()); //nuovo
             // controlla che ognuno dei comandi di setup sia stato eseguito, non ho trovato dove tu facessi il controllo, anche perché effettivamente non va
             // ma se lo fai più dentro secondo me è meglio qua
-
+            //è dentro l'interprete, non andava perchè partiva con false & ... quindi non andava mai
+            //Cosi tante ricorsioni non vanno bene (l'ho letto nelle slide di saetti, quindi lo dovremo comunque modificare nella seconda parte)
         }
 
         System.out.println("SETUP COMPLETATO");

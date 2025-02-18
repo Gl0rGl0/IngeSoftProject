@@ -106,7 +106,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
                 }
             }
             // Se il nome esiste già, si interrompe l'aggiunta
-            if (luogo.isEqualNome(existingNome)) {
+            if (luogo.getNome().equalsIgnoreCase(existingNome)) {
                 return false;
             }
             index++;
@@ -168,7 +168,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      */
     public Luogo findLuogo(String nome) {
         for (Luogo l : luoghi) {
-            if (l.isEqualNome(nome)) {
+            if (l.getNome().equalsIgnoreCase(nome)) {
                 return l;
             }
         }

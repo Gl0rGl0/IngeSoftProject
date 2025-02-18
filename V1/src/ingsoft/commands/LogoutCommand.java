@@ -12,8 +12,6 @@ public class LogoutCommand extends AbstractCommand {
     public LogoutCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.LOGOUT;
-
-        this.hasBeenExecuted = true;
     }
 
     @Override

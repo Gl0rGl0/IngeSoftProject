@@ -11,8 +11,6 @@ public class HelpCommand extends AbstractCommand{
     public HelpCommand(App app, ListInterface commandInfo) {
         this.app = app;
         super.commandInfo = commandInfo;
-
-        this.hasBeenExecuted = true;
     }
 
     @Override

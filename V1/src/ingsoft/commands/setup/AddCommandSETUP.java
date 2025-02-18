@@ -13,7 +13,7 @@ public class AddCommandSETUP extends AbstractCommand {
     public AddCommandSETUP(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.ADD;
-        hasBeenExecuted = false;
+        this.hasBeenExecuted = false;
     }
 
     @Override

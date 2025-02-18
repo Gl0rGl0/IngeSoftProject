@@ -162,8 +162,8 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         }
     }
     
-    public Persona findPersona(String user){
-        for (Persona p : cachedPersons) {
+    public T findPersona(String user){
+        for (T p : cachedPersons) {
             if(p.getUsername().equals(user))
                 return p;
         }
