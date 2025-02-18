@@ -2,6 +2,7 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 
 public class RemoveCommand extends AbstractCommand {
@@ -26,21 +27,27 @@ public class RemoveCommand extends AbstractCommand {
             return;
         }
         char option = options[0].charAt(0);
+
+        
+        String[] ar = StringUtils.joinQuotedArguments(args);
+
         switch (option) {
             case 'c' -> {
                 ViewSE.print("Eseguo: Rimuovo configuratore");
-                removeConfiguratore(args);
+                removeConfiguratore(ar);
             }
             // Qui inserisci la logica per rimuovere un configuratore
             case 'f' -> {
                 ViewSE.print("Eseguo: Rimuovo fruitore");
-                removeFruitore(args);
+                removeFruitore(ar);
             }
             // Logica per rimuovere un fruitore
             case 'v' -> {
                 ViewSE.print("Eseguo: Rimuovo volontario");
-                removeVolontario(args);
+                removeVolontario(ar);
             }
+
+            case 'L' -> removeLuogo(ar);
             // Logica per rimuovere un volontario
             default -> ViewSE.print("Opzione non riconosciuta per 'remove'.");
         }
@@ -48,14 +55,22 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeConfiguratore(String[] args){
+        ViewSE.print("Eseguo: Rimuovo configuratore");
         app.db.removeConfiguratore(args[0]);  //rimuove un configuratore
     }
 
     private void removeFruitore(String[] args){
+        ViewSE.print("Eseguo: Rimuovo fruitore");
         app.db.removeFruitore(args[0]);   //rimuove un fruitore
     }
 
     private void removeVolontario(String[] args){
+        ViewSE.print("Eseguo: Rimuovo volontario");
         app.db.removeVolontario(args[0]);     //rimuove un volontario
+    }
+
+    private void removeLuogo(String[] args){
+        ViewSE.print("Eseguo: Rimuovo luogo");
+        System.out.println(app.db.removeLuogo(args[0]));
     }
 }

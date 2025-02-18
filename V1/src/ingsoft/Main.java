@@ -16,45 +16,39 @@ import ingsoft.persone.Volontario;
 
 public class Main {
     public static void main(String[] args) {
-        
-        //Date.cheGiornoE(new Date("17/02/2025").localDate);
-
         //String[] d = LocalDateTime.now().toString().substring(0, 10).split("-"); //GIORNO IN CUI AVVII IL MAIN
         //String da = d[2] + "/" + d[1] + "/" + d[0];
-        String da = "16/02/2025";
+        
 
         DBUtils db = new DBUtils();
-        //
         App app = new App(db);
-        Test(app);
+
+        Test(app);  //Prima di avviare il ciclo...
 
         //Usi app.intepreter per dare direttamente i comandi anche prima dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza passare dalla tastiera
-        //app.interpreter("login config1 pass1C");    //da errore perchè non è finito il setup?
+
+        //app.interpreter("login config1 pass1C");
         //app.interpreter("time -s 12/02/2025");
-        app.interpreter("time -s " + da);
+        
         //app.interpreter("time");
 
-        //Inizia l'interazione con l'utente da tastiera
-
-        // Volontario v = new Volontario("a", "a", "0");
-        // v.setDisponibilita(app.date, new Date("16/03/2025"));
-        // v.setDisponibilita(app.date, new Date("20/03/2025"));
-        // v.setDisponibilita(app.date, new Date("24/03/2025"));
-        // v.setDisponibilita(app.date, new Date("26/03/2025"));
-        // v.setDisponibilita(app.date, new Date("28/03/2025"));
-        // v.printDisponibilita();
         app.start();
     }
 
 
     public static void Test(App app){
-        app.db.removeConfiguratore("config1");
         initPersone(app); //Inizializza il database in caso sia il primo accesso
 
+        String da = "16/02/2025";
+        app.interpreter("time -s " + da);
+        app.skipSetupTesting = true;
+
         //app.intepreterSETUP("login config1 pass1C");
-        String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1 Visita1 Visita2 Visita3 ";
+        String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1";
+        app.intepreterSETUP("login config1 pass1C");
         //app.intepreterSETUP("add -L" + prompt);
+        app.interpreter("remove -L \"Parco di Pisogne\"");
 
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1C"));
@@ -72,6 +66,15 @@ public class Main {
         //System.out.println(app.getConfiguratoriListString());
     
         //System.out.println(app.getLuoghiList());
+
+        
+        // Volontario v = new Volontario("a", "a", "0");
+        // v.setDisponibilita(app.date, new Date("16/03/2025"));
+        // v.setDisponibilita(app.date, new Date("20/03/2025"));
+        // v.setDisponibilita(app.date, new Date("24/03/2025"));
+        // v.setDisponibilita(app.date, new Date("26/03/2025"));
+        // v.setDisponibilita(app.date, new Date("28/03/2025"));
+        // v.printDisponibilita();
     }
 
     public static void initPersone(App app){

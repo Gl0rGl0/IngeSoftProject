@@ -13,9 +13,13 @@ public class DBLuoghiHelper extends DBAbstractHelper {
     // Cache dei luoghi letti dal file
     private ArrayList<Luogo> luoghi = new ArrayList<>();
     private boolean isCacheValid = false;
+    
+    public DBLuoghiHelper(){
+        this.luoghi = getLuoghi();
+    }
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps, ArrayList<Visita> visiteCollegate) {
-        return addLuogo(new Luogo(nome, descrizione, gps, visiteCollegate));
+    public boolean addLuogo(String nome, String descrizione, GPS gps/*, ArrayList<Visita> visiteCollegate */) {
+        return addLuogo(new Luogo(nome, descrizione, gps/*, visiteCollegate */));
     }
 
     /**
@@ -71,6 +75,16 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         return luoghi;
     }
 
+    public boolean isPresent(String toSearch){
+        for (Luogo luogo : luoghi) {
+            if(luogo.getNome().equalsIgnoreCase(toSearch)){
+                ViewSE.print("LUOGO PRESENTE");
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Aggiunge un nuovo Luogo nel file delle proprietà.
      * Simile a addPersona(), ma adattato per Luogo.
@@ -78,7 +92,10 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * @param luogo il luogo da aggiungere
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
-    public boolean addLuogo(Luogo luogo) {
+    public boolean addLuogo(Luogo toAdd) {
+        if(isPresent(toAdd.getNome()))
+            return false;
+        
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -92,10 +109,10 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         while (true) {
             String existingNome = properties.getProperty(keyPrefix + "." + index + ".nome");
             if (existingNome == null) {
-                properties.setProperty(keyPrefix + "." + index + ".nome", luogo.getNome());
-                properties.setProperty(keyPrefix + "." + index + ".descrizione", luogo.getDescrizione());
-                properties.setProperty(keyPrefix + "." + index + ".gps.latitudine", String.valueOf(luogo.getGps().getLatitudine()));
-                properties.setProperty(keyPrefix + "." + index + ".gps.longitudine", String.valueOf(luogo.getGps().getLongitudine()));
+                properties.setProperty(keyPrefix + "." + index + ".nome", toAdd.getNome());
+                properties.setProperty(keyPrefix + "." + index + ".descrizione", toAdd.getDescrizione());
+                properties.setProperty(keyPrefix + "." + index + ".gps.latitudine", String.valueOf(toAdd.getGps().getLatitudine()));
+                properties.setProperty(keyPrefix + "." + index + ".gps.longitudine", String.valueOf(toAdd.getGps().getLongitudine()));
                 try {
                     storeProperties(fileName, properties);
                     isCacheValid = false; // Invalida la cache
@@ -106,7 +123,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
                 }
             }
             // Se il nome esiste già, si interrompe l'aggiunta
-            if (luogo.getNome().equalsIgnoreCase(existingNome)) {
+            if (toAdd.getNome().equalsIgnoreCase(existingNome)) {
                 return false;
             }
             index++;
@@ -121,6 +138,9 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * @return true se il luogo è stato rimosso, false in caso di errori.
      */
     public boolean removeLuogo(String nome) {
+        if(!isPresent(nome))
+            return false;
+
         Properties properties;
         try {
             properties = loadProperties(fileName);

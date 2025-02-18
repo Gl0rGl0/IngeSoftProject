@@ -2,6 +2,7 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
@@ -68,11 +69,6 @@ public class ListCommand extends AbstractCommand {
             case 'e' -> printEffettuate();
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
-
-
-        for (Visita v : app.db.getVisite()) {
-            ViewSE.print(v);
-        }
     }
 
     // [-a]  All, tutte le visite (anche passate)       le faccio passare tutte
@@ -88,18 +84,28 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printProposte() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Visita v : app.db.getVisite()) {
+            ViewSE.print(v);
+        }
     }
 
     private void printComplete() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Volontario v : app.db.getVolontari()) {
+            for(Visita V : v.getVisite(StatusVisita.COMPLETA)){
+                ViewSE.print(V);
+            }
+        }
     }
 
     private void printCancellate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Volontario v : app.db.getVolontari()) {
+            for(Visita V : v.getVisite(StatusVisita.CANCELLATA)){
+                ViewSE.print(V);
+            }
+        }
     }
 
     private void printEffettuate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ViewSE.print("NON ACNORA SUPPORTATO");
     }
 }

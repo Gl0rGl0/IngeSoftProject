@@ -127,6 +127,8 @@ public class App {
         setupInterpreter.interpret(prompt, user);
     }
 
+    boolean skipSetupTesting = true;
+
     /**
      * Avvia l'interprete dei comandi.
      * Viene prima verificato il login e poi viene eseguito un ciclo continuo
@@ -135,9 +137,9 @@ public class App {
     public void start() {
         ViewSE.print(MESSAGGIO_START);
 
-        while(!setupInterpreter.haveAllBeenExecuted()){
+        while(!setupInterpreter.haveAllBeenExecuted() || skipSetupTesting){     //DA TOGLIEREEEE!!!!
             String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
-            setupInterpreter.interpret(input, user);
+            intepreterSETUP(input);
             //setupCompleted = setupCommandRegistry.values().stream().allMatch(action -> action.hasBeenExecuted()); //nuovo
             // controlla che ognuno dei comandi di setup sia stato eseguito, non ho trovato dove tu facessi il controllo, anche perché effettivamente non va
             // ma se lo fai più dentro secondo me è meglio qua
@@ -149,7 +151,7 @@ public class App {
 
         while (true) {
             String input = ViewSE.read("\n" + user.getUsername() + "> ");
-            interpreter.interpret(input, user);
+            interpreter(input);
         }
     }
 

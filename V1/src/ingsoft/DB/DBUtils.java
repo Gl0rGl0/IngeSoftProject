@@ -78,17 +78,17 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
     }
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps, String[] visiteCollegate){
-        ArrayList<Visita> vc = new ArrayList<>();
-        for (String nomeVisita : visiteCollegate) {
-            for (Visita visita : getVisite()) {
-                if(visita.isName(nomeVisita)){
-                    vc.add(visita);
-                    break;
-                }
-            }
-        }
-        return dbLuoghiHelper.addLuogo(nome, descrizione, gps, vc);
+    public boolean addLuogo(String nome, String descrizione, GPS gps/*, String[] visiteCollegate*/){
+        // ArrayList<Visita> vc = new ArrayList<>();
+        // for (String nomeVisita : visiteCollegate) {
+        //     for (Visita visita : getVisite()) {
+        //         if(visita.isName(nomeVisita)){
+        //             vc.add(visita);
+        //             break;
+        //         }
+        //     }
+        // }
+        return dbLuoghiHelper.addLuogo(nome, descrizione, gps/*, vc*/);
     }
 
     //Remover dato l'username [sufficiente e necessario]
@@ -102,6 +102,10 @@ public class DBUtils {
 
     public boolean removeVolontario(String username) {
         return dbVolontarioHelper.removePersona(username);
+    }
+
+    public boolean removeLuogo(String nomeLuogo){
+        return dbLuoghiHelper.removeLuogo(nomeLuogo);
     }
 
     //Come prima ogni persona ha il suo Helper che gestisce le chiamate ai giusti ArrayList

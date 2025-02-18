@@ -16,6 +16,13 @@ public class Luogo {
         this.visite = visite;
     }
 
+    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione) {
+        this.nomeLuogo = nomeLuogo;
+        this.descrizioneLuogo = descrizioneLuogo;
+        this.posizione = posizione;
+        this.visite = new ArrayList<>();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -50,7 +57,8 @@ public class Luogo {
     }
 
     public void aggiungiVisita(Visita v){
-        visite.add(v);
+        if(!visite.contains(v))
+            visite.add(v);
     }
 
 }
