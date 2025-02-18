@@ -25,7 +25,7 @@ public class TimeHelper implements Runnable {
         }else{
             eseguita = false;
             
-            if(il16epassato && !eseguita){
+            if(il16epassato && !eseguita && !app.date.festivo()){
                 eseguiAzioniDel16();
                 il16epassato = false;
             }

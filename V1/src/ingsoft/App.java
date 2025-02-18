@@ -58,7 +58,6 @@ public class App {
     private final Command ChangeC = new ChangePswCommand(this);
     private final Command ExitC = new ExitCommand();
     private final Command SetMaxC = new SetPersoneMaxCommand(this);     //COSI DA NON CREARE DOPPIONI INUTILI
-    private boolean setupCompleted;
 
     public App(DBUtils db) {
         this.db = db;
@@ -103,7 +102,7 @@ public class App {
         setupCommandRegistry.put("login", new LoginCommandSETUP(this));             //DA ESEGUIRE
         setupCommandRegistry.put("setambito", new SetAmbitoCommandSETUP(this));     //DA ESEGUIRE
         setupCommandRegistry.put("logout", LogoutC);
-        setupCommandRegistry.put("changepsw", ChangeC);                             //DA ESEGUIRE
+        setupCommandRegistry.put("changepsw", ChangeC);
         setupCommandRegistry.put("time", TimeC);
         setupCommandRegistry.put("setmax", SetMaxC);                                //DA ESEGUIRE
         setupCommandRegistry.put("help", new HelpCommand(this, CommandListSETUP.HELP));

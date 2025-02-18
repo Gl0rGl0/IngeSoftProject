@@ -23,6 +23,7 @@ public class Visita {
 
     StatusVisita stato = StatusVisita.PROPOSTA;
     ArrayList<Fruitore> partecipanti = new ArrayList<>();
+    Date giornoDellaVisita;
 
     // Costruttore
     public Visita(
@@ -61,6 +62,10 @@ public class Visita {
 
     public void setStatus(StatusVisita s){
         this.stato = s;
+    }
+
+    public void setData(Date d){
+        this.giornoDellaVisita = d;
     }
 
     public void aggiungiPartecipanti(Fruitore f){
