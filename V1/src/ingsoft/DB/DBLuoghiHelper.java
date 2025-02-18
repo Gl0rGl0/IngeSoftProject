@@ -26,7 +26,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * Legge il file delle proprietà e restituisce la lista dei luoghi.
      * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Luogo.
      */
-    public ArrayList<Luogo> getLuoghi() {
+    private ArrayList<Luogo> getLuoghi() {
         if (isCacheValid && luoghi != null) {
             return luoghi;
         }
