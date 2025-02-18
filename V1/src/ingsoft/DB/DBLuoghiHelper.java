@@ -11,12 +11,8 @@ import java.util.Properties;
 public class DBLuoghiHelper extends DBAbstractHelper {
     private final String fileName = "luoghi.properties";
     // Cache dei luoghi letti dal file
-    private ArrayList<Luogo> luoghi = new ArrayList<>();
+    private ArrayList<Luogo> luoghi = getLuoghi();
     private boolean isCacheValid = false;
-    
-    public DBLuoghiHelper(){
-        this.luoghi = getLuoghi();
-    }
 
     public boolean addLuogo(String nome, String descrizione, GPS gps/*, ArrayList<Visita> visiteCollegate */) {
         return addLuogo(new Luogo(nome, descrizione, gps/*, visiteCollegate */));
@@ -26,7 +22,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * Legge il file delle proprietà e restituisce la lista dei luoghi.
      * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Luogo.
      */
-    private ArrayList<Luogo> getLuoghi() {
+    public ArrayList<Luogo> getLuoghi() {
         if (isCacheValid && luoghi != null) {
             return luoghi;
         }
