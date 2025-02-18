@@ -10,7 +10,7 @@ public class Volontario extends Persona {
     // Disponibilità: 
     // disponibilita[0] -> periodo chiuso (non modificabile)
     // disponibilita[1] -> periodo modificabile, definito dal cutoff (dal 16 del mese X al 15 del mese X+1)
-    private final boolean[][] disponibilita = new boolean[2][31];
+    private final boolean[][] disponibilita = new boolean[3][31];
     
     // Memorizza il mese (0–11) del "periodo modificabile" (cioè il mese in cui partirà il periodo)
     private int modifiablePeriodStartMonth;
@@ -74,7 +74,8 @@ public class Volontario extends Persona {
      */
     private void scorriPeriodi() {
         disponibilita[0] = disponibilita[1];
-        disponibilita[1] = new boolean[31];
+        disponibilita[1] = disponibilita[2];
+        disponibilita[2] = new boolean[31];
     }
     
     /**

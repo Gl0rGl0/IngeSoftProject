@@ -33,6 +33,8 @@ public class Main {
         
         //app.interpreter("time");
 
+        
+
         app.start();
     }
 
@@ -44,11 +46,15 @@ public class Main {
         app.interpreter("time -s " + da);
         app.skipSetupTesting = true;
 
+        app.interpreter("login config1 pass1C");
+        app.interpreter("preclude -r 14/05");
+        System.out.println(app.db.dbDatesHelper.getPrecludedDates());
+
         //app.intepreterSETUP("login config1 pass1C");
-        String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1";
-        app.intepreterSETUP("login config1 pass1C");
+        //String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1";
+        //app.intepreterSETUP("login config1 pass1C");
         //app.intepreterSETUP("add -L" + prompt);
-        app.interpreter("remove -L \"Parco di Pisogne\"");
+        //app.interpreter("remove -L \"Parco di Pisogne\"");
 
         //System.out.println(app.db.getDBconfiguratori());
         //System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"), "pass1C"));

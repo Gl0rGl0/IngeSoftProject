@@ -126,7 +126,7 @@ public class App {
         setupInterpreter.interpret(prompt, user);
     }
 
-    boolean skipSetupTesting = true;
+    boolean skipSetupTesting = false;
 
     /**
      * Avvia l'interprete dei comandi.
@@ -136,7 +136,7 @@ public class App {
     public void start() {
         ViewSE.print(MESSAGGIO_START);
 
-        while(!setupInterpreter.haveAllBeenExecuted() || skipSetupTesting){     //DA TOGLIEREEEE!!!!
+        while(!setupInterpreter.haveAllBeenExecuted() && !skipSetupTesting){     //DA TOGLIEREEEE!!!!
             String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
             intepreterSETUP(input);
             //setupCompleted = setupCommandRegistry.values().stream().allMatch(action -> action.hasBeenExecuted()); //nuovo

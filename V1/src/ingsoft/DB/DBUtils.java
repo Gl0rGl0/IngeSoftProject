@@ -18,7 +18,7 @@ public class DBUtils {
     private final DBVolontarioHelper dbVolontarioHelper;
     public final DBVisiteHelper dbVisiteHelper;
     public final DBLuoghiHelper dbLuoghiHelper;
-    private final DBDatesHelper dbDatesHelper;
+    public final DBDatesHelper dbDatesHelper;
 
     public DBUtils() {
         dbConfiguratoreHelper = new DBConfiguratoreHelper();

@@ -7,8 +7,6 @@ public class DBDatesHelper {
     //private final String filePath = "./V1/data/dateSpeciali.txt";
     private final ArrayList<Date> precludedDates = new ArrayList<>();
 
-    public DBDatesHelper() {
-    }
     /**
      * Restituisce il set delle date speciali.
      *
