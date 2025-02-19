@@ -10,7 +10,10 @@ public class Ora {
     }
 
     public Ora(String o){
-        String[] sub = o.split(":");
+        String[] sub = o.replace("(", "")
+                        .replace(")", "")
+                        .replace("\\", "")
+                        .split(":");
         this.hh = Integer.parseInt(sub[0]);
         this.mm = Integer.parseInt(sub[1]);
     }

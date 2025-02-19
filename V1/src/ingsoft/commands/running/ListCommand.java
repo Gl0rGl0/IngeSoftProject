@@ -84,6 +84,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printProposte() {
+        System.out.println("VASCO ROSSI");
         for (Visita v : app.db.getVisite()) {
             ViewSE.print(v);
         }

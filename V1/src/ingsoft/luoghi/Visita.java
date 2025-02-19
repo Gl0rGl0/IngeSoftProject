@@ -8,8 +8,6 @@ import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 
 public class Visita {
-    private final String idVisita;
-
     String titolo;
     String descrizione;
     GPS puntoIncontro;
@@ -27,11 +25,10 @@ public class Visita {
 
     // Costruttore
     public Visita(
-            String idVisita, String titolo, String descrizione, GPS puntoIncontro,
+            String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
             boolean free, int numMinPartecipants, int numMaxPartecipants)
     {
-        this.idVisita = idVisita;
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -45,10 +42,9 @@ public class Visita {
     }
 
     //da spezzettare in qualche funzione (?)
-    public Visita(String idVisita, String[] args) {
-        this.idVisita = idVisita;
+    public Visita(String[] args) {
         int length = args.length;
-    
+        System.out.println("PROVO");
         try {
             this.titolo = (length > 0 && !args[0].equals("/")) ? args[0] : null;
             this.descrizione = (length > 1 && !args[1].equals("/")) ? args[1] : null;
@@ -60,7 +56,8 @@ public class Visita {
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            System.out.println(e);
             System.out.println("Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
         }
     }
@@ -83,6 +80,42 @@ public class Visita {
 
     public String getTitolo(){
         return this.titolo;
+    }
+
+    public String getDescrizione(){
+        return this.descrizione;
+    }
+
+    public GPS getGps(){
+        return this.puntoIncontro;
+    }
+
+    public Date getDataInizioPeriodo(){
+        return this.dataInizioPeriodo;
+    }
+
+    public Date getDataFinePeriodo(){
+        return this.dataFinePeriodo;
+    }
+
+    public Ora getOraInizio(){
+        return this.oraInizio;
+    }
+
+    public boolean isFree(){
+        return this.free;
+    }
+
+    public int getDurataVisita(){
+        return this.durataVisita;
+    }
+
+    public int getNumMinPartecipants(){
+        return this.numMinPartecipants;
+    }
+
+    public int getNumMaxPartecipants(){
+        return this.numMaxPartecipants;
     }
 
     public void setStatus(StatusVisita s){
@@ -112,10 +145,6 @@ public class Visita {
             out += f.getNumeroIscrizioni();
         }
         return out;
-    }
-
-    public String getIDVisita(){
-        return this.idVisita;
     }
 
     public boolean isName(String altroTitolo){

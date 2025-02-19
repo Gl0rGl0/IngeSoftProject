@@ -41,12 +41,15 @@ public class Main {
 
     public static void Test(App app){
         initPersone(app); //Inizializza il database in caso sia il primo accesso
+        
 
         String da = "16/02/2025";
         app.interpreter("time -s " + da);
         app.skipSetupTesting = true;
 
         app.interpreter("login config1 pass1C");
+        initLuoghioVisiteInterprete(app);
+        
         //app.interpreter("preclude -r 14/05");
         //System.out.println(app.db.dbDatesHelper.getPrecludedDates());
 
@@ -99,5 +102,12 @@ public class Main {
         //Testa se è il primo accesso per tutti i configuratori
         //app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
         //System.out.println(app.db.getConfiguratori());
+    }
+
+    public static void initLuoghioVisiteInterprete(App app){
+        app.interpreter("add -V \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30");
+        app.interpreter("add -V \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20");
+        app.interpreter("add -V \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15");
+        app.interpreter("add -V \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30");
     }
 }

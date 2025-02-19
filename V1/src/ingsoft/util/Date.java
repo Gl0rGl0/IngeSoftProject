@@ -39,10 +39,7 @@ public class Date {
      * @param d la stringa contenente la data e opzionalmente un commento
      */
     public Date(String d) {
-        String[] tmp = d.split("=");
-
-        String datePart = tmp[0];
-        String[] parts = datePart.split("/");
+        String[] parts = d.split("/");
         int day = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int year = -1; // Anno non specificato

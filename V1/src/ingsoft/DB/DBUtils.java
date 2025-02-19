@@ -11,6 +11,7 @@ import ingsoft.persone.Volontario;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DBUtils {
     private final DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -183,9 +184,7 @@ public class DBUtils {
     // }
 
     public void addVisita(String[] args) {
-        dbVisiteHelper.addVisita(args);
+        System.out.println(Arrays.toString(args));
+        dbVisiteHelper.addVisita(new Visita(args));
     }
-
-    
-    
 }
