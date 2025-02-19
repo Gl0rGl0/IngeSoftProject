@@ -12,6 +12,7 @@ import java.util.Properties;
 public class DBVisiteHelper extends DBAbstractHelper {
     private final String fileName = "visite.properties";
     private final ArrayList<Visita> visite_disponibili = new ArrayList<>();
+    private int lastID = 0;
 
     public ArrayList<Visita> getVisite() {
         refreshVisite();
@@ -112,5 +113,10 @@ public class DBVisiteHelper extends DBAbstractHelper {
                 return visita;
         }
         return null;
+    }
+
+    public void addVisita(String args[]) {
+        visite_disponibili.add(new Visita(String.format("visita%d", lastID++), args));
+        refreshVisite();
     }
 }

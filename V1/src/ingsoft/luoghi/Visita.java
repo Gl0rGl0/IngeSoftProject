@@ -44,6 +44,31 @@ public class Visita {
         this.numMaxPartecipants = numMaxPartecipants;
     }
 
+    //da spezzettare in qualche funzione (?)
+    public Visita(String idVisita, String[] args) {
+        this.idVisita = idVisita;
+        int length = args.length;
+    
+        try {
+            this.titolo = (length > 0 && !args[0].equals("/")) ? args[0] : null;
+            this.descrizione = (length > 1 && !args[1].equals("/")) ? args[1] : null;
+            this.puntoIncontro = (length > 2 && !args[2].equals("/")) ? new GPS(args[2]) : null;
+            this.dataInizioPeriodo = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
+            this.dataFinePeriodo = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
+            this.oraInizio = (length > 5 && !args[5].equals("/")) ? new Ora(args[5]) : null;
+            this.durataVisita = (length > 6 && !args[6].equals("/")) ? Integer.parseInt(args[6]) : -1;
+            this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
+            this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
+            this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
+        } catch (Exception e) {
+            System.out.println("Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
+        }
+    }
+    
+    
+
+    // add -V abcd defg hijk lmno
+
     public boolean sovrappone(Visita other){
         if(this.oraInizio.getMinuti() > other.oraInizio.getMinuti()){
             return (other.oraInizio.getMinuti() + other.durataVisita) > this.oraInizio.getMinuti();

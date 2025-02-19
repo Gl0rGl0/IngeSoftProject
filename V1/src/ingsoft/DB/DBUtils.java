@@ -182,6 +182,10 @@ public class DBUtils {
     //             .collect(Collectors.toCollection(ArrayList::new));
     // }
 
+    public void addVisita(String[] args) {
+        dbVisiteHelper.addVisita(args);
+    }
+
     
     
 }

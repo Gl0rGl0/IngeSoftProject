@@ -25,6 +25,8 @@ public enum CommandList implements ListInterface{
             numMinPartecipants  Numero minimo di partecipanti
             numMaxPartecipants  Numero massimo di partecipanti
             stato               Stato della visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
+        per lasciare un campo vuoto digitare "/"
+        se si inseriscono solo i primi N campi, dal campo N+1 in poi sarà tutto lasciato vuoto
 
         add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Integer>: visite]
             -L                 Aggiunge un luogo

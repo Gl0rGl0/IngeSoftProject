@@ -52,7 +52,8 @@ public class AddCommand extends AbstractCommand {
 
     private void addVisite(String[] args){
         String[] a = StringUtils.joinQuotedArguments(args);
-        //app.db.addVisite
+        System.out.println("sono qui e non faccio nient'altro");
+        app.db.addVisita(args);
     }
 
     private void addLuoghi(String[] args){

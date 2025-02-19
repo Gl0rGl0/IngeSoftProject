@@ -47,8 +47,8 @@ public class Main {
         app.skipSetupTesting = true;
 
         app.interpreter("login config1 pass1C");
-        app.interpreter("preclude -r 14/05");
-        System.out.println(app.db.dbDatesHelper.getPrecludedDates());
+        //app.interpreter("preclude -r 14/05");
+        //System.out.println(app.db.dbDatesHelper.getPrecludedDates());
 
         //app.intepreterSETUP("login config1 pass1C");
         //String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1";
@@ -94,6 +94,7 @@ public class Main {
 
         System.out.println(app.db.addVolontario("volont1", "pass1V"));
         System.out.println(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
+        System.out.println(app.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
         System.out.println("\n\n\n---------------------------");
         //Testa se è il primo accesso per tutti i configuratori
         //app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
