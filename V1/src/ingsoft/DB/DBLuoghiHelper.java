@@ -1,7 +1,7 @@
 package ingsoft.DB;
 
 import ingsoft.luoghi.Luogo;
-import ingsoft.luoghi.Visita;
+import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.GPS;
 import ingsoft.util.ViewSE;
 import java.io.IOException;
@@ -60,7 +60,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
     
             // Per semplicità, si crea il luogo con una lista vuota di visite
             // (eventualmente si possono caricare le visite correlate tramite visiteHelper)
-            ArrayList<Visita> visiteLuogo = new ArrayList<>();
+            ArrayList<TipoVisita> visiteLuogo = new ArrayList<>();
             Luogo luogo = new Luogo(nomeLuogo, descrizioneLuogo, gps, visiteLuogo);
             result.add(luogo);
             index++;

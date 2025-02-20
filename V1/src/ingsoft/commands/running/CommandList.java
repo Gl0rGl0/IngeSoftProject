@@ -12,19 +12,19 @@ public enum CommandList implements ListInterface{
             username  Specifica l'username della persona inserita
             psw       Specifica la password della persona inserita
 
-        add [-V] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Time: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
-            -V                 Aggiunge una visita
-            titolo              Il titolo della visita
-            descrizione         Una breve descrizione della visita
-            puntoIncontro       Il punto di incontro per la visita [latitudine,longitudine]
-            dataInizioPeriodo   Data di inizio del periodo della visita [YYYY-MM-DD]
-            dataFinePeriodo     Data di fine del periodo della visita [YYYY-MM-DD]
-            oraInizio           L'orario di inizio della visita [HH:MM]
-            durataVisita        Durata della visita in minuti
-            free                Indica se la visita è gratuita [true/false]
+        add [-t] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Time: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
+            -t                  Aggiunge un tipo di visita
+            titolo              Il titolo del tipo di visita
+            descrizione         Una breve descrizione del tipo di visita
+            puntoIncontro       Il punto di incontro per il tipo di visita [latitudine,longitudine]
+            dataInizioPeriodo   Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
+            dataFinePeriodo     Data di fine del periodo del tipo di visita [YYYY-MM-DD]
+            oraInizio           L'orario di inizio del tipo di visita [HH:MM]
+            durataVisita        Durata del tipo di visita in minuti
+            free                Indica se il tipo di visita è gratuito [true/false]
             numMinPartecipants  Numero minimo di partecipanti
             numMaxPartecipants  Numero massimo di partecipanti
-            stato               Stato della visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
+            stato               Stato del tipo di visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
         per lasciare un campo vuoto digitare "/"
         se si inseriscono solo i primi N campi, dal campo N+1 in poi sarà tutto lasciato vuoto
 
@@ -35,7 +35,7 @@ public enum CommandList implements ListInterface{
             posizione          Posizione GPS [latitudine,longitudine]
             visite             Lista degli ID delle visite associate [id1,id2,...]
     """,
-        "Aggiunge una Persona/Visita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
+        "Aggiunge una Persona/TipoVisita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),  // Solo i configuratori (4)
 
     REMOVE("""
         remove [-c] [-f] [-v] [String: username]

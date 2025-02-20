@@ -32,7 +32,7 @@ public class AddCommand extends AbstractCommand {
             case 'f' -> addFruitore(args);
             case 'v' -> addVolontario(args);
             case 'L' -> addLuoghi(args);
-            case 'V' -> addVisite(args);
+            case 't' -> addTipoVisita(args);
             default -> ViewSE.print("Opzione non riconosciuta per 'add'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
@@ -50,10 +50,10 @@ public class AddCommand extends AbstractCommand {
         app.db.addVolontario(args[0], args[1]);     //aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
     }
 
-    private void addVisite(String[] args){
+    private void addTipoVisita(String[] args){
         String[] a = StringUtils.joinQuotedArguments(args);
-        System.out.println("sono qui e non faccio nient'altro");
-        app.db.addVisita(a);
+        //System.out.println("sono qui e non faccio nient'altro");
+        app.db.addTipoVisita(a);
     }
 
     private void addLuoghi(String[] args){

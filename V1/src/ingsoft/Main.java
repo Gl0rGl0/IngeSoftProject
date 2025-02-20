@@ -105,9 +105,13 @@ public class Main {
     }
 
     public static void initLuoghioVisiteInterprete(App app){
-        app.interpreter("add -V \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30");
-        app.interpreter("add -V \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20");
-        app.interpreter("add -V \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15");
-        app.interpreter("add -V \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30");
+        app.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30");
+        app.interpreter("add -t \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20");
+        app.interpreter("add -t \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15");
+        app.interpreter("add -t \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30");
     }
 }
+
+// add -V "giretto naturalistico" "Una camminata rilassante immersa nella natura." 1.1:3.3 9/06 29/08 16:30 30 true 5 15
+
+// separato visita da tipo, e sostituito V con t per indicare il tipo, ora V indica la visita vera e propria

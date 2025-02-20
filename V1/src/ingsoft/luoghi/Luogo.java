@@ -7,9 +7,9 @@ public class Luogo {
     String nomeLuogo;
     String descrizioneLuogo;
     GPS posizione;
-    ArrayList<Visita> visite;
+    ArrayList<TipoVisita> visite;
 
-    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, ArrayList<Visita> visite) {
+    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, ArrayList<TipoVisita> visite) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
@@ -33,7 +33,7 @@ public class Luogo {
         .append(", Visite=[");
 
         if (visite != null && !visite.isEmpty()) {
-            for (Visita visita : visite) {
+            for (TipoVisita visita : visite) {
                 sb.append("\n    ").append(visita.toString()).append(",");
             }
             sb.setLength(sb.length() - 1); // Rimuove l'ultima virgola
@@ -56,7 +56,7 @@ public class Luogo {
         return this.posizione;
     }
 
-    public void aggiungiVisita(Visita v){
+    public void aggiungiVisita(TipoVisita v){
         if(!visite.contains(v))
             visite.add(v);
     }

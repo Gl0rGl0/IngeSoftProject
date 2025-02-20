@@ -1,7 +1,7 @@
 package ingsoft.DB;
 
 import ingsoft.luoghi.Luogo;
-import ingsoft.luoghi.Visita;
+import ingsoft.luoghi.TipoVisita;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Guest;
@@ -17,7 +17,7 @@ public class DBUtils {
     private final DBConfiguratoreHelper dbConfiguratoreHelper;
     private final DBFruitoreHelper dbFruitoreHelper;
     private final DBVolontarioHelper dbVolontarioHelper;
-    public final DBVisiteHelper dbVisiteHelper;
+    public final DBTipoVisiteHelper dbTipoVisiteHelper;
     public final DBLuoghiHelper dbLuoghiHelper;
     public final DBDatesHelper dbDatesHelper;
 
@@ -25,7 +25,7 @@ public class DBUtils {
         dbConfiguratoreHelper = new DBConfiguratoreHelper();
         dbFruitoreHelper = new DBFruitoreHelper();
         dbVolontarioHelper = new DBVolontarioHelper();
-        dbVisiteHelper = new DBVisiteHelper();
+        dbTipoVisiteHelper = new DBTipoVisiteHelper();
         dbLuoghiHelper = new DBLuoghiHelper();
         dbDatesHelper = new DBDatesHelper();
     }
@@ -47,8 +47,8 @@ public class DBUtils {
         return dbLuoghiHelper.getLuoghi();
     }
 
-    public ArrayList<Visita> getVisite() {
-        return dbVisiteHelper.getVisite();
+    public ArrayList<TipoVisita> getTipi() {
+        return dbTipoVisiteHelper.getTipiVisita();
     }
 
     //Adder con persone già create
@@ -168,8 +168,8 @@ public class DBUtils {
         dbDatesHelper.removePrecludedDate(date);
     }
 
-    public Visita getVisitaByName(String titoloVisita){
-        return dbVisiteHelper.findVisita(titoloVisita);
+    public TipoVisita getTipoVisitaByName(String titoloVisita){
+        return dbTipoVisiteHelper.findTipoVisita(titoloVisita);
     }
 
     public Luogo getLuogoByName(String nomeLuogo){
@@ -183,8 +183,8 @@ public class DBUtils {
     //             .collect(Collectors.toCollection(ArrayList::new));
     // }
 
-    public void addVisita(String[] args) {
+    public void addTipoVisita(String[] args) {
         System.out.println(Arrays.toString(args));
-        dbVisiteHelper.addVisita(new Visita(args));
+        dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args));
     }
 }

@@ -3,7 +3,7 @@ package ingsoft.commands;
 import ingsoft.App;
 import ingsoft.commands.setup.CommandListSETUP;
 import ingsoft.luoghi.Luogo;
-import ingsoft.luoghi.Visita;
+import ingsoft.luoghi.TipoVisita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
@@ -35,14 +35,14 @@ public class AssignCommand extends AbstractCommand {
         }
         switch (options[0]) {
             case "v" -> assignVolontario(arg[0], arg[1]);
-            case "V" -> assignVisita(arg[0], arg[1]);
+            case "t" -> assignVisita(arg[0], arg[1]);
             default -> ViewSE.print("Errore nell'utilizzo del comando 'assign'");   //Non può arrivare qua
         }
     }
 
     private void assignVolontario(String usernameVolontario, String nomeVisita){
         Volontario v = app.db.findVolontario(usernameVolontario);
-        Visita vToAssign = app.db.getVisitaByName(nomeVisita);
+        TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
         if(v == null){
             ViewSE.print("Nessun volontario trovato con quell'username.");
@@ -60,7 +60,7 @@ public class AssignCommand extends AbstractCommand {
 
     private void assignVisita(String nomeLuogo, String nomeVisita){
         Luogo l = app.db.getLuogoByName(nomeLuogo);
-        Visita vToAssign = app.db.getVisitaByName(nomeVisita);
+        TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
         if(l == null){
             ViewSE.print("Nessuna luogo trovato con quel nome.");

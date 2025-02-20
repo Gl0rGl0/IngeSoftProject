@@ -2,8 +2,7 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
-import ingsoft.luoghi.StatusVisita;
-import ingsoft.luoghi.Visita;
+import ingsoft.luoghi.TipoVisita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
 
@@ -34,7 +33,8 @@ public class ListCommand extends AbstractCommand {
             case 'v' -> listVolontari();
             case 'L' -> listLuoghi();
             case 'l' -> listLuoghi();
-            case 'V' -> listVisite(options);
+            // case 't' -> listTipi(options);
+            case 't' -> listTipi();
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
@@ -53,60 +53,61 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    private void listVisite(String[] s){
-        char option = 'a';
-        try {
-            option = s[1].charAt(0);
-        } catch (Exception e) {
-            //
-        }
+    // private void printTipi(){
+    //     char option = 'a';
+    //     try {
+    //         option = s[1].charAt(0);
+    //     } catch (Exception e) {
+    //         //
+    //     }
         
-        switch (option) {
-            case 'a' -> printAll();
-            case 'p' -> printProposte();
-            case 'c' -> printComplete();
-            case 'C' -> printCancellate();
-            case 'e' -> printEffettuate();
-            default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
-        }
-    }
+        // switch (option) {
+        //     case 'a' -> printAllTipi();
+        //     case 'p' -> printProposte();
+        //     case 'c' -> printComplete();
+        //     case 'C' -> printCancellate();
+        //     case 'e' -> printEffettuate();
+        //     default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
+        // }
+    //}
 
     // [-a]  All, tutte le visite (anche passate)       le faccio passare tutte
     // [-p]  Lista delle visite Proposte                Guardo nelle visite attuali quelle con stato PROPOSTE
     // [-c]  Lista delle visite Complete                Guardo nelle visite attuali quelle con stato COMPLETE
     // [-C]  Lista delle visite Cancellate              Guardo nelle visite attuali quelle con stato CANCELLATE
     // [-e]  Lista delle visite Effettuate (passate)    Prendo l'array della cronologia e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
-    private void printAll(){
-        printProposte();
-        printComplete();
-        printCancellate();
-        printEffettuate();
-    }
-
-    private void printProposte() {
+    
+    private void listTipi() {
         System.out.println("VASCO ROSSI");
-        for (Visita v : app.db.getVisite()) {
+            for (TipoVisita v : this.app.db.getTipi()) {
             ViewSE.print(v);
         }
     }
 
-    private void printComplete() {
-        for (Volontario v : app.db.getVolontari()) {
-            for(Visita V : v.getVisite(StatusVisita.COMPLETA)){
-                ViewSE.print(V);
-            }
-        }
-    }
+    // private void printProposte() {
+    //     System.out.println("VASCO ROSSI");
+    //     for (TipoVisita v : app.db.getVisite()) {
+    //         ViewSE.print(v);
+    //     }
+    // }
 
-    private void printCancellate() {
-        for (Volontario v : app.db.getVolontari()) {
-            for(Visita V : v.getVisite(StatusVisita.CANCELLATA)){
-                ViewSE.print(V);
-            }
-        }
-    }
+    // private void printComplete() {
+    //     for (Volontario v : app.db.getVolontari()) {
+    //         for(TipoVisita V : v.getVisite(StatusVisita.COMPLETA)){
+    //             ViewSE.print(V);
+    //         }
+    //     }
+    // }
 
-    private void printEffettuate() {
-        ViewSE.print("NON ACNORA SUPPORTATO");
-    }
+    // private void printCancellate() {
+    //     for (Volontario v : app.db.getVolontari()) {
+    //         for(TipoVisita V : v.getVisite(StatusVisita.CANCELLATA)){
+    //             ViewSE.print(V);
+    //         }
+    //     }
+    // }
+
+    // private void printEffettuate() {
+    //     ViewSE.print("NON ACNORA SUPPORTATO");
+    // }
 }
