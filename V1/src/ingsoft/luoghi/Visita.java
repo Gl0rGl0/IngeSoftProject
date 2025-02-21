@@ -10,4 +10,16 @@ public class Visita {
         this.tipo = tipo;
         this.data = data;
     }
+
+    public TipoVisita getTipo() {
+        return tipo;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public String getTitolo(){
+        return tipo.getTitolo();
+    }
 }
