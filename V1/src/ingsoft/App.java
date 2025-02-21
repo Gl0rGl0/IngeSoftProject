@@ -170,4 +170,8 @@ public class App {
     public ArrayList<Date> getDate(){
         return db.getPrecludedDates();
     }
+
+    public void checkToday(){
+        
+    }
 }

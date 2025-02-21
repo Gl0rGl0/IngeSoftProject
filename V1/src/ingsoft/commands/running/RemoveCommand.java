@@ -71,6 +71,6 @@ public class RemoveCommand extends AbstractCommand {
 
     private void removeLuogo(String[] args){
         ViewSE.print("Eseguo: Rimuovo luogo");
-        System.out.println(app.db.removeLuogo(args[0]));
+        app.db.removeLuogo(args[0]);
     }
 }

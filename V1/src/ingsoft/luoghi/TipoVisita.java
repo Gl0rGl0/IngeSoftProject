@@ -1,11 +1,9 @@
 package ingsoft.luoghi;
 
-import ingsoft.persone.Fruitore;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
 import ingsoft.util.ViewSE;
-import java.util.ArrayList;
 
 public class TipoVisita {
     String titolo;
@@ -19,8 +17,7 @@ public class TipoVisita {
     int numMinPartecipants;
     int numMaxPartecipants;
 
-    StatusVisita stato = StatusVisita.PROPOSTA;
-    ArrayList<Fruitore> partecipanti = new ArrayList<>();
+    String UID;
 
     // Costruttore
     public TipoVisita(
@@ -38,12 +35,16 @@ public class TipoVisita {
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
+        this.UID = this.hashCode() + ":" + titolo.charAt(0);
+    }
+
+    public String getUID(){
+        return this.UID;
     }
 
     //da spezzettare in qualche funzione (?)
     public TipoVisita(String[] args) {
         int length = args.length;
-        System.out.println("PROVO");
         try {
             this.titolo = (length > 0 && !args[0].equals("/")) ? args[0] : null;
             this.descrizione = (length > 1 && !args[1].equals("/")) ? args[1] : null;
@@ -56,8 +57,8 @@ public class TipoVisita {
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
         } catch (NumberFormatException e) {
-            System.out.println(e);
-            System.out.println("Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
+            ViewSE.print(e);
+            ViewSE.print("Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
         }
     }
 
@@ -67,10 +68,6 @@ public class TipoVisita {
         }else{
             return (this.oraInizio.getMinuti() + this.durataVisita) > other.oraInizio.getMinuti();
         }
-    }
-
-    public boolean isProposta(){
-        return this.stato.isPropostaSTATO();
     }
 
     public String getTitolo(){
@@ -113,30 +110,7 @@ public class TipoVisita {
         return this.numMaxPartecipants;
     }
 
-    public void setStatus(StatusVisita s){
-        this.stato = s;
-    }
-
-    public void aggiungiPartecipanti(Fruitore f){
-        int nNuovo = f.getNumeroIscrizioni();
-        if(numMaxPartecipants - getAttualeCapienza() < nNuovo){
-            ViewSE.print("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
-            return;
-        }
-        partecipanti.add(f);
-
-        if(getAttualeCapienza() == numMaxPartecipants){
-            setStatus(StatusVisita.COMPLETA);
-        }
-    }
-
-    public int getAttualeCapienza(){
-        int out = 0;
-        for (Fruitore f : partecipanti) {
-            out += f.getNumeroIscrizioni();
-        }
-        return out;
-    }
+    
 
     public boolean isName(String altroTitolo){
         return this.titolo.equalsIgnoreCase(altroTitolo);
@@ -155,11 +129,6 @@ public class TipoVisita {
                 ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario") +
                 ", Numero Min Partecipanti=" + numMinPartecipants +
                 ", Numero Max Partecipanti=" + numMaxPartecipants +
-                ", Stato=" + stato +
                 "}\n";
-    }
-
-    public StatusVisita getStatus(){
-        return this.stato;
     }
 }

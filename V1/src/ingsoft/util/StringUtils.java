@@ -40,4 +40,8 @@ public class StringUtils {
         
         return result.toArray(String[]::new);
     }
+
+    public static String rimuoviParentesi(String out) {
+        return out.replaceAll("[()]", "");
+    }    
 }

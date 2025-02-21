@@ -12,7 +12,7 @@ import java.util.Properties;
 public class DBTipoVisiteHelper extends DBAbstractHelper {
     private final String fileName = "tipiVisita.properties";
     private final ArrayList<TipoVisita> tipiVisite = new ArrayList<>();
-    private int lastID = 0; // eventualmente per generare ID univoci
+    //private int lastID = 0; // eventualmente per generare ID univoci
 
     public ArrayList<TipoVisita> getTipiVisita() {
         refreshTipiVisita();
@@ -124,7 +124,6 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                 properties.setProperty(keyPrefix + "." + index + ".free", String.valueOf(tipo.isFree()));
                 properties.setProperty(keyPrefix + "." + index + ".numMinPartecipants", String.valueOf(tipo.getNumMinPartecipants()));
                 properties.setProperty(keyPrefix + "." + index + ".numMaxPartecipants", String.valueOf(tipo.getNumMaxPartecipants()));
-                //System.out.println(visita.getOraInizio().toString());
                 try {
                     storeProperties(fileName, properties);
                     // Invalida la cache o aggiorna l'elenco se necessario

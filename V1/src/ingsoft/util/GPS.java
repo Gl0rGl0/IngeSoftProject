@@ -10,9 +10,10 @@ public class GPS {
     }
 
     public GPS(String g){
+        String[] use = StringUtils.rimuoviParentesi(g).split(":");
         try {
-            this.longitudine = Integer.parseInt(g.split(":")[0]);
-            this.latitudine = Integer.parseInt(g.split(":")[1]);
+            this.longitudine = Integer.parseInt(use[0]);
+            this.latitudine = Integer.parseInt(use[1]);
         } catch (NumberFormatException e) {
             this.latitudine = 0;
             this.longitudine = 0;
@@ -21,7 +22,7 @@ public class GPS {
 
     @Override
     public String toString(){
-        return "(" + longitudine + "," + latitudine + ")";
+        return "(" + longitudine + ":" + latitudine + ")";
     }
 
     public double getLatitudine(){

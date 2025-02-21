@@ -1,12 +1,19 @@
 package ingsoft.util;
 
 public class PeriodoAnno {
-    private Date inizioPeriodo;
-    private Date finePeriodo;
+    private final Date inizioPeriodo;
+    private final Date finePeriodo;
     
     public PeriodoAnno(Date inizioPeriodo, Date finePeriodo){
-        this.inizioPeriodo = inizioPeriodo.getNotAnno();
-        this.inizioPeriodo = finePeriodo.getNotAnno();
+        this.inizioPeriodo = inizioPeriodo;
+        this.finePeriodo = finePeriodo;
+    }
+
+    public PeriodoAnno(String in){
+        String[] use = in.split("-");
+
+        this.inizioPeriodo = new Date(use[0]);
+        this.finePeriodo = new Date(use[1]);
     }
 
     public Date inizio(){

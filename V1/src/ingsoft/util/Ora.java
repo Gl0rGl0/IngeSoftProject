@@ -10,17 +10,14 @@ public class Ora {
     }
 
     public Ora(String o){
-        String[] sub = o.replace("(", "")
-                        .replace(")", "")
-                        .replace("\\", "")
-                        .split(":");
+        String[] sub = o.split(":");
         this.hh = Integer.parseInt(sub[0]);
         this.mm = Integer.parseInt(sub[1]);
     }
 
     @Override
     public String toString(){
-        return String.format("(%d:%d)", hh, mm);
+        return String.format("%d:%d", hh, mm);
     }
 
     public boolean isequal(Ora other){

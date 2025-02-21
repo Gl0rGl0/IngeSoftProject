@@ -41,6 +41,5 @@ public class AddCommandSETUP extends AbstractCommand {
         String[] a = StringUtils.joinQuotedArguments(args);
         
         app.db.addLuogo(a[0], a[1], new GPS(a[2]));
-        System.out.println("FORSE HO AGGIUNTO UN LUOGO " + a[0]);
     }
 }

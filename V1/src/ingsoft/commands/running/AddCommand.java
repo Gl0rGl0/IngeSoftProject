@@ -52,14 +52,15 @@ public class AddCommand extends AbstractCommand {
 
     private void addTipoVisita(String[] args){
         String[] a = StringUtils.joinQuotedArguments(args);
-        //System.out.println("sono qui e non faccio nient'altro");
         app.db.addTipoVisita(a);
     }
 
     private void addLuoghi(String[] args){
+        //NON PUOI USARLO ADESSO, ASPETTA LA V3...
+        @SuppressWarnings("unused")
+        int niente = args.length;
         //String[] a = StringUtils.joinQuotedArguments(args);
-
-        //app.db addLuoghi
-        //SOLO DA V3 per ora niente...
+        
+        //app.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 }

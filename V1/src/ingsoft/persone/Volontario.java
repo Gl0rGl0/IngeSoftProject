@@ -1,6 +1,5 @@
 package ingsoft.persone;
 
-import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.Date;
 import java.util.ArrayList;
@@ -18,19 +17,10 @@ public class Volontario extends Persona {
     // Il cutoff: il giorno 15 (il periodo inizia il giorno 16)
     private static final int CUTOFF = 15;
     
-    private final ArrayList<TipoVisita> visitePresentabili = new ArrayList<>();
+    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
     
     public void aggiungiVisita(TipoVisita v){
-        visitePresentabili.add(v);
-    }
-
-    public ArrayList<TipoVisita> getVisite(StatusVisita s){
-        ArrayList<TipoVisita> out = new ArrayList<>();
-        for (TipoVisita v : visitePresentabili) {
-            if(v.getStatus() == s)
-                out.add(v);
-        }
-        return out;
+        UIDvisitePresentabili.add(v.getUID());
     }
 
     /**
