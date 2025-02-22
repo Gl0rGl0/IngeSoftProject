@@ -2,8 +2,6 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
-import ingsoft.luoghi.StatusVisita;
-import ingsoft.luoghi.TipoVisita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
 
