@@ -4,6 +4,7 @@ import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
 import ingsoft.util.ViewSE;
+import java.util.UUID;
 
 public class TipoVisita {
     String titolo;
@@ -18,13 +19,13 @@ public class TipoVisita {
     int numMaxPartecipants;
 
     String UID;
+    private String volontarioUID;
 
     // Costruttore
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
-            boolean free, int numMinPartecipants, int numMaxPartecipants)
-    {
+            boolean free, int numMinPartecipants, int numMaxPartecipants, String UID) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -35,14 +36,35 @@ public class TipoVisita {
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
-        this.UID = this.hashCode() + ":" + titolo.charAt(0);
+        this.UID = UID;
     }
 
-    public String getUID(){
+    public TipoVisita(
+            String titolo, String descrizione, GPS puntoIncontro,
+            Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
+            boolean free, int numMinPartecipants, int numMaxPartecipants) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.puntoIncontro = puntoIncontro;
+        this.dataInizioPeriodo = dataInizioPeriodo;
+        this.dataFinePeriodo = dataFinePeriodo;
+        this.oraInizio = oraInizio;
+        this.durataVisita = durataVisita;
+        this.free = free;
+        this.numMinPartecipants = numMinPartecipants;
+        this.numMaxPartecipants = numMaxPartecipants;
+        this.UID = UUID.randomUUID().toString();
+    }
+
+    public String getUID() {
         return this.UID;
     }
 
-    //da spezzettare in qualche funzione (?)
+    public String getVolontarioUID() {
+        return this.volontarioUID;
+    }
+
+    // da spezzettare in qualche funzione (?)
     public TipoVisita(String[] args) {
         int length = args.length;
         try {
@@ -58,62 +80,65 @@ public class TipoVisita {
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
         } catch (NumberFormatException e) {
             ViewSE.print(e);
-            ViewSE.print("Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
+            ViewSE.print(
+                    "Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
         }
     }
 
-    public boolean sovrappone(TipoVisita other){
-        if(this.oraInizio.getMinuti() > other.oraInizio.getMinuti()){
+    public boolean sovrappone(TipoVisita other) {
+        if (this.oraInizio.getMinuti() > other.oraInizio.getMinuti()) {
             return (other.oraInizio.getMinuti() + other.durataVisita) > this.oraInizio.getMinuti();
-        }else{
+        } else {
             return (this.oraInizio.getMinuti() + this.durataVisita) > other.oraInizio.getMinuti();
         }
     }
 
-    public String getTitolo(){
+    public String getTitolo() {
         return this.titolo;
     }
 
-    public String getDescrizione(){
+    public String getDescrizione() {
         return this.descrizione;
     }
 
-    public GPS getGps(){
+    public GPS getGps() {
         return this.puntoIncontro;
     }
 
-    public Date getDataInizioPeriodo(){
+    public Date getDataInizioPeriodo() {
         return this.dataInizioPeriodo;
     }
 
-    public Date getDataFinePeriodo(){
+    public Date getDataFinePeriodo() {
         return this.dataFinePeriodo;
     }
 
-    public Ora getOraInizio(){
+    public Ora getOraInizio() {
         return this.oraInizio;
     }
 
-    public boolean isFree(){
+    public boolean isFree() {
         return this.free;
     }
 
-    public int getDurataVisita(){
+    public int getDurataVisita() {
         return this.durataVisita;
     }
 
-    public int getNumMinPartecipants(){
+    public int getNumMinPartecipants() {
         return this.numMinPartecipants;
     }
 
-    public int getNumMaxPartecipants(){
+    public int getNumMaxPartecipants() {
         return this.numMaxPartecipants;
     }
 
-    
-
-    public boolean isName(String altroTitolo){
+    public boolean isName(String altroTitolo) {
         return this.titolo.equalsIgnoreCase(altroTitolo);
+    }
+
+    public void setVolontario(String uidVolontario) {
+        this.volontarioUID = uidVolontario;
     }
 
     @Override

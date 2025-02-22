@@ -24,7 +24,8 @@ public class ListCommand extends AbstractCommand {
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {
-        // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per configuratore)
+        // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per
+        // configuratore)
         if (options.length < 1) {
             ViewSE.print("Errore nell'utilizzo del comando 'list'");
             return;
@@ -37,30 +38,31 @@ public class ListCommand extends AbstractCommand {
             case 't' -> printTipi(options);
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
-        // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
+        // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L'
+        // per luogo)
     }
 
-    private void listLuoghi(){
-        //for (Luogo l : app.db.getLuoghi()) {
-        //    ViewSE.print(l);
-        //}
-        app.db.getLuoghi().forEach(l -> ViewSE.print(l)); //boh sono uguali
+    private void listLuoghi() {
+        // for (Luogo l : app.db.getLuoghi()) {
+        // ViewSE.print(l);
+        // }
+        app.db.getLuoghi().forEach(l -> ViewSE.print(l)); // boh sono uguali
     }
 
-    private void listVolontari(){
+    private void listVolontari() {
         for (Volontario v : app.db.getVolontari()) {
-            ViewSE.print(v);    //DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE app.db.trovaVisite(volontario)?
+            ViewSE.print(v); // DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE app.db.trovaVisite(volontario)?
         }
     }
 
-    private void printTipi(String[] s){
+    private void printTipi(String[] s) {
         char option = 'a';
         try {
             option = s[1].charAt(0);
         } catch (Exception e) {
             //
         }
-        
+
         switch (option) {
             case 'a' -> printAllTipi();
             case 'p' -> printProposte();
@@ -71,42 +73,30 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    // [-a]  All, tutte le visite (anche passate)       le faccio passare tutte
-    // [-p]  Lista delle visite Proposte                Guardo nelle visite attuali quelle con stato PROPOSTE
-    // [-c]  Lista delle visite Complete                Guardo nelle visite attuali quelle con stato COMPLETE
-    // [-C]  Lista delle visite Cancellate              Guardo nelle visite attuali quelle con stato CANCELLATE
-    // [-e]  Lista delle visite Effettuate (passate)    Prendo l'array della cronologia e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
-    
-    private void listTipi() {
-            for (TipoVisita v : this.app.db.getTipi()) {
-            ViewSE.print(v);
-        }
-    }
+    // [-a] All, tutte le visite (anche passate) le faccio passare tutte
+    // [-p] Lista delle visite Proposte Guardo nelle visite attuali quelle con stato
+    // PROPOSTE
+    // [-c] Lista delle visite Complete Guardo nelle visite attuali quelle con stato
+    // COMPLETE
+    // [-C] Lista delle visite Cancellate Guardo nelle visite attuali quelle con
+    // stato CANCELLATE
+    // [-e] Lista delle visite Effettuate (passate) Prendo l'array della cronologia
+    // e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
 
     private void printAllTipi() {
-        //tutti i print sotto
+        // tutti i print sotto
     }
 
     private void printProposte() {
-        for (TipoVisita v : app.db.getVisite()) {
-            ViewSE.print(v);
-        }
+        app.db.dbVisiteHelper.getVisite().forEach(v -> ViewSE.print(v));
     }
 
     private void printComplete() {
-        for (Volontario v : app.db.getVolontari()) {
-            for(TipoVisita V : v.getVisite(StatusVisita.COMPLETA)){
-                ViewSE.print(V);
-            }
-        }
+        app.db.dbVisiteHelper.getCompletate().forEach(v -> ViewSE.print(v));
     }
 
     private void printCancellate() {
-        for (Volontario v : app.db.getVolontari()) {
-            for(TipoVisita V : v.getVisite(StatusVisita.CANCELLATA)){
-                ViewSE.print(V);
-            }
-        }
+        app.db.dbVisiteHelper.getCancellate().forEach(v -> ViewSE.print(v));
     }
 
     private void printEffettuate() {

@@ -6,15 +6,16 @@ import ingsoft.util.ViewSE;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper {
     private final String fileName;
     private final PersonaType personaType;
     private final Class<T> personaClass;
-    protected ArrayList<T> cachedPersons = null;
     private boolean isCacheValid = false;
 
+    private final HashMap<String, T> cachedPersons = new HashMap<>();
 
     public DBAbstractPersonaHelper(PersonaType personaType, Class<T> personaClass) {
         this.personaType = personaType;
@@ -25,42 +26,41 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     @SuppressWarnings("UseSpecificCatch")
     public ArrayList<T> getPersonList() {
         if (isCacheValid && cachedPersons != null) {
-            return cachedPersons;
+            return (ArrayList<T>) cachedPersons.values();
         }
-    
-        ArrayList<T> persons = new ArrayList<>();
+
         Properties properties;
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
             ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
-            return persons;
+            return new ArrayList<>();
         }
-    
+
         int index = 1;
         String keyPrefix = personaType.getFilePath();
         while (true) {
             String username = properties.getProperty(keyPrefix + "." + index + ".username");
             String psw = properties.getProperty(keyPrefix + "." + index + ".psw");
             String newFlag = properties.getProperty(keyPrefix + "." + index + ".new", "0");
-    
+
             if (username == null || psw == null)
                 break;
-    
+
             try {
                 Constructor<T> constructor = personaClass.getConstructor(String.class, String.class, String.class);
                 T persona = constructor.newInstance(username, psw, newFlag);
-                persons.add(persona);
+                cachedPersons.put(username, persona);
             } catch (Exception e) {
-                ViewSE.print("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": " + e.getMessage());
+                ViewSE.print("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": "
+                        + e.getMessage());
             }
             index++;
         }
-    
-        cachedPersons = persons;
+
         isCacheValid = true;
-        return persons;
-    }    
+        return (ArrayList<T>) cachedPersons.values();
+    }
 
     public boolean addPersona(T persona) {
         Properties properties;
@@ -76,7 +76,8 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             String existingUsername = properties.getProperty(keyPrefix + "." + index + ".username");
             if (existingUsername == null) {
                 properties.setProperty(keyPrefix + "." + index + ".username", persona.getUsername());
-                properties.setProperty(keyPrefix + "." + index + ".psw", securePsw(persona.getUsername(), persona.getPsw()));
+                properties.setProperty(keyPrefix + "." + index + ".psw",
+                        securePsw(persona.getUsername(), persona.getPsw()));
                 properties.setProperty(keyPrefix + "." + index + ".new", persona.getNew());
                 try {
                     storeProperties(fileName, properties);
@@ -93,7 +94,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             index++;
         }
     }
-    
+
     public boolean removePersona(String username) {
         Properties properties;
         try {
@@ -102,7 +103,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return false;
         }
-    
+
         int index = 1;
         boolean removed = false;
         String keyPrefix = personaType.getFilePath();
@@ -118,7 +119,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             }
             index++;
         }
-    
+
         if (removed) {
             try {
                 storeProperties(fileName, properties);
@@ -142,14 +143,14 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
                 break;
             }
         }
-        
+
         if (found == false) {
             return false;
         }
 
         if (!removePersona(username))
             return false;
-    
+
         try {
             Constructor<T> constructor = personaClass.getConstructor(String.class, String.class, String.class);
             T newPersona = constructor.newInstance(username, newPsw, "0");
@@ -161,17 +162,17 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             return false;
         }
     }
-    
-    public T findPersona(String user){
-        for (T p : cachedPersons) {
-            if(p.getUsername().equals(user))
-                return p;
-        }
+
+    public T findPersona(String user) {
+        return cachedPersons.get(user);
+    }
+
+    public Persona login(String user, String psw) {
+        // IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
         return null;
     }
 
-    public Persona login(String user, String psw){
-        //IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
-        return null;
+    public static String securePsw(String user, String psw) {
+        return Integer.toHexString(user.hashCode() + psw.hashCode());
     }
 }

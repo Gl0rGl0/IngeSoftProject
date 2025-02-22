@@ -45,8 +45,4 @@ public abstract class DBAbstractHelper {
             properties.store(fos, null);
         }
     }
-
-    public static String securePsw(String user, String psw) {
-        return Integer.toHexString(user.hashCode() + psw.hashCode());
-    }
 }

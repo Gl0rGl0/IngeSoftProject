@@ -1,6 +1,5 @@
 package ingsoft.persone;
 
-import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +18,9 @@ public class Volontario extends Persona {
     
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
     
-    public void aggiungiVisita(TipoVisita v){
-        UIDvisitePresentabili.add(v.getUID());
+    public void aggiungiTipoVisita(String uidTipoVisita) {
+        if (!UIDvisitePresentabili.contains(uidTipoVisita))
+            UIDvisitePresentabili.add(uidTipoVisita);
     }
 
     /**

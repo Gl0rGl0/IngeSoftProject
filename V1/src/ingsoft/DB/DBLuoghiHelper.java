@@ -1,84 +1,69 @@
 package ingsoft.DB;
 
 import ingsoft.luoghi.Luogo;
-import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.GPS;
 import ingsoft.util.ViewSE;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class DBLuoghiHelper extends DBAbstractHelper {
     private final String fileName = "luoghi.properties";
-    // Cache dei luoghi letti dal file
-    private ArrayList<Luogo> luoghi = getLuoghi();
+    private final HashMap<String, Luogo> luoghiRepository = new HashMap<>();
     private boolean isCacheValid = false;
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps/*, ArrayList<Visita> visiteCollegate */) {
-        return addLuogo(new Luogo(nome, descrizione, gps/*, visiteCollegate */));
+    private ArrayList<String> tipoVisitaUIDs;
+
+    public void aggiungiTipoVisita(String tipoVisitaUID) {
+        if (!tipoVisitaUIDs.contains(tipoVisitaUID))
+            tipoVisitaUIDs.add(tipoVisitaUID);
     }
 
-    /**
-     * Legge il file delle proprietà e restituisce la lista dei luoghi.
-     * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Luogo.
-     */
+    public ArrayList<String> getTipoVisitaUIDs() {
+        return this.tipoVisitaUIDs;
+    }
+
+    public boolean addLuogo(String nome, String descrizione, GPS gps/* , ArrayList<Visita> visiteCollegate */) {
+        return addLuogo(new Luogo(nome, descrizione, gps/* , visiteCollegate */));
+    }
+
     public ArrayList<Luogo> getLuoghi() {
-        if (isCacheValid && luoghi != null) {
-            return luoghi;
+        if (isCacheValid && luoghiRepository != null) {
+            return (ArrayList<Luogo>) luoghiRepository.values();
         }
-    
-        ArrayList<Luogo> result = new ArrayList<>();
+
         Properties properties;
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
             ViewSE.print("Errore durante il caricamento dei luoghi: " + e.getMessage());
-            return result;
+            return new ArrayList<>();
         }
-    
+
+        luoghiRepository.clear();
+
         int index = 1;
-        String keyPrefix = "luogo";
+        String keyPrefix = "luogo.";
         while (true) {
-            String nomeLuogo = properties.getProperty(keyPrefix + "." + index + ".nome");
-            String descrizioneLuogo = properties.getProperty(keyPrefix + "." + index + ".descrizione");
-            String latitudine = properties.getProperty(keyPrefix + "." + index + ".gps.latitudine");
-            String longitudine = properties.getProperty(keyPrefix + "." + index + ".gps.longitudine");
-    
+            String nomeLuogo = properties.getProperty(keyPrefix + index + ".nome");
+            String descrizioneLuogo = properties.getProperty(keyPrefix + index + ".descrizione");
+            String posizione = properties.getProperty(keyPrefix + index + ".gps");
+            String UID = properties.getProperty(keyPrefix + index + ".UID");
+
             // Se uno dei campi obbligatori manca, si interrompe la lettura
-            if (nomeLuogo == null || descrizioneLuogo == null || latitudine == null || longitudine == null) {
+            if (nomeLuogo == null || descrizioneLuogo == null || posizione == null) {
                 break;
             }
-    
-            GPS gps;
-            try {
-                gps = new GPS(Double.parseDouble(latitudine), Double.parseDouble(longitudine));
-            } catch (NumberFormatException ex) {
-                ViewSE.print("Errore nel parsing delle coordinate GPS per il luogo " + nomeLuogo + ": " + ex.getMessage());
-                index++;
-                continue;
-            }
-    
-            // Per semplicità, si crea il luogo con una lista vuota di visite
-            // (eventualmente si possono caricare le visite correlate tramite visiteHelper)
-            ArrayList<TipoVisita> visiteLuogo = new ArrayList<>();
-            Luogo luogo = new Luogo(nomeLuogo, descrizioneLuogo, gps, visiteLuogo);
-            result.add(luogo);
+
+            GPS gps = new GPS(posizione);
+            Luogo luogo = new Luogo(nomeLuogo, descrizioneLuogo, gps, UID);
+            luoghiRepository.put(UID, luogo);
             index++;
         }
-    
-        luoghi = result;
-        isCacheValid = true;
-        return luoghi;
-    }
 
-    public boolean isPresent(String toSearch){
-        for (Luogo luogo : luoghi) {
-            if(luogo.getNome().equalsIgnoreCase(toSearch)){
-                ViewSE.print("LUOGO PRESENTE");
-                return true;
-            }
-        }
-        return false;
+        isCacheValid = true;
+        return (ArrayList<Luogo>) luoghiRepository.values();
     }
 
     /**
@@ -89,9 +74,9 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
     public boolean addLuogo(Luogo toAdd) {
-        if(isPresent(toAdd.getNome()))
+        if (findLuogo(toAdd.getNome()) != null)
             return false;
-        
+
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -99,16 +84,16 @@ public class DBLuoghiHelper extends DBAbstractHelper {
             ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
-    
+
         int index = 1;
-        String keyPrefix = "luogo";
+        String keyPrefix = "luogo.";
         while (true) {
-            String existingNome = properties.getProperty(keyPrefix + "." + index + ".nome");
-            if (existingNome == null) {
-                properties.setProperty(keyPrefix + "." + index + ".nome", toAdd.getNome());
-                properties.setProperty(keyPrefix + "." + index + ".descrizione", toAdd.getDescrizione());
-                properties.setProperty(keyPrefix + "." + index + ".gps.latitudine", String.valueOf(toAdd.getGps().getLatitudine()));
-                properties.setProperty(keyPrefix + "." + index + ".gps.longitudine", String.valueOf(toAdd.getGps().getLongitudine()));
+            String existing = properties.getProperty(keyPrefix + index + ".UID");
+            if (existing == null) {
+                properties.setProperty(keyPrefix + index + ".nome", toAdd.getNome());
+                properties.setProperty(keyPrefix + index + ".descrizione", toAdd.getDescrizione());
+                properties.setProperty(keyPrefix + index + ".gps", toAdd.getGps().toString());
+                properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
                 try {
                     storeProperties(fileName, properties);
                     isCacheValid = false; // Invalida la cache
@@ -117,10 +102,6 @@ public class DBLuoghiHelper extends DBAbstractHelper {
                     ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
-            }
-            // Se il nome esiste già, si interrompe l'aggiunta
-            if (toAdd.getNome().equalsIgnoreCase(existingNome)) {
-                return false;
             }
             index++;
         }
@@ -134,7 +115,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * @return true se il luogo è stato rimosso, false in caso di errori.
      */
     public boolean removeLuogo(String nome) {
-        if(!isPresent(nome))
+        if (findLuogo(nome) != null)
             return false;
 
         Properties properties;
@@ -144,25 +125,25 @@ public class DBLuoghiHelper extends DBAbstractHelper {
             ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
-    
+
         int index = 1;
         boolean removed = false;
-        String keyPrefix = "luogo";
+        String keyPrefix = "luogo.";
         while (true) {
-            String existingNome = properties.getProperty(keyPrefix + "." + index + ".nome");
+            String existingNome = properties.getProperty(keyPrefix + index + ".UID");
             if (existingNome == null) {
                 break;
             }
             if (existingNome.equals(nome)) {
-                properties.remove(keyPrefix + "." + index + ".nome");
-                properties.remove(keyPrefix + "." + index + ".descrizione");
-                properties.remove(keyPrefix + "." + index + ".gps.latitudine");
-                properties.remove(keyPrefix + "." + index + ".gps.longitudine");
+                properties.remove(keyPrefix + index + ".nome");
+                properties.remove(keyPrefix + index + ".descrizione");
+                properties.remove(keyPrefix + index + ".gps");
+                properties.remove(keyPrefix + index + ".UID");
                 removed = true;
             }
             index++;
         }
-    
+
         if (removed) {
             try {
                 storeProperties(fileName, properties);
@@ -175,7 +156,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         }
         return true;
     }
-    
+
     /**
      * Cerca e restituisce un Luogo in cache in base al nome.
      *
@@ -183,7 +164,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
      * @return il Luogo trovato, oppure null se non esiste.
      */
     public Luogo findLuogo(String nome) {
-        for (Luogo l : luoghi) {
+        for (Luogo l : getLuoghi()) {
             if (l.getNome().equalsIgnoreCase(nome)) {
                 return l;
             }

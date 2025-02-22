@@ -11,14 +11,15 @@ import ingsoft.util.ViewSE;
 public class AssignCommand extends AbstractCommand {
 
     private final App app;
+
     public AssignCommand(App app) {
         this.app = app;
-        super.commandInfo = CommandListSETUP.HELP; //CommandList.ASSIGN appena ho voglia di scriverlo
+        super.commandInfo = CommandListSETUP.HELP; // CommandList.ASSIGN appena ho voglia di scriverlo
     }
 
     @Override
     public void execute(String[] options, String[] args) {
-        if(options.length < 1){
+        if (options.length < 1) {
             ViewSE.print("Errore nell'utilizzo del comando 'assign'");
             return;
         }
@@ -26,9 +27,9 @@ public class AssignCommand extends AbstractCommand {
         String[] arg = StringUtils.joinQuotedArguments(args);
 
         if (arg.length < 2) {
-            if("v".equals(options[0])){
+            if ("v".equals(options[0])) {
                 ViewSE.print("Errore nell'utilizzo del comando 'assign': assign -v UsernameVolontario NomeVisita");
-            }else{
+            } else {
                 ViewSE.print("Errore nell'utilizzo del comando 'assign': assign -V NomeLuogo NomeVisita");
             }
             return;
@@ -36,43 +37,43 @@ public class AssignCommand extends AbstractCommand {
         switch (options[0]) {
             case "v" -> assignVolontario(arg[0], arg[1]);
             case "t" -> assignVisita(arg[0], arg[1]);
-            default -> ViewSE.print("Errore nell'utilizzo del comando 'assign'");   //Non può arrivare qua
+            default -> ViewSE.print("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
         }
     }
 
-    private void assignVolontario(String usernameVolontario, String nomeVisita){
+    private void assignVolontario(String usernameVolontario, String nomeVisita) {
         Volontario v = app.db.findVolontario(usernameVolontario);
         TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
-        if(v == null){
+        if (v == null) {
             ViewSE.print("Nessun volontario trovato con quell'username.");
             return;
         }
 
-        if(vToAssign == null){
+        if (vToAssign == null) {
             ViewSE.print("Nessuna visita trovata con quel titolo.");
             return;
         }
 
-        v.aggiungiVisita(vToAssign);
+        v.aggiungiTipoVisita(vToAssign.getUID());
         ViewSE.print("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitolo());
     }
 
-    private void assignVisita(String nomeLuogo, String nomeVisita){
+    private void assignVisita(String nomeLuogo, String nomeVisita) {
         Luogo l = app.db.getLuogoByName(nomeLuogo);
         TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
-        if(l == null){
+        if (l == null) {
             ViewSE.print("Nessuna luogo trovato con quel nome.");
             return;
         }
 
-        if(vToAssign == null){
+        if (vToAssign == null) {
             ViewSE.print("Nessuna visita trovata con quel titolo.");
             return;
         }
 
-        l.aggiungiVisita(vToAssign);
+        l.aggiungiTipoVisita(vToAssign.getUID());
         ViewSE.print("Assegnata la visita " + vToAssign.getTitolo() + " al luogo " + l.getNome());
     }
 }

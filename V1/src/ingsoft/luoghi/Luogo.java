@@ -2,40 +2,42 @@ package ingsoft.luoghi;
 
 import ingsoft.util.GPS;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Luogo {
     String nomeLuogo;
     String descrizioneLuogo;
     GPS posizione;
-    ArrayList<TipoVisita> visite;
+    String UID;
+    ArrayList<String> visiteUID = new ArrayList<>();
 
-    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, ArrayList<TipoVisita> visite) {
+    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, String UID) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
-        this.visite = visite;
+        this.UID = UID;
     }
 
     public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
-        this.visite = new ArrayList<>();
+        this.UID = UUID.randomUUID().toString();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Luogo {")
-        .append("Nome='").append(nomeLuogo).append('\'')
-        .append(", Descrizione='").append(descrizioneLuogo).append('\'')
-        .append(", Posizione=").append(posizione)
-        .append(", Visite=[");
+                .append("Nome='").append(nomeLuogo).append('\'')
+                .append(", Descrizione='").append(descrizioneLuogo).append('\'')
+                .append(", Posizione=").append(posizione)
+                .append(", Visite=[");
 
-        if (visite != null && !visite.isEmpty()) {
-            for (TipoVisita visita : visite) {
-                sb.append("\n    ").append(visita.toString()).append(",");
-            }
+        if (visiteUID != null && !visiteUID.isEmpty()) {
+            visiteUID.forEach(visita -> {
+                sb.append("\n    ").append(visita).append(",");
+            });
             sb.setLength(sb.length() - 1); // Rimuove l'ultima virgola
             sb.append("\n");
         }
@@ -44,21 +46,27 @@ public class Luogo {
         return sb.toString();
     }
 
-    public String getNome(){
+    public void aggiungiTipoVisita(String tvUID) {
+        this.visiteUID.add(tvUID);
+    }
+
+    public ArrayList<String> getTipoVisitaUID() {
+        return this.visiteUID;
+    }
+
+    public String getNome() {
         return this.nomeLuogo;
     }
 
-    public String getDescrizione(){
+    public String getDescrizione() {
         return this.descrizioneLuogo;
     }
 
-    public GPS getGps(){
+    public GPS getGps() {
         return this.posizione;
     }
 
-    public void aggiungiVisita(TipoVisita v){
-        if(!visite.contains(v))
-            visite.add(v);
+    public String getUID() {
+        return this.UID;
     }
-
 }

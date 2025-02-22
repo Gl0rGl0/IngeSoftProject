@@ -7,100 +7,84 @@ import ingsoft.util.Ora;
 import ingsoft.util.ViewSE;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class DBTipoVisiteHelper extends DBAbstractHelper {
     private final String fileName = "tipiVisita.properties";
-    private final ArrayList<TipoVisita> tipiVisite = new ArrayList<>();
-    //private int lastID = 0; // eventualmente per generare ID univoci
+    private final HashMap<String, TipoVisita> tipiVisitaRepository = new HashMap<>();
+
+    private boolean isCacheValid = false;
 
     public ArrayList<TipoVisita> getTipiVisita() {
-        refreshTipiVisita();
-        return tipiVisite;
-    }
+        if (isCacheValid && tipiVisitaRepository != null) {
+            return (ArrayList<TipoVisita>) tipiVisitaRepository.values();
+        }
 
-    @SuppressWarnings("UseSpecificCatch")
-    private void refreshTipiVisita() {
         Properties properties;
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
             ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
-            return;
+            return new ArrayList<>();
         }
-        tipiVisite.clear();
 
-        for (String key : properties.stringPropertyNames()) {
-            if (key.endsWith(".titolo")) {
-                // Supponiamo chiave del tipo "tipo.<id>.titolo"
-                String prefix = "tipo.";
-                int startIndex = prefix.length();
-                int endIndex = key.lastIndexOf(".titolo");
-                if (endIndex <= startIndex) continue;
-                String tipoID = key.substring(startIndex, endIndex);
+        tipiVisitaRepository.clear();
+        int index = 1;
+        String prefix = "tipo.";
 
-                String titolo = properties.getProperty(prefix + tipoID + ".titolo");
-                String descrizione = properties.getProperty(prefix + tipoID + ".descrizione");
-                String latitudine = properties.getProperty(prefix + tipoID + ".gps.latitudine");
-                String longitudine = properties.getProperty(prefix + tipoID + ".gps.longitudine");
-                String dataInizioPeriodo = properties.getProperty(prefix + tipoID + ".dataInizioPeriodo");
-                String dataFinePeriodo = properties.getProperty(prefix + tipoID + ".dataFinePeriodo");
-                String oraInizio = properties.getProperty(prefix + tipoID + ".oraInizio");
-                String durataVisita = properties.getProperty(prefix + tipoID + ".durataVisita");
-                String free = properties.getProperty(prefix + tipoID + ".free");
-                String numMinPartecipants = properties.getProperty(prefix + tipoID + ".numMinPartecipants");
-                String numMaxPartecipants = properties.getProperty(prefix + tipoID + ".numMaxPartecipants");
+        while (true) {
+            String titolo = properties.getProperty(prefix + index + ".titolo");
+            String descrizione = properties.getProperty(prefix + index + ".descrizione");
+            String posizione = properties.getProperty(prefix + index + ".gps");
+            String dataInizioPeriodo = properties.getProperty(prefix + index + ".dataInizioPeriodo");
+            String dataFinePeriodo = properties.getProperty(prefix + index + ".dataFinePeriodo");
+            String oraInizio = properties.getProperty(prefix + index + ".oraInizio");
+            String durataVisita = properties.getProperty(prefix + index + ".durataVisita");
+            String free = properties.getProperty(prefix + index + ".free");
+            String numMinPartecipants = properties.getProperty(prefix + index + ".numMinPartecipants");
+            String numMaxPartecipants = properties.getProperty(prefix + index + ".numMaxPartecipants");
+            String UID = properties.getProperty(prefix + index + ".UID");
 
-
-                // Parsing delle informazioni
-                GPS gps;
-                try {
-                    gps = new GPS(Double.parseDouble(latitudine), Double.parseDouble(longitudine));
-                } catch (Exception ex) {
-                    ViewSE.print("Errore nel parsing delle coordinate GPS per la visita " + tipoID + ": " + ex.getMessage());
-                    continue;
-                }
-                Date inizioPeriodo, finePeriodo;
-                try {
-                    inizioPeriodo = new Date(dataInizioPeriodo);
-                    finePeriodo = new Date(dataFinePeriodo);
-                } catch (Exception e) {
-                    ViewSE.print("Errore nel parsing delle date per la visita " + tipoID + ": " + e.getMessage());
-                    continue;
-                }
-                Ora ora;
-                try {
-                    ora = new Ora(oraInizio);
-                } catch (Exception e) {
-                    ViewSE.print("Errore nel parsing dell'ora per la visita " + tipoID + ": " + e.getMessage());
-                    continue;
-                }
-                try {
-                    TipoVisita tipo = new TipoVisita(
-                            titolo,
-                            descrizione,
-                            gps,
-                            inizioPeriodo,
-                            finePeriodo,
-                            ora,
-                            Integer.parseInt(durataVisita),
-                            Boolean.parseBoolean(free),
-                            Integer.parseInt(numMinPartecipants),
-                            Integer.parseInt(numMaxPartecipants)
-                    );
-                    tipiVisite.add(tipo);
-                } catch (Exception ex) {
-                    ViewSE.print("Errore nella creazione del tipo di visita " + tipoID + ": " + ex.getMessage());
-                }
+            if (titolo == null || descrizione == null || posizione == null || dataInizioPeriodo == null ||
+                    dataFinePeriodo == null || oraInizio == null || durataVisita == null || free == null ||
+                    numMinPartecipants == null || numMaxPartecipants == null || UID == null) {
+                break;
             }
+
+            // Parsing delle informazioni
+            GPS gps = new GPS(posizione);
+            Date inizioPeriodo = new Date(dataInizioPeriodo);
+            Date finePeriodo = new Date(dataFinePeriodo);
+            Ora ora = new Ora(oraInizio);
+            try {
+                TipoVisita tipo = new TipoVisita(
+                        titolo,
+                        descrizione,
+                        gps,
+                        inizioPeriodo,
+                        finePeriodo,
+                        ora,
+                        Integer.parseInt(durataVisita),
+                        Boolean.parseBoolean(free),
+                        Integer.parseInt(numMinPartecipants),
+                        Integer.parseInt(numMaxPartecipants));
+                tipiVisitaRepository.put(UID, tipo);
+            } catch (NumberFormatException ex) {
+                ViewSE.print("Errore nella creazione del tipo di visita " + index + ": " + ex.getMessage());
+            }
+            index++;
         }
+
+        isCacheValid = true;
+        return (ArrayList<TipoVisita>) tipiVisitaRepository.values();
     }
 
     /**
      * Aggiunge un nuovo tipo di visita al file delle proprietà.
      * Ritorna true se l'operazione va a buon fine, false altrimenti.
      */
-    public boolean addTipoVisita(TipoVisita tipo) {
+    public boolean addTipoVisita(TipoVisita toAdd) {
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -109,33 +93,34 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             return false;
         }
         int index = 1;
-        String keyPrefix = "tipo";
+        String keyPrefix = "tipo.";
         while (true) {
-            String existingTitolo = properties.getProperty(keyPrefix + "." + index + ".titolo");
-            if (existingTitolo == null) {
-                properties.setProperty(keyPrefix + "." + index + ".titolo", tipo.getTitolo());
-                properties.setProperty(keyPrefix + "." + index + ".descrizione", tipo.getDescrizione());
-                properties.setProperty(keyPrefix + "." + index + ".gps.latitudine", String.valueOf(tipo.getGps().getLatitudine()));
-                properties.setProperty(keyPrefix + "." + index + ".gps.longitudine", String.valueOf(tipo.getGps().getLongitudine()));
-                properties.setProperty(keyPrefix + "." + index + ".dataInizioPeriodo", tipo.getDataInizioPeriodo().toString());
-                properties.setProperty(keyPrefix + "." + index + ".dataFinePeriodo", tipo.getDataFinePeriodo().toString());
-                properties.setProperty(keyPrefix + "." + index + ".oraInizio", tipo.getOraInizio().toString());
-                properties.setProperty(keyPrefix + "." + index + ".durataVisita", String.valueOf(tipo.getDurataVisita()));
-                properties.setProperty(keyPrefix + "." + index + ".free", String.valueOf(tipo.isFree()));
-                properties.setProperty(keyPrefix + "." + index + ".numMinPartecipants", String.valueOf(tipo.getNumMinPartecipants()));
-                properties.setProperty(keyPrefix + "." + index + ".numMaxPartecipants", String.valueOf(tipo.getNumMaxPartecipants()));
+            String existing = properties.getProperty(keyPrefix + index + ".UID");
+            if (existing == null) {
+                properties.setProperty(keyPrefix + index + ".titolo", toAdd.getTitolo());
+                properties.setProperty(keyPrefix + index + ".descrizione", toAdd.getDescrizione());
+                properties.setProperty(keyPrefix + index + ".gps", toAdd.getGps().toString());
+                properties.setProperty(keyPrefix + index + ".dataInizioPeriodo",
+                        toAdd.getDataInizioPeriodo().toString());
+                properties.setProperty(keyPrefix + index + ".dataFinePeriodo",
+                        toAdd.getDataFinePeriodo().toString());
+                properties.setProperty(keyPrefix + index + ".oraInizio", toAdd.getOraInizio().toString());
+                properties.setProperty(keyPrefix + index + ".durataVisita",
+                        String.valueOf(toAdd.getDurataVisita()));
+                properties.setProperty(keyPrefix + index + ".free", String.valueOf(toAdd.isFree()));
+                properties.setProperty(keyPrefix + index + ".numMinPartecipants",
+                        String.valueOf(toAdd.getNumMinPartecipants()));
+                properties.setProperty(keyPrefix + index + ".numMaxPartecipants",
+                        String.valueOf(toAdd.getNumMaxPartecipants()));
+                properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
                 try {
                     storeProperties(fileName, properties);
-                    // Invalida la cache o aggiorna l'elenco se necessario
+                    isCacheValid = false;
                     return true;
                 } catch (IOException e) {
                     ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
-            }
-            if (existingTitolo.equalsIgnoreCase(tipo.getTitolo())) {
-                // Esiste già una visita con lo stesso titolo
-                return false;
             }
             index++;
         }
@@ -146,6 +131,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
      * Ritorna true se la rimozione va a buon fine, false altrimenti.
      */
     public boolean removeTipoVisita(String titolo) {
+        if (findTipoVisita(titolo) != null)
+            return false;
+
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -153,34 +141,35 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
-    
+
         int index = 1;
         boolean removed = false;
-        String keyPrefix = "visita";
+        String keyPrefix = "tvisita.";
         while (true) {
-            String existingTitolo = properties.getProperty(keyPrefix + "." + index + ".titolo");
-            if (existingTitolo == null)
+            String existing = properties.getProperty(keyPrefix + index + ".titolo");
+            if (existing == null)
                 break;
-            if (existingTitolo.equalsIgnoreCase(titolo)) {
-                properties.remove(keyPrefix + "." + index + ".titolo");
-                properties.remove(keyPrefix + "." + index + ".descrizione");
-                properties.remove(keyPrefix + "." + index + ".gps.latitudine");
-                properties.remove(keyPrefix + "." + index + ".gps.longitudine");
-                properties.remove(keyPrefix + "." + index + ".dataInizioPeriodo");
-                properties.remove(keyPrefix + "." + index + ".dataFinePeriodo");
-                properties.remove(keyPrefix + "." + index + ".oraInizio");
-                properties.remove(keyPrefix + "." + index + ".durataVisita");
-                properties.remove(keyPrefix + "." + index + ".free");
-                properties.remove(keyPrefix + "." + index + ".numMinPartecipants");
-                properties.remove(keyPrefix + "." + index + ".numMaxPartecipants");
+            if (existing.equals(titolo)) {
+                properties.remove(keyPrefix + index + ".titolo");
+                properties.remove(keyPrefix + index + ".descrizione");
+                properties.remove(keyPrefix + index + ".gps");
+                properties.remove(keyPrefix + index + ".dataInizioPeriodo");
+                properties.remove(keyPrefix + index + ".dataFinePeriodo");
+                properties.remove(keyPrefix + index + ".oraInizio");
+                properties.remove(keyPrefix + index + ".durataVisita");
+                properties.remove(keyPrefix + index + ".free");
+                properties.remove(keyPrefix + index + ".numMinPartecipants");
+                properties.remove(keyPrefix + index + ".numMaxPartecipants");
+                properties.remove(keyPrefix + index + ".UID");
                 removed = true;
             }
             index++;
         }
-    
+
         if (removed) {
             try {
                 storeProperties(fileName, properties);
+                isCacheValid = false;
                 return true;
             } catch (IOException e) {
                 ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
@@ -191,12 +180,14 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
     }
 
     /**
-     * Cerca un tipo di visita nell'elenco dei tipi caricati in cache, basandosi sul titolo.
+     * Cerca un tipo di visita nell'elenco dei tipi caricati in cache, basandosi sul
+     * titolo.
      */
     public TipoVisita findTipoVisita(String nomeVisita) {
-        for (TipoVisita tipo : tipiVisite) {
-            if (tipo.getTitolo().equalsIgnoreCase(nomeVisita))
+        for (TipoVisita tipo : tipiVisitaRepository.values()) {
+            if (tipo.getTitolo().equalsIgnoreCase(nomeVisita)) {
                 return tipo;
+            }
         }
         return null;
     }
