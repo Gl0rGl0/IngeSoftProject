@@ -24,13 +24,17 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         return this.tipoVisitaUIDs;
     }
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps/* , ArrayList<Visita> visiteCollegate */) {
-        return addLuogo(new Luogo(nome, descrizione, gps/* , visiteCollegate */));
+    public Luogo getLuogoByUID(String uid) {
+        return luoghiRepository.get(uid);
+    }
+
+    public boolean addLuogo(String nome, String descrizione, GPS gps) {
+        return addLuogo(new Luogo(nome, descrizione, gps));
     }
 
     public ArrayList<Luogo> getLuoghi() {
         if (isCacheValid && luoghiRepository != null) {
-            return (ArrayList<Luogo>) luoghiRepository.values();
+            return new ArrayList<>(luoghiRepository.values());
         }
 
         Properties properties;
@@ -63,7 +67,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         }
 
         isCacheValid = true;
-        return (ArrayList<Luogo>) luoghiRepository.values();
+        return new ArrayList<>(luoghiRepository.values());
     }
 
     /**

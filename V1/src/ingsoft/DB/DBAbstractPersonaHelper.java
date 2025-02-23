@@ -26,7 +26,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     @SuppressWarnings("UseSpecificCatch")
     public ArrayList<T> getPersonList() {
         if (isCacheValid && cachedPersons != null) {
-            return (ArrayList<T>) cachedPersons.values();
+            return new ArrayList<>(cachedPersons.values());
         }
 
         Properties properties;
@@ -59,7 +59,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         }
 
         isCacheValid = true;
-        return (ArrayList<T>) cachedPersons.values();
+        return new ArrayList<>(cachedPersons.values());
     }
 
     public boolean addPersona(T persona) {
@@ -164,6 +164,10 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public T findPersona(String user) {
+        if (isCacheValid)
+            return cachedPersons.get(user);
+
+        getPersonList();
         return cachedPersons.get(user);
     }
 

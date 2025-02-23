@@ -11,14 +11,23 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class DBTipoVisiteHelper extends DBAbstractHelper {
+
     private final String fileName = "tipiVisita.properties";
     private final HashMap<String, TipoVisita> tipiVisitaRepository = new HashMap<>();
 
     private boolean isCacheValid = false;
 
+    public TipoVisita getTipiVisitaByUID(String uid) {
+        if (isCacheValid) {
+            return tipiVisitaRepository.get(uid);
+        }
+        getTipiVisita();
+        return tipiVisitaRepository.get(uid);
+    }
+
     public ArrayList<TipoVisita> getTipiVisita() {
         if (isCacheValid && tipiVisitaRepository != null) {
-            return (ArrayList<TipoVisita>) tipiVisitaRepository.values();
+            return new ArrayList<>(tipiVisitaRepository.values());
         }
 
         Properties properties;
@@ -30,6 +39,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         }
 
         tipiVisitaRepository.clear();
+
         int index = 1;
         String prefix = "tipo.";
 
@@ -46,9 +56,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             String numMaxPartecipants = properties.getProperty(prefix + index + ".numMaxPartecipants");
             String UID = properties.getProperty(prefix + index + ".UID");
 
-            if (titolo == null || descrizione == null || posizione == null || dataInizioPeriodo == null ||
-                    dataFinePeriodo == null || oraInizio == null || durataVisita == null || free == null ||
-                    numMinPartecipants == null || numMaxPartecipants == null || UID == null) {
+            if (titolo == null || descrizione == null || posizione == null || dataInizioPeriodo == null
+                    || dataFinePeriodo == null || oraInizio == null || durataVisita == null || free == null
+                    || numMinPartecipants == null || numMaxPartecipants == null || UID == null) {
                 break;
             }
 
@@ -77,14 +87,18 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         }
 
         isCacheValid = true;
-        return (ArrayList<TipoVisita>) tipiVisitaRepository.values();
+        return new ArrayList<>(tipiVisitaRepository.values());
     }
 
     /**
-     * Aggiunge un nuovo tipo di visita al file delle proprietà.
-     * Ritorna true se l'operazione va a buon fine, false altrimenti.
+     * Aggiunge un nuovo tipo di visita al file delle proprietà. Ritorna true se
+     * l'operazione va a buon fine, false altrimenti.
      */
     public boolean addTipoVisita(TipoVisita toAdd) {
+        if (findTipoVisita(toAdd.getTitolo()) != null) {
+            return false;
+        }
+
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -131,8 +145,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
      * Ritorna true se la rimozione va a buon fine, false altrimenti.
      */
     public boolean removeTipoVisita(String titolo) {
-        if (findTipoVisita(titolo) != null)
+        if (findTipoVisita(titolo) != null) {
             return false;
+        }
 
         Properties properties;
         try {
@@ -147,8 +162,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         String keyPrefix = "tvisita.";
         while (true) {
             String existing = properties.getProperty(keyPrefix + index + ".titolo");
-            if (existing == null)
+            if (existing == null) {
                 break;
+            }
             if (existing.equals(titolo)) {
                 properties.remove(keyPrefix + index + ".titolo");
                 properties.remove(keyPrefix + index + ".descrizione");
@@ -180,11 +196,11 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
     }
 
     /**
-     * Cerca un tipo di visita nell'elenco dei tipi caricati in cache, basandosi sul
-     * titolo.
+     * Cerca un tipo di visita nell'elenco dei tipi caricati in cache, basandosi
+     * sul titolo.
      */
     public TipoVisita findTipoVisita(String nomeVisita) {
-        for (TipoVisita tipo : tipiVisitaRepository.values()) {
+        for (TipoVisita tipo : getTipiVisita()) {
             if (tipo.getTitolo().equalsIgnoreCase(nomeVisita)) {
                 return tipo;
             }

@@ -22,7 +22,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
      */
     public ArrayList<Visita> getVisite() {
         if (isCacheValid && visiteRepository != null) {
-            return (ArrayList<Visita>) visiteRepository.values();
+            return new ArrayList<>(visiteRepository.values());
         }
 
         Properties properties;
@@ -55,7 +55,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
         }
 
         isCacheValid = true;
-        return (ArrayList<Visita>) visiteRepository.values();
+        return new ArrayList<>(visiteRepository.values());
     }
 
     /**

@@ -35,9 +35,12 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
         switch (options[0]) {
-            case "v" -> assignVolontario(arg[0], arg[1]);
-            case "t" -> assignVisita(arg[0], arg[1]);
-            default -> ViewSE.print("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
+            case "v" ->
+                assignVolontario(arg[0], arg[1]);
+            case "t" ->
+                assignVisita(arg[0], arg[1]);
+            default ->
+                ViewSE.print("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
         }
     }
 
@@ -54,7 +57,6 @@ public class AssignCommand extends AbstractCommand {
             ViewSE.print("Nessuna visita trovata con quel titolo.");
             return;
         }
-
         v.aggiungiTipoVisita(vToAssign.getUID());
         ViewSE.print("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitolo());
     }

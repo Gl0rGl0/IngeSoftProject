@@ -4,9 +4,12 @@ import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
 import ingsoft.util.ViewSE;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class TipoVisita {
+
     String titolo;
     String descrizione;
     GPS puntoIncontro;
@@ -17,6 +20,8 @@ public class TipoVisita {
     boolean free;
     int numMinPartecipants;
     int numMaxPartecipants;
+
+    public ArrayList<DayOfWeek> giorni = new ArrayList<DayOfWeek>();    //POI SI AGGIUNGERANNO CON TIPO LE LETTERE...
 
     String UID;
     private String volontarioUID;
@@ -37,6 +42,14 @@ public class TipoVisita {
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
         this.UID = UID;
+
+        giorni.add(DayOfWeek.MONDAY);
+        giorni.add(DayOfWeek.TUESDAY);
+        giorni.add(DayOfWeek.WEDNESDAY);
+        giorni.add(DayOfWeek.THURSDAY);
+        giorni.add(DayOfWeek.FRIDAY);
+        giorni.add(DayOfWeek.SATURDAY);
+        giorni.add(DayOfWeek.SUNDAY);
     }
 
     public TipoVisita(
@@ -54,6 +67,8 @@ public class TipoVisita {
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
         this.UID = UUID.randomUUID().toString();
+
+        giorni.add(DayOfWeek.FRIDAY);
     }
 
     public String getUID() {
@@ -78,6 +93,7 @@ public class TipoVisita {
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
+            this.UID = UUID.randomUUID().toString();
         } catch (NumberFormatException e) {
             ViewSE.print(e);
             ViewSE.print(
@@ -143,17 +159,17 @@ public class TipoVisita {
 
     @Override
     public String toString() {
-        return "Tipo di visita {" +
-                "Titolo='" + titolo + '\'' +
-                ", Descrizione='" + descrizione + '\'' +
-                ", Punto di Incontro=" + puntoIncontro +
-                ", Periodo Inizio=" + dataInizioPeriodo +
-                ", Periodo Fine=" + dataFinePeriodo +
-                ", Ora Inizio=" + oraInizio +
-                ", Durata=" + durataVisita + " minuti" +
-                ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario") +
-                ", Numero Min Partecipanti=" + numMinPartecipants +
-                ", Numero Max Partecipanti=" + numMaxPartecipants +
-                "}\n";
+        return "Tipo di visita {"
+                + "Titolo='" + titolo + '\''
+                + ", Descrizione='" + descrizione + '\''
+                + ", Punto di Incontro=" + puntoIncontro
+                + ", Periodo Inizio=" + dataInizioPeriodo
+                + ", Periodo Fine=" + dataFinePeriodo
+                + ", Ora Inizio=" + oraInizio
+                + ", Durata=" + durataVisita + " minuti"
+                + ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario")
+                + ", Numero Min Partecipanti=" + numMinPartecipants
+                + ", Numero Max Partecipanti=" + numMaxPartecipants
+                + "}\n";
     }
 }
