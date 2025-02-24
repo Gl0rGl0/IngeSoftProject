@@ -70,11 +70,30 @@ public class Visita {
         }
     }
 
+    public void rimuoviPartecipante(Fruitore f){
+        int capienzaAttuale = getAttualeCapienza();
+        if (partecipanti.remove(f)) {
+            if(capienzaAttuale == tipo.getNumMaxPartecipants())
+                setStatus(StatusVisita.PROPOSTA);
+        }
+        
+    }
+
     public int getAttualeCapienza() {
         int out = 0;
         for (Fruitore f : partecipanti) {
             out += f.getNumeroIscrizioni();
         }
         return out;
+    }
+
+    public void mancano3Giorni(Date d){
+        if(data.giornoDellAnno() - d.giornoDellAnno() <= 3){
+            if(getAttualeCapienza() < this.tipo.numMinPartecipants){
+                this.stato = StatusVisita.CANCELLATA;
+            }else{
+                this.stato = StatusVisita.CONFERMATA;
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ public class AddCommand extends AbstractCommand {
 
     private void addTipoVisita(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
-        app.db.aggiungiTipoVisita(a);
+        app.db.aggiungiTipoVisita(a, app.date);
     }
 
     private void addLuoghi(String[] args) {

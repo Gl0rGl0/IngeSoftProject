@@ -86,7 +86,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printProposte() {
-        app.db.dbVisiteHelper.getVisite().forEach(v -> ViewSE.print(v));
+        app.db.dbVisiteHelper.getVisiteProposte().forEach(v -> ViewSE.print(v));
     }
 
     private void printComplete() {

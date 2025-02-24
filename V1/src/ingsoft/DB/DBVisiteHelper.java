@@ -1,5 +1,6 @@
 package ingsoft.DB;
 
+import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.luoghi.Visita;
 import ingsoft.util.Date;
@@ -14,47 +15,12 @@ public class DBVisiteHelper extends DBAbstractHelper {
     private final String fileName = "visite.properties";
     // Cache delle visite lette dal file
     private final HashMap<String, Visita> visiteRepository = new HashMap<>();
-    private boolean isCacheValid = false;
 
     /**
      * Legge il file delle proprietà e restituisce la lista delle visite.
      * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Visita.
      */
     public ArrayList<Visita> getVisite() {
-        if (isCacheValid && visiteRepository != null) {
-            return new ArrayList<>(visiteRepository.values());
-        }
-
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
-            return new ArrayList<>();
-        }
-
-        int index = 1;
-        String keyPrefix = "visita.";
-        while (true) {
-            String nome = properties.getProperty(keyPrefix + index + ".titolo");
-            String data = properties.getProperty(keyPrefix + index + ".data");
-            String UID = properties.getProperty(keyPrefix + index + ".UID");
-
-            // Se uno dei campi obbligatori manca, si interrompe la lettura
-            if (nome == null || data == null || UID == null) {
-                break;
-            }
-
-            TipoVisita tipo = visualizzatoreTipoVisite.findTipoVisita(nome);
-            if (tipo != null) {
-                Date d = new Date(data);
-                Visita visita = new Visita(tipo, d, UID, tipo.getUID());
-                visiteRepository.put(UID, visita);
-            }
-            index++;
-        }
-
-        isCacheValid = true;
         return new ArrayList<>(visiteRepository.values());
     }
 
@@ -65,32 +31,8 @@ public class DBVisiteHelper extends DBAbstractHelper {
      * @param visita la visita da aggiungere
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
-    public boolean addVisita(Visita toAdd) {
-
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
-            return false;
-        }
-
-        int index = 1;
-        String keyPrefix = "visita.";
-        while (true) {
-            properties.setProperty(keyPrefix + index + ".titolo", toAdd.getTitolo());
-            properties.setProperty(keyPrefix + index + ".descrizione", toAdd.getData().toString());
-            properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
-            try {
-                storeProperties(fileName, properties);
-                isCacheValid = false; // Invalida la cache
-                index++;
-                return true;
-            } catch (IOException e) {
-                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
-                return false;
-            }
-        }
+    public void addVisita(Visita toAdd) {
+        visiteRepository.put(toAdd.getUID(), toAdd);
     }
 
     /**
@@ -100,47 +42,11 @@ public class DBVisiteHelper extends DBAbstractHelper {
      * @param nome il nome della visita da rimuovere
      * @return true se la visita è stata rimossa, false in caso di errori.
      */
-    public boolean removeVisita(String nome, String data) {
-        if (findVisita(data, data) != null)
-            return false;
-
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
-            return false;
-        }
-
-        int index = 1;
-        boolean removed = false;
-        String keyPrefix = "visita.";
-        String existingTitolo = properties.getProperty(keyPrefix + index + ".nome");
-        String existingData = properties.getProperty(keyPrefix + index + ".data");
-        while (true) {
-            if (existingTitolo == null || existingData == null)
-                break;
-
-            if (existingTitolo.equals(nome) && existingData.equals(data)) {
-                properties.remove(keyPrefix + index + ".nome");
-                properties.remove(keyPrefix + index + ".data");
-                properties.remove(keyPrefix + index + ".UID");
-                removed = true;
-            }
-            index++;
-        }
-
-        if (removed) {
-            try {
-                storeProperties(fileName, properties);
-                isCacheValid = false; // Invalida la cache
-                return true;
-            } catch (IOException e) {
-                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
-                return false;
-            }
-        }
-        return true;
+    public void removeVisita(String nome, String data) {
+        Visita toRemove = findVisita(nome, data);
+        if(toRemove == null)
+            return;
+        visiteRepository.remove(toRemove.getUID());
     }
 
     /**
@@ -159,15 +65,78 @@ public class DBVisiteHelper extends DBAbstractHelper {
     }
 
     public ArrayList<Visita> getCompletate() {
-        return (ArrayList<Visita>) this.visiteRepository.values(); // IN REALTÀ BISOGNA AGGIUNGERE LA LOGICA DEI 3
-                                                                   // GIORNI PRIMA MA PER ORA LASCIAMO COSI FINCHE NON
-                                                                   // SI SETUPPA
+        ArrayList<Visita> out = new ArrayList<>();
+        for (Visita v : getVisite()) {
+            if(v.getStatus() == StatusVisita.COMPLETA)
+                out.add(v);
+        }
+
+        return out;
     }
 
     // IDEM A SOPRA...
     public ArrayList<Visita> getCancellate() {
-        return (ArrayList<Visita>) this.visiteRepository.values(); // IN REALTÀ BISOGNA AGGIUNGERE LA LOGICA DEI 3
-                                                                   // GIORNI PRIMA MA PER ORA LASCIAMO COSI FINCHE NON
-                                                                   // SI SETUPPA
+        ArrayList<Visita> out = new ArrayList<>();
+        for (Visita v : getVisite()) {
+            if(v.getStatus() == StatusVisita.CANCELLATA)
+                out.add(v);
+        }
+
+        return out;
+    }
+
+    public ArrayList<Visita> getVisiteProposte() {
+        ArrayList<Visita> out = new ArrayList<>();
+        for (Visita v : getVisite()) {
+            if(v.getStatus() == StatusVisita.PROPOSTA)
+                out.add(v);
+        }
+
+        return out;
+    }
+
+    public void checkVisiteInTerminazione(Date d){
+        for (Visita v : getVisite()) {
+            v.mancano3Giorni(d);
+            if(v.getStatus() == StatusVisita.CANCELLATA){
+                scriviVisiteCancellate(v);
+                visiteRepository.remove(v.getUID());
+            }
+        }
+    }
+
+    private boolean scriviVisiteCancellate(Visita toAdd){
+        if (!visiteRepository.containsKey(toAdd.getUID())) {
+            return false;
+        }
+
+        Properties properties;
+        try {
+            properties = loadProperties(fileName);
+        } catch (IOException e) {
+            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            return false;
+        }
+        int index = 1;
+        String keyPrefix = "archivio.";
+        while (true) {
+            String existing = properties.getProperty(keyPrefix + index + ".UID");
+            if (existing == null) {
+                properties.setProperty(keyPrefix + index + ".titolo", toAdd.getTitolo());
+                properties.setProperty(keyPrefix + index + ".stato", toAdd.getStatus().toString());
+                properties.setProperty(keyPrefix + index + ".data", toAdd.getData().toString());
+                properties.setProperty(keyPrefix + index + ".partecipanti", toAdd.getAttualeCapienza() + "/" + toAdd.tipo.getNumMaxPartecipants());
+                properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
+
+                try {
+                    storeProperties(fileName, properties);
+                    return true;
+                } catch (IOException e) {
+                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    return false;
+                }
+            }
+            index++;
+        }
     }
 }

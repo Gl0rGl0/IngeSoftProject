@@ -23,6 +23,8 @@ public class TipoVisita {
 
     public ArrayList<DayOfWeek> giorni = new ArrayList<DayOfWeek>();    //POI SI AGGIUNGERANNO CON TIPO LE LETTERE...
 
+    Date dataInserimento;
+    public StatusVisita sv = StatusVisita.ATTESA;
     String UID;
     private String volontarioUID;
 
@@ -30,7 +32,7 @@ public class TipoVisita {
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
-            boolean free, int numMinPartecipants, int numMaxPartecipants, String UID) {
+            boolean free, int numMinPartecipants, int numMaxPartecipants, String UID, Date dataI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -42,6 +44,8 @@ public class TipoVisita {
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
         this.UID = UID;
+
+        this.dataInserimento = dataI;
 
         giorni.add(DayOfWeek.MONDAY);
         giorni.add(DayOfWeek.TUESDAY);
@@ -55,7 +59,7 @@ public class TipoVisita {
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
-            boolean free, int numMinPartecipants, int numMaxPartecipants) {
+            boolean free, int numMinPartecipants, int numMaxPartecipants, Date dateI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -66,6 +70,8 @@ public class TipoVisita {
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
+        this.dataInserimento = dateI;
+
         this.UID = UUID.randomUUID().toString();
 
         giorni.add(DayOfWeek.FRIDAY);
@@ -80,7 +86,7 @@ public class TipoVisita {
     }
 
     // da spezzettare in qualche funzione (?)
-    public TipoVisita(String[] args) {
+    public TipoVisita(String[] args, Date d) {
         int length = args.length;
         try {
             this.titolo = (length > 0 && !args[0].equals("/")) ? args[0] : null;
@@ -94,6 +100,8 @@ public class TipoVisita {
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
             this.UID = UUID.randomUUID().toString();
+
+            this.dataInserimento = d;
         } catch (NumberFormatException e) {
             ViewSE.print(e);
             ViewSE.print(
@@ -149,6 +157,10 @@ public class TipoVisita {
         return this.numMaxPartecipants;
     }
 
+    public Date getDataInserimento(){
+        return this.dataInserimento;
+    }
+
     public boolean isName(String altroTitolo) {
         return this.titolo.equalsIgnoreCase(altroTitolo);
     }
@@ -171,5 +183,14 @@ public class TipoVisita {
                 + ", Numero Min Partecipanti=" + numMinPartecipants
                 + ", Numero Max Partecipanti=" + numMaxPartecipants
                 + "}\n";
+    }
+
+    public void isMeseScaduto(Date d){
+        if(Math.abs(d.giornoDellAnno() - dataInserimento.giornoDellAnno()) >= Date.lunghezzaMese(dataInserimento))
+            this.sv = StatusVisita.PROPOSTA;
+    }
+
+    public StatusVisita getStato(){
+        return this.sv;
     }
 }

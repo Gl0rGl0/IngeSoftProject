@@ -1,6 +1,7 @@
 package ingsoft;
 
 import ingsoft.DB.DBUtils;
+import ingsoft.luoghi.StatusVisita;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
@@ -14,6 +15,7 @@ import ingsoft.persone.Volontario;
 public class Main {
 
     public static void main(String[] args) {
+
         // String[] d = LocalDateTime.now().toString().substring(0, 10).split("-");
         // //GIORNO IN CUI AVVII IL MAIN
         // String da = d[2] + "/" + d[1] + "/" + d[0];
@@ -33,7 +35,6 @@ public class Main {
         //app.start();
         //app.interpreter("preclude -a 1/4");
         app.interpreter("assign -v volont1 \"Visita Test\"");
-        app.makeOrario();
     }
 
     public static void Test(App app) {

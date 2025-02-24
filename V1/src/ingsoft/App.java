@@ -204,12 +204,17 @@ public class App {
     }
 
     public void azioneDelGiorno() {
-        if (date.getGiorno() == 16) {
-            //makeOrario();
+
+        //refresh--3 giorni al termine -> STATO.CLOSE
+
+        switch (date.getGiorno()) {
+            case 1 -> db.refreshPrecludedDate(this.date);
+            //case 16 -> makePianoVisite();
         }
+        
     }
 
-    public void makeOrario() {
+    public void makePianoVisite() {
         int currentMonth = date.getMese(); // mese attuale (1-based)
         // Per test: se il mese attuale è 11, allora il mese prossimo (secondo la logica) diventa 1, altrimenti currentMonth + 2.
         int meseProssimo = (currentMonth == 11) ? 1 : currentMonth + 2;

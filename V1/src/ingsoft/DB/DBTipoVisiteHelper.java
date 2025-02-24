@@ -1,5 +1,6 @@
 package ingsoft.DB;
 
+import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
@@ -56,6 +57,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             String numMaxPartecipants = properties.getProperty(prefix + index + ".numMaxPartecipants");
             String UID = properties.getProperty(prefix + index + ".UID");
 
+            String dataInserimento = properties.getProperty(prefix + index + ".dataInserimento");
             if (titolo == null || descrizione == null || posizione == null || dataInizioPeriodo == null
                     || dataFinePeriodo == null || oraInizio == null || durataVisita == null || free == null
                     || numMinPartecipants == null || numMaxPartecipants == null || UID == null) {
@@ -66,6 +68,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             GPS gps = new GPS(posizione);
             Date inizioPeriodo = new Date(dataInizioPeriodo);
             Date finePeriodo = new Date(dataFinePeriodo);
+            Date inserimento = new Date(dataInserimento);
             Ora ora = new Ora(oraInizio);
             try {
                 TipoVisita tipo = new TipoVisita(
@@ -78,7 +81,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                         Integer.parseInt(durataVisita),
                         Boolean.parseBoolean(free),
                         Integer.parseInt(numMinPartecipants),
-                        Integer.parseInt(numMaxPartecipants));
+                        Integer.parseInt(numMaxPartecipants),
+                        inserimento);
                 tipiVisitaRepository.put(UID, tipo);
             } catch (NumberFormatException ex) {
                 ViewSE.print("Errore nella creazione del tipo di visita " + index + ": " + ex.getMessage());
@@ -127,6 +131,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                 properties.setProperty(keyPrefix + index + ".numMaxPartecipants",
                         String.valueOf(toAdd.getNumMaxPartecipants()));
                 properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
+
+                properties.setProperty(keyPrefix + index + ".dataInserimento", toAdd.getDataInserimento().toString());
                 try {
                     storeProperties(fileName, properties);
                     isCacheValid = false;
@@ -177,6 +183,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                 properties.remove(keyPrefix + index + ".numMinPartecipants");
                 properties.remove(keyPrefix + index + ".numMaxPartecipants");
                 properties.remove(keyPrefix + index + ".UID");
+
+                properties.remove(keyPrefix + index + ".dataInserimento");
                 removed = true;
             }
             index++;
@@ -206,5 +214,23 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             }
         }
         return null;
+    }
+
+    public void checkTipoVisiteAttese(Date d){
+        for (TipoVisita tv : getTipiVisita()) {
+            if(tv.getStato() == StatusVisita.ATTESA)
+                tv.isMeseScaduto(d);
+        }
+    }
+
+    public ArrayList<TipoVisita> getTipoVisiteIstanziabili(){
+        ArrayList<TipoVisita> out = new ArrayList<>();
+
+        for (TipoVisita tv : getTipiVisita()) {
+            if(tv.getStato() != StatusVisita.ATTESA)
+                out.add(tv);
+        }
+
+        return out;
     }
 }

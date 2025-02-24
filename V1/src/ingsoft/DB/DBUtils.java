@@ -56,6 +56,11 @@ public class DBUtils {
         return dbTipoVisiteHelper.getTipiVisita();
     }
 
+    //GETTER VARIABILI
+    public ArrayList<TipoVisita> getTipoVisiteIstanziabili(){
+        return dbTipoVisiteHelper.getTipoVisiteIstanziabili();
+    }
+
     // ================================================================
     // Adders per oggetti già creati
     // ================================================================
@@ -79,8 +84,8 @@ public class DBUtils {
         return dbTipoVisiteHelper.addTipoVisita(tv);
     }
 
-    public boolean addVisita(Visita visita) {
-        return dbVisiteHelper.addVisita(visita);
+    public void addVisita(Visita visita) {
+        dbVisiteHelper.addVisita(visita);
     }
 
     // public void aggiungiTipoVisita(TipoVisita v) {
@@ -102,8 +107,8 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
     }
 
-    public boolean aggiungiTipoVisita(String[] args) {
-        return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args));
+    public boolean aggiungiTipoVisita(String[] args, Date d) {
+        return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args, d));
     }
 
     // ================================================================
@@ -125,8 +130,8 @@ public class DBUtils {
         return dbTipoVisiteHelper.removeTipoVisita(nomeVisita);
     }
 
-    public boolean removeVisita(String nomeVisita, String data) {
-        return dbVisiteHelper.removeVisita(nomeVisita, data);
+    public void removeVisita(String nomeVisita, String data) {
+        dbVisiteHelper.removeVisita(nomeVisita, data);
     }
 
     public boolean removeLuogo(String nomeLuogo) {
@@ -143,6 +148,23 @@ public class DBUtils {
             case VOLONTARIO -> dbVolontarioHelper.changePassword(username, newPsw);
             default -> false;
         };
+    }
+
+    public void refreshPrecludedDate(Date d){
+        dbDatesHelper.refreshPrecludedDate(d);
+    }
+
+    public void refreshVisiteTipoVisite(Date d){
+        checkVisiteInTerminazione(d);
+        checkTipoVisiteAttese(d);
+    }
+
+    private void checkTipoVisiteAttese(Date d){
+        dbTipoVisiteHelper.checkTipoVisiteAttese(d);
+    }
+
+    private void checkVisiteInTerminazione(Date d){
+        dbVisiteHelper.checkVisiteInTerminazione(d);
     }
 
     // ================================================================
