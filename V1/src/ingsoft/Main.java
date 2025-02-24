@@ -32,9 +32,9 @@ public class Main {
         // app.interpreter("login config1 pass1C");
         // app.interpreter("time -s 12/02/2025");
         // app.interpreter("time");
-        //app.start();
+        app.start();
         //app.interpreter("preclude -a 1/4");
-        app.interpreter("assign -v volont1 \"Visita Test\"");
+        //app.interpreter("assign -v volont1 \"Visita Test\"");
     }
 
     public static void Test(App app) {
@@ -42,8 +42,8 @@ public class Main {
 
         app.skipSetupTesting = true;
 
-        app.interpreter("login config1 pass1C");
-        app.interpreter("changepsw pass1C");
+        //app.interpreter("login config1 pass1C");
+        //app.interpreter("changepsw pass1C");
         initLuoghioVisiteInterprete(app);
 
         // app.interpreter("preclude -r 14/05");

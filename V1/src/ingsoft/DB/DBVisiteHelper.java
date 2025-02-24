@@ -1,7 +1,6 @@
 package ingsoft.DB;
 
 import ingsoft.luoghi.StatusVisita;
-import ingsoft.luoghi.TipoVisita;
 import ingsoft.luoghi.Visita;
 import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
@@ -11,9 +10,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class DBVisiteHelper extends DBAbstractHelper {
-    private final DBTipoVisiteHelper visualizzatoreTipoVisite = new DBTipoVisiteHelper();
-    private final String fileName = "visite.properties";
-    // Cache delle visite lette dal file
+    private final String fileName = "archivio.properties";
     private final HashMap<String, Visita> visiteRepository = new HashMap<>();
 
     /**
@@ -138,5 +135,40 @@ public class DBVisiteHelper extends DBAbstractHelper {
             }
             index++;
         }
+    }
+
+    public ArrayList<String> getVisiteEffettuate(){
+        Properties properties;
+        try {
+            properties = loadProperties(fileName);
+        } catch (IOException e) {
+            ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
+            return new ArrayList<>();
+        }
+
+        int index = 1;
+        String keyPrefix = "archivio.";
+
+        ArrayList<String> outA = new ArrayList<>();
+
+        while (true) {
+            String titolo = properties.getProperty(keyPrefix + index + ".titolo");
+            String status = properties.getProperty(keyPrefix + index + ".stato");
+            String data = properties.getProperty(keyPrefix + index + ".data");
+            String capienza = properties.getProperty(keyPrefix + index + ".partecipanti");
+            String uid = properties.getProperty(keyPrefix + index + ".UID");
+
+            if(uid == null)
+                break;
+
+            String out = titolo + " " + status + " " + data + " " + capienza + " " + uid;
+            index++;
+            outA.add(out);
+        }
+        return outA;
+    }
+
+    public Visita getVisiteByUID(String uid) {
+        return visiteRepository.get(uid);
     }
 }

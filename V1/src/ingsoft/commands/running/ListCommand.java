@@ -2,6 +2,7 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.luoghi.Visita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
 
@@ -33,7 +34,7 @@ public class ListCommand extends AbstractCommand {
             case 'v' -> listVolontari();
             case 'L' -> listLuoghi();
             case 'l' -> listLuoghi();
-            case 't' -> printTipi(options);
+            case 'V' -> printTipiVisite(options);
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L'
@@ -49,11 +50,14 @@ public class ListCommand extends AbstractCommand {
 
     private void listVolontari() {
         for (Volontario v : app.db.getVolontari()) {
-            ViewSE.print(v); // DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE app.db.trovaVisite(volontario)?
+            ViewSE.print(v); // DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE 
+            for (Visita visita : app.db.trovaVisite(v)) {
+                ViewSE.print(visita);
+            }
         }
     }
 
-    private void printTipi(String[] s) {
+    private void printTipiVisite(String[] s) {
         char option = 'a';
         try {
             option = s[1].charAt(0);
@@ -82,7 +86,17 @@ public class ListCommand extends AbstractCommand {
     // e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
 
     private void printAllTipi() {
-        // tutti i print sotto
+        ViewSE.print("Visite proposte:");
+        printProposte();
+
+        ViewSE.print("Visite complete:");
+        printComplete();
+
+        ViewSE.print("Visite cancellate:");
+        printCancellate();
+
+        ViewSE.print("Visite effettuate:");
+        printEffettuate();
     }
 
     private void printProposte() {
@@ -98,6 +112,6 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printEffettuate() {
-        ViewSE.print("NON ACNORA SUPPORTATO");
+        app.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> ViewSE.print(v));
     }
 }
