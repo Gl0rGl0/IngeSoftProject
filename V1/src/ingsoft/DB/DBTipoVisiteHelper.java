@@ -55,6 +55,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             String free = properties.getProperty(prefix + index + ".free");
             String numMinPartecipants = properties.getProperty(prefix + index + ".numMinPartecipants");
             String numMaxPartecipants = properties.getProperty(prefix + index + ".numMaxPartecipants");
+            String giorniSettimana = properties.getProperty(prefix + index + ".days");
             String UID = properties.getProperty(prefix + index + ".UID");
 
             String dataInserimento = properties.getProperty(prefix + index + ".dataInserimento");
@@ -82,6 +83,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                         Boolean.parseBoolean(free),
                         Integer.parseInt(numMinPartecipants),
                         Integer.parseInt(numMaxPartecipants),
+                        giorniSettimana,
+                        UID,
                         inserimento);
                 tipiVisitaRepository.put(UID, tipo);
             } catch (NumberFormatException ex) {
@@ -130,6 +133,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                         String.valueOf(toAdd.getNumMinPartecipants()));
                 properties.setProperty(keyPrefix + index + ".numMaxPartecipants",
                         String.valueOf(toAdd.getNumMaxPartecipants()));
+                properties.setProperty(keyPrefix + index + ".days",
+                        String.valueOf(toAdd.getGiorniString()));
                 properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
 
                 properties.setProperty(keyPrefix + index + ".dataInserimento", toAdd.getDataInserimento().toString());
@@ -216,21 +221,20 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         return null;
     }
 
-    public void checkTipoVisiteAttese(Date d){
+    public void checkTipoVisiteAttese(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
-            if(tv.getStato() == StatusVisita.ATTESA)
+            if (tv.getStato() == StatusVisita.ATTESA)
                 tv.isMeseScaduto(d);
         }
     }
 
-    public ArrayList<TipoVisita> getTipoVisiteIstanziabili(){
+    public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if(tv.getStato() != StatusVisita.ATTESA)
+            if (tv.getStato() != StatusVisita.ATTESA)
                 out.add(tv);
         }
-
-        return out;
+       return out;
     }
 }

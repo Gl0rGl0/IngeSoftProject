@@ -254,10 +254,20 @@ public class DBUtils {
         return dbVisiteHelper.getVisiteByUID(uid);
     }
 
-    public ArrayList<Visita> trovaVisite(Volontario v) {
+    public ArrayList<Visita> trovaVisiteByVolontario(Volontario v) {
         ArrayList<Visita> out = new ArrayList<>();
 
         for (String visitaUID : v.getTipiVisiteUID()) {
+            out.add(getVisitaByUID(visitaUID));
+        }
+
+        return out;
+    }
+
+    public ArrayList<Visita> trovaVisiteByLuogo(Luogo l) {
+        ArrayList<Visita> out = new ArrayList<>();
+
+        for (String visitaUID : l.getTipoVisitaUID()) {
             out.add(getVisitaByUID(visitaUID));
         }
 

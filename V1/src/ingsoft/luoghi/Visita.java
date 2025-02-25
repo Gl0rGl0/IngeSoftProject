@@ -1,6 +1,7 @@
 package ingsoft.luoghi;
 
 import ingsoft.persone.Fruitore;
+import ingsoft.persone.Iscrizione;
 import ingsoft.util.Date;
 import ingsoft.util.ViewSE;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Visita {
     public String getTipoVisitaUID;
 
     public StatusVisita stato = StatusVisita.PROPOSTA;
-    public ArrayList<Fruitore> partecipanti = new ArrayList<>();
+    public ArrayList<Iscrizione> partecipanti = new ArrayList<>();
 
     public Visita(TipoVisita tipo, Date data, String UID, String UIDTipoVisita) {
         this.tipo = tipo;
@@ -57,22 +58,22 @@ public class Visita {
         this.stato = s;
     }
 
-    public void aggiungiPartecipanti(Fruitore f) {
-        int nNuovo = f.getNumeroIscrizioni();
-        if (tipo.numMaxPartecipants - getAttualeCapienza() < nNuovo) {
+    public void aggiungiPartecipanti(Fruitore f, int n) {
+        if (tipo.numMaxPartecipants - getAttualeCapienza() < n) {
             ViewSE.print("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
             return;
         }
-        partecipanti.add(f);
+
+        partecipanti.add(new Iscrizione(f.getUsername(), n));
 
         if (getAttualeCapienza() == tipo.numMaxPartecipants) {
             setStatus(StatusVisita.COMPLETA);
         }
     }
 
-    public void rimuoviPartecipante(Fruitore f){
+    public void rimuoviPartecipante(Iscrizione i){
         int capienzaAttuale = getAttualeCapienza();
-        if (partecipanti.remove(f)) {
+        if (partecipanti.remove(i)) {
             if(capienzaAttuale == tipo.getNumMaxPartecipants())
                 setStatus(StatusVisita.PROPOSTA);
         }
@@ -81,8 +82,8 @@ public class Visita {
 
     public int getAttualeCapienza() {
         int out = 0;
-        for (Fruitore f : partecipanti) {
-            out += f.getNumeroIscrizioni();
+        for (Iscrizione i : partecipanti) {
+            out += i.getNumeroIscrizioni();
         }
         return out;
     }

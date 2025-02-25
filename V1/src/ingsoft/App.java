@@ -122,8 +122,6 @@ public class App {
     }
 
     private void setupRegisterCommands() {
-        // Passa l'istanza di App se i comandi hanno bisogno di accedere ad essa
-        // (praticamente tutti)
         setupCommandRegistry.put("add", new AddCommandSETUP(this)); // DA ESEGUIRE
         setupCommandRegistry.put("done", new DoneCommandSETUP()); // DA ESEGUIRE
         setupCommandRegistry.put("login", new LoginCommandSETUP(this)); // DA ESEGUIRE
@@ -273,6 +271,7 @@ public class App {
                     // Verifica se il giorno da controllare è tra quelli programmabili per questo tipo di visita
                     // Supponiamo che tv.getGiorni() restituisca un Collection (ad es. ArrayList<Integer> o ArrayList<String>)
                     // e che toCheck.cheGiornoE() restituisca un valore compatibile per il confronto.
+                    
                     boolean isProgrammable = tv.giorni.contains(toCheck.cheGiornoE());
                     System.out.println("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
 
@@ -314,7 +313,7 @@ public class App {
             if (presente) {
                 continue;
             }
-            Date toCheck = new Date(i + "/" + meseProssimo);
+            //Date toCheck = new Date(i + "/" + meseProssimo);
             for (Volontario v : volontariSorted) {
                 if (v.disponibilita[i] == false) {
                     break;
@@ -327,10 +326,10 @@ public class App {
                         continue;
                     }
                     System.out.println("PD");
-                    System.out.println(tv.giorni.contains(toCheck.cheGiornoE()));
-                    if (tv.giorni.contains(toCheck.cheGiornoE())) {
-                        System.out.println(v + " puo lavorare il " + i + "/" + meseProssimo);
-                    }
+                    //System.out.println(tv.giorni.contains(toCheck.cheGiornoE()));
+                    //if (tv.giorni.contains(toCheck.cheGiornoE())) {
+                    //    System.out.println(v + " puo lavorare il " + i + "/" + meseProssimo);
+                    //}
                 }
                 //System.out.println(v.getUsername() + " puo lavorare il " + i + "/" + meseProssimo);
             }

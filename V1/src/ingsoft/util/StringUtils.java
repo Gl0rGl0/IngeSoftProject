@@ -43,5 +43,5 @@ public class StringUtils {
 
     public static String rimuoviParentesi(String out) {
         return out.replaceAll("[()]", "");
-    }    
+    }
 }

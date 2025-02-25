@@ -31,12 +31,6 @@ public class Volontario extends Persona {
      */
     public Volontario(String username, String psw, String nuovo) {
         super(username, psw, PersonaType.VOLONTARIO, nuovo);
-        disponibilita[1] = true;
-        disponibilita[3] = true;
-        disponibilita[5] = true;
-        disponibilita[6] = true;
-        disponibilita[7] = true;
-        disponibilita[12] = true;
     }
 
     /**
@@ -94,5 +88,9 @@ public class Volontario extends Persona {
 
         valid = true;
         return numDisponibilita;
+    }
+
+    public void refreshGiornaliero(){
+        
     }
 }

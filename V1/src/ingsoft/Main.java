@@ -1,7 +1,6 @@
 package ingsoft;
 
 import ingsoft.DB.DBUtils;
-import ingsoft.luoghi.StatusVisita;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
@@ -23,6 +22,7 @@ public class Main {
         DBUtils db = new DBUtils();
         App app = new App(db);
 
+        app.interpreter("login config1 pass1C");
         Test(app); // Prima di avviare il ciclo...
 
         // Usi app.intepreter per dare direttamente i comandi anche prima
@@ -32,6 +32,7 @@ public class Main {
         // app.interpreter("login config1 pass1C");
         // app.interpreter("time -s 12/02/2025");
         // app.interpreter("time");
+
         app.start();
         //app.interpreter("preclude -a 1/4");
         //app.interpreter("assign -v volont1 \"Visita Test\"");
@@ -99,13 +100,13 @@ public class Main {
     }
 
     public static void initLuoghioVisiteInterprete(App app) {
-        app.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30");
+        app.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe");
         app.interpreter(
-                "add -t \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20");
+                "add -t \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo");
         app.interpreter(
-                "add -t \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15");
+                "add -t \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa");
         app.interpreter(
-                "add -t \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30");
+                "add -t \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo");
 
         // Uso setup perchè nella V1/V2 non si possono aggiungere i luoghi dopo il setup
         app.interpreterSETUP(

@@ -1,11 +1,14 @@
 package ingsoft.luoghi;
 
 import ingsoft.util.Date;
+import ingsoft.util.DayOfWeekConverter;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
 import ingsoft.util.ViewSE;
+
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class TipoVisita {
@@ -21,18 +24,18 @@ public class TipoVisita {
     int numMinPartecipants;
     int numMaxPartecipants;
 
-    public ArrayList<DayOfWeek> giorni = new ArrayList<DayOfWeek>();    //POI SI AGGIUNGERANNO CON TIPO LE LETTERE...
+    public ArrayList<DayOfWeek> giorni;
 
     Date dataInserimento;
     public StatusVisita sv = StatusVisita.ATTESA;
     String UID;
-    private String volontarioUID;
+    private ArrayList<String> volontariUID = new ArrayList<>();
 
     // Costruttore
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
-            boolean free, int numMinPartecipants, int numMaxPartecipants, String UID, Date dataI) {
+            boolean free, int numMinPartecipants, int numMaxPartecipants, String days, String UID, Date dataI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -46,20 +49,15 @@ public class TipoVisita {
         this.UID = UID;
 
         this.dataInserimento = dataI;
+        
+        this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
 
-        giorni.add(DayOfWeek.MONDAY);
-        giorni.add(DayOfWeek.TUESDAY);
-        giorni.add(DayOfWeek.WEDNESDAY);
-        giorni.add(DayOfWeek.THURSDAY);
-        giorni.add(DayOfWeek.FRIDAY);
-        giorni.add(DayOfWeek.SATURDAY);
-        giorni.add(DayOfWeek.SUNDAY);
     }
 
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
             Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
-            boolean free, int numMinPartecipants, int numMaxPartecipants, Date dateI) {
+            boolean free, int numMinPartecipants, int numMaxPartecipants, String days, Date dateI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.puntoIncontro = puntoIncontro;
@@ -74,15 +72,24 @@ public class TipoVisita {
 
         this.UID = UUID.randomUUID().toString();
 
-        giorni.add(DayOfWeek.FRIDAY);
+        this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
+
     }
 
+    public String getGiorniString() {
+        return DayOfWeekConverter.daysToString(giorni.toArray(new DayOfWeek[0]));
+    }    
+
+    public ArrayList<DayOfWeek> getGiorni(){
+        return giorni;
+    }
+    
     public String getUID() {
         return this.UID;
     }
 
-    public String getVolontarioUID() {
-        return this.volontarioUID;
+    public ArrayList<String> getVolontariUID() {
+        return this.volontariUID;
     }
 
     // da spezzettare in qualche funzione (?)
@@ -100,6 +107,7 @@ public class TipoVisita {
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
             this.UID = UUID.randomUUID().toString();
+            this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
 
             this.dataInserimento = d;
         } catch (NumberFormatException e) {
@@ -157,7 +165,7 @@ public class TipoVisita {
         return this.numMaxPartecipants;
     }
 
-    public Date getDataInserimento(){
+    public Date getDataInserimento() {
         return this.dataInserimento;
     }
 
@@ -165,8 +173,8 @@ public class TipoVisita {
         return this.titolo.equalsIgnoreCase(altroTitolo);
     }
 
-    public void setVolontario(String uidVolontario) {
-        this.volontarioUID = uidVolontario;
+    public void addVolontario(String uidVolontario) {
+        this.volontariUID.add(uidVolontario);
     }
 
     @Override
@@ -182,15 +190,19 @@ public class TipoVisita {
                 + ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario")
                 + ", Numero Min Partecipanti=" + numMinPartecipants
                 + ", Numero Max Partecipanti=" + numMaxPartecipants
+                + ", Giorni disponibilit=" + getGiorniString()
                 + "}\n";
     }
 
-    public void isMeseScaduto(Date d){
-        if(Math.abs(d.giornoDellAnno() - dataInserimento.giornoDellAnno()) >= Date.lunghezzaMese(dataInserimento))
+    public void isMeseScaduto(Date d) {
+        if(this.sv == StatusVisita.PROPOSTA)
+            return;
+
+        if (Math.abs(d.giornoDellAnno() - dataInserimento.giornoDellAnno()) >= Date.lunghezzaMese(dataInserimento))
             this.sv = StatusVisita.PROPOSTA;
     }
 
-    public StatusVisita getStato(){
+    public StatusVisita getStato() {
         return this.sv;
     }
 }

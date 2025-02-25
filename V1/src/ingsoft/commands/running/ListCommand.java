@@ -2,6 +2,7 @@ package ingsoft.commands.running;
 
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
+import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
@@ -42,16 +43,16 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void listLuoghi() {
-        // for (Luogo l : app.db.getLuoghi()) {
-        // ViewSE.print(l);
-        // }
-        app.db.getLuoghi().forEach(l -> ViewSE.print(l)); // boh sono uguali
+        for (Luogo l : app.db.getLuoghi()) {
+            for (Visita visita : app.db.trovaVisiteByLuogo(l)) {
+                ViewSE.print(visita);
+            }
+        }
     }
 
     private void listVolontari() {
         for (Volontario v : app.db.getVolontari()) {
-            ViewSE.print(v); // DA AGGIUNGERE LE VISITE A ESSO COLLEGHATE 
-            for (Visita visita : app.db.trovaVisite(v)) {
+            for (Visita visita : app.db.trovaVisiteByVolontario(v)) {
                 ViewSE.print(visita);
             }
         }
@@ -74,16 +75,6 @@ public class ListCommand extends AbstractCommand {
             default -> ViewSE.print("Opzione non riconosciuta per 'list'.");
         }
     }
-
-    // [-a] All, tutte le visite (anche passate) le faccio passare tutte
-    // [-p] Lista delle visite Proposte Guardo nelle visite attuali quelle con stato
-    // PROPOSTE
-    // [-c] Lista delle visite Complete Guardo nelle visite attuali quelle con stato
-    // COMPLETE
-    // [-C] Lista delle visite Cancellate Guardo nelle visite attuali quelle con
-    // stato CANCELLATE
-    // [-e] Lista delle visite Effettuate (passate) Prendo l'array della cronologia
-    // e le filtro con effettuate -> prendo dall'archivio (archivio.txt?)
 
     private void printAllTipi() {
         ViewSE.print("Visite proposte:");
