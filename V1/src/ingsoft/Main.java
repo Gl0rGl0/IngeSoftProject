@@ -1,5 +1,7 @@
 package ingsoft;
 
+import java.util.ArrayList;
+
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
@@ -83,17 +85,18 @@ public class Main {
     public static void initPersone(App app) {
         // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un
         // elemento
-        System.out.println(app.db.addConfiguratore("config1", "pass1C"));
-        System.out.println(app.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
+        ArrayList<Boolean> out = new ArrayList<>();
+        out.add(app.db.addConfiguratore("config1", "pass1C"));
+        out.add(app.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
 
-        System.out.println(app.db.addFruitore("fruit1", "pass1F"));
-        System.out.println(app.db.addFruitore("fruit2", "pass2F"));
-        System.out.println(app.db.addFruitore(new Fruitore("fruit3", "pass3F", "1")));
+        out.add(app.db.addFruitore("fruit1", "pass1F"));
+        out.add(app.db.addFruitore("fruit2", "pass2F"));
+        out.add(app.db.addFruitore(new Fruitore("fruit3", "pass3F", "1")));
 
-        System.out.println(app.db.addVolontario("volont1", "pass1V"));
-        System.out.println(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
-        System.out.println(app.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
-        System.out.println("\n\n\n---------------------------");
+        out.add(app.db.addVolontario("volont1", "pass1V"));
+        out.add(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
+        out.add(app.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
+        System.out.println(out + "\n---------------------------");
         // Testa se è il primo accesso per tutti i configuratori
         // app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
         // System.out.println(app.db.getConfiguratori());
