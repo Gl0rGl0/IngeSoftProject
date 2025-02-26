@@ -1,13 +1,12 @@
 package ingsoft;
 
-import java.util.ArrayList;
-
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Guest;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
+import java.util.ArrayList;
 
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -17,7 +16,7 @@ import ingsoft.util.ViewSE;
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
         DBUtils model = new DBUtils();
         App controller = new App(model);
@@ -37,31 +36,31 @@ public class Main {
         initDBInterprete(controller); // Inizializza il database in caso sia il primo accesso
 
         // controller.interpreter("preclude -r 14/05");
-        // System.out.println(controller.db.dbDatesHelper.getPrecludedDates());
+        // ViewSE.println(controller.db.dbDatesHelper.getPrecludedDates());
         // controller.intepreterSETUP("login config1 pass1C");
         // String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\"
         // 12.34:11.1";
         // controller.intepreterSETUP("login config1 pass1C");
         // controller.intepreterSETUP("add -L" + prompt);
         // controller.interpreter("remove -L \"Parco di Pisogne\"");
-        // System.out.println(controller.db.getDBconfiguratori());
-        // System.out.println(controller.db.changePsw(controller.db.getConfiguratoreFromDB("config1"),
+        // ViewSE.println(controller.db.getDBconfiguratori());
+        // ViewSE.println(controller.db.changePsw(controller.db.getConfiguratoreFromDB("config1"),
         // "pass1C"));
-        // System.out.println(controller.db.getDBconfiguratori());
-        // System.out.println(controller.login("config1", "pass1")); //CONFIGURATORE
-        // System.out.println(controller.login("config1", "pass1")); //CONFIGURATORE
-        // System.out.println(controller.login("config2", "pass2")); //CONFIGURATORE
-        // System.out.println(controller.login("config2", "123")); //ERRORE CREDENZIALI
-        // System.out.println(controller.login("nonesisto", "1234")); //ERRORE
+        // ViewSE.println(controller.db.getDBconfiguratori());
+        // ViewSE.println(controller.login("config1", "pass1")); //CONFIGURATORE
+        // ViewSE.println(controller.login("config1", "pass1")); //CONFIGURATORE
+        // ViewSE.println(controller.login("config2", "pass2")); //CONFIGURATORE
+        // ViewSE.println(controller.login("config2", "123")); //ERRORE CREDENZIALI
+        // ViewSE.println(controller.login("nonesisto", "1234")); //ERRORE
         // CREDENZIALI
-        // System.out.println(controller.getConfiguratoriListString());
-        // System.out.println(controller.db.removeConfiguratoreFromDB("config2"));
-        // System.out.println(controller.getConfiguratoriListString());
-        // System.out.println(controller.db.addConfiguratoreToDB(new
+        // ViewSE.println(controller.getConfiguratoriListString());
+        // ViewSE.println(controller.db.removeConfiguratoreFromDB("config2"));
+        // ViewSE.println(controller.getConfiguratoriListString());
+        // ViewSE.println(controller.db.addConfiguratoreToDB(new
         // Configuratore("config2",
         // "pass2")));
-        // System.out.println(controller.getConfiguratoriListString());
-        // System.out.println(controller.getLuoghiList());
+        // ViewSE.println(controller.getConfiguratoriListString());
+        // ViewSE.println(controller.getLuoghiList());
         // Volontario v = new Volontario("a", "a", "0");
         // v.setDisponibilita(controller.date, new Date("16/03/2025"));
         // v.setDisponibilita(controller.date, new Date("20/03/2025"));
@@ -85,7 +84,7 @@ public class Main {
         out.add(controller.db.addVolontario("volont1", "pass1V"));
         out.add(controller.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
         out.add(controller.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
-        System.out.println(out + "\n---------------------------");
+        ViewSE.println(out + "\n---------------------------");
     }
 
     public static void initDBInterprete(App controller) {

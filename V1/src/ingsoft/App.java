@@ -27,6 +27,7 @@ import ingsoft.persone.Volontario;
 import ingsoft.util.Date;
 import ingsoft.util.Interpreter;
 import ingsoft.util.TimeHelper;
+import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -231,7 +232,7 @@ public class App {
 
                 // Recupera l'elenco degli UID dei tipi di visita assegnati al volontario
                 ArrayList<String> uidVisiteV = v.getTipiVisiteUID();
-                System.out.println("UID tipi di visita per " + v.getUsername() + ": " + uidVisiteV);
+                ViewSE.print("UID tipi di visita per " + v.getUsername() + ": " + uidVisiteV);
 
                 // Per ciascun tipo di visita assegnato
                 for (String s : uidVisiteV) {
@@ -245,13 +246,11 @@ public class App {
                     // e che toCheck.cheGiornoE() restituisca un valore compatibile per il confronto.
                     
                     boolean isProgrammable = tv.giorni.contains(toCheck.cheGiornoE());
-                    System.out.println("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
+                    ViewSE.print("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
 
-                    if (isProgrammable) {
-                        System.out.println(v.getUsername() + " può lavorare il " + i + "/" + meseProssimo
-                                + " per il tipo di visita " + tv.getTitolo());
-                        // Qui puoi creare l'istanza della visita o registrarla nel sistema
-                    }
+                    ViewSE.printIf(isProgrammable, v.getUsername() + " può lavorare il " + i + "/" + meseProssimo
+                    + " per il tipo di visita " + tv.getTitolo());
+                    // Qui puoi creare l'istanza della visita o registrarla nel sistema
                 }
             }
 
@@ -291,19 +290,19 @@ public class App {
                     break;
                 }
                 ArrayList<String> uidVisiteV = v.getTipiVisiteUID();
-                System.out.println(uidVisiteV);
+                ViewSE.println(uidVisiteV);
                 for (String s : uidVisiteV) {
                     TipoVisita tv = db.getTipiByUID(s);
                     if (tv == null) {
                         continue;
                     }
-                    System.out.println("PD");
-                    //System.out.println(tv.giorni.contains(toCheck.cheGiornoE()));
+                    ViewSE.println("PD");
+                    //ViewSE.println(tv.giorni.contains(toCheck.cheGiornoE()));
                     //if (tv.giorni.contains(toCheck.cheGiornoE())) {
-                    //    System.out.println(v + " puo lavorare il " + i + "/" + meseProssimo);
+                    //    ViewSE.println(v + " puo lavorare il " + i + "/" + meseProssimo);
                     //}
                 }
-                //System.out.println(v.getUsername() + " puo lavorare il " + i + "/" + meseProssimo);
+                //ViewSE.println(v.getUsername() + " puo lavorare il " + i + "/" + meseProssimo);
             }
         }
     }

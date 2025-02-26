@@ -35,6 +35,6 @@ public class TimeHelper implements Runnable {
     private void eseguiAzioniDel16() {
         eseguita = true;
         // Logica per le azioni da eseguire
-        System.out.println("Esecuzione azioni del 16 del mese!");
+        ViewSE.println("Esecuzione azioni del 16 del mese!");
     }
 }

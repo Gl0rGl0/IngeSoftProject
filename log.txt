@@ -5,3 +5,88 @@ V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.5
 V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527722293 | Non aggiunto volontario: fruit1
 V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527856726 | Non aggiunto volontario: fruit2
 V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527973776 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:54:54.828223059 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:54:54.835720381 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:54:54.836305196 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:54:54.836458978 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:54:54.836597201 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:54:54.836732749 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:54:54.836871055 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:55:34.062156354 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:55:34.068985904 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:34.069618449 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:34.069776723 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:34.069933151 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:34.070076118 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:34.070215297 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:55:45.191229055 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:55:45.199087754 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:45.199748612 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:45.199928256 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:45.200114305 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:45.200283790 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:45.200455725 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:55:58.394258396 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:55:58.401649316 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:58.402365249 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:58.402534021 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:58.402683087 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:58.402822996 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:55:58.402971319 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:56:45.134111439 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:56:45.141590484 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:56:45.142303516 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:56:45.142589122 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:56:45.142785835 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:56:45.142925837 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:56:45.143070377 | Non aggiunto volontario: fruit3
+V1 | WARNING | AddCommand | 2025-02-26T15:58:21.574409184 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:58:21.581275691 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:58:21.581879905 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:58:21.582028321 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:58:21.582175926 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:58:21.582374831 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:58:21.582570807 | Non aggiunto volontario: fruit3
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.524803198 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.598589449 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.599520779 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.600249562 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.600804213 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.603474349 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.603981072 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.604613059 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.607784814 | Non aggiunto configuratore: config1
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.608071381 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.608260546 | Non aggiunto configuratore: config2
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.608551262 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.609604321 | Non aggiunto volontario: volont1
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.609845606 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.609993764 | Non aggiunto volontario: volont2
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.610282562 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.610596235 | Non aggiunto volontario: fruit1
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.610929968 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.611091613 | Non aggiunto volontario: fruit2
+V1 | WARNING | Interpreter | 2025-02-26T16:41:42.611368239 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:41:42.611634450 | Non aggiunto volontario: fruit3
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.771871401 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.847897026 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.848698804 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.849263889 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.849848396 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.852699809 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.853145937 | ERRORE NESSUN COMANDO
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.853583548 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.856124519 | Non aggiunto configuratore: config1
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.856410242 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.856598215 | Non aggiunto configuratore: config2
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.856869015 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.857687394 | Non aggiunto volontario: volont1
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.857943390 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.858108857 | Non aggiunto volontario: volont2
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.858384752 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.858590533 | Non aggiunto volontario: fruit1
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.858951592 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.859174542 | Non aggiunto volontario: fruit2
+V1 | WARNING | Interpreter | 2025-02-26T16:42:49.859558405 | ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T16:42:49.859875093 | Non aggiunto volontario: fruit3
+V1 | WARNING | Interpreter | 2025-02-26T16:42:53.793220179 | ERRORE NESSUN COMANDO

@@ -1,6 +1,7 @@
 package ingsoft.persone;
 
 import ingsoft.util.Date;
+import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -72,7 +73,7 @@ public class Volontario extends Persona {
      * Metodo per stampare le disponibilità per il debug.
      */
     public void printDisponibilita() {
-        System.out.println(Arrays.toString(disponibilita));
+        ViewSE.println(Arrays.toString(disponibilita));
     }
 
     public int getNumDisponibilita() {

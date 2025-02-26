@@ -29,11 +29,9 @@ public class Interpreter {
      */
     public void interpret(String prompt, Persona currentUser) {
         String[] tokens = prompt.trim().split("\\s+");
-        if (tokens.length == 0 || tokens[0].isEmpty()) {
-            ViewSE.print("Errore: nessun comando fornito.");
-            ViewSE.log("ERRORE NESSUN COMANDO", 2, this.getClass().toString());
-            return;
-        }
+
+        AssertionControl.verify(tokens.length == 0 || tokens[0].isEmpty(), "ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
+        ViewSE.printIf(tokens.length == 0 || tokens[0].isEmpty(), "Errore: nessun comando fornito.");
         
         String cmd = tokens[0];
         ArrayList<String> optionsList = new ArrayList<>();

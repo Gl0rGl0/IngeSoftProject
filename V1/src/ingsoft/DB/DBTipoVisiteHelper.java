@@ -2,6 +2,7 @@ package ingsoft.DB;
 
 import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.TipoVisita;
+import ingsoft.util.AssertionControl;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
@@ -110,7 +111,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.log("Errore durante il caricamento del file: " + e.getMessage(), 1, this.getClass().toString());
+            AssertionControl.logMessage("Errore durante il caricamento del file: " + e.getMessage(), 1, this.getClass().getSimpleName());
             return false;
         }
         int index = 1;

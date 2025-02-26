@@ -1,6 +1,7 @@
 package ingsoft.commands.setup;
 
 import ingsoft.commands.AbstractCommand;
+import ingsoft.util.ViewSE;
 
 public class DoneCommandSETUP extends AbstractCommand {
 
@@ -12,6 +13,6 @@ public class DoneCommandSETUP extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         super.hasBeenExecuted = true;
-        System.out.println("finitooooo");
+        ViewSE.println("finitooooo");
     }
 }
