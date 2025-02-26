@@ -6,10 +6,11 @@ import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Volontario;
+import ingsoft.util.ViewSE;
 
 //UTILIZZO TIPO
-//init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'app
-//app: MessaggioBenvenuto -> while(Interpreter)
+//init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
+//controller: MessaggioBenvenuto -> while(Interpreter)
 //Interpreter: [comando] [-opzioni] [argomenti], ogni comando è passato al suo Command(>Abstract|Interface) dove viene gestito
 //DB: Crea 5 sotto helper che gestiscono ognuno una parte di dati, Configuratori,ecc
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
@@ -21,97 +22,98 @@ public class Main {
         // //GIORNO IN CUI AVVII IL MAIN
         // String da = d[2] + "/" + d[1] + "/" + d[0];
 
-        DBUtils db = new DBUtils();
-        App app = new App(db);
+        DBUtils model = new DBUtils();
+        App controller = new App(model);
+        ViewSE view = new ViewSE(controller);
 
-        app.interpreter("login config1 pass1C");
-        Test(app); // Prima di avviare il ciclo...
+        controller.interpreter("login config1 pass1C");
+        Test(controller); // Prima di avviare il ciclo...
 
-        // Usi app.intepreter per dare direttamente i comandi anche prima
+        // Usi controller.intepreter per dare direttamente i comandi anche prima
         // dell'interazione con l'utente
-        // -> Guadagno: GUI in cui si manda la stringa direttamente all'app senza
+        // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
-        // app.interpreter("login config1 pass1C");
-        // app.interpreter("time -s 12/02/2025");
-        // app.interpreter("time");
+        // controller.interpreter("login config1 pass1C");
+        // controller.interpreter("time -s 12/02/2025");
+        // controller.interpreter("time");
 
-        app.start();
-        //app.interpreter("preclude -a 1/4");
-        //app.interpreter("assign -v volont1 \"Visita Test\"");
+        view.run();
+        //controller.interpreter("preclude -a 1/4");
+        //controller.interpreter("assign -v volont1 \"Visita Test\"");
     }
 
-    public static void Test(App app) {
-        initPersone(app); // Inizializza il database in caso sia il primo accesso
+    public static void Test(App controller) {
+        initPersone(controller); // Inizializza il database in caso sia il primo accesso
 
-        app.skipSetupTesting = true;
+        controller.skipSetupTesting = true;
 
-        //app.interpreter("login config1 pass1C");
-        //app.interpreter("changepsw pass1C");
-        initLuoghioVisiteInterprete(app);
+        //controller.interpreter("login config1 pass1C");
+        //controller.interpreter("changepsw pass1C");
+        initLuoghioVisiteInterprete(controller);
 
-        // app.interpreter("preclude -r 14/05");
-        // System.out.println(app.db.dbDatesHelper.getPrecludedDates());
-        // app.intepreterSETUP("login config1 pass1C");
+        // controller.interpreter("preclude -r 14/05");
+        // System.out.println(controller.db.dbDatesHelper.getPrecludedDates());
+        // controller.intepreterSETUP("login config1 pass1C");
         // String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\"
         // 12.34:11.1";
-        // app.intepreterSETUP("login config1 pass1C");
-        // app.intepreterSETUP("add -L" + prompt);
-        // app.interpreter("remove -L \"Parco di Pisogne\"");
-        // System.out.println(app.db.getDBconfiguratori());
-        // System.out.println(app.db.changePsw(app.db.getConfiguratoreFromDB("config1"),
+        // controller.intepreterSETUP("login config1 pass1C");
+        // controller.intepreterSETUP("add -L" + prompt);
+        // controller.interpreter("remove -L \"Parco di Pisogne\"");
+        // System.out.println(controller.db.getDBconfiguratori());
+        // System.out.println(controller.db.changePsw(controller.db.getConfiguratoreFromDB("config1"),
         // "pass1C"));
-        // System.out.println(app.db.getDBconfiguratori());
-        // System.out.println(app.login("config1", "pass1")); //CONFIGURATORE
-        // System.out.println(app.login("config1", "pass1")); //CONFIGURATORE
-        // System.out.println(app.login("config2", "pass2")); //CONFIGURATORE
-        // System.out.println(app.login("config2", "123")); //ERRORE CREDENZIALI
-        // System.out.println(app.login("nonesisto", "1234")); //ERRORE CREDENZIALI
-        // System.out.println(app.getConfiguratoriListString());
-        // System.out.println(app.db.removeConfiguratoreFromDB("config2"));
-        // System.out.println(app.getConfiguratoriListString());
-        // System.out.println(app.db.addConfiguratoreToDB(new Configuratore("config2",
+        // System.out.println(controller.db.getDBconfiguratori());
+        // System.out.println(controller.login("config1", "pass1")); //CONFIGURATORE
+        // System.out.println(controller.login("config1", "pass1")); //CONFIGURATORE
+        // System.out.println(controller.login("config2", "pass2")); //CONFIGURATORE
+        // System.out.println(controller.login("config2", "123")); //ERRORE CREDENZIALI
+        // System.out.println(controller.login("nonesisto", "1234")); //ERRORE CREDENZIALI
+        // System.out.println(controller.getConfiguratoriListString());
+        // System.out.println(controller.db.removeConfiguratoreFromDB("config2"));
+        // System.out.println(controller.getConfiguratoriListString());
+        // System.out.println(controller.db.addConfiguratoreToDB(new Configuratore("config2",
         // "pass2")));
-        // System.out.println(app.getConfiguratoriListString());
-        // System.out.println(app.getLuoghiList());
+        // System.out.println(controller.getConfiguratoriListString());
+        // System.out.println(controller.getLuoghiList());
         // Volontario v = new Volontario("a", "a", "0");
-        // v.setDisponibilita(app.date, new Date("16/03/2025"));
-        // v.setDisponibilita(app.date, new Date("20/03/2025"));
-        // v.setDisponibilita(app.date, new Date("24/03/2025"));
-        // v.setDisponibilita(app.date, new Date("26/03/2025"));
-        // v.setDisponibilita(app.date, new Date("28/03/2025"));
+        // v.setDisponibilita(controller.date, new Date("16/03/2025"));
+        // v.setDisponibilita(controller.date, new Date("20/03/2025"));
+        // v.setDisponibilita(controller.date, new Date("24/03/2025"));
+        // v.setDisponibilita(controller.date, new Date("26/03/2025"));
+        // v.setDisponibilita(controller.date, new Date("28/03/2025"));
         // v.printDisponibilita();
     }
 
-    public static void initPersone(App app) {
+    public static void initPersone(App controller) {
         // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un elemento
         ArrayList<Boolean> out = new ArrayList<>();
-        out.add(app.db.addConfiguratore("config1", "pass1C"));
-        out.add(app.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
+        out.add(controller.db.addConfiguratore("config1", "pass1C"));
+        out.add(controller.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
 
-        out.add(app.db.addFruitore("fruit1", "pass1F"));
-        out.add(app.db.addFruitore("fruit2", "pass2F"));
-        out.add(app.db.addFruitore(new Fruitore("fruit3", "pass3F", "1")));
+        out.add(controller.db.addFruitore("fruit1", "pass1F"));
+        out.add(controller.db.addFruitore("fruit2", "pass2F"));
+        out.add(controller.db.addFruitore(new Fruitore("fruit3", "pass3F", "1")));
 
-        out.add(app.db.addVolontario("volont1", "pass1V"));
-        out.add(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
-        out.add(app.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
+        out.add(controller.db.addVolontario("volont1", "pass1V"));
+        out.add(controller.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
+        out.add(controller.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
         System.out.println(out + "\n---------------------------");
     }
 
-    public static void initLuoghioVisiteInterprete(App app) {
-        app.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe");
-        app.interpreter(
+    public static void initLuoghioVisiteInterprete(App controller) {
+        controller.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe");
+        controller.interpreter(
                 "add -t \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo");
-        app.interpreter(
+        controller.interpreter(
                 "add -t \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa");
-        app.interpreter(
+        controller.interpreter(
                 "add -t \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo");
 
         // Uso setup perchè nella V1/V2 non si possono aggiungere i luoghi dopo il setup
-        app.interpreterSETUP(
+        controller.interpreterSETUP(
                 "add -L \"Parco Grotta Cascata del Varone\" \"Un incantevole parco naturale con una spettacolare cascata sotterranea.\" 45.885:10.821");
-        app.interpreterSETUP(
+        controller.interpreterSETUP(
                 "add -L \"Pinacoteca Tosio-Martinengo di Brescia\" \"Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.\" 45.539:10.220");
-        app.interpreterSETUP("add -L \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1");
+        controller.interpreterSETUP("add -L \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1");
     }
 }

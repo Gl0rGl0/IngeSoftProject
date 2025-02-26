@@ -27,7 +27,6 @@ import ingsoft.persone.Volontario;
 import ingsoft.util.Date;
 import ingsoft.util.Interpreter;
 import ingsoft.util.TimeHelper;
-import ingsoft.util.ViewSE;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,8 +39,6 @@ public class App {
 
     public static final int SECONDIVIRTUALI_PS = 120; // 12minuti reali sono 1gg nella simulazione -> 1rs : 120vs =
     // 12rmin : 24hv
-
-    private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
     // private static final String MESSAGGIO_PRIMO_ACCESSO = "PRIMO ACCESSO
     // ESEGUITOindicare l'ambito territoriale di appartenenza";
     // private static final String AMBITO_TERRITORIALE = "Indicare l'ambito
@@ -143,43 +140,18 @@ public class App {
      *
      * @param prompt la stringa di comando immessa
      */
-    void interpreter(String prompt) {
+    public void interpreter(String prompt) {
         interpreter.interpret(prompt, user);
     }
 
-    void interpreterSETUP(String prompt) {
+    public void interpreterSETUP(String prompt) {
         setupInterpreter.interpret(prompt, user);
     }
 
     boolean skipSetupTesting = false;
 
-    /**
-     * Avvia l'interprete dei comandi. Viene prima verificato il login e poi
-     * viene eseguito un ciclo continuo che attende l'immissione di un comando.
-     */
-    public void start() {
-        ViewSE.print(MESSAGGIO_START);
-
-        while (!setupInterpreter.haveAllBeenExecuted() && !skipSetupTesting) { // DA TOGLIEREEEE!!!!
-            String input = ViewSE.read("\n(SETUP)" + user.getUsername() + "> ");
-            interpreterSETUP(input);
-            // setupCompleted = setupCommandRegistry.values().stream().allMatch(action ->
-            // action.hasBeenExecuted()); //nuovo
-            // controlla che ognuno dei comandi di setup sia stato eseguito, non ho trovato
-            // dove tu facessi il controllo, anche perché effettivamente non va
-            // ma se lo fai più dentro secondo me è meglio qua
-            // è dentro l'interprete, non andava perchè partiva con false & ... quindi non
-            // andava mai
-            // Cosi tante ricorsioni non vanno bene (l'ho letto nelle slide di saetti,
-            // quindi lo dovremo comunque modificare nella seconda parte)
-        }
-
-        System.out.println("SETUP COMPLETATO");
-
-        while (true) {
-            String input = ViewSE.read("\n" + user.getUsername() + "> ");
-            interpreter(input);
-        }
+    public boolean setupCompleted(){
+        return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting;
     }
 
     public Persona getCurrentUser() {

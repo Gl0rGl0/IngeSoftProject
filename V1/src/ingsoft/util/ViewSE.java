@@ -4,8 +4,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import ingsoft.App;
+
 //Letteralmente gestione input/output...
-public class ViewSE {
+public class ViewSE implements Runnable{
     
     private static final Scanner scanner = new Scanner(System.in);
     // Specifica il nome del file di log
@@ -18,19 +20,6 @@ public class ViewSE {
     public static String read(String out){
         System.out.print(out);
         return scanner.nextLine();
-    }
-
-    public static String read(){
-        return scanner.nextLine();
-    }
-
-    public static int readInt(){
-        try {
-            return scanner.nextInt();
-        } catch (Exception e) {
-            System.out.println("Richiesto un intero");
-            return readInt(); // penso vada bene così ricorsivo, se hai altre idee fai pure
-        }
     }
     
     /**
@@ -47,5 +36,27 @@ public class ViewSE {
             // e.printStackTrace();
             print(e.getMessage());
         }
+    }
+
+    //Classe istanziabile...
+    private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
+
+    private App app;
+    public ViewSE(App app){
+        this.app = app;
+    }
+
+    @Override
+    public void run() {
+        print(MESSAGGIO_START);
+
+        while (!app.setupCompleted()) {
+            app.interpreterSETUP(read("\n[SETUP] " + app.getCurrentUser().getUsername() + "> "));
+        }
+
+        System.out.println("SETUP COMPLETATO");
+
+        while(true)
+            app.interpreter(read("\n" + app.getCurrentUser().getUsername() + "> "));
     }
 }
