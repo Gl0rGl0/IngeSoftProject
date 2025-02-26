@@ -14,7 +14,7 @@ public class AssignCommand extends AbstractCommand {
 
     public AssignCommand(App app) {
         this.app = app;
-        super.commandInfo = CommandListSETUP.HELP; // CommandList.ASSIGN appena ho voglia di scriverlo
+        super.commandInfo = CommandListSETUP.ASSIGN; // CommandList.ASSIGN appena ho voglia di scriverlo
     }
 
     @Override

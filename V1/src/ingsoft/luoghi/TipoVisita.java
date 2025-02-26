@@ -177,6 +177,10 @@ public class TipoVisita {
         this.volontariUID.add(uidVolontario);
     }
 
+    public void removeVolontario(String uidVolontario) {
+        this.volontariUID.remove(uidVolontario);
+    }
+
     @Override
     public String toString() {
         return "Tipo di visita {"

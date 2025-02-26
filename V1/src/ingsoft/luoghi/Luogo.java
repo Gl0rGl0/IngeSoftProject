@@ -50,6 +50,10 @@ public class Luogo {
         this.visiteUID.add(tvUID);
     }
 
+    public void removeTipoVisita(String tvUID){
+        this.visiteUID.remove(tvUID);
+    }
+
     public ArrayList<String> getTipoVisitaUID() {
         return this.visiteUID;
     }

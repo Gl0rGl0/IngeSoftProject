@@ -65,14 +65,20 @@ public class DBUtils {
     // Adders per oggetti già creati
     // ================================================================
     public boolean addConfiguratore(Configuratore c) {
+        if(findUser(c.getUsername()) != null)
+            return false;
         return dbConfiguratoreHelper.addPersona(c);
     }
 
     public boolean addFruitore(Fruitore f) {
+        if(findUser(f.getUsername()) != null)
+            return false;
         return dbFruitoreHelper.addPersona(f);
     }
 
     public boolean addVolontario(Volontario v) {
+        if(findUser(v.getUsername()) != null)
+            return false;
         return dbVolontarioHelper.addPersona(v);
     }
 
@@ -88,22 +94,24 @@ public class DBUtils {
         dbVisiteHelper.addVisita(visita);
     }
 
-    // public void aggiungiTipoVisita(TipoVisita v) {
-    // dbTipoVisiteHelper.addTipoVisita(v);
-    // }
-
     // ================================================================
     // Adders per oggetti da creare tramite username/psw - String
     // ================================================================
     public boolean addConfiguratore(String user, String psw) {
+        if(findUser(user) != null)
+            return false;
         return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, "1"));
     }
 
     public boolean addFruitore(String user, String psw) {
+        if(findUser(user) != null)
+            return false;
         return dbFruitoreHelper.addPersona(new Fruitore(user, psw, "1"));
     }
 
     public boolean addVolontario(String user, String psw) {
+        if(findUser(user) != null)
+            return false;
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
     }
 
@@ -119,14 +127,30 @@ public class DBUtils {
     }
 
     public boolean removeFruitore(String username) {
+        //eliminare tutte le iscrizioni a lui collegate
         return dbFruitoreHelper.removePersona(username);
     }
 
     public boolean removeVolontario(String username) {
+        Volontario toRemove = findVolontario(username);
+        if(toRemove == null)
+            return false;
+        
+        for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
+            tv.removeVolontario(username);
+        }
         return dbVolontarioHelper.removePersona(username);
     }
 
     public boolean removeTipoVisita(String nomeVisita) {
+        TipoVisita toRemove = getTipoVisita(nomeVisita);
+        if(toRemove == null)
+            return false;
+        
+        for (Luogo l : dbLuoghiHelper.getLuoghi()) {
+            l.removeTipoVisita(nomeVisita);
+        }
+
         return dbTipoVisiteHelper.removeTipoVisita(nomeVisita);
     }
 
@@ -135,6 +159,10 @@ public class DBUtils {
     }
 
     public boolean removeLuogo(String nomeLuogo) {
+        Luogo toRemove = getLuogoByName(nomeLuogo);
+        if(toRemove == null)
+            return false;
+        
         return dbLuoghiHelper.removeLuogo(nomeLuogo);
     }
 
@@ -165,6 +193,13 @@ public class DBUtils {
 
     private void checkVisiteInTerminazione(Date d){
         dbVisiteHelper.checkVisiteInTerminazione(d);
+    }
+
+    public void refresher(){
+        //refresh volontari
+        //refresh visite
+        //refresh tipovisite
+        //refresh iscrizioni
     }
 
     // ================================================================

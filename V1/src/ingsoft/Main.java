@@ -83,8 +83,7 @@ public class Main {
     }
 
     public static void initPersone(App app) {
-        // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un
-        // elemento
+        // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un elemento
         ArrayList<Boolean> out = new ArrayList<>();
         out.add(app.db.addConfiguratore("config1", "pass1C"));
         out.add(app.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
@@ -97,9 +96,6 @@ public class Main {
         out.add(app.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
         out.add(app.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
         System.out.println(out + "\n---------------------------");
-        // Testa se è il primo accesso per tutti i configuratori
-        // app.db.getConfiguratori().forEach(c -> System.out.println(c.firstAccess()));
-        // System.out.println(app.db.getConfiguratori());
     }
 
     public static void initLuoghioVisiteInterprete(App app) {
