@@ -45,7 +45,7 @@ public class AssertionControl {
                 case 3 -> "INFO";
                 default -> "DEBUG";
             };
-                fw.write(VERSION + " | " + type + " | " + path + " | " + LocalDateTime.now() + " | " + msg + System.lineSeparator());
+                fw.write(VERSION + "\t|\t" + type + "\t|\t" + path + "\t|\t" + LocalDateTime.now() + "\t|\t" + msg + System.lineSeparator());
         } catch (IOException e) {
             // In caso di errore, stampiamo lo stack trace
             // e.printStackTrace();
