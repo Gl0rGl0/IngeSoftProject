@@ -1,5 +1,8 @@
 package ingsoft.commands.running;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import ingsoft.App;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.util.StringUtils;
@@ -38,15 +41,30 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addConfiguratore(String[] args) {
-        app.db.addConfiguratore(args[0], args[1]); // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
+        // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
+        if(app.db.addConfiguratore(args[0], args[1])){
+            ViewSE.log("Aggiunto configuratore: " + args[0], 3, this.getClass().toGenericString());
+        }else{
+            ViewSE.log("Non aggiunto configuratore: " + args[0], 2, this.getClass().getSimpleName());
+        }
     }
 
     private void addFruitore(String[] args) {
-        app.db.addFruitore(args[0], args[1]); // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
+        // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
+        if(app.db.addFruitore(args[0], args[1])){
+            ViewSE.log("Aggiunto fruitore: " + args[0], 3, this.getClass().toString());
+        }else{
+            ViewSE.log("Non aggiunto fruitore: " + args[0], 2, this.getClass().toString());
+        }
     }
 
     private void addVolontario(String[] args) {
-        app.db.addVolontario(args[0], args[1]); // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
+        // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
+        if(app.db.addVolontario(args[0], args[1])){
+            ViewSE.log("Aggiunto volontario: " + args[0], 3, this.getClass().toString());
+        }else{
+            ViewSE.log("Non aggiunto volontario: " + args[0], 2, this.getClass().toString());
+        }
     }
 
     private void addTipoVisita(String[] args) {

@@ -23,7 +23,6 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         this.fileName = personaType.getFilePath() + ".properties";
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public ArrayList<T> getPersonList() {
         if (isCacheValid && cachedPersons != null) {
             return new ArrayList<>(cachedPersons.values());

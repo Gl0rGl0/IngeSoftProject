@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Fruitore;
+import ingsoft.persone.Guest;
 import ingsoft.persone.Volontario;
 import ingsoft.util.ViewSE;
 
@@ -18,38 +19,22 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // String[] d = LocalDateTime.now().toString().substring(0, 10).split("-");
-        // //GIORNO IN CUI AVVII IL MAIN
-        // String da = d[2] + "/" + d[1] + "/" + d[0];
-
         DBUtils model = new DBUtils();
         App controller = new App(model);
         ViewSE view = new ViewSE(controller);
 
-        controller.interpreter("login config1 pass1C");
         Test(controller); // Prima di avviare il ciclo...
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
         // dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
-        // controller.interpreter("login config1 pass1C");
-        // controller.interpreter("time -s 12/02/2025");
-        // controller.interpreter("time");
 
         view.run();
-        //controller.interpreter("preclude -a 1/4");
-        //controller.interpreter("assign -v volont1 \"Visita Test\"");
     }
 
     public static void Test(App controller) {
-        initPersone(controller); // Inizializza il database in caso sia il primo accesso
-
-        controller.skipSetupTesting = true;
-
-        //controller.interpreter("login config1 pass1C");
-        //controller.interpreter("changepsw pass1C");
-        initLuoghioVisiteInterprete(controller);
+        initDBInterprete(controller); // Inizializza il database in caso sia il primo accesso
 
         // controller.interpreter("preclude -r 14/05");
         // System.out.println(controller.db.dbDatesHelper.getPrecludedDates());
@@ -67,11 +52,13 @@ public class Main {
         // System.out.println(controller.login("config1", "pass1")); //CONFIGURATORE
         // System.out.println(controller.login("config2", "pass2")); //CONFIGURATORE
         // System.out.println(controller.login("config2", "123")); //ERRORE CREDENZIALI
-        // System.out.println(controller.login("nonesisto", "1234")); //ERRORE CREDENZIALI
+        // System.out.println(controller.login("nonesisto", "1234")); //ERRORE
+        // CREDENZIALI
         // System.out.println(controller.getConfiguratoriListString());
         // System.out.println(controller.db.removeConfiguratoreFromDB("config2"));
         // System.out.println(controller.getConfiguratoriListString());
-        // System.out.println(controller.db.addConfiguratoreToDB(new Configuratore("config2",
+        // System.out.println(controller.db.addConfiguratoreToDB(new
+        // Configuratore("config2",
         // "pass2")));
         // System.out.println(controller.getConfiguratoriListString());
         // System.out.println(controller.getLuoghiList());
@@ -85,7 +72,8 @@ public class Main {
     }
 
     public static void initPersone(App controller) {
-        // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un elemento
+        // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un
+        // elemento
         ArrayList<Boolean> out = new ArrayList<>();
         out.add(controller.db.addConfiguratore("config1", "pass1C"));
         out.add(controller.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
@@ -100,20 +88,53 @@ public class Main {
         System.out.println(out + "\n---------------------------");
     }
 
-    public static void initLuoghioVisiteInterprete(App controller) {
-        controller.interpreter("add -t \"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe");
-        controller.interpreter(
-                "add -t \"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo");
-        controller.interpreter(
-                "add -t \"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa");
-        controller.interpreter(
-                "add -t \"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo");
+    public static void initDBInterprete(App controller) {
+        controller.user = new Configuratore("", "", "0");
+
+        String addVisita = "add -t ";
+        String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo";
+        String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa";
+        String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo";
+        String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe";
+        
+        controller.interpreter(addVisita + visitaT1);
+        controller.interpreter(addVisita + visitaT3);
+        controller.interpreter(addVisita + visitaT2);
+        controller.interpreter(addVisita + visitaTT);
 
         // Uso setup perchè nella V1/V2 non si possono aggiungere i luoghi dopo il setup
-        controller.interpreterSETUP(
-                "add -L \"Parco Grotta Cascata del Varone\" \"Un incantevole parco naturale con una spettacolare cascata sotterranea.\" 45.885:10.821");
-        controller.interpreterSETUP(
-                "add -L \"Pinacoteca Tosio-Martinengo di Brescia\" \"Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.\" 45.539:10.220");
-        controller.interpreterSETUP("add -L \"Parco di Pisogne\" \"Bellissimo parco brutto\" 12.34:11.1");
+        String addLuogo = "add -L ";
+        String luogoT1 = "\"Parco Grotta Cascata del Varone\" \"Un incantevole parco naturale con una spettacolare cascata sotterranea.\" 45.885:10.821";
+        String luogoT2 = "\"Pinacoteca Tosio-Martinengo di Brescia\" \"Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.\" 45.539:10.220";
+        String luogoTT = "\"Luogo Test\" \"Descrizione luogo test\" 12.34:56.78";
+
+        controller.interpreterSETUP(addLuogo + luogoT1);
+        controller.interpreterSETUP(addLuogo + luogoT2);
+        controller.interpreterSETUP(addLuogo + luogoTT);
+
+        String addCofig = "add -c ";
+        String configuratore1 = "config1 pass1C";
+        String configuratore2 = "config2 pass2C";
+        
+        controller.interpreter(addCofig + configuratore1);
+        controller.interpreter(addCofig + configuratore2);
+
+        String addVolont = "add -v ";
+        String volontario1 = "volont1 pass1V";
+        String volontario2 = "volont2 pass2V";
+        
+        controller.interpreter(addVolont + volontario1);
+        controller.interpreter(addVolont + volontario2);
+
+        String addFruit = "add -v ";
+        String fruitore1 = "fruit1 pass1F";
+        String fruitore2 = "fruit2 pass2F";
+        String fruitore3 = "fruit3 pass3F";
+        
+        controller.interpreter(addFruit + fruitore1);
+        controller.interpreter(addFruit + fruitore2);
+        controller.interpreter(addFruit + fruitore3);
+
+        controller.user = new Guest();
     }
 }

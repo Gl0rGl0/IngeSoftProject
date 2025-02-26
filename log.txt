@@ -1,2 +1,7 @@
-GRAVE | V1 ERRORE NESSUN COMANDO
-GRAVE | V1 ERRORE NESSUN COMANDO
+V1 | WARNING | AddCommand | 2025-02-26T15:46:38.518667792 | Non aggiunto configuratore: config1
+V1 | WARNING | AddCommand | 2025-02-26T15:46:38.526205742 | Non aggiunto configuratore: config2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527269071 | Non aggiunto volontario: volont1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527509163 | Non aggiunto volontario: volont2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527722293 | Non aggiunto volontario: fruit1
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527856726 | Non aggiunto volontario: fruit2
+V1 | WARNING | class ingsoft.commands.running.AddCommand | 2025-02-26T15:46:38.527973776 | Non aggiunto volontario: fruit3

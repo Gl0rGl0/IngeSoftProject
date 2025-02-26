@@ -31,7 +31,7 @@ public class Interpreter {
         String[] tokens = prompt.trim().split("\\s+");
         if (tokens.length == 0 || tokens[0].isEmpty()) {
             ViewSE.print("Errore: nessun comando fornito.");
-            ViewSE.log("V1 ERRORE NESSUN COMANDO", "GRAVE");
+            ViewSE.log("ERRORE NESSUN COMANDO", 2, this.getClass().toString());
             return;
         }
         

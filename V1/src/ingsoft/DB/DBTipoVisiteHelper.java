@@ -110,7 +110,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.log("Errore durante il caricamento del file: " + e.getMessage(), 1, this.getClass().toString());
             return false;
         }
         int index = 1;
