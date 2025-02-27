@@ -16,6 +16,9 @@ public class TimeHelper implements Runnable {
     public void run() {
         // Esempio: aggiorna la data simulata secondo la logica che preferisci
         app.date.incrementa(); // implementa il metodo incrementa() come preferisci
+        
+
+
         // Controlla se è il 16 del mese
         if(app.date.getGiorno() == 16 && !app.date.festivo()) {
             il16epassato = true;
@@ -33,8 +36,8 @@ public class TimeHelper implements Runnable {
     }
 
     private void eseguiAzioniDel16() {
+        app.azioneDelGiorno(); // ?
         eseguita = true;
-        // Logica per le azioni da eseguire
         ViewSE.println("Esecuzione azioni del 16 del mese!");
     }
 }

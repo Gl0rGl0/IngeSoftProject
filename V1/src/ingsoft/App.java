@@ -1,40 +1,15 @@
 package ingsoft;
 
 import ingsoft.DB.DBUtils;
-import ingsoft.commands.AssignCommand;
-import ingsoft.commands.ChangePswCommand;
-import ingsoft.commands.Command;
-import ingsoft.commands.ExitCommand;
-import ingsoft.commands.HelpCommand;
-import ingsoft.commands.LogoutCommand;
-import ingsoft.commands.SetPersoneMaxCommand;
-import ingsoft.commands.TimeCommand;
-import ingsoft.commands.running.AddCommand;
-import ingsoft.commands.running.CommandList;
-import ingsoft.commands.running.ListCommand;
-import ingsoft.commands.running.LoginCommand;
-import ingsoft.commands.running.PrecludeCommand;
-import ingsoft.commands.running.RemoveCommand;
-import ingsoft.commands.setup.AddCommandSETUP;
-import ingsoft.commands.setup.CommandListSETUP;
-import ingsoft.commands.setup.DoneCommandSETUP;
-import ingsoft.commands.setup.LoginCommandSETUP;
-import ingsoft.commands.setup.SetAmbitoCommandSETUP;
-import ingsoft.luoghi.TipoVisita;
-import ingsoft.persone.Guest;
-import ingsoft.persone.Persona;
-import ingsoft.persone.Volontario;
+import ingsoft.commands.*;
+import ingsoft.commands.running.*;
+import ingsoft.commands.setup.*;
+import ingsoft.luoghi.*;
+import ingsoft.persone.*;
+import ingsoft.util.*;
 import ingsoft.util.Date;
-import ingsoft.util.Interpreter;
-import ingsoft.util.TimeHelper;
-import ingsoft.util.ViewSE;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class App {
 
@@ -142,16 +117,19 @@ public class App {
      * @param prompt la stringa di comando immessa
      */
     public void interpreter(String prompt) {
+        AssertionControl.logMessage("Tentativo di eseguire: " + prompt, 3, this.getClass().getSimpleName());
         interpreter.interpret(prompt, user);
     }
 
     public void interpreterSETUP(String prompt) {
+        AssertionControl.logMessage("Tentativo di eseguire: " + prompt, 3, this.getClass().getSimpleName());
         setupInterpreter.interpret(prompt, user);
     }
 
     boolean skipSetupTesting = false;
 
     public boolean setupCompleted(){
+        // AssertionControl.logMessage("SetUp completato", 3, this.getClass().getSimpleName());
         return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting;
     }
 
