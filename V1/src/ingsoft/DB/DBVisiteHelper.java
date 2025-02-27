@@ -71,7 +71,16 @@ public class DBVisiteHelper extends DBAbstractHelper {
         return out;
     }
 
-    // IDEM A SOPRA...
+    public ArrayList<Visita> getConfermate() {
+        ArrayList<Visita> out = new ArrayList<>();
+        for (Visita v : getVisite()) {
+            if(v.getStatus() == StatusVisita.CONFERMATA)
+                out.add(v);
+        }
+
+        return out;
+    }
+
     public ArrayList<Visita> getCancellate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {

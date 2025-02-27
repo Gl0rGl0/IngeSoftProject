@@ -72,10 +72,10 @@ public class AddCommand extends AbstractCommand {
 
     private void addLuoghi(String[] args) {
         // NON PUOI USARLO ADESSO, ASPETTA LA V3...
-        @SuppressWarnings("unused")
-        int niente = args.length;
-        // String[] a = StringUtils.joinQuotedArguments(args);
+        AssertionControl.logMessage("Non puoi aggiungere un luogo prima della V3: " + args[0], 2, this.getClass().getSimpleName());
 
-        // app.db.addLuogo(a);
+    //    String[] a = StringUtils.joinQuotedArguments(args);
+        
+    //     app.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 }

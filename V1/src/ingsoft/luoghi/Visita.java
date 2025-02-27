@@ -13,6 +13,7 @@ public class Visita {
     public String UID;
     public String getTipoVisitaUID;
 
+    public String volontarioUID;
     public StatusVisita stato = StatusVisita.PROPOSTA;
     public ArrayList<Iscrizione> partecipanti = new ArrayList<>();
 
@@ -32,6 +33,14 @@ public class Visita {
 
     public StatusVisita getStatus() {
         return this.stato;
+    }
+
+    public void setVolontario(String uidVolontario){
+        this.volontarioUID = uidVolontario;
+    }
+
+    public String getUidVolontario(){
+        return this.volontarioUID;
     }
 
     public String getUID() {
@@ -56,6 +65,14 @@ public class Visita {
 
     public void setStatus(StatusVisita s) {
         this.stato = s;
+    }
+
+    public boolean isPresenteFruitore(String userF){
+        for(Iscrizione i : partecipanti){
+            if(i.fruitoreUID.equals(userF))
+                return true;
+        }
+        return false;
     }
 
     public void aggiungiPartecipanti(Fruitore f, int n) {
@@ -97,4 +114,14 @@ public class Visita {
             }
         }
     }
+
+    @Override
+    public String toString(){
+        return  "Titolo: " + tipo.getTitolo()
+            +   "\nDescrizione: " + tipo.getDescrizione()
+            +   "\nPunto Incontro: " + tipo.getGps() 
+            +   "\nData: " + data
+            +   "\nOra: " + tipo.getOraInizio()
+            +   "\nBiglietto necessario: " + tipo.isFree();
+    }   
 }
