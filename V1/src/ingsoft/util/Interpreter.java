@@ -30,8 +30,11 @@ public class Interpreter {
     public void interpret(String prompt, Persona currentUser) {
         String[] tokens = prompt.trim().split("\\s+");
 
-        AssertionControl.verify(tokens.length == 0 || tokens[0].isEmpty(), "ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
-        ViewSE.printIf(tokens.length == 0 || tokens[0].isEmpty(), "Errore: nessun comando fornito.");
+        if(tokens.length == 0 || tokens[0].isEmpty()){
+            AssertionControl.logMessage("ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
+            ViewSE.println("Errore: nessun comando fornito.");
+            return;
+        }
         
         String cmd = tokens[0];
         ArrayList<String> optionsList = new ArrayList<>();
@@ -55,20 +58,20 @@ public class Interpreter {
             int userPerm = currentUser.type().getPriorita();
             // Controlla i permessi
             if (!command.canPermission(userPerm)) {
-                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
+                ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
                 return;
             }
             // Se l'utente è in stato di "firstAccess", limita i comandi eseguibili
             if (currentUser.firstAccess() &&
                     !command.canPermission(PersonaType.CAMBIOPSW.getPriorita())) {
-                ViewSE.print("Non hai i permessi necessari per eseguire il comando '" + cmd +
+                ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd +
                         "' finché non viene cambiata la password con 'changepsw [nuovapsw]'.");
                 return;
             }
             // Esegue il comando
             command.execute(options, args);
         } else {
-            ViewSE.print("\"" + cmd + "\" non è riconosciuto come comando interno.");
+            ViewSE.println("\"" + cmd + "\" non è riconosciuto come comando interno.");
         }
     }
 

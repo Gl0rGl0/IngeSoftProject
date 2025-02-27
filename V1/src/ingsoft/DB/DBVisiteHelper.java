@@ -120,7 +120,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
         int index = 1;
@@ -138,7 +138,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
                     storeProperties(fileName, properties);
                     return true;
                 } catch (IOException e) {
-                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
             }
@@ -151,7 +151,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento delle visite: " + e.getMessage());
             return new ArrayList<>();
         }
 

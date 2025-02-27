@@ -23,7 +23,7 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
      */
     public void execute(String[] options, String[] args) {
         if(args.length < 1){
-            ViewSE.print("Errore nell'utilizzo del comando, richiesto almeno un nome. Utilizzo: \"Nome nome nome\"");
+            ViewSE.println("Errore nell'utilizzo del comando, richiesto almeno un nome. Utilizzo: \"Nome nome nome\"");
         }
         try {
             String[] a = StringUtils.joinQuotedArguments(args);

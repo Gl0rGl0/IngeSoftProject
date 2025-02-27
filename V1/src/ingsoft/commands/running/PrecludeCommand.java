@@ -18,14 +18,14 @@ public class PrecludeCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
 
         if (options.length < 1) {
-            ViewSE.print("Errore nell'utilizzo del comando 'preclude'");
+            ViewSE.println("Errore nell'utilizzo del comando 'preclude'");
             return;
         }
 
         Date toOperate = new Date(args[0]); // SPERANDO CHE SIA NEL FORMATO CORRETTO, MAGARI UN TRYCATCH PROSSIMAMENTE
 
         if (!separatiDaDueMesi(toOperate, app.date)) {
-            ViewSE.print("Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al mese successivo al prossimo");
+            ViewSE.println("Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al mese successivo al prossimo");
         }
 
         char option = options[0].charAt(0);
@@ -35,7 +35,7 @@ public class PrecludeCommand extends AbstractCommand {
             case 'r' ->
                 removePrecludedDate(args);
             default ->
-                ViewSE.print("Opzione non riconosciuta per 'preclude'.");
+                ViewSE.println("Opzione non riconosciuta per 'preclude'.");
         }
     }
 
@@ -51,12 +51,12 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private void addPrecludedDate(String[] args) {
-        ViewSE.print("Eseguo: Aggiungo data da precludere");
+        ViewSE.println("Eseguo: Aggiungo data da precludere");
         app.db.addPrecludedDate(new Date(args[0])); // aggiunge una data speciale
     }
 
     private void removePrecludedDate(String[] args) {
-        ViewSE.print("Eseguo: Rimuovo data da precludere");
+        ViewSE.println("Eseguo: Rimuovo data da precludere");
         app.db.removePrecludedDate(new Date(args[0]));
     }
 }

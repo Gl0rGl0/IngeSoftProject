@@ -23,7 +23,7 @@ public class RemoveCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per configuratore)
         if (options.length < 1) {
-            ViewSE.print("Errore nell'utilizzo del comando 'remove'");
+            ViewSE.println("Errore nell'utilizzo del comando 'remove'");
             return;
         }
         char option = options[0].charAt(0);
@@ -33,44 +33,44 @@ public class RemoveCommand extends AbstractCommand {
 
         switch (option) {
             case 'c' -> {
-                ViewSE.print("Eseguo: Rimuovo configuratore");
+                ViewSE.println("Eseguo: Rimuovo configuratore");
                 removeConfiguratore(ar);
             }
             // Qui inserisci la logica per rimuovere un configuratore
             case 'f' -> {
-                ViewSE.print("Eseguo: Rimuovo fruitore");
+                ViewSE.println("Eseguo: Rimuovo fruitore");
                 removeFruitore(ar);
             }
             // Logica per rimuovere un fruitore
             case 'v' -> {
-                ViewSE.print("Eseguo: Rimuovo volontario");
+                ViewSE.println("Eseguo: Rimuovo volontario");
                 removeVolontario(ar);
             }
 
             case 'L' -> removeLuogo(ar);
             // Logica per rimuovere un volontario
-            default -> ViewSE.print("Opzione non riconosciuta per 'remove'.");
+            default -> ViewSE.println("Opzione non riconosciuta per 'remove'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L' per luogo)
     }
 
     private void removeConfiguratore(String[] args){
-        ViewSE.print("Eseguo: Rimuovo configuratore");
+        ViewSE.println("Eseguo: Rimuovo configuratore");
         app.db.removeConfiguratore(args[0]);  //rimuove un configuratore
     }
 
     private void removeFruitore(String[] args){
-        ViewSE.print("Eseguo: Rimuovo fruitore");
+        ViewSE.println("Eseguo: Rimuovo fruitore");
         app.db.removeFruitore(args[0]);   //rimuove un fruitore
     }
 
     private void removeVolontario(String[] args){
-        ViewSE.print("Eseguo: Rimuovo volontario");
+        ViewSE.println("Eseguo: Rimuovo volontario");
         app.db.removeVolontario(args[0]);     //rimuove un volontario
     }
 
     private void removeLuogo(String[] args){
-        ViewSE.print("Eseguo: Rimuovo luogo");
+        ViewSE.println("Eseguo: Rimuovo luogo");
         app.db.removeLuogo(args[0]);
     }
 }

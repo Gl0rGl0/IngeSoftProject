@@ -28,7 +28,7 @@ public class Main {
         // dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
-
+        controller.skipSetupTesting = true;
         view.run();
     }
 

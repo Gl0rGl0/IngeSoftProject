@@ -111,8 +111,8 @@ public class TipoVisita {
 
             this.dataInserimento = d;
         } catch (NumberFormatException e) {
-            ViewSE.print(e);
-            ViewSE.print(
+            ViewSE.println(e);
+            ViewSE.println(
                     "Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
         }
     }

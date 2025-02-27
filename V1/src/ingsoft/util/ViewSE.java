@@ -14,10 +14,6 @@ public class ViewSE implements Runnable{
         public static void println(Object out){
             System.out.println(out);
         }
-
-        public static void printIf(boolean condition, Object out) {
-            if(condition) print(out);
-        }
     
         public static String read(String out){
             ViewSE.print(out);
@@ -41,7 +37,7 @@ public class ViewSE implements Runnable{
         }
 
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
-        ViewSE.print("SETUP COMPLETATO");
+        ViewSE.println("SETUP COMPLETATO");
 
         while(true)
             app.interpreter(read("\n" + app.getCurrentUser().getUsername() + "> "));

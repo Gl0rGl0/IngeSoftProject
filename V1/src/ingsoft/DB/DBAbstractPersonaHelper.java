@@ -32,7 +32,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return new ArrayList<>();
         }
 
@@ -51,7 +51,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
                 T persona = constructor.newInstance(username, psw, newFlag);
                 cachedPersons.put(username, persona);
             } catch (Exception e) {
-                ViewSE.print("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": "
+                ViewSE.println("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": "
                         + e.getMessage());
             }
             index++;
@@ -66,7 +66,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
         int index = 1;
@@ -83,7 +83,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
                     isCacheValid = false; // Invalida la cache
                     return true;
                 } catch (IOException e) {
-                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
             }
@@ -99,7 +99,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento delle proprietà: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return false;
         }
 
@@ -125,7 +125,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
                 isCacheValid = false; // Invalida la cache
                 return true;
             } catch (IOException e) {
-                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                 return false;
             }
         }
@@ -157,7 +157,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             isCacheValid = false; // Invalida la cache dopo la modifica della password
             return result;
         } catch (Exception e) {
-            ViewSE.print("Errore nella modifica della password: " + e.getMessage());
+            ViewSE.println("Errore nella modifica della password: " + e.getMessage());
             return false;
         }
     }

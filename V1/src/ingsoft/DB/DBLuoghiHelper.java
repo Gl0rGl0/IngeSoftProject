@@ -41,7 +41,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento dei luoghi: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento dei luoghi: " + e.getMessage());
             return new ArrayList<>();
         }
 
@@ -85,7 +85,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
 
@@ -103,7 +103,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
                     isCacheValid = false; // Invalida la cache
                     return true;
                 } catch (IOException e) {
-                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
             }
@@ -126,7 +126,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
 
@@ -154,7 +154,7 @@ public class DBLuoghiHelper extends DBAbstractHelper {
                 isCacheValid = false; // Invalida la cache
                 return true;
             } catch (IOException e) {
-                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                 return false;
             }
         }

@@ -7,8 +7,8 @@ import ingsoft.util.StringUtils;
 import ingsoft.util.ViewSE;
 
 public class AddCommand extends AbstractCommand {
-
     private final App app;
+    private final String NOMECLASSE = this.getClass().getSimpleName();
 
     public AddCommand(App app) {
         this.app = app;
@@ -24,9 +24,11 @@ public class AddCommand extends AbstractCommand {
      */
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
-            ViewSE.print("Errore nell'utilizzo del comando 'add'");
+            ViewSE.println("Errore nell'utilizzo del comando 'add'");
+            AssertionControl.logMessage("Errore nell'utilizzo del comando 'add'", 2, this.getClass().getSimpleName());
             return;
         }
+
         char option = options[0].charAt(0);
         switch (option) {
             case 'c' -> addConfiguratore(args);
@@ -34,7 +36,7 @@ public class AddCommand extends AbstractCommand {
             case 'v' -> addVolontario(args);
             case 'L' -> addLuoghi(args);
             case 't' -> addTipoVisita(args);
-            default -> ViewSE.print("Opzione non riconosciuta per 'add'.");
+            default -> ViewSE.println("Opzione non riconosciuta per 'add'.");
         }
     }
 

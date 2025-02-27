@@ -16,7 +16,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 1) {
-            ViewSE.print("Errore nell'utilizzo del prompt");
+            ViewSE.println("Errore nell'utilizzo del prompt");
             return;
         }
         try {

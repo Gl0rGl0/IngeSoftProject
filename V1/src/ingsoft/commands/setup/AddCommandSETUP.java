@@ -25,13 +25,13 @@ public class AddCommandSETUP extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (deve essere 'L')
         if (options.length < 1) {
-            ViewSE.print("Errore nell'utilizzo del comando 'add'");
+            ViewSE.println("Errore nell'utilizzo del comando 'add'");
             return;
         }
         char option = options[0].charAt(0);
         switch (option) {
             case 'L' -> addLuoghi(args);
-            default -> {ViewSE.print("Opzione non riconosciuta per 'add' durante il SETUP."); return;}
+            default -> {ViewSE.println("Opzione non riconosciuta per 'add' durante il SETUP."); return;}
         }
         
         this.hasBeenExecuted = true;

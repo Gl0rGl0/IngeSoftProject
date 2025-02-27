@@ -67,7 +67,7 @@ public class Date {
     public synchronized void modifica(int g) {
         if (this.localDate.getYear() == -1) {
             // Se l'anno non è noto, non possiamo gestire correttamente l'incremento.
-            ViewSE.print("Modifica non supportata per date senza anno.");
+            ViewSE.println("Modifica non supportata per date senza anno.");
             return;
         }
         this.localDate = this.localDate.plusDays(g);

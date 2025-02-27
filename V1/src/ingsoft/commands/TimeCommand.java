@@ -16,7 +16,7 @@ public class TimeCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 1 && options.length == 0) {
-            ViewSE.print(app.date);
+            ViewSE.println(app.date);
             return;
         }
         if(options.length > 0){
@@ -26,10 +26,10 @@ public class TimeCommand extends AbstractCommand {
                 case "m" -> saltaG(args[0], 30);
                 case "a" -> saltaG(args[0], 365);
                 case "n" -> app.addPrecludedDate(args[0]);
-                case "l" -> ViewSE.print(app.getDate());
+                case "l" -> ViewSE.println(app.getDate());
             }
         }else{
-            ViewSE.print(app.date);
+            ViewSE.println(app.date);
         }
     }
 
@@ -38,15 +38,15 @@ public class TimeCommand extends AbstractCommand {
         try {
             g = Integer.parseInt(d) * mult;
         } catch (NumberFormatException e) {
-            ViewSE.print("Uso sbagliato del prompt");
+            ViewSE.println("Uso sbagliato del prompt");
             return;
         }
 
         app.date.modifica(g);
         if(g > 0){
-            ViewSE.print("Saltati con successo " + g + " giorni.");
+            ViewSE.println("Saltati con successo " + g + " giorni.");
         }else{
-            ViewSE.print("Tornato indietro di " + g + " giorni con successo.");
+            ViewSE.println("Tornato indietro di " + g + " giorni con successo.");
         }
     }
 }

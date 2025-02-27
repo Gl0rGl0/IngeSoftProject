@@ -36,7 +36,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento delle visite: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento delle visite: " + e.getMessage());
             return new ArrayList<>();
         }
 
@@ -89,7 +89,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                         inserimento);
                 tipiVisitaRepository.put(UID, tipo);
             } catch (NumberFormatException ex) {
-                ViewSE.print("Errore nella creazione del tipo di visita " + index + ": " + ex.getMessage());
+                ViewSE.println("Errore nella creazione del tipo di visita " + index + ": " + ex.getMessage());
             }
             index++;
         }
@@ -144,7 +144,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                     isCacheValid = false;
                     return true;
                 } catch (IOException e) {
-                    ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                    ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                     return false;
                 }
             }
@@ -165,7 +165,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            ViewSE.print("Errore durante il caricamento del file: " + e.getMessage());
+            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
             return false;
         }
 
@@ -202,7 +202,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
                 isCacheValid = false;
                 return true;
             } catch (IOException e) {
-                ViewSE.print("Errore durante il salvataggio delle proprietà: " + e.getMessage());
+                ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
                 return false;
             }
         }

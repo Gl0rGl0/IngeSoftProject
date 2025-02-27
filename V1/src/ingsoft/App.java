@@ -210,7 +210,7 @@ public class App {
 
                 // Recupera l'elenco degli UID dei tipi di visita assegnati al volontario
                 ArrayList<String> uidVisiteV = v.getTipiVisiteUID();
-                ViewSE.print("UID tipi di visita per " + v.getUsername() + ": " + uidVisiteV);
+                ViewSE.println("UID tipi di visita per " + v.getUsername() + ": " + uidVisiteV);
 
                 // Per ciascun tipo di visita assegnato
                 for (String s : uidVisiteV) {
@@ -224,9 +224,10 @@ public class App {
                     // e che toCheck.cheGiornoE() restituisca un valore compatibile per il confronto.
                     
                     boolean isProgrammable = tv.giorni.contains(toCheck.cheGiornoE());
-                    ViewSE.print("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
+                    ViewSE.println("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
 
-                    ViewSE.printIf(isProgrammable, v.getUsername() + " può lavorare il " + i + "/" + meseProssimo
+                    if(isProgrammable)
+                        ViewSE.println(v.getUsername() + " può lavorare il " + i + "/" + meseProssimo
                     + " per il tipo di visita " + tv.getTitolo());
                     // Qui puoi creare l'istanza della visita o registrarla nel sistema
                 }

@@ -77,7 +77,7 @@ public class Visita {
 
     public void aggiungiPartecipanti(Fruitore f, int n) {
         if (tipo.numMaxPartecipants - getAttualeCapienza() < n) {
-            ViewSE.print("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
+            ViewSE.println("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
             return;
         }
 

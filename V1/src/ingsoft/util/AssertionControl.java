@@ -10,23 +10,15 @@ public class AssertionControl {
     public final static String VERSION = "V1"; 
     private static final Scanner scanner = new Scanner(System.in);
         // Specifica il nome del file di log
-    private static final String LOG_FILE = "log.txt";
+    private static final String LOG_FILE = "log.log";
 
     public static void print(Object out){
         ViewSE.println(out);
     }
 
     public static String read(String out){
-        ViewSE.print(out);
+        ViewSE.println(out);
         return scanner.nextLine();
-    }
-
-    // true se la condizione è falsa e la scrittura va a buon fine, oppure se la condizione è vera
-    public static boolean verify(boolean condition, String message, int level, String path) {
-        if(!condition) {
-            return logMessage(message, level, path);
-        }
-        return true;
     }
 
     /**
@@ -45,7 +37,8 @@ public class AssertionControl {
                 case 3 -> "INFO";
                 default -> "DEBUG";
             };
-                fw.write(VERSION + "\t|\t" + type + "\t|\t" + path + "\t|\t" + LocalDateTime.now() + "\t|\t" + msg + System.lineSeparator());
+                String out = String.format("%4s | %8s | %15s | %-29s | %s", VERSION, type , path, LocalDateTime.now(), msg);
+                fw.write(out + System.lineSeparator());
         } catch (IOException e) {
             // In caso di errore, stampiamo lo stack trace
             // e.printStackTrace();
