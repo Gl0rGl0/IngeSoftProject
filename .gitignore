@@ -4,11 +4,14 @@
 # Log file
 *.log
 
+#vscode
+.vscode/
+
 # Package Files #
-#*.jar
+*.jar
 *.war
 *.nar
 *.ear
-#*.zip #poi li rimetto
+*.zip
 *.tar.gz
 *.rar
