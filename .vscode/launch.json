@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "ingsoft.Main",
+            "projectName": "IngeSoftProject_c17daa8d"
+        },
+        {
+            "type": "java",
+            "name": "LoginApp",
+            "request": "launch",
+            "mainClass": "GUI.LoginApp",
+            "projectName": "IngeSoftProject_c17daa8d",
+            "vmArgs": "--module-path ${workspaceFolder}/lib/javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}

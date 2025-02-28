@@ -16,11 +16,13 @@ import java.util.ArrayList;
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
 public class Main {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 
         DBUtils model = new DBUtils();
         App controller = new App(model);
         ViewSE view = new ViewSE(controller);
+
+        // TODO mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
 
         Test(controller); // Prima di avviare il ciclo...
 
@@ -95,7 +97,7 @@ public class Main {
         String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa";
         String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo";
         String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe";
-        
+
         controller.interpreter(addVisita + visitaT1);
         controller.interpreter(addVisita + visitaT3);
         controller.interpreter(addVisita + visitaT2);
@@ -114,14 +116,14 @@ public class Main {
         String addCofig = "add -c ";
         String configuratore1 = "config1 pass1C";
         String configuratore2 = "config2 pass2C";
-        
+
         controller.interpreter(addCofig + configuratore1);
         controller.interpreter(addCofig + configuratore2);
 
         String addVolont = "add -v ";
         String volontario1 = "volont1 pass1V";
         String volontario2 = "volont2 pass2V";
-        
+
         controller.interpreter(addVolont + volontario1);
         controller.interpreter(addVolont + volontario2);
 
@@ -129,7 +131,7 @@ public class Main {
         String fruitore1 = "fruit1 pass1F";
         String fruitore2 = "fruit2 pass2F";
         String fruitore3 = "fruit3 pass3F";
-        
+
         controller.interpreter(addFruit + fruitore1);
         controller.interpreter(addFruit + fruitore2);
         controller.interpreter(addFruit + fruitore3);

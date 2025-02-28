@@ -1,0 +1,35 @@
+/* Imposta lo stile di base per il root (GridPane) */
+.root {
+    -fx-background-color: #f0f0f0;
+    background-color:#f0f0f0;
+}
+
+/* Stile per le Label */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Stile per i TextField e PasswordField */
+.text-field {
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+
+    font-size: 14px;
+    padding: 5px;
+}
+
+/* Stile per il bottone */
+.button {
+    -fx-background-color: #007ACC;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+
+    background-color: #007ACC;
+    font-size: 14px;
+    padding: 5px 10px;
+}
