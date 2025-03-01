@@ -35,9 +35,9 @@ public class RemoveCommand extends AbstractCommand {
         switch (option) {
             case 'c' -> removeConfiguratore(ar);
             case 'f' -> removeFruitore(ar);
-            case 'v' -> removeVolontario(ar);
-            case 't' -> removeTipoVisita(ar);
-            case 'L' -> removeLuogo(ar);
+            case 'v' -> {if(app.date.getGiorno() == 16) removeVolontario(ar); else ViewSE.println("Azione possibile solo il 16 del mese!");}
+            case 't' -> {if(app.date.getGiorno() == 16) removeTipoVisita(ar); else ViewSE.println("Azione possibile solo il 16 del mese!");}
+            case 'L' -> {if(app.date.getGiorno() == 16) removeLuogo(ar); else ViewSE.println("Azione possibile solo il 16 del mese!");}
             default -> ViewSE.println("Opzione non riconosciuta per 'remove'.");
         }
     }

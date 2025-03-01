@@ -34,7 +34,7 @@ public class AddCommand extends AbstractCommand {
             case 'c' -> addConfiguratore(args);
             case 'f' -> addFruitore(args);
             case 'v' -> addVolontario(args);
-            case 'L' -> addLuoghi(args);
+            case 'L' -> {if(app.date.getGiorno() == 16) addLuoghi(args); else ViewSE.println("Azione possibile solo il 16 del mese!");}
             case 't' -> addTipoVisita(args);
             default -> ViewSE.println("Opzione non riconosciuta per 'add'.");
         }

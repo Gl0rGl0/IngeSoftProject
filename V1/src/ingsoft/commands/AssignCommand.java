@@ -35,10 +35,8 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
         switch (options[0]) {
-            case "v" ->
-                assignVolontario(arg[0], arg[1]);
-            case "t" ->
-                assignVisita(arg[0], arg[1]);
+            case "v" ->{if(app.date.getGiorno() == 16) assignVolontario(arg[0], arg[1]); else ViewSE.println("Azione possibile solo il 16 del mese!");}
+            case "t" ->{if(app.date.getGiorno() == 16) assignVisita(arg[0], arg[1]); else ViewSE.println("Azione possibile solo il 16 del mese!");}
             default ->
                 ViewSE.println("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
         }

@@ -165,8 +165,16 @@ public class App {
 
         switch (date.getGiorno()) {
             case 1 -> db.refreshPrecludedDate(this.date);
-            // case 16 -> makePianoVisite();
+            //case 16 -> attivita16();
         }
 
     }
+
+    // public void notPossibileCreareOrario() {
+    //     possibileCreareOrario = false;
+    // }
+
+    // public void possibileCreareOrario() {
+    //     possibileCreareOrario = true;
+    // }
 }
