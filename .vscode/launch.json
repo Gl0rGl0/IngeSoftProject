@@ -12,7 +12,7 @@
             "type": "java",
             "name": "LoginApp",
             "request": "launch",
-            "mainClass": "GUI.LoginApp",
+            "mainClass": "GUI.LauncherApp",
             "projectName": "IngeSoftProject_c17daa8d",
             "vmArgs": "--module-path ${workspaceFolder}/lib/javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
         }
