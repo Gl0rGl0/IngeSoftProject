@@ -1,10 +1,10 @@
 package ingsoft.luoghi;
 
+import ingsoft.ViewSE;
 import ingsoft.util.Date;
 import ingsoft.util.DayOfWeekConverter;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
-import ingsoft.util.ViewSE;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class TipoVisita {
         this.UID = UID;
 
         this.dataInserimento = dataI;
-        
+
         this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
 
     }
@@ -78,12 +78,12 @@ public class TipoVisita {
 
     public String getGiorniString() {
         return DayOfWeekConverter.daysToString(giorni.toArray(new DayOfWeek[0]));
-    }    
+    }
 
-    public ArrayList<DayOfWeek> getGiorni(){
+    public ArrayList<DayOfWeek> getGiorni() {
         return giorni;
     }
-    
+
     public String getUID() {
         return this.UID;
     }
@@ -199,7 +199,7 @@ public class TipoVisita {
     }
 
     public void isMeseScaduto(Date d) {
-        if(this.sv == StatusVisita.PROPOSTA)
+        if (this.sv == StatusVisita.PROPOSTA)
             return;
 
         if (Math.abs(d.giornoDellAnno() - dataInserimento.giornoDellAnno()) >= Date.lunghezzaMese(dataInserimento))

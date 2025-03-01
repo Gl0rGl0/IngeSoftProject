@@ -1,14 +1,15 @@
 package ingsoft.commands.setup;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
-import ingsoft.util.ViewSE;
 
-public class LoginCommandSETUP extends AbstractCommand{
+public class LoginCommandSETUP extends AbstractCommand {
 
     private final App app;
+
     public LoginCommandSETUP(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.LOGIN;
@@ -26,20 +27,21 @@ public class LoginCommandSETUP extends AbstractCommand{
             ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
-        
+
         Persona p = login(args[0], args[1]);
         app.user = p;
 
-        if (app.user.type() == PersonaType.CONFIGURATORE) { //SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
+        if (app.user.type() == PersonaType.CONFIGURATORE) { // SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
             ViewSE.println("Login effettuato con successo (" + app.user.type() + ")");
-            if(app.user.firstAccess()){
-                ViewSE.println("Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
+            if (app.user.firstAccess()) {
+                ViewSE.println(
+                        "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }
             this.hasBeenExecuted = true;
         } else {
-            if(app.user.type() != PersonaType.GUEST){
+            if (app.user.type() != PersonaType.GUEST) {
                 ViewSE.println("Errore di login, riprova.");
-            }else{
+            } else {
                 ViewSE.println("Solo i configuratori possono accedere, riprova.");
             }
         }

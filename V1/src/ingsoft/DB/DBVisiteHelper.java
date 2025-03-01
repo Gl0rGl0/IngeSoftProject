@@ -1,9 +1,10 @@
 package ingsoft.DB;
 
+import ingsoft.ViewSE;
 import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.Visita;
 import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
      */
     public void removeVisita(String nome, String data) {
         Visita toRemove = findVisita(nome, data);
-        if(toRemove == null)
+        if (toRemove == null)
             return;
         visiteRepository.remove(toRemove.getUID());
     }
@@ -64,7 +65,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
     public ArrayList<Visita> getCompletate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if(v.getStatus() == StatusVisita.COMPLETA)
+            if (v.getStatus() == StatusVisita.COMPLETA)
                 out.add(v);
         }
 
@@ -74,7 +75,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
     public ArrayList<Visita> getConfermate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if(v.getStatus() == StatusVisita.CONFERMATA)
+            if (v.getStatus() == StatusVisita.CONFERMATA)
                 out.add(v);
         }
 
@@ -84,7 +85,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
     public ArrayList<Visita> getCancellate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if(v.getStatus() == StatusVisita.CANCELLATA)
+            if (v.getStatus() == StatusVisita.CANCELLATA)
                 out.add(v);
         }
 
@@ -94,24 +95,24 @@ public class DBVisiteHelper extends DBAbstractHelper {
     public ArrayList<Visita> getVisiteProposte() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if(v.getStatus() == StatusVisita.PROPOSTA)
+            if (v.getStatus() == StatusVisita.PROPOSTA)
                 out.add(v);
         }
 
         return out;
     }
 
-    public void checkVisiteInTerminazione(Date d){
+    public void checkVisiteInTerminazione(Date d) {
         for (Visita v : getVisite()) {
             v.mancano3Giorni(d);
-            if(v.getStatus() == StatusVisita.CANCELLATA){
+            if (v.getStatus() == StatusVisita.CANCELLATA) {
                 scriviVisiteCancellate(v);
                 visiteRepository.remove(v.getUID());
             }
         }
     }
 
-    private boolean scriviVisiteCancellate(Visita toAdd){
+    private boolean scriviVisiteCancellate(Visita toAdd) {
         if (!visiteRepository.containsKey(toAdd.getUID())) {
             return false;
         }
@@ -131,7 +132,8 @@ public class DBVisiteHelper extends DBAbstractHelper {
                 properties.setProperty(keyPrefix + index + ".titolo", toAdd.getTitolo());
                 properties.setProperty(keyPrefix + index + ".stato", toAdd.getStatus().toString());
                 properties.setProperty(keyPrefix + index + ".data", toAdd.getData().toString());
-                properties.setProperty(keyPrefix + index + ".partecipanti", toAdd.getAttualeCapienza() + "/" + toAdd.tipo.getNumMaxPartecipants());
+                properties.setProperty(keyPrefix + index + ".partecipanti",
+                        toAdd.getAttualeCapienza() + "/" + toAdd.tipo.getNumMaxPartecipants());
                 properties.setProperty(keyPrefix + index + ".UID", toAdd.getUID());
 
                 try {
@@ -146,7 +148,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
         }
     }
 
-    public ArrayList<String> getVisiteEffettuate(){
+    public ArrayList<String> getVisiteEffettuate() {
         Properties properties;
         try {
             properties = loadProperties(fileName);
@@ -167,7 +169,7 @@ public class DBVisiteHelper extends DBAbstractHelper {
             String capienza = properties.getProperty(keyPrefix + index + ".partecipanti");
             String uid = properties.getProperty(keyPrefix + index + ".UID");
 
-            if(uid == null)
+            if (uid == null)
                 break;
 
             String out = titolo + " " + status + " " + data + " " + capienza + " " + uid;

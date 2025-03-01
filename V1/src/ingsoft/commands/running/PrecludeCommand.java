@@ -1,9 +1,9 @@
 package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
 
 public class PrecludeCommand extends AbstractCommand {
 
@@ -25,7 +25,8 @@ public class PrecludeCommand extends AbstractCommand {
         Date toOperate = new Date(args[0]); // SPERANDO CHE SIA NEL FORMATO CORRETTO, MAGARI UN TRYCATCH PROSSIMAMENTE
 
         if (!separatiDaDueMesi(toOperate, app.date)) {
-            ViewSE.println("Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al mese successivo al prossimo");
+            ViewSE.println(
+                    "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al mese successivo al prossimo");
         }
 
         char option = options[0].charAt(0);

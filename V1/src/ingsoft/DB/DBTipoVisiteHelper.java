@@ -1,12 +1,13 @@
 package ingsoft.DB;
 
+import ingsoft.ViewSE;
 import ingsoft.luoghi.StatusVisita;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.util.AssertionControl;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
 import ingsoft.util.Ora;
-import ingsoft.util.ViewSE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +112,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
         try {
             properties = loadProperties(fileName);
         } catch (IOException e) {
-            AssertionControl.logMessage("Errore durante il caricamento del file: " + e.getMessage(), 1, this.getClass().getSimpleName());
+            AssertionControl.logMessage("Errore durante il caricamento del file: " + e.getMessage(), 1,
+                    this.getClass().getSimpleName());
             return false;
         }
         int index = 1;
@@ -236,6 +238,10 @@ public class DBTipoVisiteHelper extends DBAbstractHelper {
             if (tv.getStato() != StatusVisita.ATTESA)
                 out.add(tv);
         }
-       return out;
+        return out;
+    }
+
+    public boolean isNew() {
+        return tipiVisitaRepository.size() == 0;
     }
 }

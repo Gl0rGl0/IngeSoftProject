@@ -1,12 +1,12 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.setup.CommandListSETUP;
 import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.persone.Volontario;
 import ingsoft.util.StringUtils;
-import ingsoft.util.ViewSE;
 
 public class AssignCommand extends AbstractCommand {
 

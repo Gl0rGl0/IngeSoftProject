@@ -3,14 +3,10 @@ package ingsoft.DB;
 import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.TipoVisita;
 import ingsoft.luoghi.Visita;
-import ingsoft.persone.Configuratore;
-import ingsoft.persone.Fruitore;
-import ingsoft.persone.Guest;
-import ingsoft.persone.Persona;
-import ingsoft.persone.PersonaType;
-import ingsoft.persone.Volontario;
+import ingsoft.persone.*;
 import ingsoft.util.Date;
 import ingsoft.util.GPS;
+
 import java.util.ArrayList;
 
 public class DBUtils {
@@ -22,6 +18,9 @@ public class DBUtils {
     public final DBLuoghiHelper dbLuoghiHelper;
     public final DBDatesHelper dbDatesHelper;
 
+    private boolean isNew;
+    public String ambitoTerritoriale;
+
     // Costruttore e inizializzazione degli helper
     public DBUtils() {
         dbConfiguratoreHelper = new DBConfiguratoreHelper();
@@ -31,6 +30,20 @@ public class DBUtils {
         dbVisiteHelper = new DBVisiteHelper();
         dbLuoghiHelper = new DBLuoghiHelper();
         dbDatesHelper = new DBDatesHelper();
+
+        this.isNew = dbConfiguratoreHelper.isNew() && dbLuoghiHelper.isNew();
+    }
+
+    public boolean getNew() {
+        return this.isNew;
+    }
+
+    public void setAmbito(String ambito) {
+        this.ambitoTerritoriale = ambito;
+    }
+
+    public String getAmbito() {
+        return this.ambitoTerritoriale;
     }
 
     // ================================================================
@@ -56,8 +69,8 @@ public class DBUtils {
         return dbTipoVisiteHelper.getTipiVisita();
     }
 
-    //GETTER VARIABILI
-    public ArrayList<TipoVisita> getTipoVisiteIstanziabili(){
+    // GETTER VARIABILI
+    public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {
         return dbTipoVisiteHelper.getTipoVisiteIstanziabili();
     }
 
@@ -65,19 +78,19 @@ public class DBUtils {
     // Adders per oggetti già creati
     // ================================================================
     public boolean addConfiguratore(Configuratore c) {
-        if(findUser(c.getUsername()) != null)
+        if (findUser(c.getUsername()) != null)
             return false;
         return dbConfiguratoreHelper.addPersona(c);
     }
 
     public boolean addFruitore(Fruitore f) {
-        if(findUser(f.getUsername()) != null)
+        if (findUser(f.getUsername()) != null)
             return false;
         return dbFruitoreHelper.addPersona(f);
     }
 
     public boolean addVolontario(Volontario v) {
-        if(findUser(v.getUsername()) != null)
+        if (findUser(v.getUsername()) != null)
             return false;
         return dbVolontarioHelper.addPersona(v);
     }
@@ -98,19 +111,19 @@ public class DBUtils {
     // Adders per oggetti da creare tramite username/psw - String
     // ================================================================
     public boolean addConfiguratore(String user, String psw) {
-        if(findUser(user) != null)
+        if (findUser(user) != null)
             return false;
         return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, "1"));
     }
 
     public boolean addFruitore(String user, String psw) {
-        if(findUser(user) != null)
+        if (findUser(user) != null)
             return false;
         return dbFruitoreHelper.addPersona(new Fruitore(user, psw, "1"));
     }
 
     public boolean addVolontario(String user, String psw) {
-        if(findUser(user) != null)
+        if (findUser(user) != null)
             return false;
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
     }
@@ -127,15 +140,15 @@ public class DBUtils {
     }
 
     public boolean removeFruitore(String username) {
-        //eliminare tutte le iscrizioni a lui collegate
+        // eliminare tutte le iscrizioni a lui collegate
         return dbFruitoreHelper.removePersona(username);
     }
 
     public boolean removeVolontario(String username) {
         Volontario toRemove = findVolontario(username);
-        if(toRemove == null)
+        if (toRemove == null)
             return false;
-        
+
         for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
             tv.removeVolontario(username);
         }
@@ -143,10 +156,10 @@ public class DBUtils {
     }
 
     public boolean removeTipoVisita(String nomeVisita) {
-        TipoVisita toRemove = getTipoVisita(nomeVisita);
-        if(toRemove == null)
+        TipoVisita toRemove = getTipoVisitaByName(nomeVisita);
+        if (toRemove == null)
             return false;
-        
+
         for (Luogo l : dbLuoghiHelper.getLuoghi()) {
             l.removeTipoVisita(nomeVisita);
         }
@@ -160,9 +173,9 @@ public class DBUtils {
 
     public boolean removeLuogo(String nomeLuogo) {
         Luogo toRemove = getLuogoByName(nomeLuogo);
-        if(toRemove == null)
+        if (toRemove == null)
             return false;
-        
+
         return dbLuoghiHelper.removeLuogo(nomeLuogo);
     }
 
@@ -178,28 +191,28 @@ public class DBUtils {
         };
     }
 
-    public void refreshPrecludedDate(Date d){
+    public void refreshPrecludedDate(Date d) {
         dbDatesHelper.refreshPrecludedDate(d);
     }
 
-    public void refreshVisiteTipoVisite(Date d){
+    public void refreshVisiteTipoVisite(Date d) {
         checkVisiteInTerminazione(d);
         checkTipoVisiteAttese(d);
     }
 
-    private void checkTipoVisiteAttese(Date d){
+    private void checkTipoVisiteAttese(Date d) {
         dbTipoVisiteHelper.checkTipoVisiteAttese(d);
     }
 
-    private void checkVisiteInTerminazione(Date d){
+    private void checkVisiteInTerminazione(Date d) {
         dbVisiteHelper.checkVisiteInTerminazione(d);
     }
 
-    public void refresher(){
-        //refresh volontari
-        //refresh visite
-        //refresh tipovisite
-        //refresh iscrizioni
+    public void refresher() {
+        // refresh volontari
+        // refresh visite
+        // refresh tipovisite
+        // refresh iscrizioni
     }
 
     // ================================================================
@@ -270,8 +283,8 @@ public class DBUtils {
         return dbLuoghiHelper.findLuogo(nomeLuogo);
     }
 
-    public TipoVisita getTipoVisita(String nome) {
-        return dbTipoVisiteHelper.findTipoVisita(nome);
+    public Visita getVisitaByName(String string, String data) {
+        return dbVisiteHelper.findVisita(string, data);
     }
 
     // ================================================================
@@ -285,7 +298,7 @@ public class DBUtils {
         return dbTipoVisiteHelper.getTipiVisitaByUID(uid);
     }
 
-    public Visita getVisitaByUID(String uid){
+    public Visita getVisitaByUID(String uid) {
         return dbVisiteHelper.getVisiteByUID(uid);
     }
 

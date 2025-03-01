@@ -1,6 +1,7 @@
 package ingsoft.luoghi;
 
 import ingsoft.util.GPS;
+
 import java.util.ArrayList;
 import java.util.UUID;
 

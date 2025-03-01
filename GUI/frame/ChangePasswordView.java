@@ -8,12 +8,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
+
 import java.util.Random;
 
 public class ChangePasswordView {
@@ -60,7 +57,7 @@ public class ChangePasswordView {
         messageLabel.getStyleClass().add("message-label"); // In CSS, potrai definire stili per error e success
         messageLabel.setVisible(false);
 
-        resetButton.setOnAction(e -> {
+        resetButton.setOnAction(_ -> {
             if (phase.equals("change")) {
                 String newPass = passwordField.getText();
                 String confirmPass = confirmPasswordField.getText();
@@ -185,12 +182,12 @@ public class ChangePasswordView {
         Tooltip.install(bottomLogoutIconContainer, logoutTooltip);
 
         // Al click sull'icona in basso (home), passa alla pagina di cambio password
-        bottomIconContainer.setOnMouseClicked(e -> {
+        bottomIconContainer.setOnMouseClicked(_ -> {
             mainFrame.showMainApp();
         });
 
         // Al click sull'icona di logout, torna alla login
-        bottomLogoutIconContainer.setOnMouseClicked(e -> {
+        bottomLogoutIconContainer.setOnMouseClicked(_ -> {
             mainFrame.showLogin();
         });
 

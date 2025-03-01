@@ -1,10 +1,10 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.running.CommandList;
-import ingsoft.util.ViewSE;
 
-public class HelpCommand extends AbstractCommand{
+public class HelpCommand extends AbstractCommand {
 
     private final App app;
 
@@ -24,7 +24,8 @@ public class HelpCommand extends AbstractCommand{
                 // Il valore non corrisponde a nessun CommandList
             }
         }
-        // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al livello dell'utente
+        // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al
+        // livello dell'utente
         ViewSE.println(super.commandInfo.getHelpMessage(app.getCurrentUser().getPriorita()));
     }
 

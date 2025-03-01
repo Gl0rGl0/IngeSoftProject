@@ -1,15 +1,17 @@
 package ingsoft.persone;
 
+import ingsoft.ViewSE;
 import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Volontario extends Persona {
 
-    // Disponibilità: 
+    // Disponibilità:
     // disponibilita[0] -> periodo chiuso (non modificabile)
-    // disponibilita[1] -> periodo modificabile, definito dal cutoff (dal 16 del mese X al 15 del mese X+1)
+    // disponibilita[1] -> periodo modificabile, definito dal cutoff (dal 16 del
+    // mese X al 15 del mese X+1)
     public boolean[] disponibilita = new boolean[31];
     public int numDisponibilita;
     private boolean valid = false;
@@ -91,7 +93,7 @@ public class Volontario extends Persona {
         return numDisponibilita;
     }
 
-    public void refreshGiornaliero(){
-        
+    public void refreshGiornaliero() {
+
     }
 }

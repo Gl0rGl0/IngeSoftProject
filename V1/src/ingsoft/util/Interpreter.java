@@ -1,8 +1,10 @@
 package ingsoft.util;
 
+import ingsoft.ViewSE;
 import ingsoft.commands.Command;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,12 +16,12 @@ public class Interpreter {
     public Interpreter(Map<String, Command> commandRegistry) {
         this.commandRegistry = commandRegistry;
     }
-    
+
     // Permette di aggiornare la mappa dei comandi in caso di necessità
     public void setCommandRegistry(Map<String, Command> commandRegistry) {
         this.commandRegistry = commandRegistry;
     }
-    
+
     /**
      * Interpreta il prompt fornito dall'utente e, in base alla mappa dei comandi,
      * esegue l'azione corrispondente.
@@ -30,16 +32,16 @@ public class Interpreter {
     public void interpret(String prompt, Persona currentUser) {
         String[] tokens = prompt.trim().split("\\s+");
 
-        if(tokens.length == 0 || tokens[0].isEmpty()){
+        if (tokens.length == 0 || tokens[0].isEmpty()) {
             AssertionControl.logMessage("ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
             ViewSE.println("Errore: nessun comando fornito.");
             return;
         }
-        
+
         String cmd = tokens[0];
         ArrayList<String> optionsList = new ArrayList<>();
         ArrayList<String> argsList = new ArrayList<>();
-        
+
         // Separa opzioni (token che iniziano con '-') e argomenti
         for (int i = 1; i < tokens.length; i++) {
             String token = tokens[i];
@@ -49,10 +51,10 @@ public class Interpreter {
                 argsList.add(token);
             }
         }
-        
+
         String[] options = optionsList.toArray(String[]::new);
         String[] args = argsList.toArray(String[]::new);
-        
+
         Command command = commandRegistry.get(cmd);
         if (command != null) {
             int userPerm = currentUser.type().getPriorita();
@@ -75,11 +77,11 @@ public class Interpreter {
         }
     }
 
-    public boolean haveAllBeenExecuted(){
+    public boolean haveAllBeenExecuted() {
         boolean out = true;
         for (Command c : commandRegistry.values()) {
             out &= c.hasBeenExecuted();
         }
-        return out;     //Ne basta una false per dare false come risultato
+        return out; // Ne basta una false per dare false come risultato
     }
 }

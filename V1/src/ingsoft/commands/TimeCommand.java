@@ -1,9 +1,9 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.running.CommandList;
 import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
 
 public class TimeCommand extends AbstractCommand {
     App app;
@@ -19,7 +19,7 @@ public class TimeCommand extends AbstractCommand {
             ViewSE.println(app.date);
             return;
         }
-        if(options.length > 0){
+        if (options.length > 0) {
             switch (options[0]) {
                 case "s" -> app.date = new Date(args[0]);
                 case "d" -> saltaG(args[0], 1);
@@ -28,12 +28,12 @@ public class TimeCommand extends AbstractCommand {
                 case "n" -> app.addPrecludedDate(args[0]);
                 case "l" -> ViewSE.println(app.getDate());
             }
-        }else{
+        } else {
             ViewSE.println(app.date);
         }
     }
 
-    private void saltaG(String d, int mult){
+    private void saltaG(String d, int mult) {
         int g;
         try {
             g = Integer.parseInt(d) * mult;
@@ -43,9 +43,9 @@ public class TimeCommand extends AbstractCommand {
         }
 
         app.date.modifica(g);
-        if(g > 0){
+        if (g > 0) {
             ViewSE.println("Saltati con successo " + g + " giorni.");
-        }else{
+        } else {
             ViewSE.println("Tornato indietro di " + g + " giorni con successo.");
         }
     }

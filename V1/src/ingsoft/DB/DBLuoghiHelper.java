@@ -1,8 +1,9 @@
 package ingsoft.DB;
 
+import ingsoft.ViewSE;
 import ingsoft.luoghi.Luogo;
 import ingsoft.util.GPS;
-import ingsoft.util.ViewSE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,5 +175,9 @@ public class DBLuoghiHelper extends DBAbstractHelper {
             }
         }
         return null;
+    }
+
+    public boolean isNew() {
+        return luoghiRepository.size() == 0;
     }
 }

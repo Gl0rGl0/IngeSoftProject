@@ -1,14 +1,15 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.running.CommandList;
 import ingsoft.persone.Guest;
 import ingsoft.persone.PersonaType;
-import ingsoft.util.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
 
     private final App app;
+
     public LogoutCommand(App app) {
         this.app = app;
         super.commandInfo = CommandList.LOGOUT;

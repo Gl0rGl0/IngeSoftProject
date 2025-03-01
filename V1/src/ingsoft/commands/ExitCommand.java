@@ -1,7 +1,7 @@
 package ingsoft.commands;
 
+import ingsoft.ViewSE;
 import ingsoft.commands.running.CommandList;
-import ingsoft.util.ViewSE;
 
 public class ExitCommand extends AbstractCommand {
 
@@ -13,5 +13,5 @@ public class ExitCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         ViewSE.println("Programma terminato. Arrivederci!");
         System.exit(0);
-    } 
+    }
 }

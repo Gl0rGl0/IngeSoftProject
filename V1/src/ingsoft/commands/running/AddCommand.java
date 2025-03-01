@@ -1,10 +1,10 @@
 package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.util.AssertionControl;
 import ingsoft.util.StringUtils;
-import ingsoft.util.ViewSE;
 
 public class AddCommand extends AbstractCommand {
     private final App app;
@@ -42,27 +42,27 @@ public class AddCommand extends AbstractCommand {
 
     private void addConfiguratore(String[] args) {
         // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
-        if(app.db.addConfiguratore(args[0], args[1])){
+        if (app.db.addConfiguratore(args[0], args[1])) {
             AssertionControl.logMessage("Aggiunto configuratore: " + args[0], 3, this.getClass().getSimpleName());
-        }else{
+        } else {
             AssertionControl.logMessage("Non aggiunto configuratore: " + args[0], 2, this.getClass().getSimpleName());
         }
     }
 
     private void addFruitore(String[] args) {
         // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
-        if(app.db.addFruitore(args[0], args[1])){
+        if (app.db.addFruitore(args[0], args[1])) {
             AssertionControl.logMessage("Aggiunto fruitore: " + args[0], 3, this.getClass().getSimpleName());
-        }else{
+        } else {
             AssertionControl.logMessage("Non aggiunto fruitore: " + args[0], 2, this.getClass().getSimpleName());
         }
     }
 
     private void addVolontario(String[] args) {
         // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
-        if(app.db.addVolontario(args[0], args[1])){
+        if (app.db.addVolontario(args[0], args[1])) {
             AssertionControl.logMessage("Aggiunto volontario: " + args[0], 3, this.getClass().getSimpleName());
-        }else{
+        } else {
             AssertionControl.logMessage("Non aggiunto volontario: " + args[0], 2, this.getClass().getSimpleName());
         }
     }
@@ -74,10 +74,11 @@ public class AddCommand extends AbstractCommand {
 
     private void addLuoghi(String[] args) {
         // NON PUOI USARLO ADESSO, ASPETTA LA V3...
-        AssertionControl.logMessage("Non puoi aggiungere un luogo prima della V3: " + args[0], 2, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Non puoi aggiungere un luogo prima della V3: " + args[0], 2,
+                this.getClass().getSimpleName());
 
-    //    String[] a = StringUtils.joinQuotedArguments(args);
-        
-    //     app.db.addLuogo(a[0], a[1], new GPS(a[2]));
+        // String[] a = StringUtils.joinQuotedArguments(args);
+
+        // app.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 }

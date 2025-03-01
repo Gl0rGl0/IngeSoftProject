@@ -1,12 +1,13 @@
 package ingsoft.commands;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.setup.CommandListSETUP;
-import ingsoft.util.ViewSE;
 
 public class SetPersoneMaxCommand extends AbstractCommand {
 
     private final App app;
+
     public SetPersoneMaxCommand(App app) {
         this.app = app;
         super.commandInfo = CommandListSETUP.SETMAX;
@@ -25,6 +26,6 @@ public class SetPersoneMaxCommand extends AbstractCommand {
             return;
         }
 
-        this.hasBeenExecuted = true;        //DEVE ESSERE ESEGUITO ANCHE A SETUP
+        this.hasBeenExecuted = true; // DEVE ESSERE ESEGUITO ANCHE A SETUP
     }
 }

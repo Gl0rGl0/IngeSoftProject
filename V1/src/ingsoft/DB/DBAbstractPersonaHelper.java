@@ -1,8 +1,9 @@
 package ingsoft.DB;
 
+import ingsoft.ViewSE;
 import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
-import ingsoft.util.ViewSE;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -177,5 +178,9 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     public static String securePsw(String user, String psw) {
         return Integer.toHexString(user.hashCode() + psw.hashCode());
+    }
+
+    public boolean isNew() {
+        return cachedPersons.size() == 0;
     }
 }

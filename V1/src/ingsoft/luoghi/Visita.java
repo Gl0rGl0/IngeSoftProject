@@ -3,7 +3,7 @@ package ingsoft.luoghi;
 import ingsoft.persone.Fruitore;
 import ingsoft.persone.Iscrizione;
 import ingsoft.util.Date;
-import ingsoft.util.ViewSE;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -35,11 +35,11 @@ public class Visita {
         return this.stato;
     }
 
-    public void setVolontario(String uidVolontario){
+    public void setVolontario(String uidVolontario) {
         this.volontarioUID = uidVolontario;
     }
 
-    public String getUidVolontario(){
+    public String getUidVolontario() {
         return this.volontarioUID;
     }
 
@@ -67,34 +67,41 @@ public class Visita {
         this.stato = s;
     }
 
-    public boolean isPresenteFruitore(String userF){
-        for(Iscrizione i : partecipanti){
-            if(i.fruitoreUID.equals(userF))
+    public boolean isPresenteFruitore(String userF) {
+        for (Iscrizione i : partecipanti) {
+            if (i.fruitoreUID.equals(userF))
                 return true;
         }
         return false;
     }
 
-    public void aggiungiPartecipanti(Fruitore f, int n) {
+    public String aggiungiPartecipanti(Fruitore f, int n) {
         if (tipo.numMaxPartecipants - getAttualeCapienza() < n) {
-            ViewSE.println("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
-            return;
+            return "capienza";
         }
 
-        partecipanti.add(new Iscrizione(f.getUsername(), n));
+        if (isPresenteFruitore(f.getUsername())) {
+            return "presente";
+        }
+
+        Iscrizione nuova = new Iscrizione(f.getUsername(), n);
+        partecipanti.add(nuova);
 
         if (getAttualeCapienza() == tipo.numMaxPartecipants) {
             setStatus(StatusVisita.COMPLETA);
         }
+        return nuova.getUIDFruitore();
     }
 
-    public void rimuoviPartecipante(Iscrizione i){
+    public void rimuoviPartecipante(String user) {
         int capienzaAttuale = getAttualeCapienza();
-        if (partecipanti.remove(i)) {
-            if(capienzaAttuale == tipo.getNumMaxPartecipants())
-                setStatus(StatusVisita.PROPOSTA);
+        for (Iscrizione i : partecipanti) {
+            if (i.getUIDFruitore().equals(user)) {
+                if (partecipanti.remove(i) && capienzaAttuale == tipo.getNumMaxPartecipants())
+                    setStatus(StatusVisita.PROPOSTA);
+                return;
+            }
         }
-        
     }
 
     public int getAttualeCapienza() {
@@ -105,23 +112,23 @@ public class Visita {
         return out;
     }
 
-    public void mancano3Giorni(Date d){
-        if(data.giornoDellAnno() - d.giornoDellAnno() <= 3){
-            if(getAttualeCapienza() < this.tipo.numMinPartecipants){
+    public void mancano3Giorni(Date d) {
+        if (data.giornoDellAnno() - d.giornoDellAnno() <= 3) {
+            if (getAttualeCapienza() < this.tipo.numMinPartecipants) {
                 this.stato = StatusVisita.CANCELLATA;
-            }else{
+            } else {
                 this.stato = StatusVisita.CONFERMATA;
             }
         }
     }
 
     @Override
-    public String toString(){
-        return  "Titolo: " + tipo.getTitolo()
-            +   "\nDescrizione: " + tipo.getDescrizione()
-            +   "\nPunto Incontro: " + tipo.getGps() 
-            +   "\nData: " + data
-            +   "\nOra: " + tipo.getOraInizio()
-            +   "\nBiglietto necessario: " + tipo.isFree();
-    }   
+    public String toString() {
+        return "Titolo: " + tipo.getTitolo()
+                + "\nDescrizione: " + tipo.getDescrizione()
+                + "\nPunto Incontro: " + tipo.getGps()
+                + "\nData: " + data
+                + "\nOra: " + tipo.getOraInizio()
+                + "\nBiglietto necessario: " + tipo.isFree();
+    }
 }

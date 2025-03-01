@@ -2,11 +2,7 @@ package ingsoft;
 
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
-import ingsoft.persone.Fruitore;
 import ingsoft.persone.Guest;
-import ingsoft.persone.Volontario;
-import ingsoft.util.ViewSE;
-import java.util.ArrayList;
 
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -16,21 +12,23 @@ import java.util.ArrayList;
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
 
         DBUtils model = new DBUtils();
         App controller = new App(model);
         ViewSE view = new ViewSE(controller);
 
-        // TODO mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
+        // Mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
+        controller.skipSetupTesting = model.getNew();
 
-        Test(controller); // Prima di avviare il ciclo...
+        if (controller.skipSetupTesting)
+            Test(controller); // Prima di avviare il ciclo...
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
         // dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
-        controller.skipSetupTesting = true;
+
         view.run();
     }
 
@@ -70,23 +68,6 @@ public class Main {
         // v.setDisponibilita(controller.date, new Date("26/03/2025"));
         // v.setDisponibilita(controller.date, new Date("28/03/2025"));
         // v.printDisponibilita();
-    }
-
-    public static void initPersone(App controller) {
-        // Ogni tipologia di persona ha i suoi metodi per aggiungere/rimuovere un
-        // elemento
-        ArrayList<Boolean> out = new ArrayList<>();
-        out.add(controller.db.addConfiguratore("config1", "pass1C"));
-        out.add(controller.db.addConfiguratore(new Configuratore("config2", "pass2C", "1")));
-
-        out.add(controller.db.addFruitore("fruit1", "pass1F"));
-        out.add(controller.db.addFruitore("fruit2", "pass2F"));
-        out.add(controller.db.addFruitore(new Fruitore("fruit3", "pass3F", "1")));
-
-        out.add(controller.db.addVolontario("volont1", "pass1V"));
-        out.add(controller.db.addVolontario(new Volontario("volont2", "pass2V", "1")));
-        out.add(controller.db.addVolontario(new Volontario("volont3", "pass3V", "1")));
-        ViewSE.println(out + "\n---------------------------");
     }
 
     public static void initDBInterprete(App controller) {

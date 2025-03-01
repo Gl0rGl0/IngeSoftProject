@@ -4,12 +4,19 @@ import ingsoft.DB.DBUtils;
 import ingsoft.commands.*;
 import ingsoft.commands.running.*;
 import ingsoft.commands.setup.*;
-import ingsoft.luoghi.*;
-import ingsoft.persone.*;
-import ingsoft.util.*;
+import ingsoft.persone.Guest;
+import ingsoft.persone.Persona;
+import ingsoft.util.AssertionControl;
 import ingsoft.util.Date;
-import java.util.*;
-import java.util.concurrent.*;
+import ingsoft.util.Interpreter;
+import ingsoft.util.TimeHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class App {
 
@@ -27,7 +34,6 @@ public class App {
     // private static final String MAX_PRENOTAZIONI_SCELTO = "Numero correttamente
     // impostato: ";
 
-    public String ambitoTerritoriale = new String();
     public int maxPrenotazioniPerPersona;
 
     public DBUtils db;
@@ -128,9 +134,10 @@ public class App {
 
     boolean skipSetupTesting = false;
 
-    public boolean setupCompleted(){
-        // AssertionControl.logMessage("SetUp completato", 3, this.getClass().getSimpleName());
-        return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting;
+    public boolean setupCompleted() {
+        // AssertionControl.logMessage("SetUp completato", 3,
+        // this.getClass().getSimpleName());
+        return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.getNew();
     }
 
     public Persona getCurrentUser() {
@@ -154,136 +161,12 @@ public class App {
 
     public void azioneDelGiorno() {
 
-        //refresh--3 giorni al termine -> STATO.CLOSE
+        // refresh--3 giorni al termine -> STATO.CLOSE
 
         switch (date.getGiorno()) {
             case 1 -> db.refreshPrecludedDate(this.date);
-            //case 16 -> makePianoVisite();
+            // case 16 -> makePianoVisite();
         }
-        
+
     }
-
-    public void makePianoVisite() {
-        int currentMonth = date.getMese(); // mese attuale (1-based)
-        // Per test: se il mese attuale è 11, allora il mese prossimo (secondo la logica) diventa 1, altrimenti currentMonth + 2.
-        int meseProssimo = (currentMonth == 11) ? 1 : currentMonth + 2;
-
-        // Creiamo una data di riferimento (ad esempio il 16 del mese prossimo)
-        Date d = new Date("16/" + meseProssimo);
-
-        // Recupera e ordina i volontari in base al numero di disponibilità (minimo in testa)
-        ArrayList<Volontario> volontariSorted = db.getVolontari();
-        volontariSorted.sort(Comparator.comparingInt(Volontario::getNumDisponibilita));
-
-        // Recupera le date precluse
-        ArrayList<Date> precludedDates = db.dbDatesHelper.getPrecludedDates();
-
-        // Ottieni la lunghezza del mese relativo alla data d (presumibilmente in giorni)
-        int daysInMonth = Date.lunghezzaMese(d);
-
-        // Itera per ogni giorno del mese prossimo (1-based)
-        for (int i = 1; i <= daysInMonth; i++) {
-            boolean presente = false;
-
-            // Verifica se il giorno "i" è precluso
-            for (Date dat : precludedDates) {
-                if (dat.getGiorno() == i && dat.getMese() == meseProssimo) {
-                    presente = true;
-                    break;
-                }
-            }
-            if (presente) {
-                continue;
-            }
-
-            // Crea una data da controllare per il giorno i del mese prossimo
-            Date toCheck = new Date(i + "/" + meseProssimo);
-
-            // Per ogni volontario ordinato
-            for (Volontario v : volontariSorted) {
-                // Supponiamo che la disponibilità modificabile sia nella riga 1 (array 0-based: index 1) e che
-                // il giorno nel calendario corrisponda a index = (giorno - 1)
-                if (!v.disponibilita[i]) {
-                    // Se il volontario non è disponibile per questo giorno, passa al prossimo volontario
-                    continue;
-                }
-
-                // Recupera l'elenco degli UID dei tipi di visita assegnati al volontario
-                ArrayList<String> uidVisiteV = v.getTipiVisiteUID();
-                ViewSE.println("UID tipi di visita per " + v.getUsername() + ": " + uidVisiteV);
-
-                // Per ciascun tipo di visita assegnato
-                for (String s : uidVisiteV) {
-                    TipoVisita tv = db.getTipiByUID(s);
-                    if (tv == null) {
-                        continue;
-                    }
-
-                    // Verifica se il giorno da controllare è tra quelli programmabili per questo tipo di visita
-                    // Supponiamo che tv.getGiorni() restituisca un Collection (ad es. ArrayList<Integer> o ArrayList<String>)
-                    // e che toCheck.cheGiornoE() restituisca un valore compatibile per il confronto.
-                    
-                    boolean isProgrammable = tv.giorni.contains(toCheck.cheGiornoE());
-                    ViewSE.println("Verifica per " + tv.getTitolo() + ": " + isProgrammable);
-
-                    if(isProgrammable)
-                        ViewSE.println(v.getUsername() + " può lavorare il " + i + "/" + meseProssimo
-                    + " per il tipo di visita " + tv.getTitolo());
-                    // Qui puoi creare l'istanza della visita o registrarla nel sistema
-                }
-            }
-
-        }
-    }
-
-    public void makeOrarioVecchio() {       //È la versione incollata su gpt, il risultato è quello sopra (ovviamente non funziona)
-          //boh fai orario?
-        //non so se serva un comando che venga lanciato dal configuratore o possa essere svolto in autonomia...
-        //Verranno create tutte le visite massimizzando le disponibilità dei volontari
-
-        int currentMonth = date.getMese();
-        // int meseProssimo = (currentMonth == 12) ? 1 : currentMonth + 1;      //QUESTO È GIUSTO, SOTTO PER TEST
-        int meseProssimo = (currentMonth == 11) ? 1 : currentMonth + 2;
-        Date d = new Date("16/" + meseProssimo);
-
-        ArrayList<Volontario> volontariSorted = db.getVolontari();
-        volontariSorted.sort(Comparator.comparingInt(Volontario::getNumDisponibilita));
-
-        ArrayList<Date> precludedDates = db.dbDatesHelper.getPrecludedDates();
-        boolean presente;
-        for (int i = 1; i < Date.lunghezzaMese(d); i++) {
-            presente = false;
-
-            for (Date dat : precludedDates) {
-                if (dat.getGiorno() == i && dat.getMese() == meseProssimo) {
-                    presente = true;
-                    break;
-                }
-            }
-            if (presente) {
-                continue;
-            }
-            //Date toCheck = new Date(i + "/" + meseProssimo);
-            for (Volontario v : volontariSorted) {
-                if (v.disponibilita[i] == false) {
-                    break;
-                }
-                ArrayList<String> uidVisiteV = v.getTipiVisiteUID();
-                ViewSE.println(uidVisiteV);
-                for (String s : uidVisiteV) {
-                    TipoVisita tv = db.getTipiByUID(s);
-                    if (tv == null) {
-                        continue;
-                    }
-                    ViewSE.println("PD");
-                    //ViewSE.println(tv.giorni.contains(toCheck.cheGiornoE()));
-                    //if (tv.giorni.contains(toCheck.cheGiornoE())) {
-                    //    ViewSE.println(v + " puo lavorare il " + i + "/" + meseProssimo);
-                    //}
-                }
-                //ViewSE.println(v.getUsername() + " puo lavorare il " + i + "/" + meseProssimo);
-            }
-        }
-    }
-
 }

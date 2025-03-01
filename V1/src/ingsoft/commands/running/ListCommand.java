@@ -1,11 +1,11 @@
 package ingsoft.commands.running;
 
 import ingsoft.App;
+import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.luoghi.Luogo;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.Volontario;
-import ingsoft.util.ViewSE;
 
 public class ListCommand extends AbstractCommand {
 
