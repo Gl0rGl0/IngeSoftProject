@@ -209,6 +209,11 @@ public class DBUtils {
     }
 
     public void refresher() {
+        for(Volontario v : dbVolontarioHelper.getPersonList()){
+            boolean toRemove = false;
+            //for(TipoVisita tv : v.g)
+            //TODO
+        }
         // refresh volontari
         // refresh visite
         // refresh tipovisite

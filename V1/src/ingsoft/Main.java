@@ -71,6 +71,9 @@ public class Main {
     }
 
     public static void initDBInterprete(App controller) {
+        if(!controller.db.getNew())
+            return; //basta log ti prego
+
         controller.user = new Configuratore("", "", "0");
 
         String addVisita = "add -t ";

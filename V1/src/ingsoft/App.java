@@ -135,21 +135,17 @@ public class App {
     boolean skipSetupTesting = false;
 
     public boolean setupCompleted() {
-        // AssertionControl.logMessage("SetUp completato", 3,
-        // this.getClass().getSimpleName());
+        boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.getNew();
+        
+        if(out)
+            AssertionControl.logMessage("SetUp completato", 3, this.getClass().getSimpleName());
+        
         return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.getNew();
     }
 
     public Persona getCurrentUser() {
         return this.user;
     }
-
-    public void setUser(String username) {
-        this.user = db.findUser(username);
-        if (this.user == null) {
-            this.user = new Guest();
-        }
-    }// INUTILE, TOREMOVE?
 
     public void addPrecludedDate(String d) {
         db.addPrecludedDate(new Date(d));
@@ -160,7 +156,7 @@ public class App {
     }
 
     public void azioneDelGiorno() {
-
+        db.refresher();
         // refresh--3 giorni al termine -> STATO.CLOSE
 
         switch (date.getGiorno()) {
