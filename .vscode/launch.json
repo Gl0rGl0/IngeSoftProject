@@ -6,15 +6,14 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "ingsoft.Main",
-            "projectName": "IngeSoftProject_c17daa8d"
+            "projectName": "IngeSoftProject_940ba1e8"
         },
         {
             "type": "java",
-            "name": "LoginApp",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "GUI.LauncherApp",
-            "projectName": "IngeSoftProject_c17daa8d",
-            "vmArgs": "--module-path ${workspaceFolder}/lib/javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml"
+            "mainClass": "ingsoft.Main",
+            "projectName": "IngeSoftProject_c17daa8d"
         }
     ]
 }
