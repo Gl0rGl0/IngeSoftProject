@@ -180,4 +180,10 @@ public class DBLuoghiHelper extends DBAbstractHelper {
     public boolean isNew() {
         return luoghiRepository.size() == 0;
     }
+
+    public boolean containsLuogoUID(String uidLuogo) {
+        if(uidLuogo == null)
+            return false;
+        return luoghiRepository.containsKey(uidLuogo);
+    }
 }

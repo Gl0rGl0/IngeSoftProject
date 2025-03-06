@@ -156,7 +156,7 @@ public class App {
     }
 
     public void azioneDelGiorno() {
-        db.refresher();
+        db.refresher(this.date);
         // refresh--3 giorni al termine -> STATO.CLOSE
 
         switch (date.getGiorno()) {

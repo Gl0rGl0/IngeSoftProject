@@ -17,6 +17,7 @@ public class DBUtils {
     public final DBVisiteHelper dbVisiteHelper;
     public final DBLuoghiHelper dbLuoghiHelper;
     public final DBDatesHelper dbDatesHelper;
+    public final DBIscrizioniHelper dbIscrizionisHelper;
 
     private boolean isNew;
     public String ambitoTerritoriale;
@@ -30,6 +31,7 @@ public class DBUtils {
         dbVisiteHelper = new DBVisiteHelper();
         dbLuoghiHelper = new DBLuoghiHelper();
         dbDatesHelper = new DBDatesHelper();
+        dbIscrizionisHelper = new DBIscrizioniHelper();
 
         this.isNew = dbConfiguratoreHelper.isNew() && dbLuoghiHelper.isNew();
     }
@@ -195,29 +197,84 @@ public class DBUtils {
         dbDatesHelper.refreshPrecludedDate(d);
     }
 
-    public void refreshVisiteTipoVisite(Date d) {
-        checkVisiteInTerminazione(d);
-        checkTipoVisiteAttese(d);
-    }
+    public void refresher(Date d) {
+        // Prima tolgo le eventuali tipologie di visite dal DB
+        refreshTipoVisite();
 
-    private void checkTipoVisiteAttese(Date d) {
+        // Poi rimuovo i volontari per evitare di NON rimuovere un volontario
+        // appartenente a un tipovisita non esistente
+        refreshVolontari();
+
         dbTipoVisiteHelper.checkTipoVisiteAttese(d);
-    }
-
-    private void checkVisiteInTerminazione(Date d) {
         dbVisiteHelper.checkVisiteInTerminazione(d);
+
+        refreshIscrizioni();
     }
 
-    public void refresher() {
-        for(Volontario v : dbVolontarioHelper.getPersonList()){
-            boolean toRemove = false;
-            //for(TipoVisita tv : v.g)
-            //TODO
+    // Controlla ogni volontario
+    // Se almeno una visita dentro la sua lista di (tipi)Visite esiste ancora => OK
+    // Se TUTTE le visite non esistono (o è vuoto) => si elimina il volontario dal
+    // DB
+    // Per ogni visita non trovata si toglie l'uid dalle sue visite
+    private void refreshVolontari() {
+        for (Volontario v : dbVolontarioHelper.getPersonList()) {
+            boolean toRemove = true;
+            for (String tv : v.getTipiVisiteUID()) {
+                TipoVisita toCheck = dbTipoVisiteHelper.getTipiVisitaByUID(tv);
+                if (toCheck == null) {
+                    v.removeUIDVisita(tv);
+                    continue;
+                }
+
+                toRemove &= !toCheck.lavoraUIDVolontario(v.getUsername());
+
+                if (!toRemove)
+                    break;
+            }
+            if (toRemove)
+                dbVolontarioHelper.removePersona(v.getUsername());
         }
-        // refresh volontari
-        // refresh visite
-        // refresh tipovisite
-        // refresh iscrizioni
+    }
+
+    // Controlla ogni TipoVisita
+    // Se l'uid è 'null' o non è presente nei luoghi => rimuovo il tipo visita
+    private void refreshTipoVisite() {
+        for (TipoVisita v : dbTipoVisiteHelper.getTipiVisita()) {
+            String uidLuogo = v.getLuogoUID();
+
+            if (!dbLuoghiHelper.containsLuogoUID(uidLuogo))
+                dbTipoVisiteHelper.removeTipoVisita(v.getTitolo());
+        }
+    }
+
+    /*
+     * Per ogni iscrizione si assume inizialmente che debba essere rimossa (toRemove
+     * = true).
+     * Si itera su tutte le visite e sulle loro iscrizioni per verificare se
+     * l'iscrizione corrente è referenziata.
+     * Se viene trovata una corrispondenza, il flag toRemove diventa false e
+     * l'iterazione viene interrotta.
+     * Alla fine, se toRemove rimane true, l'iscrizione viene eliminata dal
+     * database.
+     */
+    private void refreshIscrizioni() {
+        for (Iscrizione i : dbIscrizionisHelper.getIscrizioni()) {
+            boolean toRemove = true;
+            for (Visita v : dbVisiteHelper.getVisite()) {
+                for (Iscrizione ii : v.getIscrizioni()) {
+                    toRemove &= !i.getUIDIscrizione().equals(ii.getUIDIscrizione());
+
+                    if (!toRemove)
+                        break;
+                }
+
+                if (!toRemove)
+                    break;
+            }
+
+            if (toRemove)
+                dbIscrizionisHelper.removeIscrizione(i.getUIDIscrizione());
+        }
     }
 
     // ================================================================

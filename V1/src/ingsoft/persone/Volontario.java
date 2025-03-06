@@ -24,6 +24,10 @@ public class Volontario extends Persona {
         }
     }
 
+    public void removeUIDVisita(String uidTipoVisita){
+        UIDvisitePresentabili.remove(uidTipoVisita);
+    }
+
     public ArrayList<String> getTipiVisiteUID() {
         return this.UIDvisitePresentabili;
     }
@@ -91,9 +95,5 @@ public class Volontario extends Persona {
 
         valid = true;
         return numDisponibilita;
-    }
-
-    public void refreshGiornaliero() {
-
     }
 }

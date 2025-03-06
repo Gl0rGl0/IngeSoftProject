@@ -131,4 +131,8 @@ public class Visita {
                 + "\nOra: " + tipo.getOraInizio()
                 + "\nBiglietto necessario: " + tipo.isFree();
     }
+
+    public ArrayList<Iscrizione> getIscrizioni(){
+        return partecipanti;
+    }
 }

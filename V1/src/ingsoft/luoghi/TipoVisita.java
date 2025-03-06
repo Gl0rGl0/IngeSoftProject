@@ -30,6 +30,7 @@ public class TipoVisita {
     public StatusVisita sv = StatusVisita.ATTESA;
     String UID;
     private ArrayList<String> volontariUID = new ArrayList<>();
+    private String luogoUID = null;
 
     // Costruttore
     public TipoVisita(
@@ -208,5 +209,21 @@ public class TipoVisita {
 
     public StatusVisita getStato() {
         return this.sv;
+    }
+
+    public boolean lavoraUIDVolontario(String usernameVolontario){
+        for(String v : getVolontariUID()){
+            if(v.equals(usernameVolontario))
+                return true;
+        }
+        return false;
+    }
+
+    public void setLuogo(String luogoUID){
+        this.luogoUID = luogoUID;
+    }
+
+    public String getLuogoUID(){
+        return this.luogoUID;
     }
 }
