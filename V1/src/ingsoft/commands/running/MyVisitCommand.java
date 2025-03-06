@@ -5,6 +5,7 @@ import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.PersonaType;
+import ingsoft.persone.Volontario;
 
 public class MyVisitCommand extends AbstractCommand {
     private final App app;
@@ -27,9 +28,13 @@ public class MyVisitCommand extends AbstractCommand {
     }
 
     private void listVolontari() {
+        Volontario currentVolontario = (Volontario) app.getCurrentUser();
         ViewSE.println("Lista delle visite al quale sei convocato: ");
         // app.db.dbVisiteHelper.getConfermate() non si può fare perchè una visita può
         // avere piu volontari disponibili
+        for (Visita v : app.db.dbVisiteHelper.getVisite()) {
+            if(v.getUidVolontario().equals(v));
+        }
 
     }
 

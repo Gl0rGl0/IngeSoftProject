@@ -3,6 +3,8 @@ package ingsoft;
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Guest;
+import ingsoft.persone.Persona;
+import ingsoft.persone.Volontario;
 
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -28,6 +30,13 @@ public class Main {
         // dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
+        
+        // Persona p = new Guest();
+        // Volontario v = new Volontario("Prova", "PROVA", "1");
+        // v.numDisponibilita = 5;
+        // p = v;
+        // Volontario v2 = (Volontario) p;
+        // System.out.println(v2.numDisponibilita); //IL CAST FUNZIONA
 
         view.run();
     }
@@ -71,9 +80,6 @@ public class Main {
     }
 
     public static void initDBInterprete(App controller) {
-        if(!controller.db.getNew())
-            return; //basta log ti prego
-
         controller.user = new Configuratore("", "", "0");
 
         String addVisita = "add -t ";

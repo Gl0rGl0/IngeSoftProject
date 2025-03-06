@@ -155,22 +155,26 @@ public class App {
         return db.getPrecludedDates();
     }
 
+    public boolean alreadyDone16 = true;
+
     public void azioneDelGiorno() {
         db.refresher(this.date);
-        // refresh--3 giorni al termine -> STATO.CLOSE
 
         switch (date.getGiorno()) {
-            case 1 -> db.refreshPrecludedDate(this.date);
-            //case 16 -> attivita16();
+            case 16 -> azioniDel16(true);
+            case 17, 18 -> azioniDel16(!alreadyDone16 && !this.date.festivo());
+            default -> alreadyDone16 = false;
         }
 
     }
 
-    // public void notPossibileCreareOrario() {
-    //     possibileCreareOrario = false;
-    // }
+    private void azioniDel16(boolean eseguo){
+        if(!eseguo)
+            return;
+        
+        db.refreshPrecludedDate(this.date);
+        alreadyDone16 = true;   //SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il primo giorno feriale)
+    }
 
-    // public void possibileCreareOrario() {
-    //     possibileCreareOrario = true;
-    // }
+    //TODO non mi ricordo quali siano le cose da fare solo il 16
 }
