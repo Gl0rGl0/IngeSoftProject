@@ -78,8 +78,8 @@ public class Volontario extends Persona {
     /**
      * Metodo per stampare le disponibilità per il debug.
      */
-    public void printDisponibilita() {
-        ViewSE.println(Arrays.toString(disponibilita));
+    public String getDisponibilita() {
+        return(Arrays.toString(disponibilita));
     }
 
     public int getNumDisponibilita() {

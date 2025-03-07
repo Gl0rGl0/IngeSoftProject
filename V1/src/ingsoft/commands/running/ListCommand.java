@@ -4,7 +4,9 @@ import ingsoft.App;
 import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.luoghi.Luogo;
+import ingsoft.luoghi.TipoVisita;
 import ingsoft.luoghi.Visita;
+import ingsoft.persone.PersonaType;
 import ingsoft.persone.Volontario;
 
 public class ListCommand extends AbstractCommand {
@@ -24,12 +26,11 @@ public class ListCommand extends AbstractCommand {
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {
-        // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per
-        // configuratore)
         if (options.length < 1) {
             ViewSE.println("Errore nell'utilizzo del comando 'list'");
             return;
         }
+
         char option = options[0].charAt(0);
         switch (option) {
             case 'v' -> listVolontari();
@@ -51,20 +52,20 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void listVolontari() {
+        StringBuilder out;
         for (Volontario v : app.db.getVolontari()) {
+            out = new StringBuilder();
+            out.append(v.getUsername() + ":\n");
             for (Visita visita : app.db.trovaVisiteByVolontario(v)) {
-                ViewSE.println(visita);
+                out.append(visita + "\n");
             }
+            ViewSE.println(out);
         }
     }
 
     private void printTipiVisite(String[] s) {
         char option = 'a';
-        try {
-            option = s[1].charAt(0);
-        } catch (Exception e) {
-            //
-        }
+        option = s[1].charAt(0);
 
         switch (option) {
             case 'a' -> printAllTipi();
@@ -72,37 +73,85 @@ public class ListCommand extends AbstractCommand {
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
             case 'e' -> printEffettuate();
+            case 'V' -> printDisponibilitaVolontari();
+            case 'T' -> printTipiVisita();
             default -> ViewSE.println("Opzione non riconosciuta per 'list'.");
         }
     }
 
+    private void printDisponibilitaVolontari(){
+        if(app.getCurrentUser().type() != PersonaType.CONFIGURATORE){
+            ViewSE.println("Opzione non riconosciuta per 'list'.");
+            return;
+        }
+
+        StringBuilder out = new StringBuilder();
+        for(Volontario v : app.db.dbVolontarioHelper.getPersonList()){
+            out.append(v.getUsername() + ":\n" + v.getDisponibilita());
+        }
+        ViewSE.println(out);
+    }
+
+    private void printTipiVisita(){
+        if(app.getCurrentUser().type() != PersonaType.CONFIGURATORE){
+            ViewSE.println("Opzione non riconosciuta per 'list'.");
+            return;
+        }
+
+        StringBuilder out = new StringBuilder();
+        for(TipoVisita t : app.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili()){
+            out.append(t);
+        }
+        ViewSE.println(out);
+    }
+
+
     private void printAllTipi() {
-        ViewSE.println("Visite proposte:");
-        printProposte();
-
-        ViewSE.println("Visite complete:");
-        printComplete();
-
-        ViewSE.println("Visite cancellate:");
-        printCancellate();
-
-        ViewSE.println("Visite effettuate:");
-        printEffettuate();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Visite proposte:\n").append(getVisiteProposte());
+        sb.append("Visite complete:\n").append(getVisiteComplete());
+        sb.append("Visite cancellate:\n").append(getVisiteCancellate());
+        sb.append("Visite effettuate:\n").append(getVisiteEffettuate());
+        ViewSE.println(sb.toString());
     }
 
     private void printProposte() {
-        app.db.dbVisiteHelper.getVisiteProposte().forEach(v -> ViewSE.println(v));
+        ViewSE.println(getVisiteProposte());
     }
 
     private void printComplete() {
-        app.db.dbVisiteHelper.getCompletate().forEach(v -> ViewSE.println(v));
+        ViewSE.println(getVisiteComplete());
     }
 
     private void printCancellate() {
-        app.db.dbVisiteHelper.getCancellate().forEach(v -> ViewSE.println(v));
+        ViewSE.println(getVisiteCancellate());
     }
 
     private void printEffettuate() {
-        app.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> ViewSE.println(v));
+        ViewSE.println(getVisiteEffettuate());
+    }
+
+    private String getVisiteProposte() {
+        StringBuilder sb = new StringBuilder();
+        app.db.dbVisiteHelper.getVisiteProposte().forEach(v -> sb.append(v).append("\n"));
+        return sb.toString();
+    }
+
+    private String getVisiteComplete() {
+        StringBuilder sb = new StringBuilder();
+        app.db.dbVisiteHelper.getCompletate().forEach(v -> sb.append(v).append("\n"));
+        return sb.toString();
+    }
+
+    private String getVisiteCancellate() {
+        StringBuilder sb = new StringBuilder();
+        app.db.dbVisiteHelper.getCancellate().forEach(v -> sb.append(v).append("\n"));
+        return sb.toString();
+    }
+
+    private String getVisiteEffettuate() {
+        StringBuilder sb = new StringBuilder();
+        app.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> sb.append(v).append("\n"));
+        return sb.toString();
     }
 }

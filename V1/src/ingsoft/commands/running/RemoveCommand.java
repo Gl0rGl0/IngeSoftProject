@@ -70,9 +70,12 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeVolontario(String[] args) {
-        if(!app.alreadyDone16){
-            AssertionControl.logMessage("Non puoi rimuovere un volontario se non è il 16 del mese: " + args[0], 1,
-            NOMECLASSE);
+        if (!app.alreadyDone16) {
+            AssertionControl.logMessage(
+                    app.getCurrentUser().getUsername()
+                            + "|  + Non puoi rimuovere un volontario se non è il 16 del mese: " + args[0],
+                    1,
+                    NOMECLASSE);
             return;
         }
 
@@ -81,9 +84,12 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeTipoVisita(String[] args) {
-        if(!app.alreadyDone16){
-            AssertionControl.logMessage("Non puoi rimuovere un tipo di visita se non è il 16 del mese: " + args[0], 1,
-            NOMECLASSE);
+        if (!app.alreadyDone16) {
+            AssertionControl.logMessage(
+                    app.getCurrentUser().getUsername()
+                            + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del mese: " + args[0],
+                    1,
+                    NOMECLASSE);
             return;
         }
 
@@ -92,9 +98,12 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeLuogo(String[] args) {
-        if(!app.alreadyDone16){
-            AssertionControl.logMessage("Non puoi rimuovere un luogo se non è il 16 del mese: " + args[0], 1,
-            NOMECLASSE);
+        if (!app.alreadyDone16) {
+            AssertionControl.logMessage(
+                    app.getCurrentUser().getUsername() + "|  + Non puoi rimuovere un luogo se non è il 16 del mese: "
+                            + args[0],
+                    1,
+                    NOMECLASSE);
             return;
         }
 

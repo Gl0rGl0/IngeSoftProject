@@ -3,8 +3,6 @@ package ingsoft;
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Guest;
-import ingsoft.persone.Persona;
-import ingsoft.persone.Volontario;
 
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -14,7 +12,7 @@ import ingsoft.persone.Volontario;
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         DBUtils model = new DBUtils();
         App controller = new App(model);
@@ -30,7 +28,7 @@ public class Main {
         // dell'interazione con l'utente
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
-        
+
         // Persona p = new Guest();
         // Volontario v = new Volontario("Prova", "PROVA", "1");
         // v.numDisponibilita = 5;
@@ -66,8 +64,7 @@ public class Main {
         // ViewSE.println(controller.db.removeConfiguratoreFromDB("config2"));
         // ViewSE.println(controller.getConfiguratoriListString());
         // ViewSE.println(controller.db.addConfiguratoreToDB(new
-        // Configuratore("config2",
-        // "pass2")));
+        // Configuratore("config2", "pass2")));
         // ViewSE.println(controller.getConfiguratoriListString());
         // ViewSE.println(controller.getLuoghiList());
         // Volontario v = new Volontario("a", "a", "0");

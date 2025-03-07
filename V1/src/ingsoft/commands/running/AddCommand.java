@@ -25,7 +25,8 @@ public class AddCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
             ViewSE.println("Errore nell'utilizzo del comando 'add'");
-            AssertionControl.logMessage("Errore nell'utilizzo del comando 'add'", 2, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2, NOMECLASSE);
             return;
         }
 
@@ -48,33 +49,40 @@ public class AddCommand extends AbstractCommand {
     private void addConfiguratore(String[] args) {
         // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
         if (app.db.addConfiguratore(args[0], args[1])) {
-            AssertionControl.logMessage("Aggiunto configuratore: " + args[0], 3, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, NOMECLASSE);
         } else {
-            AssertionControl.logMessage("Non aggiunto configuratore: " + args[0], 2, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Non aggiunto configuratore: " + args[0], 2, NOMECLASSE);
         }
     }
 
     private void addFruitore(String[] args) {
         // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
         if (app.db.addFruitore(args[0], args[1])) {
-            AssertionControl.logMessage("Aggiunto fruitore: " + args[0], 3, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, NOMECLASSE);
         } else {
-            AssertionControl.logMessage("Non aggiunto fruitore: " + args[0], 2, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Non aggiunto fruitore: " + args[0], 2, NOMECLASSE);
         }
     }
 
     private void addVolontario(String[] args) {
         // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
         if (app.db.addVolontario(args[0], args[1])) {
-            AssertionControl.logMessage("Aggiunto volontario: " + args[0], 3, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, NOMECLASSE);
         } else {
-            AssertionControl.logMessage("Non aggiunto volontario: " + args[0], 2, NOMECLASSE);
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Non aggiunto volontario: " + args[0], 2, NOMECLASSE);
         }
     }
 
     private void addTipoVisita(String[] args) {
         if(!app.alreadyDone16){
-            AssertionControl.logMessage("Non puoi aggiungere un tipo di visita se non è il 16 del mese: " + args[0], 1,
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Non puoi aggiungere un tipo di visita se non è il 16 del mese: " + args[0], 1,
             NOMECLASSE);
             return;
         }
@@ -85,7 +93,8 @@ public class AddCommand extends AbstractCommand {
 
     private void addLuoghi(String[] args) {
         if(!app.alreadyDone16){
-            AssertionControl.logMessage("Non puoi aggiungere un luogo se non è il 16 del mese: " + args[0], 1,
+            AssertionControl.logMessage(
+        app.getCurrentUser().getUsername() + "| Non puoi aggiungere un luogo se non è il 16 del mese: " + args[0], 1,
             NOMECLASSE);
             return;
         }

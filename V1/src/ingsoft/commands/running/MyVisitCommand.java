@@ -5,7 +5,6 @@ import ingsoft.ViewSE;
 import ingsoft.commands.AbstractCommand;
 import ingsoft.luoghi.Visita;
 import ingsoft.persone.PersonaType;
-import ingsoft.persone.Volontario;
 
 public class MyVisitCommand extends AbstractCommand {
     private final App app;
@@ -28,22 +27,30 @@ public class MyVisitCommand extends AbstractCommand {
     }
 
     private void listVolontari() {
-        Volontario currentVolontario = (Volontario) app.getCurrentUser();
-        ViewSE.println("Lista delle visite al quale sei convocato: ");
+        String uidCV = app.getCurrentUser().getUsername();
+        StringBuilder out = new StringBuilder();
+
+        out.append("Lista delle visite al quale sei convocato: \n");
         // app.db.dbVisiteHelper.getConfermate() non si può fare perchè una visita può
         // avere piu volontari disponibili
         for (Visita v : app.db.dbVisiteHelper.getVisite()) {
-            if(v.getUidVolontario().equals(v));
+            if (v.getUidVolontario().equals(uidCV))
+                out.append(v + "\n");
         }
 
+        ViewSE.println(out);
     }
 
     private void listFruitore() {
         String userF = app.getCurrentUser().getUsername();
-        ViewSE.println("Lista delle visite al quale sei iscritto: ");
+        StringBuilder out = new StringBuilder();
+
+        out.append("Lista delle visite al quale sei iscritto: ");
         for (Visita v : app.db.dbVisiteHelper.getVisite()) {
             if (v.isPresenteFruitore(userF))
-                ViewSE.println(v.toString());
+                out.append(v + "\n");
         }
+
+        ViewSE.println(out);
     }
 }

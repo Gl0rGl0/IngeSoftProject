@@ -176,5 +176,4 @@ public class App {
         alreadyDone16 = true;   //SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il primo giorno feriale)
     }
 
-    //TODO non mi ricordo quali siano le cose da fare solo il 16
 }
