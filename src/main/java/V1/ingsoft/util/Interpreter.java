@@ -64,7 +64,7 @@ public class Interpreter {
                 return;
             }
             // Se l'utente è in stato di "firstAccess", limita i comandi eseguibili
-            if (currentUser.firstAccess() &&
+            if (currentUser.getNew() &&
                     !command.canPermission(PersonaType.CAMBIOPSW.getPriorita())) {
                 ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd +
                         "' finché non viene cambiata la password con 'changepsw [nuovapsw]'.");

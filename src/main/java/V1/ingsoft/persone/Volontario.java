@@ -5,18 +5,11 @@ import V1.ingsoft.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class Volontario extends Persona {
-
-    // Disponibilità:
-    // disponibilita[0] -> periodo chiuso (non modificabile)
-    // disponibilita[1] -> periodo modificabile, definito dal cutoff (dal 16 del
-    // mese X al 15 del mese X+1)
-    public boolean[] disponibilita = new boolean[31];
-    public int numDisponibilita;
-    private boolean valid = false;
-
-    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
-
     public void aggiungiTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
             UIDvisitePresentabili.add(uidTipoVisita);
@@ -31,11 +24,22 @@ public class Volontario extends Persona {
         return this.UIDvisitePresentabili;
     }
 
-    /**
-     * Costruttore. È utile passare la data corrente per inizializzare
-     * correttamente il periodo modificabile.
-     */
-    public Volontario(String username, String psw, String nuovo) {
+    public static final String PATH = "volontari";
+
+    @JsonIgnore
+    public boolean[] disponibilita = new boolean[31];
+    @JsonIgnore
+    public int numDisponibilita;
+    @JsonIgnore
+    private boolean valid = false;
+    @JsonIgnore
+    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
+
+    @JsonCreator
+    public Volontario(
+            @JsonProperty("username") String username,
+            @JsonProperty("psw") String psw,
+            @JsonProperty("new") boolean nuovo) {
         super(username, psw, PersonaType.VOLONTARIO, nuovo);
     }
 

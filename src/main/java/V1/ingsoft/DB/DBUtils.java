@@ -115,19 +115,19 @@ public class DBUtils {
     public boolean addConfiguratore(String user, String psw) {
         if (findUser(user) != null)
             return false;
-        return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, "1"));
+        return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, true));
     }
 
     public boolean addFruitore(String user, String psw) {
         if (findUser(user) != null)
             return false;
-        return dbFruitoreHelper.addPersona(new Fruitore(user, psw, "1"));
+        return dbFruitoreHelper.addPersona(new Fruitore(user, psw, true));
     }
 
     public boolean addVolontario(String user, String psw) {
         if (findUser(user) != null)
             return false;
-        return dbVolontarioHelper.addPersona(new Volontario(user, psw, "1"));
+        return dbVolontarioHelper.addPersona(new Volontario(user, psw, true));
     }
 
     public boolean aggiungiTipoVisita(String[] args, Date d) {
@@ -363,7 +363,7 @@ public class DBUtils {
     }
 
     public Visita getVisitaByUID(String uid) {
-        return dbVisiteHelper.getVisiteByUID(uid);
+        return dbVisiteHelper.getVisitaByUID(uid);
     }
 
     public ArrayList<Visita> trovaVisiteByVolontario(Volontario v) {

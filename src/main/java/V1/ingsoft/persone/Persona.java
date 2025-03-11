@@ -2,21 +2,26 @@ package V1.ingsoft.persone;
 
 import java.util.ArrayList;
 
-public abstract class Persona {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
+public abstract class Persona {
     private String psw;
     private final String username;
-    private final PersonaType personaType;
     private boolean nuovo;
 
+    @JsonIgnore
+    public final PersonaType personaType;
+    @JsonIgnore
     protected ArrayList<String> uidVisitePartecipante = new ArrayList<>();
 
-    public Persona(String username, String psw, PersonaType personaType, String nuovo) {
+    public Persona(String username, String psw, PersonaType personaType, boolean nuovo) {
         this.username = username;
         this.psw = psw;
         this.personaType = personaType;
-
-        this.nuovo = nuovo.equals("1");
+        this.nuovo = nuovo;
     }
 
     public String getUsername() {
@@ -31,11 +36,7 @@ public abstract class Persona {
         this.psw = psw;
     }
 
-    public String getNew() { // come firstAccess ma in stringa...
-        return this.nuovo ? "1" : "0";
-    }
-
-    public boolean firstAccess() {
+    public boolean getNew() {
         return this.nuovo;
     }
 
@@ -49,12 +50,14 @@ public abstract class Persona {
 
     // se si disattiva non si potranno vedere le psw del database dall'app (come
     // giusto che sia)
+    @JsonIgnore
     boolean testPsw = true;
 
     @Override
     public String toString() {
         if (testPsw)
-            return "Username: " + getUsername() + " - Password: " + getPsw();
+            return "Username: " + getUsername() + " - Password: " + getPsw() + " - Nuovo: " + getNew();
+        // return "Username: " + getUsername() + " - Password: " + getPsw();
         return "Username: " + getUsername() + " - Password: *****";
     }
 

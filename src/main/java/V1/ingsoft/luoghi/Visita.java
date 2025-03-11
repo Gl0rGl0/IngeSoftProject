@@ -7,27 +7,38 @@ import V1.ingsoft.util.Date;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Visita {
+    @JsonIgnore
+    public static final String PATH = "archivio-visite";
+
+    @JsonIgnore
     public TipoVisita tipo;
     public Date data;
     public String UID;
-    public String getTipoVisitaUID;
+    public String tipoVisitaUID;
 
+    @JsonIgnore
     public String volontarioUID;
     public StatusVisita stato = StatusVisita.PROPOSTA;
+    @JsonIgnore
     public ArrayList<Iscrizione> partecipanti = new ArrayList<>();
 
     public Visita(TipoVisita tipo, Date data, String UID, String UIDTipoVisita) {
         this.tipo = tipo;
         this.data = data;
-        this.getTipoVisitaUID = UIDTipoVisita;
+        this.tipoVisitaUID = UIDTipoVisita;
         this.UID = UID;
     }
 
     public Visita(TipoVisita tipo, Date data, String UIDTipoVisita) {
         this.tipo = tipo;
         this.data = data;
-        this.getTipoVisitaUID = UIDTipoVisita;
+        this.tipoVisitaUID = UIDTipoVisita;
         this.UID = UUID.randomUUID().toString();
     }
 
@@ -47,7 +58,7 @@ public class Visita {
         return this.UID;
     }
 
-    public String getTipoVisitaUID() {
+    public String tipoVisitaUID() {
         return this.tipo.getUID();
     }
 

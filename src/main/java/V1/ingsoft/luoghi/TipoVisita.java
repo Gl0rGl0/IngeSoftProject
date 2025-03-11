@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class TipoVisita {
+    public static final String PATH = "tipoVisite";
 
     String titolo;
     String descrizione;

@@ -1,0 +1,13 @@
+[ {
+  "psw" : "pass3F",
+  "username" : "fruit3",
+  "nuovo" : true
+}, {
+  "psw" : "pass2F",
+  "username" : "fruit2",
+  "nuovo" : true
+}, {
+  "psw" : "pass1F",
+  "username" : "fruit1",
+  "nuovo" : true
+} ]

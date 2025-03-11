@@ -26,7 +26,7 @@ public class Main {
         controller.skipSetupTesting = model.getNew();
 
         // if (controller.skipSetupTesting)
-        // Test(controller); // Prima di avviare il ciclo...
+        Test(controller); // Prima di avviare il ciclo...
         // initDisponibilita(controller);
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
@@ -42,6 +42,11 @@ public class Main {
         // System.out.println(v2.numDisponibilita); //IL CAST FUNZIONA
         controller.interpreter("login config1 pass1C");
         controller.interpreter("changepsw pass1C pass1C");
+
+        System.out.println("\n\n");
+        System.out.println(controller.db.dbVolontarioHelper.saveJson(controller.db.dbVolontarioHelper.getJson()));
+        System.out.println("\n\n");
+
         view.run();
     }
 
@@ -83,7 +88,7 @@ public class Main {
     }
 
     public static void initDBInterprete(App controller) {
-        controller.user = new Configuratore("", "", "0");
+        controller.user = new Configuratore("", "", false);
 
         String addVisita = "add -t ";
         String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo";

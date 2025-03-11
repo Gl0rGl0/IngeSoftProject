@@ -1,178 +1,67 @@
 package V1.ingsoft.DB;
 
-import V1.ingsoft.ViewSE;
 import V1.ingsoft.persone.Persona;
 import V1.ingsoft.persone.PersonaType;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
-public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper {
-    private final String fileName;
-    private final PersonaType personaType;
-    private final Class<T> personaClass;
-    private boolean isCacheValid = false;
-
+public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
     private final HashMap<String, T> cachedPersons = new HashMap<>();
 
-    public DBAbstractPersonaHelper(PersonaType personaType, Class<T> personaClass) {
-        this.personaType = personaType;
-        this.personaClass = personaClass;
-        this.fileName = personaType.getFilePath() + ".properties";
+    @SuppressWarnings("unchecked")
+    public DBAbstractPersonaHelper(PersonaType personaType) {
+        super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass());
+        // INIT DATABASE
+        getJson().forEach(p -> cachedPersons.put(p.getUsername(), p));
     }
 
     public ArrayList<T> getPersonList() {
-        if (isCacheValid && cachedPersons != null) {
-            return new ArrayList<>(cachedPersons.values());
-        }
-
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.println("Errore durante il caricamento delle proprietà: " + e.getMessage());
-            return new ArrayList<>();
-        }
-
-        int index = 1;
-        String keyPrefix = personaType.getFilePath();
-        while (true) {
-            String username = properties.getProperty(keyPrefix + "." + index + ".username");
-            String psw = properties.getProperty(keyPrefix + "." + index + ".psw");
-            String newFlag = properties.getProperty(keyPrefix + "." + index + ".new", "0");
-
-            if (username == null || psw == null)
-                break;
-
-            try {
-                Constructor<T> constructor = personaClass.getConstructor(String.class, String.class, String.class);
-                T persona = constructor.newInstance(username, psw, newFlag);
-                cachedPersons.put(username, persona);
-            } catch (Exception e) {
-                ViewSE.println("Errore durante l'istanziazione della classe " + personaClass.getSimpleName() + ": "
-                        + e.getMessage());
-            }
-            index++;
-        }
-
-        isCacheValid = true;
         return new ArrayList<>(cachedPersons.values());
     }
 
     public boolean addPersona(T persona) {
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.println("Errore durante il caricamento del file: " + e.getMessage());
+        if (cachedPersons.get(persona.getUsername()) != null)
             return false;
-        }
-        int index = 1;
-        String keyPrefix = personaType.getFilePath();
-        while (true) {
-            String existingUsername = properties.getProperty(keyPrefix + "." + index + ".username");
-            if (existingUsername == null) {
-                properties.setProperty(keyPrefix + "." + index + ".username", persona.getUsername());
-                properties.setProperty(keyPrefix + "." + index + ".psw",
-                        securePsw(persona.getUsername(), persona.getPsw()));
-                properties.setProperty(keyPrefix + "." + index + ".new", persona.getNew());
-                try {
-                    storeProperties(fileName, properties);
-                    isCacheValid = false; // Invalida la cache
-                    return true;
-                } catch (IOException e) {
-                    ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
-                    return false;
-                }
-            }
-            if (existingUsername.equals(persona.getUsername())) {
-                return false;
-            }
-            index++;
-        }
+
+        cachedPersons.put(persona.getUsername(), persona);
+        return saveJson(getPersonList());
     }
 
     public boolean removePersona(String username) {
-        Properties properties;
-        try {
-            properties = loadProperties(fileName);
-        } catch (IOException e) {
-            ViewSE.println("Errore durante il caricamento delle proprietà: " + e.getMessage());
+        if (cachedPersons.get(username) == null)
             return false;
-        }
-        int index = 1;
-        boolean removed = false;
-        String keyPrefix = personaType.getFilePath();
-        // TODO DDAAA
-        while (true) {
-            String existingUsername = properties.getProperty(keyPrefix + "." + index + ".username");
-            if (existingUsername == null)
-                break;
-            if (existingUsername.equals(username)) {
-                properties.remove(keyPrefix + "." + index + ".username");
-                properties.remove(keyPrefix + "." + index + ".psw");
-                properties.remove(keyPrefix + "." + index + ".new");
-                removed = true;
-            }
-            index++;
-        }
 
-        if (removed) {
-            try {
-                storeProperties(fileName, properties);
-                isCacheValid = false; // Invalida la cache
-                return true;
-            } catch (IOException e) {
-                ViewSE.println("Errore durante il salvataggio delle proprietà: " + e.getMessage());
-                return false;
-            }
-        }
-        return true;
+        cachedPersons.remove(username);
+        return saveJson(getPersonList());
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public boolean changePassword(String username, String newPsw) {
-        ArrayList<T> persons = getPersonList();
-        boolean found = false;
-        for (T persona : persons) {
-            if (persona.getUsername().equals(username)) {
-                found = true;
-                break;
-            }
-        }
+        T toChange = cachedPersons.get(username);
 
-        if (found == false) {
-            return false;
-        }
-
-        if (!removePersona(username))
+        if (toChange == null)
             return false;
 
         try {
-            Constructor<T> constructor = personaClass.getConstructor(String.class, String.class, String.class);
-            T newPersona = constructor.newInstance(username, newPsw, "0");
-            boolean result = addPersona(newPersona);
-            isCacheValid = false; // Invalida la cache dopo la modifica della password
-            return result;
+            Constructor<T> constructor;
+            constructor = clazz.getConstructor(String.class, String.class, boolean.class);
+            T newPersona = constructor.newInstance(username, newPsw, false);
+            cachedPersons.put(username, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
+            return saveJson(getPersonList());
         } catch (Exception e) {
-            ViewSE.println("Errore nella modifica della password: " + e.getMessage());
-            return false;
+            e.printStackTrace();
         }
+
+        return false;
     }
 
     public T findPersona(String user) {
-        if (isCacheValid)
-            return cachedPersons.get(user);
-
-        getPersonList();
         return cachedPersons.get(user);
     }
 
+    // IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
     public Persona login(String user, String psw) {
-        // IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
         return null;
     }
 

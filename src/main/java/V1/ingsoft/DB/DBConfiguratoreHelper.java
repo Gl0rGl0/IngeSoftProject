@@ -3,10 +3,11 @@ package V1.ingsoft.DB;
 import V1.ingsoft.persone.Configuratore;
 import V1.ingsoft.persone.Persona;
 import V1.ingsoft.persone.PersonaType;
+import V1.ingsoft.util.JsonStorage;
 
 public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
     public DBConfiguratoreHelper() {
-        super(PersonaType.CONFIGURATORE, Configuratore.class);
+        super(PersonaType.CONFIGURATORE);
     }
 
     // la psw è salvata con una cifratura hash semplicissima + salting con user dato

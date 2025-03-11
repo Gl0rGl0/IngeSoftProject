@@ -30,7 +30,7 @@ public class LoginCommand extends AbstractCommand {
 
         if (app.user.type() != PersonaType.GUEST) {
             ViewSE.println("Login effettuato con successo (" + app.user.type() + ")");
-            if (app.user.firstAccess()) {
+            if (app.user.getNew()) {
                 ViewSE.println(
                         "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }

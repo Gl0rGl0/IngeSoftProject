@@ -2,9 +2,16 @@ package V1.ingsoft.persone;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Fruitore extends Persona {
 
-    public Fruitore(String username, String psw, String nuovo) {
+    @JsonCreator
+    public Fruitore(
+            @JsonProperty("username") String username,
+            @JsonProperty("psw") String psw,
+            @JsonProperty("new") boolean nuovo) {
         super(username, psw, PersonaType.FRUITORE, nuovo);
     }
 

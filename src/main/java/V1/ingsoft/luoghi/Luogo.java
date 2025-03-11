@@ -1,25 +1,44 @@
 package V1.ingsoft.luoghi;
 
+import V1.ingsoft.persone.PersonaType;
 import V1.ingsoft.util.GPS;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Luogo {
+    @JsonIgnore
+    public static final String PATH = "luoghi";
+
     String nomeLuogo;
     String descrizioneLuogo;
     GPS posizione;
     String UID;
     ArrayList<String> visiteUID = new ArrayList<>();
 
-    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione, String UID) {
+    @JsonCreator
+    public Luogo(
+            @JsonProperty("nomeLuogo") String nomeLuogo,
+            @JsonProperty("descrizioneLuogo") String descrizioneLuogo,
+            @JsonProperty("posizione") GPS posizione,
+            @JsonProperty("UID") String UID) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
         this.UID = UID;
     }
 
-    public Luogo(String nomeLuogo, String descrizioneLuogo, GPS posizione) {
+    public Luogo(
+            @JsonProperty("nomeLuogo") String nomeLuogo,
+            @JsonProperty("descrizioneLuogo") String descrizioneLuogo,
+            @JsonProperty("posizione") GPS posizione) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
