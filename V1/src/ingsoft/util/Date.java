@@ -27,7 +27,8 @@ public class Date {
     }
 
     /**
-     * Costruisce una data partendo da una stringa nel formato "gg/mm[/aa]". Se
+     * Costruisce una data partendo da una stringa nel formato "gg/mm[/aa]-[hh:mm]".
+     * Se
      * l'anno non è presente, viene impostato a -1.
      *
      * @param d la stringa contenente la data e opzionalmente un commento
@@ -39,6 +40,8 @@ public class Date {
 
         if (parts.length > 1) {
             setOra(parts[1].split(":"));
+        } else {
+            setOra(new String[] { "00", "00" });
         }
     }
 
@@ -131,7 +134,7 @@ public class Date {
         };
     }
 
-    public DayOfWeek cheGiornoE() {
+    public DayOfWeek giornoDellaSettimana() {
         return localDate.getDayOfWeek();
     }
 
@@ -141,5 +144,9 @@ public class Date {
 
     public boolean festivo() {
         return this.localDate.getDayOfWeek() == DayOfWeek.SUNDAY || this.localDate.getDayOfWeek() == DayOfWeek.SATURDAY;
+    }
+
+    public String getOra() {
+        return this.localDate.getHour() + ":" + this.localDate.getMinute();
     }
 }

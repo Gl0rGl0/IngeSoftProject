@@ -154,6 +154,7 @@ public class DBUtils {
         for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
             tv.removeVolontario(username);
         }
+
         return dbVolontarioHelper.removePersona(username);
     }
 
@@ -231,6 +232,7 @@ public class DBUtils {
                 if (!toRemove)
                     break;
             }
+            System.out.println(toRemove + v.getUsername());
             if (toRemove)
                 dbVolontarioHelper.removePersona(v.getUsername());
         }

@@ -1,8 +1,12 @@
 package ingsoft;
 
+import java.util.Random;
+
 import ingsoft.DB.DBUtils;
 import ingsoft.persone.Configuratore;
 import ingsoft.persone.Guest;
+import ingsoft.persone.Volontario;
+import ingsoft.util.Date;
 
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -21,8 +25,9 @@ public class Main {
         // Mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
         controller.skipSetupTesting = model.getNew();
 
-        if (controller.skipSetupTesting)
-            Test(controller); // Prima di avviare il ciclo...
+        //if (controller.skipSetupTesting)
+            //Test(controller); // Prima di avviare il ciclo...
+            //initDisponibilita(controller);
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
         // dell'interazione con l'utente
@@ -35,7 +40,8 @@ public class Main {
         // p = v;
         // Volontario v2 = (Volontario) p;
         // System.out.println(v2.numDisponibilita); //IL CAST FUNZIONA
-
+        controller.interpreter("login config1 pass1C");
+        controller.interpreter("changepsw pass1C pass1C");
         view.run();
     }
 
@@ -110,11 +116,13 @@ public class Main {
         String addVolont = "add -v ";
         String volontario1 = "volont1 pass1V";
         String volontario2 = "volont2 pass2V";
+        String volontario3 = "volont3 pass3V";
 
         controller.interpreter(addVolont + volontario1);
         controller.interpreter(addVolont + volontario2);
+        controller.interpreter(addVolont + volontario3);
 
-        String addFruit = "add -v ";
+        String addFruit = "add -f ";
         String fruitore1 = "fruit1 pass1F";
         String fruitore2 = "fruit2 pass2F";
         String fruitore3 = "fruit3 pass3F";
@@ -124,5 +132,20 @@ public class Main {
         controller.interpreter(addFruit + fruitore3);
 
         controller.user = new Guest();
+        System.out.println(controller.db.dbVolontarioHelper.getPersonList());
+    }
+
+    public static void initDisponibilita(App controller){
+        Random r = new Random();
+        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
+            for(int i = 0; i < 15; i++)
+                v.setDisponibilita(controller.date, new Date(String.format("%d/%d/2025", r.nextInt(1, 28), 5)));
+        }
+
+        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
+            for(boolean b: v.getDisponibilita())
+            System.out.print (b);
+            System.out.println();
+        }
     }
 }

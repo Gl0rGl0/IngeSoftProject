@@ -34,6 +34,7 @@ public class ListCommand extends AbstractCommand {
         char option = options[0].charAt(0);
         switch (option) {
             case 'v' -> listVolontari();
+            case 'd' -> printDisponibilitaVolontari();
             case 'L' -> listLuoghi();
             case 'l' -> listLuoghi();
             case 'V' -> printTipiVisite(options);
@@ -73,7 +74,6 @@ public class ListCommand extends AbstractCommand {
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
             case 'e' -> printEffettuate();
-            case 'V' -> printDisponibilitaVolontari();
             case 'T' -> printTipiVisita();
             default -> ViewSE.println("Opzione non riconosciuta per 'list'.");
         }
@@ -85,9 +85,17 @@ public class ListCommand extends AbstractCommand {
             return;
         }
 
+        int targetMonth = app.date.getMese() + 2;
+        if(app.date.getGiorno() > 16)
+            targetMonth++;
+
         StringBuilder out = new StringBuilder();
         for(Volontario v : app.db.dbVolontarioHelper.getPersonList()){
-            out.append(v.getUsername() + ":\n" + v.getDisponibilita());
+            out.append(v.getUsername() + ":\n");
+            int i = 1;
+            for (boolean b : v.getDisponibilita()){
+                out.append(String.format("%d:%d [%b]", i++, targetMonth, b));
+            }
         }
         ViewSE.println(out);
     }

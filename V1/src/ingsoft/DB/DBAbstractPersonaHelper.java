@@ -5,7 +5,7 @@ import ingsoft.persone.Persona;
 import ingsoft.persone.PersonaType;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Constructor    ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -103,10 +103,10 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             ViewSE.println("Errore durante il caricamento delle proprietà: " + e.getMessage());
             return false;
         }
-
         int index = 1;
         boolean removed = false;
         String keyPrefix = personaType.getFilePath();
+        // TODO DDAAA
         while (true) {
             String existingUsername = properties.getProperty(keyPrefix + "." + index + ".username");
             if (existingUsername == null)

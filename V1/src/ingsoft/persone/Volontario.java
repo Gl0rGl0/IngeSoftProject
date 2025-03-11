@@ -1,6 +1,5 @@
 package ingsoft.persone;
 
-import ingsoft.ViewSE;
 import ingsoft.util.Date;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class Volontario extends Persona {
         }
     }
 
-    public void removeUIDVisita(String uidTipoVisita){
+    public void removeUIDVisita(String uidTipoVisita) {
         UIDvisitePresentabili.remove(uidTipoVisita);
     }
 
@@ -53,6 +52,7 @@ public class Volontario extends Persona {
      */
     public void setDisponibilita(Date oggi, Date disp) {
         if (!separatiDaDueMesi(oggi, disp)) {
+            System.out.println("DATA SBAGLIATA"); // TODO REMOVE
             return;
         }
 
@@ -61,8 +61,8 @@ public class Volontario extends Persona {
     }
 
     private boolean separatiDaDueMesi(Date d1, Date d2) {
-        int currentMonth = d2.getMese();
-        int targetMonth = d1.getMese();
+        int currentMonth = d1.getMese();
+        int targetMonth = d2.getMese();
 
         if (d1.getGiorno() < 16) {
             return (currentMonth + 2) == targetMonth;
@@ -78,8 +78,12 @@ public class Volontario extends Persona {
     /**
      * Metodo per stampare le disponibilità per il debug.
      */
-    public String getDisponibilita() {
-        return(Arrays.toString(disponibilita));
+    public String getDisponibilitaString() {
+        return (Arrays.toString(disponibilita));
+    }
+
+    public boolean[] getDisponibilita() {
+        return disponibilita;
     }
 
     public int getNumDisponibilita() {
