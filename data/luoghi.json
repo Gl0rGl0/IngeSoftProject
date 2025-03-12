@@ -1,0 +1,28 @@
+[ {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "1538077252",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "-788368380",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "87918382",
+  "visiteUID" : [ ]
+} ]

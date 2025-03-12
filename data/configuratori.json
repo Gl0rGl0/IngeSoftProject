@@ -1,0 +1,9 @@
+[ {
+  "username" : "config2",
+  "psw" : "fd5c8f52",
+  "nuovo" : true
+}, {
+  "username" : "config1",
+  "psw" : "fd5c8f32",
+  "nuovo" : false
+} ]
