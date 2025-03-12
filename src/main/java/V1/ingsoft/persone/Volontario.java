@@ -40,7 +40,11 @@ public class Volontario extends Persona {
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean nuovo) {
-        super(username, psw, PersonaType.VOLONTARIO, nuovo);
+        super(username, psw, PersonaType.VOLONTARIO, nuovo, false);
+    }
+
+    public Volontario(String username, String psw, boolean nuovo, boolean hash) {
+        super(username, psw, PersonaType.VOLONTARIO, nuovo, hash);
     }
 
     /**

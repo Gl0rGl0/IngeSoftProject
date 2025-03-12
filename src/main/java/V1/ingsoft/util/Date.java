@@ -7,9 +7,22 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Date {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime localDate;
+
+    @JsonCreator
+    public Date(@JsonProperty("localDate") LocalDateTime lc) {
+        this.localDate = lc;
+    }
 
     /**
      * Costruisce una data completa (giorno, mese e anno).
@@ -48,7 +61,7 @@ public class Date {
     private void setData(String[] in) {
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
-        int year = -1; // Anno non specificato
+        int year = 0; // Anno non specificato
 
         if (in.length == 3) {
             year = Integer.parseInt(in[2]);

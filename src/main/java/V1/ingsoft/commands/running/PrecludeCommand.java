@@ -23,6 +23,7 @@ public class PrecludeCommand extends AbstractCommand {
         }
 
         Date toOperate = new Date(args[0]); // SPERANDO CHE SIA NEL FORMATO CORRETTO, MAGARI UN TRYCATCH PROSSIMAMENTE
+                                            // TODO
 
         if (!separatiDaDueMesi(toOperate, app.date)) {
             ViewSE.println(

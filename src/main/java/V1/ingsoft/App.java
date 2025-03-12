@@ -68,7 +68,7 @@ public class App {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(() -> {
             azioneDelGiorno();
-        }, 1, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS); // OGNI GIORNO VIRTUALE (ogni 12min) = 60 * 12
+        }, 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS); // OGNI GIORNO VIRTUALE (ogni 12min) = 60 * 12
     }
 
     private void initVirtualTime() {

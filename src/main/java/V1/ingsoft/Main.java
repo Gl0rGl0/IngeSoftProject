@@ -23,10 +23,11 @@ public class Main {
         ViewSE view = new ViewSE(controller);
 
         // Mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
-        controller.skipSetupTesting = model.getNew();
+        controller.skipSetupTesting = true; // !model.getNew();
 
         // if (controller.skipSetupTesting)
         Test(controller); // Prima di avviare il ciclo...
+        System.out.println(controller.db.getConfiguratori());
         // initDisponibilita(controller);
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
@@ -42,10 +43,6 @@ public class Main {
         // System.out.println(v2.numDisponibilita); //IL CAST FUNZIONA
         controller.interpreter("login config1 pass1C");
         controller.interpreter("changepsw pass1C pass1C");
-
-        System.out.println("\n\n");
-        System.out.println(controller.db.dbVolontarioHelper.saveJson(controller.db.dbVolontarioHelper.getJson()));
-        System.out.println("\n\n");
 
         view.run();
     }
@@ -137,7 +134,6 @@ public class Main {
         controller.interpreter(addFruit + fruitore3);
 
         controller.user = new Guest();
-        System.out.println(controller.db.dbVolontarioHelper.getPersonList());
     }
 
     public static void initDisponibilita(App controller) {
@@ -149,8 +145,7 @@ public class Main {
 
         for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
             for (boolean b : v.getDisponibilita())
-                System.out.print(b);
-            System.out.println();
+                ;
         }
     }
 }

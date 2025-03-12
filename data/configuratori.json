@@ -1,9 +1,9 @@
 [ {
-  "psw" : "pass2C",
   "username" : "config2",
+  "psw" : "fd5c8f52",
   "nuovo" : true
 }, {
-  "psw" : "pass1C",
   "username" : "config1",
-  "nuovo" : true
+  "psw" : "fd5c8f32",
+  "nuovo" : false
 } ]

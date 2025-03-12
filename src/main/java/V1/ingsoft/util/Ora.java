@@ -1,10 +1,17 @@
 package V1.ingsoft.util;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Ora {
     int hh;
     int mm;
 
-    public Ora(int hh, int mm) {
+    @JsonCreator
+    public Ora(@JsonProperty("hh") int hh, @JsonProperty("mm") int mm) {
         this.hh = hh;
         this.mm = mm;
     }

@@ -12,7 +12,11 @@ public class Fruitore extends Persona {
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean nuovo) {
-        super(username, psw, PersonaType.FRUITORE, nuovo);
+        super(username, psw, PersonaType.FRUITORE, nuovo, false);
+    }
+
+    public Fruitore(String username, String psw, boolean nuovo, boolean hash) {
+        super(username, psw, PersonaType.FRUITORE, nuovo, hash);
     }
 
     @Override

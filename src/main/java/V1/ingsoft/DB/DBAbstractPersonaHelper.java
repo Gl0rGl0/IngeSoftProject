@@ -46,7 +46,8 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         try {
             Constructor<T> constructor;
             constructor = clazz.getConstructor(String.class, String.class, boolean.class);
-            T newPersona = constructor.newInstance(username, newPsw, false);
+            T newPersona = constructor.newInstance(username, DBAbstractPersonaHelper.securePsw(username, newPsw),
+                    false);
             cachedPersons.put(username, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
             return saveJson(getPersonList());
         } catch (Exception e) {

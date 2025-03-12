@@ -1,1 +1,29 @@
-[ ]
+[ {
+  "titolo" : "Alla scoperta della cascata",
+  "descrizione" : "Un percorso guidato per scoprire le meraviglie naturali del parco.",
+  "puntoIncontro" : {
+    "longitudine" : 10.800000190734863,
+    "latitudine" : 39.310001373291016
+  },
+  "dataInizioPeriodo" : {
+    "localDate" : "0001-05-15T00:00:00"
+  },
+  "dataFinePeriodo" : {
+    "localDate" : "0001-12-21T00:00:00"
+  },
+  "oraInizio" : {
+    "hh" : 9,
+    "mm" : 0
+  },
+  "durataVisita" : 90,
+  "free" : false,
+  "numMinPartecipants" : 10,
+  "numMaxPartecipants" : 20,
+  "giorni" : [ "SATURDAY", "SUNDAY" ],
+  "dataInserimento" : {
+    "localDate" : "2025-03-12T10:19:23"
+  },
+  "luogoUID" : null,
+  "UID" : "45199ce4-564b-4a0b-92b6-ff81d58e3097",
+  "volontariUID" : [ ]
+} ]

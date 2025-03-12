@@ -1,6 +1,10 @@
 package V1.ingsoft.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import V1.ingsoft.ViewSE;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +13,10 @@ import java.util.Collection;
 
 public class JsonStorage {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    static {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     private static final String basePath = "data/";
 
@@ -22,7 +30,8 @@ public class JsonStorage {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            System.out.println("Errore nel caricamento del file JSON: " + e.getMessage());
+            AssertionControl.logMessage("Errore nel carocamento del file JSON", 1, "JsonStorage");
+            ViewSE.println("Errore nel caricamento del file JSON: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -33,7 +42,8 @@ public class JsonStorage {
                     collection);
             return true;
         } catch (IOException e) {
-            System.out.println("Errore nel salvataggio del file JSON: " + e.getMessage());
+            AssertionControl.logMessage("Errore nel salvataggio del file JSON", 1, "JsonStorage");
+            ViewSE.println("Errore nel salvataggio del file JSON: " + e.getMessage());
             return false;
         }
     }

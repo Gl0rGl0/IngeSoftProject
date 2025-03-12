@@ -1,13 +1,13 @@
 [ {
-  "psw" : "pass3F",
   "username" : "fruit3",
+  "psw" : "793738e3",
   "nuovo" : true
 }, {
-  "psw" : "pass2F",
   "username" : "fruit2",
+  "psw" : "793738c3",
   "nuovo" : true
 }, {
-  "psw" : "pass1F",
   "username" : "fruit1",
+  "psw" : "793738a3",
   "nuovo" : true
 } ]

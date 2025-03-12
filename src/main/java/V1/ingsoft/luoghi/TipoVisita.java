@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class TipoVisita {
     public static final String PATH = "tipoVisite";
 
@@ -24,14 +31,49 @@ public class TipoVisita {
     boolean free;
     int numMinPartecipants;
     int numMaxPartecipants;
-
-    public ArrayList<DayOfWeek> giorni;
-
+    ArrayList<DayOfWeek> giorni;
     Date dataInserimento;
-    public StatusVisita sv = StatusVisita.ATTESA;
     String UID;
+
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
+
+    @JsonIgnore
+    public StatusVisita sv = StatusVisita.ATTESA;
+
+    @JsonCreator
+    public TipoVisita(
+            @JsonProperty("titolo") String titolo,
+            @JsonProperty("descrizione") String descrizione,
+            @JsonProperty("puntoIncontro") GPS puntoIncontro,
+            @JsonProperty("dataInizioPeriodo") Date dataInizioPeriodo,
+            @JsonProperty("dataFinePeriodo") Date dataFinePeriodo,
+            @JsonProperty("oraInizio") Ora oraInizio,
+            @JsonProperty("durataVisita") int durataVisita,
+            @JsonProperty("free") boolean free,
+            @JsonProperty("numMinPartecipants") int numMinPartecipants,
+            @JsonProperty("numMaxPartecipants") int numMaxPartecipants,
+            @JsonProperty("giorni") ArrayList<DayOfWeek> giorni,
+            @JsonProperty("dataInserimento") Date dataInserimento,
+            @JsonProperty("volontari") ArrayList<String> volontariUID,
+            @JsonProperty("luogoUID") String luogoUID,
+            @JsonProperty("UID") String UID) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.puntoIncontro = puntoIncontro;
+        this.dataInizioPeriodo = dataInizioPeriodo;
+        this.dataFinePeriodo = dataFinePeriodo;
+        this.oraInizio = oraInizio;
+        this.durataVisita = durataVisita;
+        this.free = free;
+        this.numMinPartecipants = numMinPartecipants;
+        this.numMaxPartecipants = numMaxPartecipants;
+        this.giorni = giorni;
+        this.dataInserimento = dataInserimento;
+        this.volontariUID = volontariUID;
+        this.luogoUID = luogoUID;
+        this.UID = UID;
+    }
 
     // Costruttore
     public TipoVisita(
@@ -53,7 +95,6 @@ public class TipoVisita {
         this.dataInserimento = dataI;
 
         this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
-
     }
 
     public TipoVisita(

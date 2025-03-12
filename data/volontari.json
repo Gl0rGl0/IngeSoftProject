@@ -1,1 +1,13 @@
-[ ]
+[ {
+  "username" : "volont1",
+  "psw" : "ea5af1c5",
+  "nuovo" : true
+}, {
+  "username" : "volont3",
+  "psw" : "ea5af205",
+  "nuovo" : true
+}, {
+  "username" : "volont2",
+  "psw" : "ea5af1e5",
+  "nuovo" : true
+} ]

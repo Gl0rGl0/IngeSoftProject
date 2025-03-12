@@ -1,10 +1,19 @@
 package V1.ingsoft.util;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class GPS {
     double longitudine;
     double latitudine;
 
-    public GPS(double longitudine, double latitudine) {
+    @JsonCreator
+    public GPS(
+            @JsonProperty("longitudine") double longitudine,
+            @JsonProperty("latitudine") double latitudine) {
         this.longitudine = longitudine;
         this.latitudine = latitudine;
     }

@@ -9,6 +9,10 @@ public class Configuratore extends Persona {
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean nuovo) {
-        super(username, psw, PersonaType.CONFIGURATORE, nuovo);
+        super(username, psw, PersonaType.CONFIGURATORE, nuovo, false);
+    }
+
+    public Configuratore(String username, String psw, boolean nuovo, boolean hash) {
+        super(username, psw, PersonaType.CONFIGURATORE, nuovo, hash);
     }
 }

@@ -1,20 +1,11 @@
 [ {
-  "nomeLuogo" : "Parco Grotta Cascata del Varone",
-  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
-  "posizione" : {
-    "longitudine" : 45.8849983215332,
-    "latitudine" : 10.821000099182129
-  },
-  "UID" : "f5b46cd9-a10c-42d5-8680-6c8cad5e8c88",
-  "visiteUID" : [ ]
-}, {
   "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
   "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
   "posizione" : {
     "longitudine" : 45.53900146484375,
     "latitudine" : 10.220000267028809
   },
-  "UID" : "3ac19f1a-313d-46e4-882c-b073176c695b",
+  "UID" : "35d16a09-6605-4c99-b7d6-fc4c76217d24",
   "visiteUID" : [ ]
 }, {
   "nomeLuogo" : "Luogo Test",
@@ -23,6 +14,204 @@
     "longitudine" : 12.34000015258789,
     "latitudine" : 56.779998779296875
   },
-  "UID" : "9f7f1fbe-206b-41b7-a65c-61307f862a8b",
+  "UID" : "1355f66a-116e-4584-9ff4-7034489eb016",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "d3332c87-5812-4439-909a-5431b6d2c0a0",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "e7562bf0-cbb4-4c93-a003-ec7dcb91fda2",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "9d851e7c-4e58-4da3-80fa-38e871a152af",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "f071e2f8-2787-432e-8ba6-89336cb3c4b3",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "2af62021-8394-4a94-95fc-77c14217e36c",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "ba6f6241-244f-4d5b-9912-c753b934e567",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "3fca0d0c-a0ba-4a78-b613-c5105e9c19fe",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "0c18dbf8-5209-4e5f-be6a-5e52cdde66ab",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "6ef8ccbb-c63e-4ab2-a14f-26173c3ba296",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "68f4ca4e-6417-41fb-bfd0-a8d308b5692a",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "4ad7f0a9-59e9-43c1-a0f0-b7a3bccb1fc0",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "8efcc316-279f-41e2-80d3-7be41bfb2d15",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "a934aa2d-a5fe-4a53-88b8-52849bca5c7a",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "91c28578-54f4-42e4-9c03-062c1818ccec",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "b5e8db09-349b-4681-aa29-494d88b3e3f1",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "ba93663c-c10f-4497-96f4-e4ced1c8d28c",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "f9cfec7b-e00b-41d7-bda0-e971db9b3a1e",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "4bea1bcc-66d0-4aaf-b4e1-d5aa3bc33668",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "2121156f-27f8-4320-9011-6039923f1b84",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Parco Grotta Cascata del Varone",
+  "descrizioneLuogo" : "Un incantevole parco naturale con una spettacolare cascata sotterranea.",
+  "posizione" : {
+    "longitudine" : 45.8849983215332,
+    "latitudine" : 10.821000099182129
+  },
+  "UID" : "b4c55057-836b-424c-b1b1-beab2d1e2e3c",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Pinacoteca Tosio-Martinengo di Brescia",
+  "descrizioneLuogo" : "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.",
+  "posizione" : {
+    "longitudine" : 45.53900146484375,
+    "latitudine" : 10.220000267028809
+  },
+  "UID" : "60b450f0-1b85-445c-b33c-100b9187bf85",
+  "visiteUID" : [ ]
+}, {
+  "nomeLuogo" : "Luogo Test",
+  "descrizioneLuogo" : "Descrizione luogo test",
+  "posizione" : {
+    "longitudine" : 12.34000015258789,
+    "latitudine" : 56.779998779296875
+  },
+  "UID" : "246878b8-ea52-44b4-9f56-bd88b6c53955",
   "visiteUID" : [ ]
 } ]

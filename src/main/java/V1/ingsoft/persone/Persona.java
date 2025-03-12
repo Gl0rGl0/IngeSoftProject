@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import V1.ingsoft.DB.DBAbstractPersonaHelper;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
@@ -18,8 +21,12 @@ public abstract class Persona {
     protected ArrayList<String> uidVisitePartecipante = new ArrayList<>();
 
     public Persona(String username, String psw, PersonaType personaType, boolean nuovo) {
+        this(username, psw, PersonaType.VOLONTARIO, nuovo, true);
+    }
+
+    public Persona(String username, String psw, PersonaType personaType, boolean nuovo, boolean hash) {
         this.username = username;
-        this.psw = psw;
+        this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
         this.personaType = personaType;
         this.nuovo = nuovo;
     }
