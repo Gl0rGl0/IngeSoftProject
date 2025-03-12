@@ -95,6 +95,7 @@ public class App {
         commandRegistry.put("assign", AssignC);
         commandRegistry.put("setmax", SetMaxC);
         commandRegistry.put("help", new HelpCommand(this, CommandList.HELP));
+        commandRegistry.put("myvisit", new MyVisitCommand(this));
 
         // Puoi aggiungere altri comandi
         commandRegistry.put("exit", ExitC);

@@ -36,7 +36,8 @@ public class Date {
     }
 
     public Date() {
-        this.localDate = LocalDateTime.now();
+        //this.localDate = LocalDateTime.now();
+        this(16, 1, 2024);
     }
 
     /**

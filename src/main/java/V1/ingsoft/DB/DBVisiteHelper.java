@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class DBVisiteHelper extends DBAbstractHelper<Visita> {
 
     private final HashMap<String, Visita> cachedVisite = new HashMap<>();
-    private ArrayList<Visita> archivio;
+    private ArrayList<Visita> archivio = new ArrayList<>();
 
     public DBVisiteHelper() {
         super(Visita.PATH, Visita.class);

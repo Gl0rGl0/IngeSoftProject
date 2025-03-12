@@ -90,7 +90,7 @@ public class TipoVisita {
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
-        this.UID = UID;
+        this.UID = titolo.hashCode() + "";
 
         this.dataInserimento = dataI;
 
@@ -113,7 +113,7 @@ public class TipoVisita {
         this.numMaxPartecipants = numMaxPartecipants;
         this.dataInserimento = dateI;
 
-        this.UID = UUID.randomUUID().toString();
+        this.UID = titolo.hashCode() + "";
 
         this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
 
@@ -149,7 +149,7 @@ public class TipoVisita {
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
-            this.UID = UUID.randomUUID().toString();
+            this.UID = titolo.hashCode() + "";
             this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
 
             this.dataInserimento = d;

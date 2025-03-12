@@ -133,7 +133,11 @@ public enum CommandList implements ListInterface {
             "Chiude il programma", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI (0,100)
 
     HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita(),
-            PersonaType.MAX.getPriorita()); // TUTTI (0,100)
+            PersonaType.MAX.getPriorita()),
+    
+    MYVISIT("""
+            
+            """, "Visualizza le visite associate all'utente corrente", PersonaType.FRUITORE.getPriorita(), PersonaType.VOLONTARIO.getPriorita());        // TUTTI (0,100)
 
     @Override
     public String getHelpMessage(int userPerm) {

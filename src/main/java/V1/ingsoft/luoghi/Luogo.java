@@ -1,6 +1,7 @@
 package V1.ingsoft.luoghi;
 
-import V1.ingsoft.persone.PersonaType;
+import V1.ingsoft.DB.DBAbstractPersonaHelper;
+// import V1.ingsoft.persone.PersonaType;
 import V1.ingsoft.util.GPS;
 
 import java.util.ArrayList;
@@ -33,16 +34,17 @@ public class Luogo {
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
         this.UID = UID;
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n\n\n");
     }
 
     public Luogo(
-            @JsonProperty("nomeLuogo") String nomeLuogo,
-            @JsonProperty("descrizioneLuogo") String descrizioneLuogo,
-            @JsonProperty("posizione") GPS posizione) {
+            String nomeLuogo,
+            String descrizioneLuogo,
+            GPS posizione) {
         this.nomeLuogo = nomeLuogo;
         this.descrizioneLuogo = descrizioneLuogo;
         this.posizione = posizione;
-        this.UID = UUID.randomUUID().toString();
+        this.UID = nomeLuogo.hashCode() + "";
     }
 
     @Override

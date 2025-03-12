@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
@@ -28,6 +30,17 @@ public class Visita {
     @JsonIgnore
     public ArrayList<Iscrizione> partecipanti = new ArrayList<>();
 
+    @JsonCreator
+    public Visita(
+            @JsonProperty("data") Date data,
+            @JsonProperty("UID") String UID,
+            @JsonProperty("stato") StatusVisita stato) {
+
+        this.data = data;
+        this.UID = UID;
+        this.stato = stato;
+    }
+
     public Visita(TipoVisita tipo, Date data, String UID, String UIDTipoVisita) {
         this.tipo = tipo;
         this.data = data;
@@ -39,7 +52,7 @@ public class Visita {
         this.tipo = tipo;
         this.data = data;
         this.tipoVisitaUID = UIDTipoVisita;
-        this.UID = UUID.randomUUID().toString();
+        this.UID = UIDTipoVisita + data.hashCode();
     }
 
     public StatusVisita getStatus() {

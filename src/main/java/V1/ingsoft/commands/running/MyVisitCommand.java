@@ -11,7 +11,7 @@ public class MyVisitCommand extends AbstractCommand {
 
     public MyVisitCommand(App app) {
         this.app = app;
-        super.commandInfo = CommandList.ADD; // MYVISIT;
+        super.commandInfo = CommandList.MYVISIT; // MYVISIT;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class MyVisitCommand extends AbstractCommand {
         switch (tipo) {
             case FRUITORE -> listFruitore();
             case VOLONTARIO -> listVolontari();
-            default -> ViewSE.println("Opzione non riconosciuta per 'myvisit'.");
+            default -> ViewSE.println("Opzione valida solo per volontari e fruitori");
         }
     }
 

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import V1.ingsoft.DB.DBUtils;
 import V1.ingsoft.persone.Configuratore;
+import V1.ingsoft.persone.Fruitore;
 import V1.ingsoft.persone.Guest;
 import V1.ingsoft.persone.Volontario;
 import V1.ingsoft.util.Date;
@@ -40,10 +41,14 @@ public class Main {
         // v.numDisponibilita = 5;
         // p = v;
         // Volontario v2 = (Volontario) p;
+        System.out.println(controller.db.dbLuoghiHelper.getLuoghi());
         // System.out.println(v2.numDisponibilita); //IL CAST FUNZIONA
+
+
         controller.interpreter("login config1 pass1C");
         controller.interpreter("changepsw pass1C pass1C");
 
+        //controller.user = new Fruitore("V1", "ciao", false);
         view.run();
     }
 
@@ -82,18 +87,20 @@ public class Main {
         // v.setDisponibilita(controller.date, new Date("26/03/2025"));
         // v.setDisponibilita(controller.date, new Date("28/03/2025"));
         // v.printDisponibilita();
+
+        initDBInterprete(controller);
     }
 
     public static void initDBInterprete(App controller) {
         controller.user = new Configuratore("", "", false);
 
         String addVisita = "add -t ";
-        String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo";
+        // String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90 false 10 20 SaDo";
         String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa";
         String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo";
         String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe";
 
-        controller.interpreter(addVisita + visitaT1);
+        // controller.interpreter(addVisita + visitaT1);
         controller.interpreter(addVisita + visitaT3);
         controller.interpreter(addVisita + visitaT2);
         controller.interpreter(addVisita + visitaTT);
@@ -143,9 +150,9 @@ public class Main {
                 v.setDisponibilita(controller.date, new Date(String.format("%d/%d/2025", r.nextInt(1, 28), 5)));
         }
 
-        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
-            for (boolean b : v.getDisponibilita())
-                ;
-        }
+        // for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
+        //     for (boolean b : v.getDisponibilita())
+        //     ;
+        // }
     }
 }

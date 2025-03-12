@@ -46,6 +46,7 @@ public class ListCommand extends AbstractCommand {
 
     private void listLuoghi() {
         for (Luogo l : app.db.getLuoghi()) {
+            ViewSE.println(l.getNome());
             for (Visita visita : app.db.trovaVisiteByLuogo(l)) {
                 ViewSE.println(visita);
             }

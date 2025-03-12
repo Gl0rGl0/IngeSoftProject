@@ -2,8 +2,8 @@ package V1.ingsoft.commands;
 
 import V1.ingsoft.App;
 import V1.ingsoft.ViewSE;
-import V1.ingsoft.DB.DBAbstractHelper;
-import V1.ingsoft.DB.DBAbstractPersonaHelper;
+// import V1.ingsoft.DB.DBAbstractHelper;
+// import V1.ingsoft.DB.DBAbstractPersonaHelper;
 import V1.ingsoft.commands.running.CommandList;
 
 public class ChangePswCommand extends AbstractCommand {
