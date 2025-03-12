@@ -34,8 +34,8 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         return new ArrayList<>(cachedLuoghi.values());
     }
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps) {
-        return addLuogo(new Luogo(nome, descrizione, gps));
+    public boolean addLuogo(String nome, String description, GPS gps) {
+        return addLuogo(new Luogo(nome, description, gps));
     }
 
     /**
@@ -86,7 +86,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
      */
     public Luogo findLuogo(String nome) {
         for (Luogo l : getLuoghi()) {
-            if (l.getNome().equalsIgnoreCase(nome)) {
+            if (l.getName().equalsIgnoreCase(nome)) {
                 return l;
             }
         }

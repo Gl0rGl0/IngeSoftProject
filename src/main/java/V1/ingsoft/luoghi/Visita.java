@@ -20,43 +20,43 @@ public class Visita {
 
     @JsonIgnore
     public TipoVisita tipo;
-    public Date data;
+    public Date date;
     public String UID;
     public String tipoVisitaUID;
 
     @JsonIgnore
     public String volontarioUID;
-    public StatusVisita stato = StatusVisita.PROPOSTA;
+    public StatusVisita status = StatusVisita.PROPOSTA;
     @JsonIgnore
-    public ArrayList<Iscrizione> partecipanti = new ArrayList<>();
+    public ArrayList<Iscrizione> fruitori = new ArrayList<>();
 
     @JsonCreator
     public Visita(
             @JsonProperty("data") Date data,
             @JsonProperty("UID") String UID,
-            @JsonProperty("stato") StatusVisita stato) {
+            @JsonProperty("stato") StatusVisita status) {
 
-        this.data = data;
+        this.date = data;
         this.UID = UID;
-        this.stato = stato;
+        this.status = status;
     }
 
-    public Visita(TipoVisita tipo, Date data, String UID, String UIDTipoVisita) {
+    public Visita(TipoVisita tipo, Date date, String UID, String UIDTipoVisita) {
         this.tipo = tipo;
-        this.data = data;
+        this.date = date;
         this.tipoVisitaUID = UIDTipoVisita;
         this.UID = UID;
     }
 
-    public Visita(TipoVisita tipo, Date data, String UIDTipoVisita) {
+    public Visita(TipoVisita tipo, Date date, String UIDTipoVisita) {
         this.tipo = tipo;
-        this.data = data;
+        this.date = date;
         this.tipoVisitaUID = UIDTipoVisita;
-        this.UID = UIDTipoVisita + data.hashCode();
+        this.UID = UIDTipoVisita + date.hashCode();
     }
 
     public StatusVisita getStatus() {
-        return this.stato;
+        return this.status;
     }
 
     public void setVolontario(String uidVolontario) {
@@ -80,83 +80,83 @@ public class Visita {
     }
 
     public Date getDate() {
-        return data;
+        return date;
     }
 
-    public String getTitolo() {
-        return tipo.getTitolo();
+    public String getTitle() {
+        return tipo.getTitle();
     }
 
-    public void setStatus(StatusVisita s) {
-        this.stato = s;
+    public void setStatus(StatusVisita status) {
+        this.status = status;
     }
 
-    public boolean isPresenteFruitore(String userF) {
-        for (Iscrizione i : partecipanti) {
+    public boolean hasFruitore(String userF) {
+        for (Iscrizione i : fruitori) {
             if (i.fruitoreUID.equals(userF))
                 return true;
         }
         return false;
     }
 
-    public String addPartecipanti(Fruitore f, int n) {
-        if (tipo.numMaxPartecipants - getAttualeCapienza() < n) {
+    public String addPartecipants(Fruitore f, int n) {
+        if (tipo.numMaxPartecipants - getCurrentNumber() < n) {
             return "capienza";
         }
 
-        if (isPresenteFruitore(f.getUsername())) {
+        if (hasFruitore(f.getUsername())) {
             return "presente";
         }
 
-        Iscrizione nuova = new Iscrizione(f.getUsername(), n);
-        partecipanti.add(nuova);
+        Iscrizione newIscrizione = new Iscrizione(f.getUsername(), n);
+        fruitori.add(newIscrizione);
 
-        if (getAttualeCapienza() == tipo.numMaxPartecipants) {
+        if (getCurrentNumber() == tipo.numMaxPartecipants) {
             setStatus(StatusVisita.COMPLETA);
         }
-        return nuova.getUIDFruitore();
+        return newIscrizione.getUIDFruitore();
     }
 
-    public void rimuoviPartecipante(String user) {
-        int capienzaAttuale = getAttualeCapienza();
-        for (Iscrizione i : partecipanti) {
+    public void removePartecipant(String user) {
+        int capienzaAttuale = getCurrentNumber();
+        for (Iscrizione i : fruitori) {
             if (i.getUIDFruitore().equals(user)) {
-                if (partecipanti.remove(i) && capienzaAttuale == tipo.getNumMaxPartecipants())
+                if (fruitori.remove(i) && capienzaAttuale == tipo.getNumMaxPartecipants())
                     setStatus(StatusVisita.PROPOSTA);
                 return;
             }
         }
     }
 
-    public int getAttualeCapienza() {
+    public int getCurrentNumber() {
         int out = 0;
-        for (Iscrizione i : partecipanti) {
-            out += i.getNumeroIscrizioni();
+        for (Iscrizione i : fruitori) {
+            out += i.getQuantity();
         }
         return out;
     }
 
-    public void mancano3Giorni(Date d) {
-        if (data.dayOfTheYear() - d.dayOfTheYear() <= 3) {
-            if (getAttualeCapienza() < this.tipo.numMinPartecipants) {
-                this.stato = StatusVisita.CANCELLATA;
+    public void isThreeDaysFrom(Date d) {
+        if (date.dayOfTheYear() - d.dayOfTheYear() <= 3) {
+            if (getCurrentNumber() < this.tipo.numMinPartecipants) {
+                this.status = StatusVisita.CANCELLATA;
             } else {
-                this.stato = StatusVisita.CONFERMATA;
+                this.status = StatusVisita.CONFERMATA;
             }
         }
     }
 
     @Override
     public String toString() {
-        return "Titolo: " + tipo.getTitolo()
-                + "\nDescrizione: " + tipo.getDescrizione()
-                + "\nPunto Incontro: " + tipo.getGps()
-                + "\nData: " + data
-                + "\nTime: " + tipo.getTimeInizio()
+        return "Titolo: " + tipo.getTitle()
+                + "\nDescrizione: " + tipo.getDescription()
+                + "\nPunto Incontro: " + tipo.getMeetingPlace()
+                + "\nData: " + date
+                + "\nTime: " + tipo.getInitTime()
                 + "\nBiglietto necessario: " + tipo.isFree();
     }
 
     public ArrayList<Iscrizione> getIscrizioni() {
-        return partecipanti;
+        return fruitori;
     }
 }

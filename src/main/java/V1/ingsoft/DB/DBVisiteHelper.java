@@ -56,9 +56,9 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @param nome il nome della visita da cercare
      * @return la Visita trovata, oppure null se non esiste.
      */
-    public Visita findVisita(String titolo, String data) {
+    public Visita findVisita(String title, String data) {
         for (Visita v : cachedVisite.values()) {
-            if (v.getTitolo().equalsIgnoreCase(titolo) && v.getDate().toString().equals(data)) {
+            if (v.getTitle().equalsIgnoreCase(title) && v.getDate().toString().equals(data)) {
                 return v;
             }
         }
@@ -107,7 +107,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
 
     public void checkVisiteInTerminazione(Date d) {
         for (Visita v : getVisite()) {
-            v.mancano3Giorni(d);
+            v.isThreeDaysFrom(d);
             if (v.getStatus() == StatusVisita.CANCELLATA) {
                 scriviVisiteCancellate(v);
                 cachedVisite.remove(v.getUID());

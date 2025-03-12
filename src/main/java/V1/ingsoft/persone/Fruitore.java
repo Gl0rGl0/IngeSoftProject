@@ -9,31 +9,31 @@ public class Fruitore extends Persona {
 
     @JsonCreator
     public Fruitore(
-            @JsonProperty("username") String username,
+            @JsonProperty("userName") String userName,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean nuovo) {
-        super(username, psw, PersonaType.FRUITORE, nuovo, false);
+            @JsonProperty("new") boolean isNew) {
+        super(userName, psw, PersonaType.FRUITORE, isNew, false);
     }
 
-    public Fruitore(String username, String psw, boolean nuovo, boolean hash) {
-        super(username, psw, PersonaType.FRUITORE, nuovo, hash);
-    }
-
-    @Override
-    public ArrayList<String> getVisiteIscrittoUID() {
-        return this.uidVisitePartecipante;
+    public Fruitore(String userName, String psw, boolean isNew, boolean hash) {
+        super(userName, psw, PersonaType.FRUITORE, isNew, hash);
     }
 
     @Override
-    public boolean iscriviVisita(String uid) {
-        if (uidVisitePartecipante.contains(uid))
+    public ArrayList<String> getVisiteUIDs() {
+        return this.visiteUIDs;
+    }
+
+    @Override
+    public boolean subscribeToVisit(String uid) {
+        if (visiteUIDs.contains(uid))
             return false;
 
-        return uidVisitePartecipante.add(uid);
+        return visiteUIDs.add(uid);
     }
 
     @Override
-    public boolean disiscriviVisita(String uid) {
-        return uidVisitePartecipante.remove(uid);
+    public boolean removeFromVisita(String uid) {
+        return visiteUIDs.remove(uid);
     }
 }

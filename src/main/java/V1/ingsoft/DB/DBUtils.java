@@ -36,7 +36,7 @@ public class DBUtils {
         this.isNew = dbConfiguratoreHelper.isNew() && dbLuoghiHelper.isNew();
     }
 
-    public boolean getNew() {
+    public boolean isNew() {
         return this.isNew;
     }
 
@@ -97,8 +97,8 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(v);
     }
 
-    public boolean addLuogo(String nome, String descrizione, GPS gps) {
-        return dbLuoghiHelper.addLuogo(nome, descrizione, gps);
+    public boolean addLuogo(String nome, String description, GPS gps) {
+        return dbLuoghiHelper.addLuogo(nome, description, gps);
     }
 
     public boolean addTipoVisita(TipoVisita tv) {
@@ -110,7 +110,7 @@ public class DBUtils {
     }
 
     // ================================================================
-    // Adders per oggetti da creare tramite username/psw - String
+    // Adders per oggetti da creare tramite userName/psw - String
     // ================================================================
     public boolean addConfiguratore(String user, String psw) {
         if (findUser(user) != null)
@@ -137,25 +137,25 @@ public class DBUtils {
     // ================================================================
     // Remove methods
     // ================================================================
-    public boolean removeConfiguratore(String username) {
-        return dbConfiguratoreHelper.removePersona(username);
+    public boolean removeConfiguratore(String userName) {
+        return dbConfiguratoreHelper.removePersona(userName);
     }
 
-    public boolean removeFruitore(String username) {
+    public boolean removeFruitore(String userName) {
         // eliminare tutte le iscrizioni a lui collegate
-        return dbFruitoreHelper.removePersona(username);
+        return dbFruitoreHelper.removePersona(userName);
     }
 
-    public boolean removeVolontario(String username) {
-        Volontario toRemove = findVolontario(username);
+    public boolean removeVolontario(String userName) {
+        Volontario toRemove = findVolontario(userName);
         if (toRemove == null)
             return false;
 
         for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
-            tv.removeVolontario(username);
+            tv.removeVolontario(userName);
         }
 
-        return dbVolontarioHelper.removePersona(username);
+        return dbVolontarioHelper.removePersona(userName);
     }
 
     public boolean removeTipoVisita(String nomeVisita) {
@@ -174,22 +174,22 @@ public class DBUtils {
         dbVisiteHelper.removeVisita(nomeVisita, data);
     }
 
-    public boolean removeLuogo(String nomeLuogo) {
-        Luogo toRemove = getLuogoByName(nomeLuogo);
+    public boolean removeLuogo(String name) {
+        Luogo toRemove = getLuogoByName(name);
         if (toRemove == null)
             return false;
 
-        return dbLuoghiHelper.removeLuogo(nomeLuogo);
+        return dbLuoghiHelper.removeLuogo(name);
     }
 
     // ================================================================
     // Metodi di aggiornamento (change password)
     // ================================================================
-    public boolean changePassword(String username, String newPsw, PersonaType tipoPersona) {
+    public boolean changePassword(String userName, String newPsw, PersonaType tipoPersona) {
         return switch (tipoPersona) {
-            case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(username, newPsw);
-            case FRUITORE -> dbFruitoreHelper.changePassword(username, newPsw);
-            case VOLONTARIO -> dbVolontarioHelper.changePassword(username, newPsw);
+            case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(userName, newPsw);
+            case FRUITORE -> dbFruitoreHelper.changePassword(userName, newPsw);
+            case VOLONTARIO -> dbVolontarioHelper.changePassword(userName, newPsw);
             default -> false;
         };
     }
@@ -220,14 +220,14 @@ public class DBUtils {
     private void refreshVolontari() {
         for (Volontario v : dbVolontarioHelper.getPersonList()) {
             boolean toRemove = true;
-            for (String tv : v.getTipiVisiteUID()) {
+            for (String tv : v.getTipiVisiteUIDs()) {
                 TipoVisita toCheck = dbTipoVisiteHelper.getTipiVisitaByUID(tv);
                 if (toCheck == null) {
                     v.removeUIDVisita(tv);
                     continue;
                 }
 
-                toRemove &= !toCheck.lavoraUIDVolontario(v.getUsername());
+                toRemove &= !toCheck.assignedTo(v.getUsername());
 
                 if (!toRemove)
                     break;
@@ -242,10 +242,10 @@ public class DBUtils {
     // Se l'uid è 'null' o non è presente nei luoghi => rimuovo il tipo visita
     private void refreshTipoVisite() {
         for (TipoVisita v : dbTipoVisiteHelper.getTipiVisita()) {
-            String uidLuogo = v.getLuogoUID();
+            String uidLuogo = v.getLuogo();
 
             if (!dbLuoghiHelper.containsLuogoUID(uidLuogo))
-                dbTipoVisiteHelper.removeTipoVisita(v.getTitolo());
+                dbTipoVisiteHelper.removeTipoVisita(v.getTitle());
         }
     }
 
@@ -282,26 +282,26 @@ public class DBUtils {
     // ================================================================
     // Metodi di ricerca e login
     // ================================================================
-    public Persona findUser(String username) {
+    public Persona findUser(String userName) {
         Persona out;
 
-        out = dbConfiguratoreHelper.findPersona(username);
+        out = dbConfiguratoreHelper.findPersona(userName);
         if (out != null)
             return out;
 
-        out = dbVolontarioHelper.findPersona(username);
+        out = dbVolontarioHelper.findPersona(userName);
         if (out != null)
             return out;
 
-        out = dbFruitoreHelper.findPersona(username);
+        out = dbFruitoreHelper.findPersona(userName);
         if (out != null)
             return out;
 
         return null;
     }
 
-    public Volontario findVolontario(String username) {
-        return dbVolontarioHelper.findPersona(username);
+    public Volontario findVolontario(String userName) {
+        return dbVolontarioHelper.findPersona(userName);
     }
 
     public Persona login(String user, String psw) {
@@ -339,12 +339,12 @@ public class DBUtils {
     // ================================================================
     // Recupero di TipoVisita e Luogo tramite nome
     // ================================================================
-    public TipoVisita getTipoVisitaByName(String titoloVisita) {
-        return dbTipoVisiteHelper.findTipoVisita(titoloVisita);
+    public TipoVisita getTipoVisitaByName(String titleVisita) {
+        return dbTipoVisiteHelper.findTipoVisita(titleVisita);
     }
 
-    public Luogo getLuogoByName(String nomeLuogo) {
-        return dbLuoghiHelper.findLuogo(nomeLuogo);
+    public Luogo getLuogoByName(String name) {
+        return dbLuoghiHelper.findLuogo(name);
     }
 
     public Visita getVisitaByName(String string, String data) {
@@ -369,7 +369,7 @@ public class DBUtils {
     public ArrayList<Visita> trovaVisiteByVolontario(Volontario v) {
         ArrayList<Visita> out = new ArrayList<>();
 
-        for (String visitaUID : v.getTipiVisiteUID()) {
+        for (String visitaUID : v.getTipiVisiteUIDs()) {
             out.add(getVisitaByUID(visitaUID));
         }
 

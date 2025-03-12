@@ -144,14 +144,14 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (!tv.getVolontariUID().contains(v.getUsername())) {
+        if (!tv.getVolontariUIDs().contains(v.getUsername())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Il volontario non è assegnato a quel tipo di visita", 2,
                     CLASSNAME);
             return;
         }
 
-        if (!v.getDisponibilita()[d.getDay()]) {
+        if (!v.getAvailability()[d.getDay()]) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
                             + "| Il volontario non è disponibile quel day per quella visita",
@@ -160,7 +160,7 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (!tv.getGiorni().contains(d.dayOfTheWeek())) {
+        if (!tv.getDays().contains(d.dayOfTheWeek())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
                             + "| La visita non può essere svolta quel day della settimana",

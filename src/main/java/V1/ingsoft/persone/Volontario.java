@@ -20,16 +20,16 @@ public class Volontario extends Persona {
         UIDvisitePresentabili.remove(uidTipoVisita);
     }
 
-    public ArrayList<String> getTipiVisiteUID() {
+    public ArrayList<String> getTipiVisiteUIDs() {
         return this.UIDvisitePresentabili;
     }
 
     public static final String PATH = "volontari";
 
     @JsonIgnore
-    public boolean[] disponibilita = new boolean[31];
+    public boolean[] availability = new boolean[31];
     @JsonIgnore
-    public int numDisponibilita;
+    public int numAvailability;
     @JsonIgnore
     private boolean valid = false;
     @JsonIgnore
@@ -37,14 +37,14 @@ public class Volontario extends Persona {
 
     @JsonCreator
     public Volontario(
-            @JsonProperty("username") String username,
+            @JsonProperty("userName") String userName,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean nuovo) {
-        super(username, psw, PersonaType.VOLONTARIO, nuovo, false);
+            @JsonProperty("new") boolean isNew) {
+        super(userName, psw, PersonaType.VOLONTARIO, isNew, false);
     }
 
-    public Volontario(String username, String psw, boolean nuovo, boolean hash) {
-        super(username, psw, PersonaType.VOLONTARIO, nuovo, hash);
+    public Volontario(String userName, String psw, boolean isNew, boolean hash) {
+        super(userName, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 
     /**
@@ -58,17 +58,17 @@ public class Volontario extends Persona {
      * @param oggi la data corrente (per aggiornare eventualmente il periodo)
      * @param disp la data per cui si vuole impostare la disponibilità
      */
-    public void setDisponibilita(Date oggi, Date disp) {
-        if (!separatiDaDueMesi(oggi, disp)) {
+    public void setAvailability(Date oggi, Date disp) {
+        if (!twoMonthsDifference(oggi, disp)) {
             System.out.println("DATA SBAGLIATA"); // TODO REMOVE
             return;
         }
 
         valid = false;
-        disponibilita[disp.getDay()] = true;
+        availability[disp.getDay()] = true;
     }
 
-    private boolean separatiDaDueMesi(Date d1, Date d2) {
+    private boolean twoMonthsDifference(Date d1, Date d2) {
         int currentMonth = d1.getMonth();
         int targetMonth = d2.getMonth();
 
@@ -79,33 +79,33 @@ public class Volontario extends Persona {
         }
     }
 
-    public void clearDisp() {
-        disponibilita = new boolean[31];
+    public void clearAvailability() {
+        availability = new boolean[31];
     }
 
     /**
      * Metodo per stampare le disponibilità per il debug.
      */
-    public String getDisponibilitaString() {
-        return (Arrays.toString(disponibilita));
+    public String getAvailabilityString() {
+        return (Arrays.toString(availability));
     }
 
-    public boolean[] getDisponibilita() {
-        return disponibilita;
+    public boolean[] getAvailability() {
+        return availability;
     }
 
-    public int getNumDisponibilita() {
+    public int getNumAvailability() {
         if (valid) {
-            return numDisponibilita;
+            return numAvailability;
         }
 
-        for (boolean b : disponibilita) {
+        for (boolean b : availability) {
             if (b) {
-                numDisponibilita += 1;
+                numAvailability += 1;
             }
         }
 
         valid = true;
-        return numDisponibilita;
+        return numAvailability;
     }
 }

@@ -2,7 +2,7 @@
 
 ## Descrizione del Progetto
 
-Il presente progetto è un sistema software finalizzato a far incontrare la domanda e l’offerta di visite guidate relative a luoghi caratterizzati da bellezze naturali, paesaggistiche e architettoniche, nonché da interesse storico, artistico e culturale. L'applicazione è concepita per essere adottata da organizzazioni locali, prive di scopo di lucro, che desiderano promuovere la conoscenza del territorio, avvalendosi di volontari che prestano la loro opera a titolo gratuito.
+Il presente progetto è un sistema software finalizzato a far incontrare la domanda e l’offerta di visite guidate relative a luoghi caratterizzati da bellezze naturali, paesaggistiche e architettoniche, nonché da interesse storico, artistico e culturale. L'applicazione è concepita per essere adottata da organizzazioni locali, prive di scopo di lucro, che desiderano promuovere la conoscenza del territorio, avvalendosi di volontari che prestano la loro opera a title gratuito.
 
 ## Funzionalità
 

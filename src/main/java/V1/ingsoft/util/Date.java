@@ -78,10 +78,10 @@ public class Date {
 
     /**
      * Modifica la data incrementandola (o decrementandola, se g è negativo) di
-     * g giorni. Se l'anno non è noto (ossia -1), l'operazione non viene
+     * g days. Se l'anno non è noto (ossia -1), l'operazione non viene
      * eseguita.
      *
-     * @param g numero di giorni da aggiungere (o sottrarre se negativo)
+     * @param g numero di days da aggiungere (o sottrarre se negativo)
      */
     public synchronized void update(int g) {
         if (this.localDate.getYear() == -1) {

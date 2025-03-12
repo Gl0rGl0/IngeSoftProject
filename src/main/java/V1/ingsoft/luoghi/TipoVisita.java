@@ -21,18 +21,18 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public class TipoVisita {
     public static final String PATH = "tipoVisite";
 
-    String titolo;
-    String descrizione;
-    GPS puntoIncontro;
-    Date dataInizioPeriodo;
-    Date dataFinePeriodo;
-    Time oraInizio;
-    int durataVisita;
+    String title;
+    String description;
+    GPS meetingPlace;
+    Date initDay;
+    Date finishDay;
+    Time initTime;
+    int duration;
     boolean free;
     int numMinPartecipants;
     int numMaxPartecipants;
-    ArrayList<DayOfWeek> giorni;
-    Date dataInserimento;
+    ArrayList<DayOfWeek> days;
+    Date insertionDay;
     String UID;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
@@ -43,33 +43,33 @@ public class TipoVisita {
 
     @JsonCreator
     public TipoVisita(
-            @JsonProperty("titolo") String titolo,
-            @JsonProperty("descrizione") String descrizione,
-            @JsonProperty("puntoIncontro") GPS puntoIncontro,
-            @JsonProperty("dataInizioPeriodo") Date dataInizioPeriodo,
-            @JsonProperty("dataFinePeriodo") Date dataFinePeriodo,
-            @JsonProperty("oraInizio") Time oraInizio,
-            @JsonProperty("durataVisita") int durataVisita,
+            @JsonProperty("title") String title,
+            @JsonProperty("description") String description,
+            @JsonProperty("meetingPlace") GPS meetingPlace,
+            @JsonProperty("initDay") Date initDay,
+            @JsonProperty("finishDay") Date finishDay,
+            @JsonProperty("initTime") Time initTime,
+            @JsonProperty("duration") int duration,
             @JsonProperty("free") boolean free,
             @JsonProperty("numMinPartecipants") int numMinPartecipants,
             @JsonProperty("numMaxPartecipants") int numMaxPartecipants,
-            @JsonProperty("giorni") ArrayList<DayOfWeek> giorni,
-            @JsonProperty("dataInserimento") Date dataInserimento,
+            @JsonProperty("days") ArrayList<DayOfWeek> days,
+            @JsonProperty("insertionDay") Date insertionDay,
             @JsonProperty("volontari") ArrayList<String> volontariUID,
             @JsonProperty("luogoUID") String luogoUID,
             @JsonProperty("UID") String UID) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.puntoIncontro = puntoIncontro;
-        this.dataInizioPeriodo = dataInizioPeriodo;
-        this.dataFinePeriodo = dataFinePeriodo;
-        this.oraInizio = oraInizio;
-        this.durataVisita = durataVisita;
+        this.title = title;
+        this.description = description;
+        this.meetingPlace = meetingPlace;
+        this.initDay = initDay;
+        this.finishDay = finishDay;
+        this.initTime = initTime;
+        this.duration = duration;
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
-        this.giorni = giorni;
-        this.dataInserimento = dataInserimento;
+        this.days = days;
+        this.insertionDay = insertionDay;
         this.volontariUID = volontariUID;
         this.luogoUID = luogoUID;
         this.UID = UID;
@@ -77,61 +77,61 @@ public class TipoVisita {
 
     // Costruttore
     public TipoVisita(
-            String titolo, String descrizione, GPS puntoIncontro,
-            Date dataInizioPeriodo, Date dataFinePeriodo, Time oraInizio, int durataVisita,
+            String title, String description, GPS meetingPlace,
+            Date initDay, Date finishDay, Time initTime, int duration,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, String UID, Date dataI) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.puntoIncontro = puntoIncontro;
-        this.dataInizioPeriodo = dataInizioPeriodo;
-        this.dataFinePeriodo = dataFinePeriodo;
-        this.oraInizio = oraInizio;
-        this.durataVisita = durataVisita;
+        this.title = title;
+        this.description = description;
+        this.meetingPlace = meetingPlace;
+        this.initDay = initDay;
+        this.finishDay = finishDay;
+        this.initTime = initTime;
+        this.duration = duration;
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
-        this.UID = titolo.hashCode() + "";
+        this.UID = title.hashCode() + "";
 
-        this.dataInserimento = dataI;
+        this.insertionDay = dataI;
 
-        this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
+        this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
     }
 
     public TipoVisita(
-            String titolo, String descrizione, GPS puntoIncontro,
-            Date dataInizioPeriodo, Date dataFinePeriodo, Time oraInizio, int durataVisita,
+            String title, String description, GPS meetingPlace,
+            Date initDay, Date finishDay, Time initTime, int duration,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, Date dateI) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.puntoIncontro = puntoIncontro;
-        this.dataInizioPeriodo = dataInizioPeriodo;
-        this.dataFinePeriodo = dataFinePeriodo;
-        this.oraInizio = oraInizio;
-        this.durataVisita = durataVisita;
+        this.title = title;
+        this.description = description;
+        this.meetingPlace = meetingPlace;
+        this.initDay = initDay;
+        this.finishDay = finishDay;
+        this.initTime = initTime;
+        this.duration = duration;
         this.free = free;
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
-        this.dataInserimento = dateI;
+        this.insertionDay = dateI;
 
-        this.UID = titolo.hashCode() + "";
+        this.UID = title.hashCode() + "";
 
-        this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
+        this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
 
     }
 
-    public String getGiorniString() {
-        return DayOfWeekConverter.daysToString(giorni.toArray(new DayOfWeek[0]));
+    public String getDaysString() {
+        return DayOfWeekConverter.daysToString(days.toArray(new DayOfWeek[0]));
     }
 
-    public ArrayList<DayOfWeek> getGiorni() {
-        return giorni;
+    public ArrayList<DayOfWeek> getDays() {
+        return days;
     }
 
     public String getUID() {
         return this.UID;
     }
 
-    public ArrayList<String> getVolontariUID() {
+    public ArrayList<String> getVolontariUIDs() {
         return this.volontariUID;
     }
 
@@ -139,20 +139,20 @@ public class TipoVisita {
     public TipoVisita(String[] args, Date d) {
         int length = args.length;
         try {
-            this.titolo = (length > 0 && !args[0].equals("/")) ? args[0] : null;
-            this.descrizione = (length > 1 && !args[1].equals("/")) ? args[1] : null;
-            this.puntoIncontro = (length > 2 && !args[2].equals("/")) ? new GPS(args[2]) : null;
-            this.dataInizioPeriodo = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
-            this.dataFinePeriodo = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
-            this.oraInizio = (length > 5 && !args[5].equals("/")) ? new Time(args[5]) : null;
-            this.durataVisita = (length > 6 && !args[6].equals("/")) ? Integer.parseInt(args[6]) : -1;
+            this.title = (length > 0 && !args[0].equals("/")) ? args[0] : null;
+            this.description = (length > 1 && !args[1].equals("/")) ? args[1] : null;
+            this.meetingPlace = (length > 2 && !args[2].equals("/")) ? new GPS(args[2]) : null;
+            this.initDay = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
+            this.finishDay = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
+            this.initTime = (length > 5 && !args[5].equals("/")) ? new Time(args[5]) : null;
+            this.duration = (length > 6 && !args[6].equals("/")) ? Integer.parseInt(args[6]) : -1;
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
-            this.UID = titolo.hashCode() + "";
-            this.giorni = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
+            this.UID = title.hashCode() + "";
+            this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
 
-            this.dataInserimento = d;
+            this.insertionDay = d;
         } catch (NumberFormatException e) {
             ViewSE.println(e);
             ViewSE.println(
@@ -161,43 +161,43 @@ public class TipoVisita {
     }
 
     public boolean overlaps(TipoVisita other) {
-        if (this.oraInizio.getMinutes() > other.oraInizio.getMinutes()) {
-            return (other.oraInizio.getMinutes() + other.durataVisita) > this.oraInizio.getMinutes();
+        if (this.initTime.getMinutes() > other.initTime.getMinutes()) {
+            return (other.initTime.getMinutes() + other.duration) > this.initTime.getMinutes();
         } else {
-            return (this.oraInizio.getMinutes() + this.durataVisita) > other.oraInizio.getMinutes();
+            return (this.initTime.getMinutes() + this.duration) > other.initTime.getMinutes();
         }
     }
 
-    public String getTitolo() {
-        return this.titolo;
+    public String getTitle() {
+        return this.title;
     }
 
-    public String getDescrizione() {
-        return this.descrizione;
+    public String getDescription() {
+        return this.description;
     }
 
-    public GPS getGps() {
-        return this.puntoIncontro;
+    public GPS getMeetingPlace() {
+        return this.meetingPlace;
     }
 
-    public Date getDataInizioPeriodo() {
-        return this.dataInizioPeriodo;
+    public Date getInitDay() {
+        return this.initDay;
     }
 
-    public Date getDataFinePeriodo() {
-        return this.dataFinePeriodo;
+    public Date getFinishDay() {
+        return this.finishDay;
     }
 
-    public Time getTimeInizio() {
-        return this.oraInizio;
+    public Time getInitTime() {
+        return this.initTime;
     }
 
     public boolean isFree() {
         return this.free;
     }
 
-    public int getDurataVisita() {
-        return this.durataVisita;
+    public int getDuration() {
+        return this.duration;
     }
 
     public int getNumMinPartecipants() {
@@ -208,12 +208,12 @@ public class TipoVisita {
         return this.numMaxPartecipants;
     }
 
-    public Date getDataInserimento() {
-        return this.dataInserimento;
+    public Date getInsertionDay() {
+        return this.insertionDay;
     }
 
-    public boolean isName(String altroTitolo) {
-        return this.titolo.equalsIgnoreCase(altroTitolo);
+    public boolean isName(String other) {
+        return this.title.equalsIgnoreCase(other);
     }
 
     public void addVolontario(String uidVolontario) {
@@ -227,35 +227,35 @@ public class TipoVisita {
     @Override
     public String toString() {
         return "Tipo di visita {"
-                + "Titolo='" + titolo + '\''
-                + ", Descrizione='" + descrizione + '\''
-                + ", Punto di Incontro=" + puntoIncontro
-                + ", Periodo Inizio=" + dataInizioPeriodo
-                + ", Periodo Fine=" + dataFinePeriodo
-                + ", Time Inizio=" + oraInizio
-                + ", Durata=" + durataVisita + " minuti"
+                + "Titolo='" + title + '\''
+                + ", Descrizione='" + description + '\''
+                + ", Punto di Incontro=" + meetingPlace
+                + ", Periodo Inizio=" + initDay
+                + ", Periodo Fine=" + finishDay
+                + ", Time Inizio=" + initTime
+                + ", Durata=" + duration + " minuti"
                 + ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario")
                 + ", Numero Min Partecipanti=" + numMinPartecipants
                 + ", Numero Max Partecipanti=" + numMaxPartecipants
-                + ", Giorni disponibilit=" + getGiorniString()
+                + ", Days disponibilit=" + getDaysString()
                 + "}\n";
     }
 
-    public void isMonthScaduto(Date d) {
+    public void isMonthExpired(Date d) {
         if (this.sv == StatusVisita.PROPOSTA)
             return;
 
-        if (Math.abs(d.dayOfTheYear() - dataInserimento.dayOfTheYear()) >= Date.monthLength(dataInserimento))
+        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= Date.monthLength(insertionDay))
             this.sv = StatusVisita.PROPOSTA;
     }
 
-    public StatusVisita getStato() {
+    public StatusVisita getStatus() {
         return this.sv;
     }
 
-    public boolean lavoraUIDVolontario(String usernameVolontario) {
-        for (String v : getVolontariUID()) {
-            if (v.equals(usernameVolontario))
+    public boolean assignedTo(String userNameVolontario) {
+        for (String v : getVolontariUIDs()) {
+            if (v.equals(userNameVolontario))
                 return true;
         }
         return false;
@@ -265,7 +265,7 @@ public class TipoVisita {
         this.luogoUID = luogoUID;
     }
 
-    public String getLuogoUID() {
+    public String getLuogo() {
         return this.luogoUID;
     }
 }

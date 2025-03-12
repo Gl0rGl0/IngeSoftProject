@@ -136,12 +136,12 @@ public class App {
     boolean skipSetupTesting = false;
 
     public boolean setupCompleted() {
-        boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.getNew();
+        boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.isNew();
 
         if (out)
             AssertionControl.logMessage("SetUp completato", 3, this.getClass().getSimpleName());
 
-        return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.getNew();
+        return setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.isNew();
     }
 
     public Persona getCurrentUser() {

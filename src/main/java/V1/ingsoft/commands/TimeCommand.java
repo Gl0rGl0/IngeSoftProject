@@ -44,9 +44,9 @@ public class TimeCommand extends AbstractCommand {
 
         app.date.update(g);
         if (g > 0) {
-            ViewSE.println("Saltati con successo " + g + " giorni.");
+            ViewSE.println("Saltati con successo " + g + " days.");
         } else {
-            ViewSE.println("Tornato indietro di " + g + " giorni con successo.");
+            ViewSE.println("Tornato indietro di " + g + " days con successo.");
         }
     }
 }

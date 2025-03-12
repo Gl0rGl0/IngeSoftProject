@@ -52,25 +52,25 @@ public class AssignCommand extends AbstractCommand {
         }
     }
 
-    private void assignVolontario(String usernameVolontario, String nomeVisita) {
-        Volontario v = app.db.findVolontario(usernameVolontario);
+    private void assignVolontario(String userNameVolontario, String nomeVisita) {
+        Volontario v = app.db.findVolontario(userNameVolontario);
         TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
         if (v == null) {
-            ViewSE.println("Nessun volontario trovato con quell'username.");
+            ViewSE.println("Nessun volontario trovato con quell'userName.");
             return;
         }
 
         if (vToAssign == null) {
-            ViewSE.println("Nessuna visita trovata con quel titolo.");
+            ViewSE.println("Nessuna visita trovata con quel title.");
             return;
         }
         v.addTipoVisita(vToAssign.getUID());
-        ViewSE.println("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitolo());
+        ViewSE.println("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitle());
     }
 
-    private void assignVisita(String nomeLuogo, String nomeVisita) {
-        Luogo l = app.db.getLuogoByName(nomeLuogo);
+    private void assignVisita(String name, String nomeVisita) {
+        Luogo l = app.db.getLuogoByName(name);
         TipoVisita vToAssign = app.db.getTipoVisitaByName(nomeVisita);
 
         if (l == null) {
@@ -79,11 +79,11 @@ public class AssignCommand extends AbstractCommand {
         }
 
         if (vToAssign == null) {
-            ViewSE.println("Nessuna visita trovata con quel titolo.");
+            ViewSE.println("Nessuna visita trovata con quel title.");
             return;
         }
 
         l.addTipoVisita(vToAssign.getUID());
-        ViewSE.println("Assegnata la visita " + vToAssign.getTitolo() + " al luogo " + l.getNome());
+        ViewSE.println("Assegnata la visita " + vToAssign.getTitle() + " al luogo " + l.getName());
     }
 }

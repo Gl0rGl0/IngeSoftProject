@@ -64,7 +64,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
      */
     public TipoVisita findTipoVisita(String nome) {
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getTitolo().equalsIgnoreCase(nome)) {
+            if (tv.getTitle().equalsIgnoreCase(nome)) {
                 return tv;
             }
         }
@@ -73,8 +73,8 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
 
     public void checkTipoVisiteAttese(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStato() == StatusVisita.ATTESA)
-                tv.isMonthScaduto(d);
+            if (tv.getStatus() == StatusVisita.ATTESA)
+                tv.isMonthExpired(d);
         }
     }
 
@@ -82,7 +82,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStato() != StatusVisita.ATTESA)
+            if (tv.getStatus() != StatusVisita.ATTESA)
                 out.add(tv);
         }
         return out;

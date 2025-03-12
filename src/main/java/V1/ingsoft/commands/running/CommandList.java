@@ -5,57 +5,57 @@ import V1.ingsoft.persone.PersonaType;
 
 public enum CommandList implements ListInterface {
     ADD("""
-                add [-c] [-f] [-v] [String: username] [String: psw]
+                add [-c] [-f] [-v] [String: userName] [String: psw]
                     -c        Aggiunge un configuratore
                     -f        Aggiunge un fruitore
                     -v        Aggiunge un volontario
-                    username  Specifica l'username della persona inserita
+                    userName  Specifica l'userName della persona inserita
                     psw       Specifica la password della persona inserita
 
-                add [-t] [String: titolo] [String: descrizione] [GPS: puntoIncontro] [Date: dataInizioPeriodo] [Date: dataFinePeriodo] [Time: oraInizio] [int: durataVisita] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
+                add [-t] [String: title] [String: description] [GPS: meetingPlace] [Date: initDay] [Date: finishDay] [Time: initTime] [int: duration] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
                     -t                  Aggiunge un tipo di visita
-                    titolo              Il titolo del tipo di visita
-                    descrizione         Una breve descrizione del tipo di visita
-                    puntoIncontro       Il punto di incontro per il tipo di visita [latitude,longitude]
-                    dataInizioPeriodo   Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
-                    dataFinePeriodo     Data di fine del periodo del tipo di visita [YYYY-MM-DD]
-                    oraInizio           L'orario di inizio del tipo di visita [HH:MM]
-                    durataVisita        Durata del tipo di visita in minuti
+                    title              Il title del tipo di visita
+                    description         Una breve description del tipo di visita
+                    meetingPlace       Il punto di incontro per il tipo di visita [latitude,longitude]
+                    initDay   Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
+                    finishDay     Data di fine del periodo del tipo di visita [YYYY-MM-DD]
+                    initTime           L'orario di inizio del tipo di visita [HH:MM]
+                    duration        Durata del tipo di visita in minuti
                     free                Indica se il tipo di visita è gratuito [true/false]
-                    numMinPartecipants  Numero minimo di partecipanti
-                    numMaxPartecipants  Numero massimo di partecipanti
+                    numMinPartecipants  Numero minimo di fruitori
+                    numMaxPartecipants  Numero massimo di fruitori
                     stato               Stato del tipo di visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
                 per lasciare un campo vuoto digitare "/"
                 se si inseriscono solo i primi N campi, dal campo N+1 in poi sarà tutto lasciato vuoto
 
-                add [-L] [String: nomeLuogo] [String: descrizioneLuogo] [GPS: posizione] [List<Integer>: visite]
+                add [-L] [String: name] [String: description] [GPS: position] [List<Integer>: visite]
                     -L                 Aggiunge un luogo
-                    nomeLuogo          Nome del luogo
-                    descrizioneLuogo   Breve descrizione del luogo
-                    posizione          Posizione GPS [latitude,longitude]
+                    name          Nome del luogo
+                    description   Breve description del luogo
+                    position          Posizione GPS [latitude,longitude]
                     visite             Lista degli ID delle visite associate [id1,id2,...]
             """,
             "Aggiunge una Persona/TipoVisita/Luogo al database", PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()), // Solo i configuratori (4)
 
     REMOVE("""
-                remove [-c] [-f] [-v] [String: username]
+                remove [-c] [-f] [-v] [String: userName]
                     -c        Rimuove un configuratore
                     -f        Rimuove un fruitore
                     -v        Rimuove un volontario
-                    username  Specifica l'username della persona da rimuovere
+                    userName  Specifica l'userName della persona da rimuovere
 
-                remove [-V] [-L] [String: titolo]
+                remove [-V] [-L] [String: title]
                     -V        Rimuove una visita
                     -L        Rimuove un luogo
-                    titolo    Specifica il titolo della visita o del luogo da rimuovere
+                    title    Specifica il title della visita o del luogo da rimuovere
             """,
             "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()), // Solo i configuratori (4)
 
     LOGIN("""
-                login [String: username] [String: password]
-                    username  Specifica l'username con cui fare il login
+                login [String: userName] [String: password]
+                    userName  Specifica l'userName con cui fare il login
                     password  Specifica la password con cui fare il login
             """,
             "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriority(),
@@ -89,9 +89,9 @@ public enum CommandList implements ListInterface {
                                                                                                                 // (1,100)
 
     TIME("""
-                time [[-d] [-m] [-a]] [int: giorni]
-                    giorni  Specifica il numero di giorni da saltare
-                    opzionalmente -d: numero di giorni
+                time [[-d] [-m] [-a]] [int: days]
+                    days  Specifica il numero di days da saltare
+                    opzionalmente -d: numero di days
                                   -m: numero di mesi
                                   -a: numero di anni
                 time -s [Date gg/mm/aa]
@@ -141,10 +141,10 @@ public enum CommandList implements ListInterface {
             PersonaType.VOLONTARIO.getPriority()); // TUTTI (0,100)
 
     @Override
-    public String getHelpMessage(int userPerm) {
+    public String getHelpMessage(int userPriority) {
         StringBuilder out = new StringBuilder();
         for (CommandList element : CommandList.values()) {
-            if (element != HELP && canPermission(userPerm)) {
+            if (element != HELP && canBeExecutedBy(userPriority)) {
                 out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
             }
         }
@@ -175,7 +175,7 @@ public enum CommandList implements ListInterface {
     }
 
     @Override
-    public boolean canPermission(int userPerm) {
-        return minRequiredPermission <= userPerm && userPerm <= maxRequiredPermission;
+    public boolean canBeExecutedBy(int userPriority) {
+        return minRequiredPermission <= userPriority && userPriority <= maxRequiredPermission;
     }
 }

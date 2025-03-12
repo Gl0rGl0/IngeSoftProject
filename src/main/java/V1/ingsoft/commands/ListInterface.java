@@ -1,9 +1,9 @@
 package V1.ingsoft.commands;
 
 public interface ListInterface {
-    String getHelpMessage(int userPerm);
+    String getHelpMessage(int userPriority);
 
     String getInfo();
 
-    boolean canPermission(int userPerm);
+    boolean canBeExecutedBy(int userPriority);
 }

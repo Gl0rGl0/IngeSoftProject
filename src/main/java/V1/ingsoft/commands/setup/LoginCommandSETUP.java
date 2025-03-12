@@ -23,7 +23,7 @@ public class LoginCommandSETUP extends AbstractCommand {
             ViewSE.println("Errore nell'utilizzo del prompt");
             return;
         }
-        if (app.user.type() != PersonaType.GUEST) {
+        if (app.user.getType() != PersonaType.GUEST) {
             ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
@@ -31,15 +31,15 @@ public class LoginCommandSETUP extends AbstractCommand {
         Persona p = login(args[0], args[1]);
         app.user = p;
 
-        if (app.user.type() == PersonaType.CONFIGURATORE) { // SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
-            ViewSE.println("Login effettuato con successo (" + app.user.type() + ")");
-            if (app.user.getNew()) {
+        if (app.user.getType() == PersonaType.CONFIGURATORE) { // SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
+            ViewSE.println("Login effettuato con successo (" + app.user.getType() + ")");
+            if (app.user.isNew()) {
                 ViewSE.println(
                         "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }
             this.hasBeenExecuted = true;
         } else {
-            if (app.user.type() != PersonaType.GUEST) {
+            if (app.user.getType() != PersonaType.GUEST) {
                 ViewSE.println("Errore di login, riprova.");
             } else {
                 ViewSE.println("Solo i configuratori possono accedere, riprova.");
@@ -47,8 +47,8 @@ public class LoginCommandSETUP extends AbstractCommand {
         }
     }
 
-    private Persona login(String username, String psw) {
-        return app.db.login(username, psw);
+    private Persona login(String userName, String psw) {
+        return app.db.login(userName, psw);
     }
 
 }

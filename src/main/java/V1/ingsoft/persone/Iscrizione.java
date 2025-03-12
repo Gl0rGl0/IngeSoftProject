@@ -4,12 +4,12 @@ import java.util.UUID;
 
 public class Iscrizione {
     public String fruitoreUID;
-    public int q = 0;
+    public int quantity = 0;
     public String UIDIscrizione;
 
-    public Iscrizione(String fruitoreUID, int quantita) {
+    public Iscrizione(String fruitoreUID, int quantity) {
         this.fruitoreUID = fruitoreUID;
-        this.q = quantita;
+        this.quantity = quantity;
 
         this.UIDIscrizione = UUID.randomUUID().toString();
     }
@@ -22,11 +22,11 @@ public class Iscrizione {
         return this.fruitoreUID;
     }
 
-    public void setNumeroIscrizioni(int n) {
-        this.q = n;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public int getNumeroIscrizioni() {
-        return this.q;
+    public int getQuantity() {
+        return this.quantity;
     }
 }

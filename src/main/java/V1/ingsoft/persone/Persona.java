@@ -12,27 +12,27 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public abstract class Persona {
     private String psw;
-    private final String username;
-    private boolean nuovo;
+    private final String userName;
+    private boolean isNew;
 
     @JsonIgnore
     public final PersonaType personaType;
     @JsonIgnore
-    protected ArrayList<String> uidVisitePartecipante = new ArrayList<>();
+    protected ArrayList<String> visiteUIDs = new ArrayList<>();
 
-    public Persona(String username, String psw, PersonaType personaType, boolean nuovo) {
-        this(username, psw, PersonaType.VOLONTARIO, nuovo, true);
+    public Persona(String userName, String psw, PersonaType personaType, boolean isNew) {
+        this(userName, psw, PersonaType.VOLONTARIO, isNew, true);
     }
 
-    public Persona(String username, String psw, PersonaType personaType, boolean nuovo, boolean hash) {
-        this.username = username;
-        this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
+    public Persona(String userName, String psw, PersonaType personaType, boolean isNew, boolean hash) {
+        this.userName = userName;
+        this.psw = hash ? DBAbstractPersonaHelper.securePsw(userName, psw) : psw;
         this.personaType = personaType;
-        this.nuovo = nuovo;
+        this.isNew = isNew;
     }
 
     public String getUsername() {
-        return this.username;
+        return this.userName;
     }
 
     public String getPsw() {
@@ -43,15 +43,15 @@ public abstract class Persona {
         this.psw = psw;
     }
 
-    public boolean getNew() {
-        return this.nuovo;
+    public boolean isNew() {
+        return this.isNew;
     }
 
-    public void notNew() {
-        this.nuovo = false;
+    public void setAsNotNew() {
+        this.isNew = false;
     }
 
-    public PersonaType type() {
+    public PersonaType getType() {
         return this.personaType;
     }
 
@@ -63,7 +63,7 @@ public abstract class Persona {
     @Override
     public String toString() {
         if (testPsw)
-            return "Username: " + getUsername() + " - Password: " + getPsw() + " - Nuovo: " + getNew();
+            return "Username: " + getUsername() + " - Password: " + getPsw() + " - Nuovo: " + isNew();
         // return "Username: " + getUsername() + " - Password: " + getPsw();
         return "Username: " + getUsername() + " - Password: *****";
     }
@@ -72,15 +72,15 @@ public abstract class Persona {
         return this.personaType.getPriority();
     }
 
-    public ArrayList<String> getVisiteIscrittoUID() {
+    public ArrayList<String> getVisiteUIDs() {
         return null;
     }
 
-    public boolean iscriviVisita(String uid) {
+    public boolean subscribeToVisit(String uid) {
         return false;
     }
 
-    public boolean disiscriviVisita(String uid) {
+    public boolean removeFromVisita(String uid) {
         return false;
     }
 }

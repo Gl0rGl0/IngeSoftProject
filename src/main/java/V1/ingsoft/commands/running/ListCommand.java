@@ -34,7 +34,7 @@ public class ListCommand extends AbstractCommand {
         char option = options[0].charAt(0);
         switch (option) {
             case 'v' -> listVolontari();
-            case 'd' -> printDisponibilitaVolontari();
+            case 'd' -> printAvailabilityVolontari();
             case 'L' -> listLuoghi();
             case 'l' -> listLuoghi();
             case 'V' -> printTipiVisite(options);
@@ -46,7 +46,7 @@ public class ListCommand extends AbstractCommand {
 
     private void listLuoghi() {
         for (Luogo l : app.db.getLuoghi()) {
-            ViewSE.println(l.getNome());
+            ViewSE.println(l.getName());
             for (Visita visita : app.db.trovaVisiteByLuogo(l)) {
                 ViewSE.println(visita);
             }
@@ -80,8 +80,8 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    private void printDisponibilitaVolontari() {
-        if (app.getCurrentUser().type() != PersonaType.CONFIGURATORE) {
+    private void printAvailabilityVolontari() {
+        if (app.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println("Opzione non riconosciuta per 'list'.");
             return;
         }
@@ -94,7 +94,7 @@ public class ListCommand extends AbstractCommand {
         for (Volontario v : app.db.dbVolontarioHelper.getPersonList()) {
             out.append(v.getUsername() + ":\n");
             int i = 1;
-            for (boolean b : v.getDisponibilita()) {
+            for (boolean b : v.getAvailability()) {
                 out.append(String.format("%d:%d [%b]", i++, targetMonth, b));
             }
         }
@@ -102,7 +102,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printTipiVisita() {
-        if (app.getCurrentUser().type() != PersonaType.CONFIGURATORE) {
+        if (app.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println("Opzione non riconosciuta per 'list'.");
             return;
         }

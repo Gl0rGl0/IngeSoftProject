@@ -34,7 +34,7 @@ public class VisitCommand extends AbstractCommand {
 
         switch (options[0].charAt(0)) {
             case 'a' -> iscriviAVisita(args);
-            case 'r' -> disiscriviVisita(args);
+            case 'r' -> removeFromVisita(args);
             default -> ViewSE.println("Opzione non riconosciuta per 'myvisit'.");
         }
     }
@@ -49,7 +49,7 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (app.getCurrentUser().type() != PersonaType.FRUITORE) {
+        if (app.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso iscrivere un NON fruitore alla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
                     CLASSNAME);
@@ -74,7 +74,7 @@ public class VisitCommand extends AbstractCommand {
 
         Fruitore f = (Fruitore) app.getCurrentUser();
 
-        switch (v.addPartecipanti(f, quantita)) {
+        switch (v.addPartecipants(f, quantita)) {
             case "capienza" -> {
                 ViewSE.println("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
                 return;
@@ -87,13 +87,13 @@ public class VisitCommand extends AbstractCommand {
 
             default -> {
                 ViewSE.println("Iscrizione completata con successo");
-                f.iscriviVisita(v.getUID());
+                f.subscribeToVisit(v.getUID());
             }
         }
 
     }
 
-    private void disiscriviVisita(String[] args) {
+    private void removeFromVisita(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
         Visita v = app.db.getVisitaByName(a[0], a[1]);
 
@@ -103,7 +103,7 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (app.getCurrentUser().type() != PersonaType.FRUITORE) {
+        if (app.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso disiscrivere un NON fruitore dalla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
                     CLASSNAME);
@@ -111,7 +111,7 @@ public class VisitCommand extends AbstractCommand {
         }
 
         Fruitore f = (Fruitore) app.getCurrentUser();
-        f.disiscriviVisita(v.getUID());
-        v.rimuoviPartecipante(f.getUsername());
+        f.removeFromVisita(v.getUID());
+        v.removePartecipant(f.getUsername());
     }
 }

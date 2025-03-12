@@ -29,16 +29,16 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         return saveJson(getPersonList());
     }
 
-    public boolean removePersona(String username) {
-        if (cachedPersons.get(username) == null)
+    public boolean removePersona(String userName) {
+        if (cachedPersons.get(userName) == null)
             return false;
 
-        cachedPersons.remove(username);
+        cachedPersons.remove(userName);
         return saveJson(getPersonList());
     }
 
-    public boolean changePassword(String username, String newPsw) {
-        T toChange = cachedPersons.get(username);
+    public boolean changePassword(String userName, String newPsw) {
+        T toChange = cachedPersons.get(userName);
 
         if (toChange == null)
             return false;
@@ -46,9 +46,9 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         try {
             Constructor<T> constructor;
             constructor = clazz.getConstructor(String.class, String.class, boolean.class);
-            T newPersona = constructor.newInstance(username, DBAbstractPersonaHelper.securePsw(username, newPsw),
+            T newPersona = constructor.newInstance(userName, DBAbstractPersonaHelper.securePsw(userName, newPsw),
                     false);
-            cachedPersons.put(username, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
+            cachedPersons.put(userName, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
             return saveJson(getPersonList());
         } catch (Exception e) {
             e.printStackTrace();

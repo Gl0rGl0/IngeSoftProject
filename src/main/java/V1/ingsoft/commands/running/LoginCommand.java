@@ -21,16 +21,16 @@ public class LoginCommand extends AbstractCommand {
             ViewSE.println("Errore nell'utilizzo del prompt");
             return;
         }
-        if (app.user.type() != PersonaType.GUEST) {
+        if (app.user.getType() != PersonaType.GUEST) {
             ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
 
         app.user = login(args[0], args[1]);
 
-        if (app.user.type() != PersonaType.GUEST) {
-            ViewSE.println("Login effettuato con successo (" + app.user.type() + ")");
-            if (app.user.getNew()) {
+        if (app.user.getType() != PersonaType.GUEST) {
+            ViewSE.println("Login effettuato con successo (" + app.user.getType() + ")");
+            if (app.user.isNew()) {
                 ViewSE.println(
                         "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire di servizi");
             }
@@ -39,8 +39,8 @@ public class LoginCommand extends AbstractCommand {
         }
     }
 
-    private Persona login(String username, String psw) {
-        return app.db.login(username, psw);
+    private Persona login(String userName, String psw) {
+        return app.db.login(userName, psw);
     }
 
 }

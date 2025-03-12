@@ -17,7 +17,7 @@ public class MyVisitCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
 
-        PersonaType tipo = app.getCurrentUser().type();
+        PersonaType tipo = app.getCurrentUser().getType();
 
         switch (tipo) {
             case FRUITORE -> listFruitore();
@@ -47,7 +47,7 @@ public class MyVisitCommand extends AbstractCommand {
 
         out.append("Lista delle visite al quale sei iscritto: ");
         for (Visita v : app.db.dbVisiteHelper.getVisite()) {
-            if (v.isPresenteFruitore(userF))
+            if (v.hasFruitore(userF))
                 out.append(v + "\n");
         }
 

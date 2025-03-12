@@ -18,42 +18,42 @@ public class Luogo {
     @JsonIgnore
     public static final String PATH = "luoghi";
 
-    String nomeLuogo;
-    String descrizioneLuogo;
-    GPS posizione;
+    String name;
+    String description;
+    GPS position;
     String UID;
     ArrayList<String> visiteUID = new ArrayList<>();
 
     @JsonCreator
     public Luogo(
-            @JsonProperty("nomeLuogo") String nomeLuogo,
-            @JsonProperty("descrizioneLuogo") String descrizioneLuogo,
-            @JsonProperty("posizione") GPS posizione,
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("position") GPS position,
             @JsonProperty("UID") String UID) {
-        this.nomeLuogo = nomeLuogo;
-        this.descrizioneLuogo = descrizioneLuogo;
-        this.posizione = posizione;
+        this.name = name;
+        this.description = description;
+        this.position = position;
         this.UID = UID;
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n\n\n");
     }
 
     public Luogo(
-            String nomeLuogo,
-            String descrizioneLuogo,
-            GPS posizione) {
-        this.nomeLuogo = nomeLuogo;
-        this.descrizioneLuogo = descrizioneLuogo;
-        this.posizione = posizione;
-        this.UID = nomeLuogo.hashCode() + "";
+            String name,
+            String description,
+            GPS position) {
+        this.name = name;
+        this.description = description;
+        this.position = position;
+        this.UID = name.hashCode() + "";
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Luogo {")
-                .append("Nome='").append(nomeLuogo).append('\'')
-                .append(", Descrizione='").append(descrizioneLuogo).append('\'')
-                .append(", Posizione=").append(posizione)
+                .append("Nome='").append(name).append('\'')
+                .append(", Descrizione='").append(description).append('\'')
+                .append(", Posizione=").append(position)
                 .append(", Visite=[");
 
         if (visiteUID != null && !visiteUID.isEmpty()) {
@@ -80,16 +80,16 @@ public class Luogo {
         return this.visiteUID;
     }
 
-    public String getNome() {
-        return this.nomeLuogo;
+    public String getName() {
+        return this.name;
     }
 
-    public String getDescrizione() {
-        return this.descrizioneLuogo;
+    public String getDescription() {
+        return this.description;
     }
 
-    public GPS getGps() {
-        return this.posizione;
+    public GPS getMeetingPlace() {
+        return this.position;
     }
 
     public String getUID() {

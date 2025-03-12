@@ -11,8 +11,8 @@ public abstract class AbstractCommand implements Command {
     // dagli alberi
 
     @Override
-    public boolean canPermission(int userPerm) {
-        return commandInfo.canPermission(userPerm);
+    public boolean canBeExecutedBy(int userPriority) {
+        return commandInfo.canBeExecutedBy(userPriority);
     }
 
     @Override

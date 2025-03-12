@@ -9,7 +9,7 @@ public interface Command {
      */
     void execute(String[] options, String[] args);
 
-    boolean canPermission(int userPerm);
+    boolean canBeExecutedBy(int userPriority);
 
     boolean hasBeenExecuted();
 }
