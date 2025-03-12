@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class Volontario extends Persona {
-    public void aggiungiTipoVisita(String uidTipoVisita) {
+    public void addTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
             UIDvisitePresentabili.add(uidTipoVisita);
         }
@@ -48,11 +48,11 @@ public class Volontario extends Persona {
     }
 
     /**
-     * Imposta la disponibilità per una data specifica nel periodo modificabile.
-     * La data (disp) deve appartenere al periodo modificabile, cioè: - Se
-     * disp.getMese() corrisponde a modifiablePeriodStartMonth, il giorno deve
-     * essere ≥ 16. - Se disp.getMese() corrisponde al mese successivo, il
-     * giorno deve essere ≤ 15. Viene calcolato un indice in base a questo
+     * Imposta la disponibilità per una data specifica nel periodo updatebile.
+     * La data (disp) deve appartenere al periodo updatebile, cioè: - Se
+     * disp.getMonth() corrisponde a modifiablePeriodStartMonth, il day deve
+     * essere ≥ 16. - Se disp.getMonth() corrisponde al month successivo, il
+     * day deve essere ≤ 15. Viene calcolato un indice in base a questo
      * mapping e si imposta lo slot a true.
      *
      * @param oggi la data corrente (per aggiornare eventualmente il periodo)
@@ -65,14 +65,14 @@ public class Volontario extends Persona {
         }
 
         valid = false;
-        disponibilita[disp.getGiorno()] = true;
+        disponibilita[disp.getDay()] = true;
     }
 
     private boolean separatiDaDueMesi(Date d1, Date d2) {
-        int currentMonth = d1.getMese();
-        int targetMonth = d2.getMese();
+        int currentMonth = d1.getMonth();
+        int targetMonth = d2.getMonth();
 
-        if (d1.getGiorno() < 16) {
+        if (d1.getDay() < 16) {
             return (currentMonth + 2) == targetMonth;
         } else {
             return (currentMonth + 3) == targetMonth;

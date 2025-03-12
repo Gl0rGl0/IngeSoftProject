@@ -4,7 +4,7 @@ import V1.ingsoft.ViewSE;
 import V1.ingsoft.util.Date;
 import V1.ingsoft.util.DayOfWeekConverter;
 import V1.ingsoft.util.GPS;
-import V1.ingsoft.util.Ora;
+import V1.ingsoft.util.Time;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class TipoVisita {
     GPS puntoIncontro;
     Date dataInizioPeriodo;
     Date dataFinePeriodo;
-    Ora oraInizio;
+    Time oraInizio;
     int durataVisita;
     boolean free;
     int numMinPartecipants;
@@ -48,7 +48,7 @@ public class TipoVisita {
             @JsonProperty("puntoIncontro") GPS puntoIncontro,
             @JsonProperty("dataInizioPeriodo") Date dataInizioPeriodo,
             @JsonProperty("dataFinePeriodo") Date dataFinePeriodo,
-            @JsonProperty("oraInizio") Ora oraInizio,
+            @JsonProperty("oraInizio") Time oraInizio,
             @JsonProperty("durataVisita") int durataVisita,
             @JsonProperty("free") boolean free,
             @JsonProperty("numMinPartecipants") int numMinPartecipants,
@@ -78,7 +78,7 @@ public class TipoVisita {
     // Costruttore
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
-            Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
+            Date dataInizioPeriodo, Date dataFinePeriodo, Time oraInizio, int durataVisita,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, String UID, Date dataI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
@@ -99,7 +99,7 @@ public class TipoVisita {
 
     public TipoVisita(
             String titolo, String descrizione, GPS puntoIncontro,
-            Date dataInizioPeriodo, Date dataFinePeriodo, Ora oraInizio, int durataVisita,
+            Date dataInizioPeriodo, Date dataFinePeriodo, Time oraInizio, int durataVisita,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, Date dateI) {
         this.titolo = titolo;
         this.descrizione = descrizione;
@@ -144,7 +144,7 @@ public class TipoVisita {
             this.puntoIncontro = (length > 2 && !args[2].equals("/")) ? new GPS(args[2]) : null;
             this.dataInizioPeriodo = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
             this.dataFinePeriodo = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
-            this.oraInizio = (length > 5 && !args[5].equals("/")) ? new Ora(args[5]) : null;
+            this.oraInizio = (length > 5 && !args[5].equals("/")) ? new Time(args[5]) : null;
             this.durataVisita = (length > 6 && !args[6].equals("/")) ? Integer.parseInt(args[6]) : -1;
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
@@ -160,11 +160,11 @@ public class TipoVisita {
         }
     }
 
-    public boolean sovrappone(TipoVisita other) {
-        if (this.oraInizio.getMinuti() > other.oraInizio.getMinuti()) {
-            return (other.oraInizio.getMinuti() + other.durataVisita) > this.oraInizio.getMinuti();
+    public boolean overlaps(TipoVisita other) {
+        if (this.oraInizio.getMinutes() > other.oraInizio.getMinutes()) {
+            return (other.oraInizio.getMinutes() + other.durataVisita) > this.oraInizio.getMinutes();
         } else {
-            return (this.oraInizio.getMinuti() + this.durataVisita) > other.oraInizio.getMinuti();
+            return (this.oraInizio.getMinutes() + this.durataVisita) > other.oraInizio.getMinutes();
         }
     }
 
@@ -188,7 +188,7 @@ public class TipoVisita {
         return this.dataFinePeriodo;
     }
 
-    public Ora getOraInizio() {
+    public Time getTimeInizio() {
         return this.oraInizio;
     }
 
@@ -232,7 +232,7 @@ public class TipoVisita {
                 + ", Punto di Incontro=" + puntoIncontro
                 + ", Periodo Inizio=" + dataInizioPeriodo
                 + ", Periodo Fine=" + dataFinePeriodo
-                + ", Ora Inizio=" + oraInizio
+                + ", Time Inizio=" + oraInizio
                 + ", Durata=" + durataVisita + " minuti"
                 + ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario")
                 + ", Numero Min Partecipanti=" + numMinPartecipants
@@ -241,11 +241,11 @@ public class TipoVisita {
                 + "}\n";
     }
 
-    public void isMeseScaduto(Date d) {
+    public void isMonthScaduto(Date d) {
         if (this.sv == StatusVisita.PROPOSTA)
             return;
 
-        if (Math.abs(d.giornoDellAnno() - dataInserimento.giornoDellAnno()) >= Date.lunghezzaMese(dataInserimento))
+        if (Math.abs(d.dayOfTheYear() - dataInserimento.dayOfTheYear()) >= Date.monthLength(dataInserimento))
             this.sv = StatusVisita.PROPOSTA;
     }
 

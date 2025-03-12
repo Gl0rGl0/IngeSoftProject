@@ -58,7 +58,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      */
     public Visita findVisita(String titolo, String data) {
         for (Visita v : cachedVisite.values()) {
-            if (v.getTitolo().equalsIgnoreCase(titolo) && v.getData().toString().equals(data)) {
+            if (v.getTitolo().equalsIgnoreCase(titolo) && v.getDate().toString().equals(data)) {
                 return v;
             }
         }

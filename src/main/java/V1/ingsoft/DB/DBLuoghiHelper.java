@@ -17,7 +17,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         getJson().forEach(l -> cachedLuoghi.put(l.getUID(), l));
     }
 
-    public void aggiungiTipoVisita(String tipoVisitaUID) {
+    public void addTipoVisita(String tipoVisitaUID) {
         if (!tipoVisitaUIDs.contains(tipoVisitaUID))
             tipoVisitaUIDs.add(tipoVisitaUID);
     }

@@ -130,7 +130,7 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(new Volontario(user, psw, true, true));
     }
 
-    public boolean aggiungiTipoVisita(String[] args, Date d) {
+    public boolean addTipoVisita(String[] args, Date d) {
         return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args, d));
     }
 

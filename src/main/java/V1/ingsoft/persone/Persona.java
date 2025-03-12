@@ -68,8 +68,8 @@ public abstract class Persona {
         return "Username: " + getUsername() + " - Password: *****";
     }
 
-    public int getPriorita() {
-        return this.personaType.getPriorita();
+    public int getPriority() {
+        return this.personaType.getPriority();
     }
 
     public ArrayList<String> getVisiteIscrittoUID() {

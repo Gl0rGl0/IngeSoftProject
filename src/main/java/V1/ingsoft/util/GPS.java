@@ -7,41 +7,41 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class GPS {
-    double longitudine;
-    double latitudine;
+    double longitude;
+    double latitude;
 
     @JsonCreator
     public GPS(
-            @JsonProperty("longitudine") double longitudine,
-            @JsonProperty("latitudine") double latitudine) {
-        this.longitudine = longitudine;
-        this.latitudine = latitudine;
+            @JsonProperty("longitude") double longitude,
+            @JsonProperty("latitude") double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public GPS(String g) {
-        String[] use = StringUtils.rimuoviParentesi(g).split(":");
+        String[] use = StringUtils.removeParentheses(g).split(":");
         try {
             float lon = Float.parseFloat(use[0]);
             float lat = Float.parseFloat(use[1]);
             // Arrotonda a 3 decimali
-            this.longitudine = Math.round(lon * 1000) / 1000f;
-            this.latitudine = Math.round(lat * 1000) / 1000f;
+            this.longitude = Math.round(lon * 1000) / 1000f;
+            this.latitude = Math.round(lat * 1000) / 1000f;
         } catch (NumberFormatException e) {
-            this.latitudine = 0;
-            this.longitudine = 0;
+            this.latitude = 0;
+            this.longitude = 0;
         }
     }
 
     @Override
     public String toString() {
-        return "(" + longitudine + ":" + latitudine + ")";
+        return "(" + longitude + ":" + latitude + ")";
     }
 
-    public double getLatitudine() {
-        return this.latitudine;
+    public double getLatitude() {
+        return this.latitude;
     }
 
-    public double getLongitudine() {
-        return this.longitudine;
+    public double getLongitude() {
+        return this.longitude;
     }
 }

@@ -36,10 +36,10 @@ public class DBDatesHelper {
     }
 
     public void refreshPrecludedDate(Date date) {
-        int meseCorrente = date.getMese();
+        int monthCorrente = date.getMonth();
 
         for (Date d : precludedDates) {
-            if (d.getMese() == meseCorrente)
+            if (d.getMonth() == monthCorrente)
                 precludedDates.remove(d);
         }
     }

@@ -57,7 +57,7 @@ public class Interpreter {
 
         Command command = commandRegistry.get(cmd);
         if (command != null) {
-            int userPerm = currentUser.type().getPriorita();
+            int userPerm = currentUser.type().getPriority();
             // Controlla i permessi
             if (!command.canPermission(userPerm)) {
                 ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
@@ -65,7 +65,7 @@ public class Interpreter {
             }
             // Se l'utente è in stato di "firstAccess", limita i comandi eseguibili
             if (currentUser.getNew() &&
-                    !command.canPermission(PersonaType.CAMBIOPSW.getPriorita())) {
+                    !command.canPermission(PersonaType.CAMBIOPSW.getPriority())) {
                 ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd +
                         "' finché non viene cambiata la password con 'changepsw [nuovapsw]'.");
                 return;

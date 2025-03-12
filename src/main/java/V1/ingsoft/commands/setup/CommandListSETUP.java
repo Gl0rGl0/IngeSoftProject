@@ -9,24 +9,24 @@ public enum CommandListSETUP implements ListInterface {
                     -L                 Aggiunge un luogo
                     nomeLuogo          Nome del luogo
                     descrizioneLuogo   Breve descrizione del luogo
-                    posizione          Posizione GPS [latitudine,longitudine]
+                    posizione          Posizione GPS [latitude,longitude]
                     visite             Lista degli ID delle visite associate [id1,id2,...]
             """,
-            "Aggiunge un Luogo al database", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()), // Solo i configuratori (4)
+            "Aggiunge un Luogo al database", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()), // Solo i configuratori (4)
 
     LOGIN("""
                 login [String: username] [String: password]
                     username  Specifica l'username con cui fare il login
                     password  Specifica la password con cui fare il login
             """,
-            "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita(),
-            PersonaType.GUEST.getPriorita()), // SOLO GUEST (0,0)
+            "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriority(),
+            PersonaType.GUEST.getPriority()), // SOLO GUEST (0,0)
 
     LOGOUT("""
                 logout
             """,
-            "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()), // Devi
+            "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriority(), PersonaType.MAX.getPriority()), // Devi
                                                                                                                  // essere
                                                                                                                  // almeno
                                                                                                                  // nel
@@ -36,7 +36,7 @@ public enum CommandListSETUP implements ListInterface {
     CHANGEPSW("""
             changepsw [String: nuovapsw]
                 nuovapsw  Specifica la nuova password per l'account
-                """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()), // Devi
+                """, "Cambia la password", PersonaType.CAMBIOPSW.getPriority(), PersonaType.MAX.getPriority()), // Devi
                                                                                                                 // essere
                                                                                                                 // almeno
                                                                                                                 // loggato
@@ -61,7 +61,7 @@ public enum CommandListSETUP implements ListInterface {
                 time
                     Mostra la data attuale
             """,
-            "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI
+            "Gestione della data del sistema", PersonaType.GUEST.getPriority(), PersonaType.MAX.getPriority()), // TUTTI
                                                                                                                 // ma
                                                                                                                 // solo
                                                                                                                 // in
@@ -73,32 +73,32 @@ public enum CommandListSETUP implements ListInterface {
     SETMAX("""
                 setmax [int: max]
                     max     Specifica il numero massimo di fruitori per una visita
-            """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()),
+            """, "(SETUP) Assegna il valore massimo delle visite", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()),
 
     SETAMBITO("""
                 setambito [String: max]
                     max     Specifica l'ambito territoriale del programma
-            """, "(SETUP) Assegna il nome del territorio", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()),
+            """, "(SETUP) Assegna il nome del territorio", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()),
 
     ASSIGN("""
                 assign ...
             """, "Assegna una visita ad un luogo o un volontario ad una visita",
-            PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+            PersonaType.CONFIGURATORE.getPriority(), PersonaType.CONFIGURATORE.getPriority()),
 
     DONE("""
 
-            """, "Termina il turno di setup", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()),
+            """, "Termina il turno di setup", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()),
 
     EXIT("""
                 exit
             """,
-            "Chiude il programma", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI (0,100)
+            "Chiude il programma", PersonaType.GUEST.getPriority(), PersonaType.MAX.getPriority()), // TUTTI (0,100)
 
-    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita(),
-            PersonaType.MAX.getPriorita()); // TUTTI (0,100)
+    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriority(),
+            PersonaType.MAX.getPriority()); // TUTTI (0,100)
 
     @Override
     public String getHelpMessage(int userPerm) {

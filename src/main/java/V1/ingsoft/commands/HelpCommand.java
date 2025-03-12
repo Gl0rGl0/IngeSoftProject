@@ -26,7 +26,7 @@ public class HelpCommand extends AbstractCommand {
         }
         // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al
         // livello dell'utente
-        ViewSE.println(super.commandInfo.getHelpMessage(app.getCurrentUser().getPriorita()));
+        ViewSE.println(super.commandInfo.getHelpMessage(app.getCurrentUser().getPriority()));
     }
 
 }

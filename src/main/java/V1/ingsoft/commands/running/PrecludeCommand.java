@@ -27,7 +27,7 @@ public class PrecludeCommand extends AbstractCommand {
 
         if (!separatiDaDueMesi(toOperate, app.date)) {
             ViewSE.println(
-                    "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al mese successivo al prossimo");
+                    "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al month successivo al prossimo");
         }
 
         char option = options[0].charAt(0);
@@ -42,10 +42,10 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private boolean separatiDaDueMesi(Date d1, Date d2) {
-        int currentMonth = d2.getMese();
-        int targetMonth = d1.getMese();
+        int currentMonth = d2.getMonth();
+        int targetMonth = d1.getMonth();
 
-        if (d1.getGiorno() < 16) {
+        if (d1.getDay() < 16) {
             return (currentMonth + 2) == targetMonth;
         } else {
             return (currentMonth + 3) == targetMonth;

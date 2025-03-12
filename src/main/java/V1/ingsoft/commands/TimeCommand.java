@@ -42,7 +42,7 @@ public class TimeCommand extends AbstractCommand {
             return;
         }
 
-        app.date.modifica(g);
+        app.date.update(g);
         if (g > 0) {
             ViewSE.println("Saltati con successo " + g + " giorni.");
         } else {

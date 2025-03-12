@@ -15,7 +15,7 @@ public class TimeHelper implements Runnable {
         // Esempio: aggiorna la data simulata secondo la logica che preferisci
         app.date.incrementa(); // implementa il metodo incrementa() come preferisci
 
-        // if(il16epassato && !eseguita && !app.date.festivo()){
+        // if(il16epassato && !eseguita && !app.date.holiday()){
         // eseguiAzioniDel16();
         // il16epassato = false;
         // } //Questa roba è da mettere in App

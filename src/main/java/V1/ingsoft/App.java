@@ -67,7 +67,7 @@ public class App {
     private void initDailyScheduler() {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(() -> {
-            azioneDelGiorno();
+            azioneDelDay();
         }, 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS); // OGNI GIORNO VIRTUALE (ogni 12min) = 60 * 12
     }
 
@@ -158,12 +158,12 @@ public class App {
 
     public boolean alreadyDone16 = true;
 
-    public void azioneDelGiorno() {
+    public void azioneDelDay() {
         db.refresher(this.date);
 
-        switch (date.getGiorno()) {
+        switch (date.getDay()) {
             case 16 -> azioniDel16(true);
-            case 17, 18 -> azioniDel16(!alreadyDone16 && !this.date.festivo());
+            case 17, 18 -> azioniDel16(!alreadyDone16 && !this.date.holiday());
             default -> alreadyDone16 = false;
         }
 
@@ -175,7 +175,7 @@ public class App {
 
         db.refreshPrecludedDate(this.date);
         alreadyDone16 = true; // SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il
-                              // primo giorno feriale)
+                              // primo day feriale)
     }
 
 }

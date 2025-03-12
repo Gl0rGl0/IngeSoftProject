@@ -79,7 +79,7 @@ public class Visita {
         return tipo;
     }
 
-    public Date getData() {
+    public Date getDate() {
         return data;
     }
 
@@ -99,7 +99,7 @@ public class Visita {
         return false;
     }
 
-    public String aggiungiPartecipanti(Fruitore f, int n) {
+    public String addPartecipanti(Fruitore f, int n) {
         if (tipo.numMaxPartecipants - getAttualeCapienza() < n) {
             return "capienza";
         }
@@ -137,7 +137,7 @@ public class Visita {
     }
 
     public void mancano3Giorni(Date d) {
-        if (data.giornoDellAnno() - d.giornoDellAnno() <= 3) {
+        if (data.dayOfTheYear() - d.dayOfTheYear() <= 3) {
             if (getAttualeCapienza() < this.tipo.numMinPartecipants) {
                 this.stato = StatusVisita.CANCELLATA;
             } else {
@@ -152,7 +152,7 @@ public class Visita {
                 + "\nDescrizione: " + tipo.getDescrizione()
                 + "\nPunto Incontro: " + tipo.getGps()
                 + "\nData: " + data
-                + "\nOra: " + tipo.getOraInizio()
+                + "\nTime: " + tipo.getTimeInizio()
                 + "\nBiglietto necessario: " + tipo.isFree();
     }
 

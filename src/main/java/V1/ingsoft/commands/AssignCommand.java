@@ -36,16 +36,16 @@ public class AssignCommand extends AbstractCommand {
         }
         switch (options[0]) {
             case "v" -> {
-                if (app.date.getGiorno() == 16)
+                if (app.date.getDay() == 16)
                     assignVolontario(arg[0], arg[1]);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del mese!");
+                    ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case "t" -> {
-                if (app.date.getGiorno() == 16)
+                if (app.date.getDay() == 16)
                     assignVisita(arg[0], arg[1]);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del mese!");
+                    ViewSE.println("Azione possibile solo il 16 del month!");
             }
             default ->
                 ViewSE.println("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
@@ -65,7 +65,7 @@ public class AssignCommand extends AbstractCommand {
             ViewSE.println("Nessuna visita trovata con quel titolo.");
             return;
         }
-        v.aggiungiTipoVisita(vToAssign.getUID());
+        v.addTipoVisita(vToAssign.getUID());
         ViewSE.println("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitolo());
     }
 
@@ -83,7 +83,7 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
 
-        l.aggiungiTipoVisita(vToAssign.getUID());
+        l.addTipoVisita(vToAssign.getUID());
         ViewSE.println("Assegnata la visita " + vToAssign.getTitolo() + " al luogo " + l.getNome());
     }
 }

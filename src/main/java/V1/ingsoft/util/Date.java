@@ -25,10 +25,10 @@ public class Date {
     }
 
     /**
-     * Costruisce una data completa (giorno, mese e anno).
+     * Costruisce una data completa (day, month e anno).
      *
-     * @param gg giorno
-     * @param mm mese
+     * @param gg day
+     * @param mm month
      * @param aa anno
      */
     public Date(int gg, int mm, int aa) {
@@ -36,7 +36,7 @@ public class Date {
     }
 
     public Date() {
-        //this.localDate = LocalDateTime.now();
+        // this.localDate = LocalDateTime.now();
         this(16, 1, 2024);
     }
 
@@ -50,16 +50,16 @@ public class Date {
     public Date(String in) {
         String[] parts = in.split("-");
 
-        setData(parts[0].split("/"));
+        setDate(parts[0].split("/"));
 
         if (parts.length > 1) {
-            setOra(parts[1].split(":"));
+            setTime(parts[1].split(":"));
         } else {
-            setOra(new String[] { "00", "00" });
+            setTime(new String[] { "00", "00" });
         }
     }
 
-    private void setData(String[] in) {
+    private void setDate(String[] in) {
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
         int year = 0; // Anno non specificato
@@ -70,7 +70,7 @@ public class Date {
         this.localDate = LocalDate.of(year, month, day).atStartOfDay();
     }
 
-    private void setOra(String[] in) {
+    private void setTime(String[] in) {
         int hh = Integer.parseInt(in[0]);
         int mm = Integer.parseInt(in[1]);
         this.localDate.plusHours(hh).plusMinutes(mm);
@@ -83,7 +83,7 @@ public class Date {
      *
      * @param g numero di giorni da aggiungere (o sottrarre se negativo)
      */
-    public synchronized void modifica(int g) {
+    public synchronized void update(int g) {
         if (this.localDate.getYear() == -1) {
             // Se l'anno non è noto, non possiamo gestire correttamente l'incremento.
             ViewSE.println("Modifica non supportata per date senza anno.");
@@ -111,15 +111,15 @@ public class Date {
         this.localDate = localDate.plusSeconds(App.SECONDIVIRTUALI_PS);
     }
 
-    public int getGiorno() {
+    public int getDay() {
         return this.localDate.getDayOfMonth();
     }
 
-    public int getMese() {
+    public int getMonth() {
         return this.localDate.getMonthValue();
     }
 
-    public static int lunghezzaMese(Date d) {
+    public static int monthLength(Date d) {
         return switch (d.localDate.getMonthValue()) {
             case 1 ->
                 31;
@@ -148,19 +148,19 @@ public class Date {
         };
     }
 
-    public DayOfWeek giornoDellaSettimana() {
+    public DayOfWeek dayOfTheWeek() {
         return localDate.getDayOfWeek();
     }
 
-    public int giornoDellAnno() {
+    public int dayOfTheYear() {
         return localDate.getDayOfYear();
     }
 
-    public boolean festivo() {
+    public boolean holiday() {
         return this.localDate.getDayOfWeek() == DayOfWeek.SUNDAY || this.localDate.getDayOfWeek() == DayOfWeek.SATURDAY;
     }
 
-    public String getOra() {
+    public String getTime() {
         return this.localDate.getHour() + ":" + this.localDate.getMinute();
     }
 }

@@ -32,7 +32,7 @@ public class AddCommandSETUP extends AbstractCommand {
         }
         char option = options[0].charAt(0);
         switch (option) {
-            case 'L' -> addLuoghi(args);
+            case 'L' -> addLuogo(args);
             default -> {
                 ViewSE.println("Opzione non riconosciuta per 'add' durante il SETUP.");
                 return;
@@ -42,7 +42,7 @@ public class AddCommandSETUP extends AbstractCommand {
         this.hasBeenExecuted = true;
     }
 
-    public void addLuoghi(String[] args) {
+    public void addLuogo(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
 
         app.db.addLuogo(a[0], a[1], new GPS(a[2]));

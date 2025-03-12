@@ -90,7 +90,7 @@ public class DayOfWeekConverter {
                     sb.append("Do");
                     break;
                 default:
-                    throw new IllegalArgumentException("Giorno non riconosciuto: " + day);
+                    throw new IllegalArgumentException("Day non riconosciuto: " + day);
             }
         }
         return sb.toString();

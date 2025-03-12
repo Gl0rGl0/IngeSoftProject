@@ -9,7 +9,7 @@ import V1.ingsoft.util.StringUtils;
 public class RemoveCommand extends AbstractCommand {
 
     private final App app;
-    private final String NOMECLASSE = this.getClass().getSimpleName();
+    private final String CLASSNAME = this.getClass().getSimpleName();
 
     public RemoveCommand(App app) {
         this.app = app;
@@ -38,22 +38,22 @@ public class RemoveCommand extends AbstractCommand {
             case 'c' -> removeConfiguratore(ar);
             case 'f' -> removeFruitore(ar);
             case 'v' -> {
-                if (app.date.getGiorno() == 16)
+                if (app.date.getDay() == 16)
                     removeVolontario(ar);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del mese!");
+                    ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 't' -> {
-                if (app.date.getGiorno() == 16)
+                if (app.date.getDay() == 16)
                     removeTipoVisita(ar);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del mese!");
+                    ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 'L' -> {
-                if (app.date.getGiorno() == 16)
+                if (app.date.getDay() == 16)
                     removeLuogo(ar);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del mese!");
+                    ViewSE.println("Azione possibile solo il 16 del month!");
             }
             default -> ViewSE.println("Opzione non riconosciuta per 'remove'.");
         }
@@ -73,9 +73,9 @@ public class RemoveCommand extends AbstractCommand {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "|  + Non puoi rimuovere un volontario se non è il 16 del mese: " + args[0],
+                            + "|  + Non puoi rimuovere un volontario se non è il 16 del month: " + args[0],
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
@@ -87,9 +87,9 @@ public class RemoveCommand extends AbstractCommand {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del mese: " + args[0],
+                            + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del month: " + args[0],
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
@@ -100,10 +100,10 @@ public class RemoveCommand extends AbstractCommand {
     private void removeLuogo(String[] args) {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "|  + Non puoi rimuovere un luogo se non è il 16 del mese: "
+                    app.getCurrentUser().getUsername() + "|  + Non puoi rimuovere un luogo se non è il 16 del month: "
                             + args[0],
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 

@@ -16,7 +16,7 @@ public enum CommandList implements ListInterface {
                     -t                  Aggiunge un tipo di visita
                     titolo              Il titolo del tipo di visita
                     descrizione         Una breve descrizione del tipo di visita
-                    puntoIncontro       Il punto di incontro per il tipo di visita [latitudine,longitudine]
+                    puntoIncontro       Il punto di incontro per il tipo di visita [latitude,longitude]
                     dataInizioPeriodo   Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
                     dataFinePeriodo     Data di fine del periodo del tipo di visita [YYYY-MM-DD]
                     oraInizio           L'orario di inizio del tipo di visita [HH:MM]
@@ -32,11 +32,11 @@ public enum CommandList implements ListInterface {
                     -L                 Aggiunge un luogo
                     nomeLuogo          Nome del luogo
                     descrizioneLuogo   Breve descrizione del luogo
-                    posizione          Posizione GPS [latitudine,longitudine]
+                    posizione          Posizione GPS [latitude,longitude]
                     visite             Lista degli ID delle visite associate [id1,id2,...]
             """,
-            "Aggiunge una Persona/TipoVisita/Luogo al database", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()), // Solo i configuratori (4)
+            "Aggiunge una Persona/TipoVisita/Luogo al database", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()), // Solo i configuratori (4)
 
     REMOVE("""
                 remove [-c] [-f] [-v] [String: username]
@@ -50,21 +50,21 @@ public enum CommandList implements ListInterface {
                     -L        Rimuove un luogo
                     titolo    Specifica il titolo della visita o del luogo da rimuovere
             """,
-            "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.CONFIGURATORE.getPriorita()), // Solo i configuratori (4)
+            "Rimuove una Persona/Visita/Luogo dal database", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()), // Solo i configuratori (4)
 
     LOGIN("""
                 login [String: username] [String: password]
                     username  Specifica l'username con cui fare il login
                     password  Specifica la password con cui fare il login
             """,
-            "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriorita(),
-            PersonaType.GUEST.getPriorita()), // SOLO GUEST (0,0)
+            "Esegui il login immettendo le credenziali", PersonaType.GUEST.getPriority(),
+            PersonaType.GUEST.getPriority()), // SOLO GUEST (0,0)
 
     LOGOUT("""
                 logout
             """,
-            "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()), // Devi
+            "Esegui il logout dal sistema", PersonaType.CAMBIOPSW.getPriority(), PersonaType.MAX.getPriority()), // Devi
                                                                                                                  // essere
                                                                                                                  // almeno
                                                                                                                  // nel
@@ -74,7 +74,7 @@ public enum CommandList implements ListInterface {
     CHANGEPSW("""
             changepsw [String: nuovapsw]
                 nuovapsw  Specifica la nuova password per l'account
-                """, "Cambia la password", PersonaType.CAMBIOPSW.getPriorita(), PersonaType.MAX.getPriorita()), // Devi
+                """, "Cambia la password", PersonaType.CAMBIOPSW.getPriority(), PersonaType.MAX.getPriority()), // Devi
                                                                                                                 // essere
                                                                                                                 // almeno
                                                                                                                 // loggato
@@ -99,13 +99,13 @@ public enum CommandList implements ListInterface {
                 time
                     Mostra la data attuale
             """,
-            "Gestione della data del sistema", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI
+            "Gestione della data del sistema", PersonaType.GUEST.getPriority(), PersonaType.MAX.getPriority()), // TUTTI
                                                                                                                 // (0,100)
 
     ASSING("""
                 assing ...
             """, "Assegna una visita ad un luogo o un volontario ad una visita",
-            PersonaType.CONFIGURATORE.getPriorita(), PersonaType.CONFIGURATORE.getPriorita()),
+            PersonaType.CONFIGURATORE.getPriority(), PersonaType.CONFIGURATORE.getPriority()),
 
     LIST("""
                 list [-l] [-v]
@@ -119,25 +119,26 @@ public enum CommandList implements ListInterface {
                                                         [-C]  Lista delle visite Cancellate
                                                         [-e]  Lista delle visite Effettuate (passate)
             """,
-            "Visualizza la lista desiderata", PersonaType.CONFIGURATORE.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI
+            "Visualizza la lista desiderata", PersonaType.CONFIGURATORE.getPriority(), PersonaType.MAX.getPriority()), // TUTTI
                                                                                                                        // (0,100)ù
 
     PRECLUDE("""
 
-            """, "Aggiunge/rimuove data da precludere", PersonaType.CONFIGURATORE.getPriorita(),
-            PersonaType.MAX.getPriorita()),
+            """, "Aggiunge/rimuove data da precludere", PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.MAX.getPriority()),
 
     EXIT("""
                 exit
             """,
-            "Chiude il programma", PersonaType.GUEST.getPriorita(), PersonaType.MAX.getPriorita()), // TUTTI (0,100)
+            "Chiude il programma", PersonaType.GUEST.getPriority(), PersonaType.MAX.getPriority()), // TUTTI (0,100)
 
-    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriorita(),
-            PersonaType.MAX.getPriorita()),
-    
+    HELP("Questa lista", "Fornisce informazioni sui comandi disponibili.", PersonaType.GUEST.getPriority(),
+            PersonaType.MAX.getPriority()),
+
     MYVISIT("""
-            
-            """, "Visualizza le visite associate all'utente corrente", PersonaType.FRUITORE.getPriorita(), PersonaType.VOLONTARIO.getPriorita());        // TUTTI (0,100)
+
+            """, "Visualizza le visite associate all'utente corrente", PersonaType.FRUITORE.getPriority(),
+            PersonaType.VOLONTARIO.getPriority()); // TUTTI (0,100)
 
     @Override
     public String getHelpMessage(int userPerm) {

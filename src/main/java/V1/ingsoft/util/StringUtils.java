@@ -42,7 +42,7 @@ public class StringUtils {
         return result.toArray(String[]::new);
     }
 
-    public static String rimuoviParentesi(String out) {
+    public static String removeParentheses(String out) {
         return out.replaceAll("[()]", "");
     }
 }

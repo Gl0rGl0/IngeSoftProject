@@ -86,8 +86,8 @@ public class ListCommand extends AbstractCommand {
             return;
         }
 
-        int targetMonth = app.date.getMese() + 2;
-        if (app.date.getGiorno() > 16)
+        int targetMonth = app.date.getMonth() + 2;
+        if (app.date.getDay() > 16)
             targetMonth++;
 
         StringBuilder out = new StringBuilder();

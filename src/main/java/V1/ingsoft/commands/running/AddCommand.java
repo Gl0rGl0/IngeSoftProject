@@ -11,7 +11,7 @@ import V1.ingsoft.util.StringUtils;
 
 public class AddCommand extends AbstractCommand {
     private final App app;
-    private final String NOMECLASSE = this.getClass().getSimpleName();
+    private final String CLASSNAME = this.getClass().getSimpleName();
 
     public AddCommand(App app) {
         this.app = app;
@@ -29,7 +29,7 @@ public class AddCommand extends AbstractCommand {
         if (options.length < 1) {
             ViewSE.println("Errore nell'utilizzo del comando 'add'");
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2, CLASSNAME);
             return;
         }
 
@@ -38,7 +38,7 @@ public class AddCommand extends AbstractCommand {
             case 'c' -> addConfiguratore(args);
             case 'f' -> addFruitore(args);
             case 'v' -> addVolontario(args);
-            case 'L' -> addLuoghi(args);
+            case 'L' -> addLuogo(args);
             case 'V' -> addVisita(args);
             case 't' -> addTipoVisita(args);
             default -> ViewSE.println("Opzione non riconosciuta per 'add'.");
@@ -49,10 +49,10 @@ public class AddCommand extends AbstractCommand {
         // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
         if (app.db.addConfiguratore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto configuratore: " + args[0], 2, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Non aggiunto configuratore: " + args[0], 2, CLASSNAME);
         }
     }
 
@@ -60,10 +60,10 @@ public class AddCommand extends AbstractCommand {
         // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
         if (app.db.addFruitore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto fruitore: " + args[0], 2, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Non aggiunto fruitore: " + args[0], 2, CLASSNAME);
         }
     }
 
@@ -71,10 +71,10 @@ public class AddCommand extends AbstractCommand {
         // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
         if (app.db.addVolontario(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto volontario: " + args[0], 2, NOMECLASSE);
+                    app.getCurrentUser().getUsername() + "| Non aggiunto volontario: " + args[0], 2, CLASSNAME);
         }
     }
 
@@ -82,23 +82,23 @@ public class AddCommand extends AbstractCommand {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| Non puoi aggiungere un tipo di visita se non è il 16 del mese: " + args[0],
+                            + "| Non puoi aggiungere un tipo di visita se non è il 16 del month: " + args[0],
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
         String[] a = StringUtils.joinQuotedArguments(args);
-        app.db.aggiungiTipoVisita(a, app.date);
+        app.db.addTipoVisita(a, app.date);
     }
 
-    private void addLuoghi(String[] args) {
+    private void addLuogo(String[] args) {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non puoi aggiungere un luogo se non è il 16 del mese: "
+                    app.getCurrentUser().getUsername() + "| Non puoi aggiungere un luogo se non è il 16 del month: "
                             + args[0],
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
         // NON PUOI USARLO ADESSO, ASPETTA LA V3...
@@ -111,9 +111,9 @@ public class AddCommand extends AbstractCommand {
         if (!app.alreadyDone16) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| Non puoi aggiungere una visita al calendario se non è il 16 del mese",
+                            + "| Non puoi aggiungere una visita al calendario se non è il 16 del month",
                     1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
@@ -126,46 +126,46 @@ public class AddCommand extends AbstractCommand {
         if (tv == null) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel nome: " + a[0], 1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
         if (v == null) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel nome: " + a[1], 1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
-        if (d.getOra().equals("00:00")) {
+        if (d.getTime().equals("00:00")) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Formato di ora sbagliato inserito: " + a[1], 1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
         if (!tv.getVolontariUID().contains(v.getUsername())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Il volontario non è assegnato a quel tipo di visita", 2,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
-        if (!v.getDisponibilita()[d.getGiorno()]) {
+        if (!v.getDisponibilita()[d.getDay()]) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| Il volontario non è disponibile quel giorno per quella visita",
+                            + "| Il volontario non è disponibile quel day per quella visita",
                     2,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
-        if (!tv.getGiorni().contains(d.giornoDellaSettimana())) {
+        if (!tv.getGiorni().contains(d.dayOfTheWeek())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| La visita non può essere svolta quel giorno della settimana",
+                            + "| La visita non può essere svolta quel day della settimana",
                     2,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 

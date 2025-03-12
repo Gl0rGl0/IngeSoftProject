@@ -68,7 +68,7 @@ public class Luogo {
         return sb.toString();
     }
 
-    public void aggiungiTipoVisita(String tvUID) {
+    public void addTipoVisita(String tvUID) {
         this.visiteUID.add(tvUID);
     }
 

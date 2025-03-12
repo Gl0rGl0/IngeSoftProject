@@ -74,7 +74,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     public void checkTipoVisiteAttese(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
             if (tv.getStato() == StatusVisita.ATTESA)
-                tv.isMeseScaduto(d);
+                tv.isMonthScaduto(d);
         }
     }
 

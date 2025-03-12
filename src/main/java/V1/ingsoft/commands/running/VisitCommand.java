@@ -11,7 +11,7 @@ import V1.ingsoft.util.StringUtils;
 
 public class VisitCommand extends AbstractCommand {
     private final App app;
-    private final String NOMECLASSE = this.getClass().getSimpleName();
+    private final String CLASSNAME = this.getClass().getSimpleName();
 
     public VisitCommand(App app) {
         this.app = app;
@@ -22,13 +22,13 @@ public class VisitCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
             ViewSE.println("Nessun opzione inserita, riprova...");
-            AssertionControl.logMessage("Opzioni insufficienti", 2, NOMECLASSE);
+            AssertionControl.logMessage("Opzioni insufficienti", 2, CLASSNAME);
             return;
         }
 
         if (args.length < 3) { // nome_visita data_visita quantita
             ViewSE.println("Utilizzo sbagliato del comando 'visit', riprova...");
-            AssertionControl.logMessage("Argomenti insufficienti", 2, NOMECLASSE);
+            AssertionControl.logMessage("Argomenti insufficienti", 2, CLASSNAME);
             return;
         }
 
@@ -45,14 +45,14 @@ public class VisitCommand extends AbstractCommand {
 
         if (v == null) {
             ViewSE.println("Non ci sono visite disponibili con quel nome...");
-            AssertionControl.logMessage("Visita non esistente", 3, NOMECLASSE);
+            AssertionControl.logMessage("Visita non esistente", 3, CLASSNAME);
             return;
         }
 
         if (app.getCurrentUser().type() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso iscrivere un NON fruitore alla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
@@ -61,20 +61,20 @@ public class VisitCommand extends AbstractCommand {
             quantita = Integer.valueOf(a[3]);
         } catch (NumberFormatException e) {
             ViewSE.println("Errore nella lettura della quantita...");
-            AssertionControl.logMessage("Exception numerica nell'iscrizione", 2, NOMECLASSE);
+            AssertionControl.logMessage("Exception numerica nell'iscrizione", 2, CLASSNAME);
             return;
         }
 
         if (quantita > app.maxPrenotazioniPerPersona) {
             ViewSE.println("Non puoi iscrivere cosi tante persone, il massimo è: " + app.maxPrenotazioniPerPersona);
             AssertionControl.logMessage("Superato massimale prenotazioni per persona", 3,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
         Fruitore f = (Fruitore) app.getCurrentUser();
 
-        switch (v.aggiungiPartecipanti(f, quantita)) {
+        switch (v.addPartecipanti(f, quantita)) {
             case "capienza" -> {
                 ViewSE.println("Impossibile iscriverti alla visita, la capienza eccede la tua richiesta.");
                 return;
@@ -99,14 +99,14 @@ public class VisitCommand extends AbstractCommand {
 
         if (v == null) {
             ViewSE.println("Non ci sono visite disponibili con quel nome...");
-            AssertionControl.logMessage("Visita non esistente", 3, NOMECLASSE);
+            AssertionControl.logMessage("Visita non esistente", 3, CLASSNAME);
             return;
         }
 
         if (app.getCurrentUser().type() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso disiscrivere un NON fruitore dalla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
-                    NOMECLASSE);
+                    CLASSNAME);
             return;
         }
 
