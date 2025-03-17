@@ -22,9 +22,9 @@ public class TimeCommand extends AbstractCommand {
         if (options.length > 0) {
             switch (options[0]) {
                 case "s" -> app.date = new Date(args[0]);
-                case "d" -> saltaG(args[0], 1);
-                case "m" -> saltaG(args[0], 30);
-                case "a" -> saltaG(args[0], 365);
+                case "d" -> jumpDays(args[0], 1);
+                case "m" -> jumpDays(args[0], 30);
+                case "a" -> jumpDays(args[0], 365);
                 case "n" -> app.addPrecludedDate(args[0]);
                 case "l" -> ViewSE.println(app.getDate());
             }
@@ -33,7 +33,7 @@ public class TimeCommand extends AbstractCommand {
         }
     }
 
-    private void saltaG(String d, int mult) {
+    private void jumpDays(String d, int mult) {
         int g;
         try {
             g = Integer.parseInt(d) * mult;
@@ -44,9 +44,9 @@ public class TimeCommand extends AbstractCommand {
 
         app.date.update(g);
         if (g > 0) {
-            ViewSE.println("Saltati con successo " + g + " days.");
+            ViewSE.println("Saltati con successo " + g + " giorni.");
         } else {
-            ViewSE.println("Tornato indietro di " + g + " days con successo.");
+            ViewSE.println("Tornato indietro di " + g + " giorni con successo.");
         }
     }
 }

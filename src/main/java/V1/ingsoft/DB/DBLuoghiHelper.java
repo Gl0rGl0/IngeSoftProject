@@ -34,8 +34,8 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         return new ArrayList<>(cachedLuoghi.values());
     }
 
-    public boolean addLuogo(String nome, String description, GPS gps) {
-        return addLuogo(new Luogo(nome, description, gps));
+    public boolean addLuogo(String name, String description, GPS gps) {
+        return addLuogo(new Luogo(name, description, gps));
     }
 
     /**
@@ -54,10 +54,10 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
     }
 
     /**
-     * Rimuove un Luogo dal file delle proprietà, basandosi sul nome.
+     * Rimuove un Luogo dal file delle proprietà, basandosi sul name.
      * Simile a removePersona(), ma adattato per Luogo.
      *
-     * @param nome il nome del luogo da rimuovere
+     * @param name il name del luogo da rimuovere
      * @return true se il luogo è stato rimosso, false in caso di errori.
      */
     public boolean removeLuogo(String toRemove) {
@@ -79,14 +79,14 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
     }
 
     /**
-     * Cerca e restituisce un Luogo in cache in base al nome.
+     * Cerca e restituisce un Luogo in cache in base al name.
      *
-     * @param nome il nome del luogo da cercare
+     * @param name il name del luogo da cercare
      * @return il Luogo trovato, oppure null se non esiste.
      */
-    public Luogo findLuogo(String nome) {
+    public Luogo findLuogo(String name) {
         for (Luogo l : getLuoghi()) {
-            if (l.getName().equalsIgnoreCase(nome)) {
+            if (l.getName().equalsIgnoreCase(name)) {
                 return l;
             }
         }

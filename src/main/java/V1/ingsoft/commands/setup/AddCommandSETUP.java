@@ -20,7 +20,7 @@ public class AddCommandSETUP extends AbstractCommand {
     /**
      * Implementazione del comando "add".
      *
-     * @param opzioni le opzioni (solo -L per i luoghi)
+     * @param options le options (solo -L per i luoghi)
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {

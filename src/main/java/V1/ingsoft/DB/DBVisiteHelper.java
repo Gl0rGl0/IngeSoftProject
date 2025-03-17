@@ -37,23 +37,23 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     }
 
     /**
-     * Rimuove una Visita dal file delle proprietà, basandosi sul nome.
+     * Rimuove una Visita dal file delle proprietà, basandosi sul name.
      * Simile a removePersona(), ma adattato per Visita.
      *
-     * @param nome il nome della visita da rimuovere
+     * @param name il name della visita da rimuovere
      * @return true se la visita è stata rimossa, false in caso di errori.
      */
-    public void removeVisita(String nome, String data) {
-        Visita toRemove = findVisita(nome, data);
+    public void removeVisita(String name, String date) {
+        Visita toRemove = findVisita(name, date);
         if (toRemove == null)
             return;
         cachedVisite.remove(toRemove.getUID());
     }
 
     /**
-     * Cerca e restituisce una Visita in cache in base al nome.
+     * Cerca e restituisce una Visita in cache in base al name.
      *
-     * @param nome il nome della visita da cercare
+     * @param name il name della visita da cercare
      * @return la Visita trovata, oppure null se non esiste.
      */
     public Visita findVisita(String title, String data) {
@@ -85,7 +85,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         return out;
     }
 
-    public ArrayList<Visita> getCancellate() {
+    public ArrayList<Visita> getVisiteCancellate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
             if (v.getStatus() == StatusVisita.CANCELLATA)
@@ -109,13 +109,13 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         for (Visita v : getVisite()) {
             v.isThreeDaysFrom(d);
             if (v.getStatus() == StatusVisita.CANCELLATA) {
-                scriviVisiteCancellate(v);
+                writeVisiteCancellate(v);
                 cachedVisite.remove(v.getUID());
             }
         }
     }
 
-    private boolean scriviVisiteCancellate(Visita toAdd) {
+    private boolean writeVisiteCancellate(Visita toAdd) {
         archivio.add(toAdd);
         return saveJson(archivio);
     }

@@ -13,6 +13,5 @@ public class DoneCommandSETUP extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         super.hasBeenExecuted = true;
-        ViewSE.println("finitooooo");
     }
 }

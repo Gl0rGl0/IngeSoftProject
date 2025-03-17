@@ -22,7 +22,7 @@ public class AddCommand extends AbstractCommand {
     /**
      * Implementazione del comando "add".
      *
-     * @param opzioni le opzioni (es. -c per configuratore)
+     * @param options le options (es. -c per configuratore)
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {
@@ -117,7 +117,7 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        // USAGE add -V [nomeVisita] [hVisita] [nomeVolontario]
+        // USAGE add -V [type] [hVisita] [nameVolontario]
         String[] a = StringUtils.joinQuotedArguments(args);
         TipoVisita tv = app.db.getTipoVisitaByName(a[0]);
         Date d = new Date(a[1]);
@@ -125,14 +125,14 @@ public class AddCommand extends AbstractCommand {
 
         if (tv == null) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel nome: " + a[0], 1,
+                    app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel name: " + a[0], 1,
                     CLASSNAME);
             return;
         }
 
         if (v == null) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel nome: " + a[1], 1,
+                    app.getCurrentUser().getUsername() + "| Nessun tipo di visita con quel name: " + a[1], 1,
                     CLASSNAME);
             return;
         }

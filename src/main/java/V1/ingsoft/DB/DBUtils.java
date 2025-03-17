@@ -97,8 +97,8 @@ public class DBUtils {
         return dbVolontarioHelper.addPersona(v);
     }
 
-    public boolean addLuogo(String nome, String description, GPS gps) {
-        return dbLuoghiHelper.addLuogo(nome, description, gps);
+    public boolean addLuogo(String name, String description, GPS gps) {
+        return dbLuoghiHelper.addLuogo(name, description, gps);
     }
 
     public boolean addTipoVisita(TipoVisita tv) {
@@ -158,20 +158,20 @@ public class DBUtils {
         return dbVolontarioHelper.removePersona(userName);
     }
 
-    public boolean removeTipoVisita(String nomeVisita) {
-        TipoVisita toRemove = getTipoVisitaByName(nomeVisita);
+    public boolean removeTipoVisita(String type) {
+        TipoVisita toRemove = getTipoVisitaByName(type);
         if (toRemove == null)
             return false;
 
         for (Luogo l : dbLuoghiHelper.getLuoghi()) {
-            l.removeTipoVisita(nomeVisita);
+            l.removeTipoVisita(type);
         }
 
-        return dbTipoVisiteHelper.removeTipoVisita(nomeVisita);
+        return dbTipoVisiteHelper.removeTipoVisita(type);
     }
 
-    public void removeVisita(String nomeVisita, String data) {
-        dbVisiteHelper.removeVisita(nomeVisita, data);
+    public void removeVisita(String type, String date) {
+        dbVisiteHelper.removeVisita(type, date);
     }
 
     public boolean removeLuogo(String name) {
@@ -185,8 +185,8 @@ public class DBUtils {
     // ================================================================
     // Metodi di aggiornamento (change password)
     // ================================================================
-    public boolean changePassword(String userName, String newPsw, PersonaType tipoPersona) {
-        return switch (tipoPersona) {
+    public boolean changePassword(String userName, String newPsw, PersonaType type) {
+        return switch (type) {
             case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(userName, newPsw);
             case FRUITORE -> dbFruitoreHelper.changePassword(userName, newPsw);
             case VOLONTARIO -> dbVolontarioHelper.changePassword(userName, newPsw);
@@ -337,18 +337,18 @@ public class DBUtils {
     }
 
     // ================================================================
-    // Recupero di TipoVisita e Luogo tramite nome
+    // Recupero di TipoVisita e Luogo tramite name
     // ================================================================
-    public TipoVisita getTipoVisitaByName(String titleVisita) {
-        return dbTipoVisiteHelper.findTipoVisita(titleVisita);
+    public TipoVisita getTipoVisitaByName(String title) {
+        return dbTipoVisiteHelper.findTipoVisita(title);
     }
 
     public Luogo getLuogoByName(String name) {
         return dbLuoghiHelper.findLuogo(name);
     }
 
-    public Visita getVisitaByName(String string, String data) {
-        return dbVisiteHelper.findVisita(string, data);
+    public Visita getVisitaByName(String string, String date) {
+        return dbVisiteHelper.findVisita(string, date);
     }
 
     // ================================================================

@@ -19,12 +19,12 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
     /**
      * Implementazione del comando "add".
      *
-     * @param opzioni le opzioni (es. -c per configuratore)
+     * @param options le options (es. -c per configuratore)
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {
         if (args.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando, richiesto almeno un nome. Utilizzo: \"Nome nome nome\"");
+            ViewSE.println("Errore nell'utilizzo del comando, richiesto almeno un name. Utilizzo: \"Nome name name\"");
         }
         String[] a = StringUtils.joinQuotedArguments(args);
         app.db.setAmbito(a[0]);

@@ -26,20 +26,20 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (args.length < 3) { // nome_visita data_visita quantita
+        if (args.length < 3) { // name_visita data_visita quantita
             ViewSE.println("Utilizzo sbagliato del comando 'visit', riprova...");
             AssertionControl.logMessage("Argomenti insufficienti", 2, CLASSNAME);
             return;
         }
 
         switch (options[0].charAt(0)) {
-            case 'a' -> iscriviAVisita(args);
+            case 'a' -> addFruitoreToVisita(args);
             case 'r' -> removeFromVisita(args);
             default -> ViewSE.println("Opzione non riconosciuta per 'myvisit'.");
         }
     }
 
-    private void iscriviAVisita(String[] args) {
+    private void addFruitoreToVisita(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
         Visita v = app.db.getVisitaByName(a[0], a[1]);
 
@@ -98,7 +98,7 @@ public class VisitCommand extends AbstractCommand {
         Visita v = app.db.getVisitaByName(a[0], a[1]);
 
         if (v == null) {
-            ViewSE.println("Non ci sono visite disponibili con quel nome...");
+            ViewSE.println("Non ci sono visite disponibili con quel name...");
             AssertionControl.logMessage("Visita non esistente", 3, CLASSNAME);
             return;
         }

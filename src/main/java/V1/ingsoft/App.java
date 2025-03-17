@@ -118,7 +118,7 @@ public class App {
 
     /**
      * Metodo interprete che analizza la stringa di comando immessa dall'utente,
-     * ne estrae il comando, le opzioni (precedute dal carattere '-') e gli
+     * ne estrae il comando, le options (precedute dal carattere '-') e gli
      * argomenti, e poi esegue l'azione corrispondente.
      *
      * @param prompt la stringa di comando immessa

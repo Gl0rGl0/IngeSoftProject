@@ -20,7 +20,7 @@ public class RemoveCommand extends AbstractCommand {
     /**
      * Implementazione del comando "remove".
      *
-     * @param opzioni le opzioni (es. -c per configuratore)
+     * @param options le options (es. -c per configuratore)
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {

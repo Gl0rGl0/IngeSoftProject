@@ -22,7 +22,7 @@ public class ListCommand extends AbstractCommand {
     /**
      * Implementazione del comando "add".
      *
-     * @param opzioni le opzioni (es. -c per configuratore)
+     * @param options le options (es. -c per configuratore)
      * @param args    eventuali argomenti aggiuntivi
      */
     public void execute(String[] options, String[] args) {
@@ -153,7 +153,7 @@ public class ListCommand extends AbstractCommand {
 
     private String getVisiteCancellate() {
         StringBuilder sb = new StringBuilder();
-        app.db.dbVisiteHelper.getCancellate().forEach(v -> sb.append(v).append("\n"));
+        app.db.dbVisiteHelper.getVisiteCancellate().forEach(v -> sb.append(v).append("\n"));
         return sb.toString();
     }
 

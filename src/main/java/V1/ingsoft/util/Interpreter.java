@@ -42,7 +42,7 @@ public class Interpreter {
         ArrayList<String> optionsList = new ArrayList<>();
         ArrayList<String> argsList = new ArrayList<>();
 
-        // Separa opzioni (token che iniziano con '-') e argomenti
+        // Separa options (token che iniziano con '-') e argomenti
         for (int i = 1; i < tokens.length; i++) {
             String token = tokens[i];
             if (token.startsWith("-") && token.length() > 1) {

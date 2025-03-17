@@ -32,10 +32,10 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     /**
-     * Rimuove un Luogo dal file delle proprietà, basandosi sul nome.
+     * Rimuove un Luogo dal file delle proprietà, basandosi sul name.
      * Simile a removePersona(), ma adattato per Luogo.
      *
-     * @param nome il nome del luogo da rimuovere
+     * @param name il name del luogo da rimuovere
      * @return true se il luogo è stato rimosso, false in caso di errori.
      */
     public boolean removeTipoVisita(String toRemove) {
@@ -57,14 +57,14 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     /**
-     * Cerca e restituisce un Luogo in cache in base al nome.
+     * Cerca e restituisce un Luogo in cache in base al name.
      *
-     * @param nome il nome del luogo da cercare
+     * @param name il name del luogo da cercare
      * @return il Luogo trovato, oppure null se non esiste.
      */
-    public TipoVisita findTipoVisita(String nome) {
+    public TipoVisita findTipoVisita(String name) {
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getTitle().equalsIgnoreCase(nome)) {
+            if (tv.getTitle().equalsIgnoreCase(name)) {
                 return tv;
             }
         }

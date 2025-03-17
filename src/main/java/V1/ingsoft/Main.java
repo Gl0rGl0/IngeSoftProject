@@ -12,7 +12,7 @@ import V1.ingsoft.util.Date;
 //UTILIZZO TIPO
 //init: Main -> Test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
 //controller: MessaggioBenvenuto -> while(Interpreter)
-//Interpreter: [comando] [-opzioni] [argomenti], ogni comando è passato al suo Command(>Abstract|Interface) dove viene gestito
+//Interpreter: [comando] [-options] [argomenti], ogni comando è passato al suo Command(>Abstract|Interface) dove viene gestito
 //DB: Crea 5 sotto helper che gestiscono ognuno una parte di dati, Configuratori,ecc
 //Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
 public class Main {
