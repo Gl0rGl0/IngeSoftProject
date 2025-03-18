@@ -15,7 +15,7 @@ public class VisitCommand extends AbstractCommand {
 
     public VisitCommand(App app) {
         this.app = app;
-        super.commandInfo = CommandList.ASSING; // VISIT;
+        super.commandInfo = CommandList.ASSIGN; // VISIT;
     }
 
     @Override

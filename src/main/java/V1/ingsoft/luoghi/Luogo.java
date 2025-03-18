@@ -31,7 +31,6 @@ public class Luogo {
         this.description = description;
         this.position = position;
         this.UID = UID;
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n\n\n");
     }
 
     public Luogo(

@@ -22,6 +22,10 @@ public class Main {
         App controller = new App(model);
         ViewSE view = new ViewSE(controller);
 
+        controller.azioneDelDay();
+        System.out.println(controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili());
+        System.out.println(controller.db.dbTipoVisiteHelper.getTipiVisita());
+
         // Mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
         controller.skipSetupTesting = true; // !model.isNew();
 

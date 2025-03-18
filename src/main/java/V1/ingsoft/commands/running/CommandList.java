@@ -29,7 +29,7 @@ public enum CommandList implements ListInterface {
                         PersonaType.GUEST.getPriority(),
                         PersonaType.MAX.getPriority()),
 
-        ASSING(ConstString.ASSING_INFO, ConstString.ASSING_LINE_INFO,
+        ASSIGN(ConstString.ASSIGN_INFO, ConstString.ASSIGN_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.CONFIGURATORE.getPriority()),
 

@@ -79,11 +79,16 @@ public class ConstString {
 
     public static final String TIME_LINE_INFO = "Gestione della data del sistema";
 
-    public static final String ASSING_INFO = """
-                assing ...
+    public static final String ASSIGN_INFO = """
+            assign [-L] [String: titoloLuogo] [String: titoloVisita]
+                titoloLuogo     Titolo del luogo a cui assegnare il tipo di visita
+                titoloVisita    Titilo della visita da assegnare
+            assign [-V] [String: titoloVisita] [String: usernameVolontario]
+                titoloVisita        Titolo della visita a cui assegnare il volontario
+                usernameVolontario  Username del volontario da assegnare
             """;
 
-    public static final String ASSING_LINE_INFO = "Assegna una visita ad un luogo o un volontario ad una visita";
+    public static final String ASSIGN_LINE_INFO = "Assegna una visita ad un luogo o un volontario ad una visita";
 
     public static final String LIST_INFO = """
                 list [-l] [-v]
@@ -144,17 +149,6 @@ public class ConstString {
             """;
 
     public static final String SETAMBITO_LINE_INFO = "(SETUP) Assegna il nome del territorio";
-
-    public static final String ASSIGN_INFO = """
-            assign [-L] [String: titoloLuogo] [String: titoloVisita]
-                titoloLuogo     Titolo del luogo a cui assegnare il tipo di visita
-                titoloVisita    Titilo della visita da assegnare
-            assign [-V] [String: titoloVisita] [String: usernameVolontario]
-                titoloVisita        Titolo della visita a cui assegnare il volontario
-                usernameVolontario  Username del volontario da assegnare
-            """;
-
-    public static final String ASSIGN_LINE_INFO = "Assegna una visita ad un luogo o un volontario ad una visita";
 
     public static final String DONE_INFO = """
             done

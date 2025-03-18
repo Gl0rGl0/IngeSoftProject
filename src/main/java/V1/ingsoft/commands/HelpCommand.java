@@ -21,7 +21,6 @@ public class HelpCommand extends AbstractCommand {
                 ViewSE.println(cl.toString());
                 return;
             } catch (IllegalArgumentException ex) {
-                // Il valore non corrisponde a nessun CommandList
             }
         }
         // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al

@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
@@ -33,12 +32,10 @@ public class TipoVisita {
     ArrayList<DayOfWeek> days;
     Date insertionDay;
     String UID;
+    public StatusVisita sv = StatusVisita.ATTESA;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
-
-    @JsonIgnore
-    public StatusVisita sv = StatusVisita.ATTESA;
 
     @JsonCreator
     public TipoVisita(
@@ -56,6 +53,7 @@ public class TipoVisita {
             @JsonProperty("insertionDay") Date insertionDay,
             @JsonProperty("volontari") ArrayList<String> volontariUID,
             @JsonProperty("luogoUID") String luogoUID,
+            @JsonProperty("status") StatusVisita status,
             @JsonProperty("UID") String UID) {
         this.title = title;
         this.description = description;
@@ -71,6 +69,7 @@ public class TipoVisita {
         this.insertionDay = insertionDay;
         this.volontariUID = volontariUID;
         this.luogoUID = luogoUID;
+        this.sv = status;
         this.UID = UID;
     }
 
@@ -237,6 +236,7 @@ public class TipoVisita {
                 + ", Numero Min Partecipanti=" + numMinPartecipants
                 + ", Numero Max Partecipanti=" + numMaxPartecipants
                 + ", Days disponibilit=" + getDaysString()
+                + ", Stato visita=" + sv
                 + "}\n";
     }
 

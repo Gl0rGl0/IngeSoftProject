@@ -35,9 +35,9 @@ public class ListCommand extends AbstractCommand {
         switch (option) {
             case 'v' -> listVolontari();
             case 'd' -> printAvailabilityVolontari();
-            case 'L' -> listLuoghi();
-            case 'l' -> listLuoghi();
-            case 'V' -> printTipiVisite(options);
+            case 'L', 'l' -> listLuoghi();
+            case 't' -> printTipiVisita();
+            case 'V' -> printVisite(options);
             default -> ViewSE.println("Opzione non riconosciuta per 'list'.");
         }
         // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L'
@@ -65,7 +65,7 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    private void printTipiVisite(String[] s) {
+    private void printVisite(String[] s) {
         char option = 'a';
         option = s[1].charAt(0);
 
@@ -75,8 +75,7 @@ public class ListCommand extends AbstractCommand {
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
             case 'e' -> printEffettuate();
-            case 'T' -> printTipiVisita();
-            default -> ViewSE.println("Opzione non riconosciuta per 'list'.");
+            default -> ViewSE.println("Opzione non riconosciuta per 'list -V'.");
         }
     }
 
