@@ -51,6 +51,7 @@ public class Main {
         controller.interpreter("changepsw pass1C pass1C");
 
         // controller.user = new Fruitore("V1", "ciao", false);
+        controller.interpreter("time -s 18/03/24");
         view.run();
     }
 

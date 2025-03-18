@@ -20,13 +20,17 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     public ArrayList<TipoVisita> getTipiVisita() {
-        return new ArrayList<>(cachedTipiVisita.values());
+        ArrayList<TipoVisita> lista = new ArrayList<>(cachedTipiVisita.values());
+        if (lista.isEmpty()) {
+            System.out.println("⚠️ Attenzione: getTipiVisita() sta restituendo una lista vuota!");
+        }
+        return lista;
     }
 
     public boolean addTipoVisita(TipoVisita toAdd) {
         if (cachedTipiVisita.get(toAdd.getUID()) != null)
             return false;
-        cachedTipiVisita.put(toAdd.getTitle(), toAdd);
+        cachedTipiVisita.put(toAdd.getUID(), toAdd);
         return saveJson(getTipiVisita());
     }
 
