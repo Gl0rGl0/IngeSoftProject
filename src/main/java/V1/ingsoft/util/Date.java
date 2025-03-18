@@ -1,7 +1,6 @@
 package V1.ingsoft.util;
 
 import V1.ingsoft.App;
-import V1.ingsoft.ViewSE;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -55,18 +54,15 @@ public class Date {
         if (parts.length > 1) {
             setTime(parts[1].split(":"));
         } else {
-            setTime(new String[] { "00", "00" });
+            setTime(new String[] { "00", "00", "00" });
         }
     }
 
     private void setDate(String[] in) {
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
-        int year = 0; // Anno non specificato
+        int year = Integer.parseInt(in[2]);
 
-        if (in.length == 3) {
-            year = Integer.parseInt(in[2]);
-        }
         this.localDate = LocalDate.of(year, month, day).atStartOfDay();
     }
 
@@ -84,27 +80,15 @@ public class Date {
      * @param g numero di days da aggiungere (o sottrarre se negativo)
      */
     public synchronized void update(int g) {
-        if (this.localDate.getYear() == -1) {
-            // Se l'anno non è noto, non possiamo gestire correttamente l'incremento.
-            ViewSE.println("Modifica non supportata per date senza anno.");
-            return;
-        }
         this.localDate = this.localDate.plusDays(g);
     }
 
     @Override
     public String toString() {
-        if (this.localDate.getYear() != -1) {
-            return String.format("%d/%d/%d-%02d:%02d",
-                    this.localDate.getDayOfMonth(),
-                    this.localDate.getMonthValue(),
-                    this.localDate.getYear(),
-                    this.localDate.getHour(),
-                    this.localDate.getMinute());
-        }
-        return String.format("%d/%d",
+        return String.format("%d/%d/%d",
                 this.localDate.getDayOfMonth(),
-                this.localDate.getMonthValue());
+                this.localDate.getMonthValue(),
+                this.localDate.getYear());
     }
 
     public void incrementa() {
@@ -121,30 +105,9 @@ public class Date {
 
     public static int monthLength(Date d) {
         return switch (d.localDate.getMonthValue()) {
-            case 1 ->
-                31;
-            case 2 ->
-                28;
-            case 3 ->
-                31;
-            case 4 ->
-                30;
-            case 5 ->
-                31;
-            case 6 ->
-                30;
-            case 7 ->
-                31;
-            case 9 ->
-                30;
-            case 10 ->
-                31;
-            case 11 ->
-                30;
-            case 12 ->
-                31;
-            default ->
-                31; // boh non si sa mai
+            case 1, 3, 5, 7, 8, 10, 12 -> 31;
+            case 2 -> 28;
+            default -> 30;
         };
     }
 

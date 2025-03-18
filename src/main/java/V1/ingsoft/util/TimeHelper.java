@@ -4,7 +4,7 @@ import V1.ingsoft.App;
 
 public class TimeHelper implements Runnable {
 
-    private final App app; // o la classe che contiene il tempo simulato
+    private final App app;
 
     public TimeHelper(App app) {
         this.app = app;
@@ -13,11 +13,6 @@ public class TimeHelper implements Runnable {
     @Override
     public void run() {
         // Esempio: aggiorna la data simulata secondo la logica che preferisci
-        app.date.incrementa(); // implementa il metodo incrementa() come preferisci
-
-        // if(il16epassato && !eseguita && !app.date.holiday()){
-        // eseguiAzioniDel16();
-        // il16epassato = false;
-        // } //Questa roba è da mettere in App
+        app.date.incrementa();
     }
 }

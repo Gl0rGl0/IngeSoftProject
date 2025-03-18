@@ -117,6 +117,13 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
+        // 1. deve esistere la visita
+        // 2. deve esistere il volontario
+        // 3. il volontario deve essere disponibile quel giorno
+        // 4. la visita deve essere possibile quel giorno
+        // 5. il volontario non deve avere altre visite
+        // 6. la visita deve essere organizzata solo una volta al giorno
+
         // USAGE add -V [type] [hVisita] [nameVolontario]
         String[] a = StringUtils.joinQuotedArguments(args);
         TipoVisita tv = app.db.getTipoVisitaByName(a[0]);
@@ -137,13 +144,6 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (d.getTime().equals("00:00")) {
-            AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Formato di ora sbagliato inserito: " + a[1], 1,
-                    CLASSNAME);
-            return;
-        }
-
         if (!tv.getVolontariUIDs().contains(v.getUsername())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Il volontario non è assegnato a quel tipo di visita", 2,
@@ -154,7 +154,7 @@ public class AddCommand extends AbstractCommand {
         if (!v.getAvailability()[d.getDay()]) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| Il volontario non è disponibile quel day per quella visita",
+                            + "| Il volontario non è disponibile quel giorno per quella visita",
                     2,
                     CLASSNAME);
             return;
@@ -163,7 +163,7 @@ public class AddCommand extends AbstractCommand {
         if (!tv.getDays().contains(d.dayOfTheWeek())) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| La visita non può essere svolta quel day della settimana",
+                            + "| La visita non può essere svolta quel giorno della settimana",
                     2,
                     CLASSNAME);
             return;

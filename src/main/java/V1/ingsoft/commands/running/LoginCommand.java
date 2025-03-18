@@ -39,8 +39,8 @@ public class LoginCommand extends AbstractCommand {
         }
     }
 
-    private Persona login(String userName, String psw) {
-        return app.db.login(userName, psw);
+    private Persona login(String username, String psw) {
+        return app.db.login(username, psw);
     }
 
 }

@@ -41,6 +41,8 @@ public class ViewSE implements Runnable {
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
         ViewSE.println("SETUP COMPLETATO");
 
+        System.out.println(app.getCurrentUser().getPriority());
+
         while (true)
             app.interpreter(read("\n" + app.getCurrentUser().getUsername() + "> "));
     }

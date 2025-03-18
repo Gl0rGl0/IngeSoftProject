@@ -5,7 +5,6 @@ import V1.ingsoft.persone.Iscrizione;
 import V1.ingsoft.util.Date;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;

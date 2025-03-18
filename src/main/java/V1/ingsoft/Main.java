@@ -4,7 +4,6 @@ import java.util.Random;
 
 import V1.ingsoft.DB.DBUtils;
 import V1.ingsoft.persone.Configuratore;
-import V1.ingsoft.persone.Fruitore;
 import V1.ingsoft.persone.Guest;
 import V1.ingsoft.persone.Volontario;
 import V1.ingsoft.util.Date;
@@ -97,9 +96,9 @@ public class Main {
         // String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per
         // scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90
         // false 10 20 SaDo";
-        String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06 29/08 16:30 30 true 5 15 MeVeSa";
-        String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01 28/09 14:00 120 true 8 30 LuDo";
-        String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02 14/09 14:00 90 true 10 30 LuMaMe";
+        String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06/25 29/08/25 16:30 30 true 5 15 MeVeSa";
+        String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01/25 28/09/25 14:00 120 true 8 30 LuDo";
+        String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02/25 14/09/25 14:00 90 true 10 30 LuMaMe";
 
         // controller.interpreter(addVisita + visitaT1);
         controller.interpreter(addVisita + visitaT3);

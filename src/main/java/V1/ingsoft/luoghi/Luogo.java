@@ -1,12 +1,9 @@
 package V1.ingsoft.luoghi;
 
-import V1.ingsoft.DB.DBAbstractPersonaHelper;
 // import V1.ingsoft.persone.PersonaType;
 import V1.ingsoft.util.GPS;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

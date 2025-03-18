@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Configuratore extends Persona {
     @JsonCreator
     public Configuratore(
-            @JsonProperty("userName") String userName,
+            @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean isNew) {
-        super(userName, psw, PersonaType.CONFIGURATORE, isNew, false);
+        super(username, psw, PersonaType.CONFIGURATORE, isNew, false);
     }
 
-    public Configuratore(String userName, String psw, boolean isNew, boolean hash) {
-        super(userName, psw, PersonaType.CONFIGURATORE, isNew, hash);
+    public Configuratore(String username, String psw, boolean isNew, boolean hash) {
+        super(username, psw, PersonaType.CONFIGURATORE, isNew, hash);
     }
 }

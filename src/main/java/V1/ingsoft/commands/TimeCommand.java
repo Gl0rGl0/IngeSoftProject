@@ -26,7 +26,7 @@ public class TimeCommand extends AbstractCommand {
                 case "m" -> jumpDays(args[0], 30);
                 case "a" -> jumpDays(args[0], 365);
                 case "n" -> app.addPrecludedDate(args[0]);
-                case "l" -> ViewSE.println(app.getDate());
+                case "l" -> ViewSE.println(app.db.getPrecludedDates());
             }
         } else {
             ViewSE.println(app.date);

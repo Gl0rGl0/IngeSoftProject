@@ -1,6 +1,5 @@
 package V1.ingsoft.commands.setup;
 
-import V1.ingsoft.ViewSE;
 import V1.ingsoft.commands.AbstractCommand;
 
 public class DoneCommandSETUP extends AbstractCommand {

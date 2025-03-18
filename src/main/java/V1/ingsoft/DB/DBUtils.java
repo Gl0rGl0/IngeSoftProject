@@ -110,7 +110,7 @@ public class DBUtils {
     }
 
     // ================================================================
-    // Adders per oggetti da creare tramite userName/psw - String
+    // Adders per oggetti da creare tramite username/psw - String
     // ================================================================
     public boolean addConfiguratore(String user, String psw) {
         if (findUser(user) != null)
@@ -137,25 +137,25 @@ public class DBUtils {
     // ================================================================
     // Remove methods
     // ================================================================
-    public boolean removeConfiguratore(String userName) {
-        return dbConfiguratoreHelper.removePersona(userName);
+    public boolean removeConfiguratore(String username) {
+        return dbConfiguratoreHelper.removePersona(username);
     }
 
-    public boolean removeFruitore(String userName) {
+    public boolean removeFruitore(String username) {
         // eliminare tutte le iscrizioni a lui collegate
-        return dbFruitoreHelper.removePersona(userName);
+        return dbFruitoreHelper.removePersona(username);
     }
 
-    public boolean removeVolontario(String userName) {
-        Volontario toRemove = findVolontario(userName);
+    public boolean removeVolontario(String username) {
+        Volontario toRemove = findVolontario(username);
         if (toRemove == null)
             return false;
 
         for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
-            tv.removeVolontario(userName);
+            tv.removeVolontario(username);
         }
 
-        return dbVolontarioHelper.removePersona(userName);
+        return dbVolontarioHelper.removePersona(username);
     }
 
     public boolean removeTipoVisita(String type) {
@@ -185,11 +185,11 @@ public class DBUtils {
     // ================================================================
     // Metodi di aggiornamento (change password)
     // ================================================================
-    public boolean changePassword(String userName, String newPsw, PersonaType type) {
+    public boolean changePassword(String username, String newPsw, PersonaType type) {
         return switch (type) {
-            case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(userName, newPsw);
-            case FRUITORE -> dbFruitoreHelper.changePassword(userName, newPsw);
-            case VOLONTARIO -> dbVolontarioHelper.changePassword(userName, newPsw);
+            case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(username, newPsw);
+            case FRUITORE -> dbFruitoreHelper.changePassword(username, newPsw);
+            case VOLONTARIO -> dbVolontarioHelper.changePassword(username, newPsw);
             default -> false;
         };
     }
@@ -282,26 +282,26 @@ public class DBUtils {
     // ================================================================
     // Metodi di ricerca e login
     // ================================================================
-    public Persona findUser(String userName) {
+    public Persona findUser(String username) {
         Persona out;
 
-        out = dbConfiguratoreHelper.findPersona(userName);
+        out = dbConfiguratoreHelper.findPersona(username);
         if (out != null)
             return out;
 
-        out = dbVolontarioHelper.findPersona(userName);
+        out = dbVolontarioHelper.findPersona(username);
         if (out != null)
             return out;
 
-        out = dbFruitoreHelper.findPersona(userName);
+        out = dbFruitoreHelper.findPersona(username);
         if (out != null)
             return out;
 
         return null;
     }
 
-    public Volontario findVolontario(String userName) {
-        return dbVolontarioHelper.findPersona(userName);
+    public Volontario findVolontario(String username) {
+        return dbVolontarioHelper.findPersona(username);
     }
 
     public Persona login(String user, String psw) {

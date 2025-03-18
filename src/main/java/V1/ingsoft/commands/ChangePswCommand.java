@@ -22,6 +22,8 @@ public class ChangePswCommand extends AbstractCommand {
             return;
         }
 
+        System.out.println(app.getCurrentUser());
+
         if (app.db.changePassword(app.user.getUsername(), args[0], app.user.getType())) {
             app.user.setAsNotNew();
             ViewSE.println("Password cambiata con successo!");

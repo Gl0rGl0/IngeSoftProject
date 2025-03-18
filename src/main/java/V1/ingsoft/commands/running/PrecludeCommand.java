@@ -22,12 +22,17 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        Date toOperate = new Date(args[0]); // SPERANDO CHE SIA NEL FORMATO CORRETTO, MAGARI UN TRYCATCH PROSSIMAMENTE
-                                            // TODO
+        // Controllo interno
+        Date toOperate = new Date(args[0]);
+        if (toOperate.toString().equals("00/00/00")) {
+            ViewSE.println("Errore nell'inserimento della data, ricontrollare");
+            return;
+        }
 
         if (!twoMonthsDifference(toOperate, app.date)) {
             ViewSE.println(
                     "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al month successivo al prossimo");
+            return;
         }
 
         char option = options[0].charAt(0);

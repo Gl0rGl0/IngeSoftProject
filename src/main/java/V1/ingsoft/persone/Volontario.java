@@ -1,5 +1,6 @@
 package V1.ingsoft.persone;
 
+import V1.ingsoft.ViewSE;
 import V1.ingsoft.util.Date;
 
 import java.util.ArrayList;
@@ -37,14 +38,14 @@ public class Volontario extends Persona {
 
     @JsonCreator
     public Volontario(
-            @JsonProperty("userName") String userName,
+            @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean isNew) {
-        super(userName, psw, PersonaType.VOLONTARIO, isNew, false);
+        super(username, psw, PersonaType.VOLONTARIO, isNew, false);
     }
 
-    public Volontario(String userName, String psw, boolean isNew, boolean hash) {
-        super(userName, psw, PersonaType.VOLONTARIO, isNew, hash);
+    public Volontario(String username, String psw, boolean isNew, boolean hash) {
+        super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 
     /**
@@ -60,7 +61,7 @@ public class Volontario extends Persona {
      */
     public void setAvailability(Date oggi, Date disp) {
         if (!twoMonthsDifference(oggi, disp)) {
-            System.out.println("DATA SBAGLIATA"); // TODO REMOVE
+            ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return;
         }
 

@@ -1,25 +1,32 @@
 package V1.ingsoft.util;
 
+import V1.ingsoft.App;
 import V1.ingsoft.ViewSE;
+import V1.ingsoft.commands.AssignCommand;
+import V1.ingsoft.commands.ChangePswCommand;
 import V1.ingsoft.commands.Command;
+import V1.ingsoft.commands.ExitCommand;
+import V1.ingsoft.commands.LogoutCommand;
+import V1.ingsoft.commands.SetPersoneMaxCommand;
+import V1.ingsoft.commands.TimeCommand;
 import V1.ingsoft.persone.Persona;
 import V1.ingsoft.persone.PersonaType;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
-public class Interpreter {
+public abstract class Interpreter {
     // Mappa dei comandi passata durante il setup
-    private Map<String, Command> commandRegistry;
+    protected HashMap<String, Command> commandRegistry = new HashMap<>();
 
     // Costruttore che riceve la mappa dei comandi
-    public Interpreter(Map<String, Command> commandRegistry) {
-        this.commandRegistry = commandRegistry;
-    }
-
-    // Permette di aggiornare la mappa dei comandi in caso di necessità
-    public void setCommandRegistry(Map<String, Command> commandRegistry) {
-        this.commandRegistry = commandRegistry;
+    public Interpreter(App controller) {
+        commandRegistry.put("time", new TimeCommand(controller));
+        commandRegistry.put("logout", new LogoutCommand(controller));
+        commandRegistry.put("changepsw", new ChangePswCommand(controller));
+        commandRegistry.put("assign", new AssignCommand(controller));
+        commandRegistry.put("setmax", new SetPersoneMaxCommand(controller));
+        commandRegistry.put("exit", new ExitCommand());
     }
 
     /**
@@ -81,6 +88,8 @@ public class Interpreter {
         boolean out = true;
         for (Command c : commandRegistry.values()) {
             out &= c.hasBeenExecuted();
+            if (!out)
+                return out;
         }
         return out; // Ne basta una false per dare false come risultato
     }

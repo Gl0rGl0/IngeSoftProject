@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public abstract class Persona {
     private String psw;
-    private final String userName;
+    private final String username;
     private boolean isNew;
 
     @JsonIgnore
@@ -20,19 +20,19 @@ public abstract class Persona {
     @JsonIgnore
     protected ArrayList<String> visiteUIDs = new ArrayList<>();
 
-    public Persona(String userName, String psw, PersonaType personaType, boolean isNew) {
-        this(userName, psw, PersonaType.VOLONTARIO, isNew, true);
+    public Persona(String username, String psw, PersonaType personaType, boolean isNew) {
+        this(username, psw, PersonaType.VOLONTARIO, isNew, true);
     }
 
-    public Persona(String userName, String psw, PersonaType personaType, boolean isNew, boolean hash) {
-        this.userName = userName;
-        this.psw = hash ? DBAbstractPersonaHelper.securePsw(userName, psw) : psw;
+    public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) {
+        this.username = username;
+        this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
         this.personaType = personaType;
         this.isNew = isNew;
     }
 
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     public String getPsw() {
@@ -43,6 +43,7 @@ public abstract class Persona {
         this.psw = psw;
     }
 
+    @JsonIgnore // Jackson is[qualcosa] lo salva come [qualcosa]: return value...
     public boolean isNew() {
         return this.isNew;
     }
