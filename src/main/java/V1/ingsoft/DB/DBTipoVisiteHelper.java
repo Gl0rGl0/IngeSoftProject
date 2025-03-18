@@ -26,7 +26,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     public boolean addTipoVisita(TipoVisita toAdd) {
         if (cachedTipiVisita.get(toAdd.getUID()) != null)
             return false;
-
+        cachedTipiVisita.put(toAdd.getTitle(), toAdd);
         return saveJson(getTipiVisita());
     }
 

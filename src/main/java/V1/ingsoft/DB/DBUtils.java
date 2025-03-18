@@ -131,6 +131,7 @@ public class DBUtils {
     }
 
     public boolean addTipoVisita(String[] args, Date d) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args, d));
     }
 
