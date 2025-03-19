@@ -21,7 +21,10 @@ public class TimeCommand extends AbstractCommand {
         }
         if (options.length > 0) {
             switch (options[0]) {
-                case "s" -> app.date = new Date(args[0]);
+                case "s" -> {
+                    app.date = new Date(args[0]);
+                    app.dailyAction();
+                }
                 case "d" -> jumpDays(args[0], 1);
                 case "m" -> jumpDays(args[0], 30);
                 case "a" -> jumpDays(args[0], 365);

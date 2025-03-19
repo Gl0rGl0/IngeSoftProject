@@ -22,16 +22,19 @@ public class Main {
         App controller = new App(model);
         ViewSE view = new ViewSE(controller);
 
-        controller.azioneDelDay();
-        System.out.println(controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili());
-        System.out.println(controller.db.dbTipoVisiteHelper.getTipiVisita());
+        controller.dailyAction();
 
         // Mettere controllo in db se tutti i db.prop esistono (se non c'è già...)
         controller.skipSetupTesting = true; // !model.isNew();
 
         // if (controller.skipSetupTesting)
         Test(controller); // Prima di avviare il ciclo...
-        System.out.println(controller.db.getConfiguratori());
+        // System.out.println("CONFIGURATORI:" + controller.db.getConfiguratori());
+        // System.out.println("VOLONTARI:" + controller.db.getVolontari());
+        // System.out.println("FRUITORI:" + controller.db.getFruitori());
+        // System.out.println("LUOGHI:" + controller.db.getLuoghi());
+        // System.out.println("TIPIVISITA:" + controller.db.getTipi());
+
         // initAvailability(controller);
 
         // Usi controller.intepreter per dare direttamente i comandi anche prima
@@ -39,73 +42,29 @@ public class Main {
         // -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
         // passare dalla tastiera
 
-        // Persona p = new Guest();
-        // Volontario v = new Volontario("Prova", "PROVA", "1");
-        // v.numAvailability = 5;
-        // p = v;
-        // Volontario v2 = (Volontario) p;
-        System.out.println(controller.db.dbLuoghiHelper.getLuoghi());
-        // System.out.println(v2.numAvailability); //IL CAST FUNZIONA
-
         controller.interpreter("login config1 pass1C");
         controller.interpreter("changepsw pass1C pass1C");
 
-        // controller.user = new Fruitore("V1", "ciao", false);
-        controller.interpreter("time -s 18/03/24");
         view.run();
     }
 
     public static void Test(App controller) {
-        initDBInterprete(controller); // Inizializza il database in caso sia il primo accesso
-
-        // controller.interpreter("preclude -r 14/05");
-        // ViewSE.println(controller.db.dbDatesHelper.getPrecludedDates());
-        // controller.intepreterSETUP("login config1 pass1C");
-        // String prompt = " \"Parco di Pisogne\" \"Bellissimo parco brutto\"
-        // 12.34:11.1";
-        // controller.intepreterSETUP("login config1 pass1C");
-        // controller.intepreterSETUP("add -L" + prompt);
-        // controller.interpreter("remove -L \"Parco di Pisogne\"");
-        // ViewSE.println(controller.db.getDBconfiguratori());
-        // ViewSE.println(controller.db.changePsw(controller.db.getConfiguratoreFromDB("config1"),
-        // "pass1C"));
-        // ViewSE.println(controller.db.getDBconfiguratori());
-        // ViewSE.println(controller.login("config1", "pass1")); //CONFIGURATORE
-        // ViewSE.println(controller.login("config1", "pass1")); //CONFIGURATORE
-        // ViewSE.println(controller.login("config2", "pass2")); //CONFIGURATORE
-        // ViewSE.println(controller.login("config2", "123")); //ERRORE CREDENZIALI
-        // ViewSE.println(controller.login("nonesisto", "1234")); //ERRORE
-        // CREDENZIALI
-        // ViewSE.println(controller.getConfiguratoriListString());
-        // ViewSE.println(controller.db.removeConfiguratoreFromDB("config2"));
-        // ViewSE.println(controller.getConfiguratoriListString());
-        // ViewSE.println(controller.db.addConfiguratoreToDB(new
-        // Configuratore("config2", "pass2")));
-        // ViewSE.println(controller.getConfiguratoriListString());
-        // ViewSE.println(controller.getLuoghiList());
-        // Volontario v = new Volontario("a", "a", "0");
-        // v.setAvailability(controller.date, new Date("16/03/2025"));
-        // v.setAvailability(controller.date, new Date("20/03/2025"));
-        // v.setAvailability(controller.date, new Date("24/03/2025"));
-        // v.setAvailability(controller.date, new Date("26/03/2025"));
-        // v.setAvailability(controller.date, new Date("28/03/2025"));
-        // v.printAvailability();
+        controller.interpreter("login ADMIN PASSWORD");
 
         initDBInterprete(controller);
+        initAssign(controller);
+
+        controller.interpreter("logout");
     }
 
     public static void initDBInterprete(App controller) {
-        controller.user = new Configuratore("", "", false);
-
         String addVisita = "add -t ";
-        // String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per
-        // scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05 21/12 9:00 90
-        // false 10 20 SaDo";
+        String visitaT1 = "\"Alla scoperta della cascata\" \"Un percorso guidato per scoprire le meraviglie naturali del parco.\" 10.8:39.31 15/05/25 21/12/25 9:00 90 false 10 20 SaDo";
         String visitaT2 = "\"Passeggiata naturalistica\" \"Una camminata rilassante immersa nella natura.\" 1.1:3.3 9/06/25 29/08/25 16:30 30 true 5 15 MeVeSa";
         String visitaT3 = "\"Alla scoperta del Moretto\" \"Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.\" 45.539:10.220 15/01/25 28/09/25 14:00 120 true 8 30 LuDo";
         String visitaTT = "\"Visita Test\" \"Descrizione Test\" 12.1:33.3 27/02/25 14/09/25 14:00 90 true 10 30 LuMaMe";
 
-        // controller.interpreter(addVisita + visitaT1);
+        controller.interpreter(addVisita + visitaT1);
         controller.interpreter(addVisita + visitaT3);
         controller.interpreter(addVisita + visitaT2);
         controller.interpreter(addVisita + visitaTT);
@@ -144,8 +103,26 @@ public class Main {
         controller.interpreter(addFruit + fruitore1);
         controller.interpreter(addFruit + fruitore2);
         controller.interpreter(addFruit + fruitore3);
+    }
 
-        controller.user = new Guest();
+    public static void initAssign(App controller) {
+        String lv1 = "\"Parco Grotta Cascata del Varone\"" + " " + "\"Passeggiata naturalistica\"";
+        String lv2 = "\"Pinacoteca Tosio-Martinengo di Brescia\"" + " " + "\"Alla scoperta del Moretto\"";
+        String lv3 = "\"Luogo Test\"" + " " + "\"Visita Test\"";
+        String assignLV = "assign -L ";
+
+        controller.interpreter(assignLV + lv1);
+        controller.interpreter(assignLV + lv2);
+        controller.interpreter(assignLV + lv3);
+
+        String tv1 = "\"Passeggiata naturalistica\"" + " " + "volont1";
+        String tv2 = "\"Alla scoperta del Moretto\"" + " " + "volont2";
+        String tv3 = "\"Visita Test\"" + " " + "volont3";
+        String assignTV = "assign -V ";
+
+        controller.interpreter(assignTV + tv1);
+        controller.interpreter(assignTV + tv2);
+        controller.interpreter(assignTV + tv3);
     }
 
     public static void initAvailability(App controller) {

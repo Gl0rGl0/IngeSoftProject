@@ -41,17 +41,17 @@ public enum CommandList implements ListInterface {
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.MAX.getPriority()),
 
+        MYVISIT(ConstString.MYVISIT_INFO, ConstString.MYVISIT_LINE_INFO,
+                        PersonaType.FRUITORE.getPriority(),
+                        PersonaType.VOLONTARIO.getPriority()),
+
         EXIT(ConstString.EXIT_INFO, ConstString.EXIT_LINE_INFO,
                         PersonaType.GUEST.getPriority(),
                         PersonaType.MAX.getPriority()),
 
         HELP(ConstString.HELP_INFO, ConstString.HELP_LINE_INFO,
                         PersonaType.GUEST.getPriority(),
-                        PersonaType.MAX.getPriority()),
-
-        MYVISIT(ConstString.MYVISIT_INFO, ConstString.MYVISIT_LINE_INFO,
-                        PersonaType.FRUITORE.getPriority(),
-                        PersonaType.VOLONTARIO.getPriority());
+                        PersonaType.MAX.getPriority());
 
         @Override
         public String getHelpMessage(int userPriority) {
@@ -78,7 +78,7 @@ public enum CommandList implements ListInterface {
 
         @Override
         public String toString() {
-                return this == HELP ? getHelpMessage(minRequiredPermission) : (this.lineInfo + "\n" + this.message);
+                return this.lineInfo + "\n" + this.message;
         }
 
         @Override

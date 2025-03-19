@@ -79,36 +79,37 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addTipoVisita(String[] args) {
-        if (!app.alreadyDone16) {
+
+        String[] a = StringUtils.joinQuotedArguments(args);
+
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
-                            + "| Non puoi aggiungere un tipo di visita se non è il 16 del month: " + args[0],
+                            + "| Non puoi aggiungere un tipo di visita se non è il 16 del month: " + a[0],
                     1,
                     CLASSNAME);
             return;
         }
 
-        String[] a = StringUtils.joinQuotedArguments(args);
         app.db.addTipoVisita(a, app.date);
     }
 
     private void addLuogo(String[] args) {
-        if (!app.alreadyDone16) {
+        String[] a = StringUtils.joinQuotedArguments(args);
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "| Non puoi aggiungere un luogo se non è il 16 del month: "
-                            + args[0],
+                            + a[0],
                     1,
                     CLASSNAME);
             return;
         }
         // NON PUOI USARLO ADESSO, ASPETTA LA V3...
-
-        // String[] a = StringUtils.joinQuotedArguments(args);
         // app.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 
     private void addVisita(String[] args) {
-        if (!app.alreadyDone16) {
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
                             + "| Non puoi aggiungere una visita al calendario se non è il 16 del month",

@@ -131,7 +131,6 @@ public class DBUtils {
     }
 
     public boolean addTipoVisita(String[] args, Date d) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args, d));
     }
 
@@ -385,5 +384,14 @@ public class DBUtils {
         }
 
         return out;
+    }
+
+    public void closeAll() {
+        dbConfiguratoreHelper.close();
+        dbFruitoreHelper.close();
+        dbVolontarioHelper.close();
+        dbLuoghiHelper.close();
+        dbVisiteHelper.close();
+        dbTipoVisiteHelper.close();
     }
 }

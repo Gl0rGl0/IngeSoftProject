@@ -127,4 +127,8 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public Visita getVisitaByUID(String uid) {
         return cachedVisite.get(uid);
     }
+
+    public void close() {
+        saveJson(archivio);
+    }
 }

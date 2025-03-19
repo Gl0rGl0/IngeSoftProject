@@ -28,21 +28,21 @@ public class AssignCommand extends AbstractCommand {
 
         if (arg.length < 2) {
             if ("v".equals(options[0])) {
-                ViewSE.println("Errore nell'utilizzo del comando 'assign': assign -v UsernameVolontario NomeVisita");
+                ViewSE.println("Errore nell'utilizzo del comando 'assign': assign -v NomeVisita UsernameVolontario");
             } else {
                 ViewSE.println("Errore nell'utilizzo del comando 'assign': assign -V NomeLuogo NomeVisita");
             }
             return;
         }
         switch (options[0]) {
-            case "v" -> {
-                if (app.date.getDay() == 16)
+            case "V" -> {
+                if (app.canExecute16thAction)
                     assignVolontario(arg[0], arg[1]);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
-            case "t" -> {
-                if (app.date.getDay() == 16)
+            case "L" -> {
+                if (app.canExecute16thAction)
                     assignVisita(arg[0], arg[1]);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
@@ -52,7 +52,7 @@ public class AssignCommand extends AbstractCommand {
         }
     }
 
-    private void assignVolontario(String userNameVolontario, String type) {
+    private void assignVolontario(String type, String userNameVolontario) {
         Volontario v = app.db.findVolontario(userNameVolontario);
         TipoVisita vToAssign = app.db.getTipoVisitaByName(type);
 
@@ -65,7 +65,9 @@ public class AssignCommand extends AbstractCommand {
             ViewSE.println("Nessuna visita trovata con quel titolo.");
             return;
         }
+
         v.addTipoVisita(vToAssign.getUID());
+        vToAssign.addVolontario(v.getUsername());
         ViewSE.println("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitle());
     }
 
@@ -84,6 +86,7 @@ public class AssignCommand extends AbstractCommand {
         }
 
         l.addTipoVisita(vToAssign.getUID());
+        vToAssign.setLuogo(l.getUID());
         ViewSE.println("Assegnata la visita " + vToAssign.getTitle() + " al luogo " + l.getName());
     }
 }

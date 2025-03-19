@@ -11,6 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class Volontario extends Persona {
+
+    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
+
     public void addTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
             UIDvisitePresentabili.add(uidTipoVisita);
@@ -27,21 +30,23 @@ public class Volontario extends Persona {
 
     public static final String PATH = "volontari";
 
-    @JsonIgnore
     public boolean[] availability = new boolean[31];
     @JsonIgnore
     public int numAvailability;
     @JsonIgnore
     private boolean valid = false;
-    @JsonIgnore
-    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
 
     @JsonCreator
     public Volontario(
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean isNew) {
+            @JsonProperty("new") boolean isNew,
+            @JsonProperty("visite") ArrayList<String> visite,
+            @JsonProperty("disponibilita") boolean[] disponibilita) {
         super(username, psw, PersonaType.VOLONTARIO, isNew, false);
+        this.visiteUIDs = visite;
+        if (disponibilita != null)
+            this.availability = disponibilita;
     }
 
     public Volontario(String username, String psw, boolean isNew, boolean hash) {

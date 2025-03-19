@@ -106,8 +106,6 @@ public class ListCommand extends AbstractCommand {
             return;
         }
 
-        System.out.println("DENTRO listcommand.printtipivisita()");
-
         StringBuilder out = new StringBuilder();
         for (TipoVisita t : app.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
             out.append(t);

@@ -3,57 +3,57 @@ package V1.ingsoft.util;
 public class ConstString {
     // --- Comandi della modalità RUNNING ---
     public static final String RUN_ADD_INFO = """
-                add [-c] [-f] [-v] [String: username] [String: psw]
-                    -c        Aggiunge un configuratore
-                    -f        Aggiunge un fruitore
-                    -v        Aggiunge un volontario
-                    username  Specifica l'username della persona inserita
-                    psw       Specifica la password della persona inserita
+            add [-c] [-f] [-v] [String: username] [String: psw]
+                -c        Aggiunge un configuratore
+                -f        Aggiunge un fruitore
+                -v        Aggiunge un volontario
+                username  Specifica l'username della persona inserita
+                psw       Specifica la password della persona inserita
 
-                add [-t] [String: title] [String: description] [GPS: meetingPlace] [Date: initDay] [Date: finishDay] [Time: initTime] [int: duration] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
-                    -t                  Aggiunge un tipo di visita
-                    title              Il title del tipo di visita
-                    description         Una breve description del tipo di visita
-                    meetingPlace       Il punto di incontro per il tipo di visita [latitude,longitude]
-                    initDay   Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
-                    finishDay     Data di fine del periodo del tipo di visita [YYYY-MM-DD]
-                    initTime           L'orario di inizio del tipo di visita [HH:MM]
-                    duration        Durata del tipo di visita in minuti
-                    free                Indica se il tipo di visita è gratuito [true/false]
-                    numMinPartecipants  Numero minimo di fruitori
-                    numMaxPartecipants  Numero massimo di fruitori
-                    stato               Stato del tipo di visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
-                per lasciare un campo vuoto digitare "/"
-                se si inseriscono solo i primi N campi, dal campo N+1 in poi sarà tutto lasciato vuoto
+            add [-t] [String: title] [String: description] [GPS: meetingPlace] [Date: initDay] [Date: finishDay] [Time: initTime] [int: duration] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
+                -t                  Aggiunge un tipo di visita
+                title               Il title del tipo di visita
+                description         Una breve description del tipo di visita
+                meetingPlace        Il punto di incontro per il tipo di visita [latitude,longitude]
+                initDay             Data di inizio del periodo del tipo di visita [YYYY-MM-DD]
+                finishDay           Data di fine del periodo del tipo di visita [YYYY-MM-DD]
+                initTime            L'orario di inizio del tipo di visita [HH:MM]
+                duration            Durata del tipo di visita in minuti
+                free                Indica se il tipo di visita è gratuito [true/false]
+                numMinPartecipants  Numero minimo di fruitori
+                numMaxPartecipants  Numero massimo di fruitori
+                stato               Stato del tipo di visita [PROPOSTA/CONFERMATA/CANCELLATA/EFFETTUATA]
+
+            Per lasciare un campo vuoto digitare "/"
             """;
 
     public static final String RUN_ADD_LINE_INFO = "Aggiunge una Persona/TipoVisita/Luogo al database";
 
     public static final String REMOVE_INFO = """
-                remove [-c] [-f] [-v] [String: username]
-                    -c        Rimuove un configuratore
-                    -f        Rimuove un fruitore
-                    -v        Rimuove un volontario
-                    username  Specifica l'username della persona da rimuovere
+            remove [-c] [-f] [-v] [String: username]
+                -c        Rimuove un configuratore
+                -f        Rimuove un fruitore
+                -v        Rimuove un volontario
+                username  Specifica l'username della persona da rimuovere
 
-                remove [-V] [-L] [String: title]
-                    -V        Rimuove una visita
-                    -L        Rimuove un luogo
-                    title    Specifica il title della visita o del luogo da rimuovere
+            remove [-V] [-L] [String: title]
+                -V        Rimuove una visita
+                -L        Rimuove un luogo
+                title     Specifica il title della visita o del luogo da rimuovere
             """;
 
     public static final String REMOVE_LINE_INFO = "Rimuove una Persona/Visita/Luogo dal database";
 
     public static final String LOGIN_INFO = """
-                login [String: username] [String: password]
-                    username  Specifica l'username con cui fare il login
-                    password  Specifica la password con cui fare il login
+            login [String: username] [String: password]
+                username  Specifica l'username con cui fare il login
+                password  Specifica la password con cui fare il login
             """;
 
     public static final String LOGIN_LINE_INFO = "Esegui il login immettendo le credenziali";
 
     public static final String LOGOUT_INFO = """
-                logout
+            logout
             """;
 
     public static final String LOGOUT_LINE_INFO = "Esegui il logout dal sistema";
@@ -112,7 +112,7 @@ public class ConstString {
     public static final String PRECLUDE_LINE_INFO = "Aggiunge/rimuove data da precludere";
 
     public static final String EXIT_INFO = """
-                exit
+            exit
             """;
 
     public static final String EXIT_LINE_INFO = "Chiude il programma";
@@ -120,7 +120,6 @@ public class ConstString {
     public static final String MYVISIT_INFO = """
 
             """;
-
     public static final String MYVISIT_LINE_INFO = "Visualizza le visite associate all'utente corrente";
 
     // --- Comandi della modalità SETUP ---

@@ -20,7 +20,7 @@ public class JsonStorage {
 
     private static final String basePath = "data/";
 
-    public static <T> ArrayList<T> loadList(String fileName, Class<T> clazz) {
+    synchronized public static <T> ArrayList<T> loadList(String fileName, Class<T> clazz) {
         File file = new File(basePath + fileName + ".json");
         if (!file.exists()) {
             return new ArrayList<>();
@@ -36,7 +36,7 @@ public class JsonStorage {
         }
     }
 
-    public static <T> boolean saveList(String fileName, Collection<T> collection) {
+    synchronized public static <T> boolean saveList(String fileName, Collection<T> collection) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(basePath + fileName + ".json"),
                     collection);

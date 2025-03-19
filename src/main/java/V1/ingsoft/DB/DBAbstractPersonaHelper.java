@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
-    private final HashMap<String, T> cachedPersons = new HashMap<>();
+    protected final HashMap<String, T> cachedPersons = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     public DBAbstractPersonaHelper(PersonaType personaType) {
@@ -29,11 +29,10 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         return saveJson(getPersonList());
     }
 
-    public boolean removePersona(String username) {
-        if (cachedPersons.get(username) == null)
+    synchronized public boolean removePersona(String username) {
+        if (cachedPersons.remove(username) == null)
             return false;
 
-        cachedPersons.remove(username);
         return saveJson(getPersonList());
     }
 
@@ -72,5 +71,9 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     public boolean isNew() {
         return cachedPersons.size() == 0;
+    }
+
+    public void close() {
+        saveJson(getPersonList());
     }
 }

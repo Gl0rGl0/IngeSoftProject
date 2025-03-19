@@ -26,7 +26,7 @@ public abstract class Interpreter {
         commandRegistry.put("changepsw", new ChangePswCommand(controller));
         commandRegistry.put("assign", new AssignCommand(controller));
         commandRegistry.put("setmax", new SetPersoneMaxCommand(controller));
-        commandRegistry.put("exit", new ExitCommand());
+        commandRegistry.put("exit", new ExitCommand(controller));
     }
 
     /**

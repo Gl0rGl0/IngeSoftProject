@@ -38,19 +38,19 @@ public class RemoveCommand extends AbstractCommand {
             case 'c' -> removeConfiguratore(ar);
             case 'f' -> removeFruitore(ar);
             case 'v' -> {
-                if (app.date.getDay() == 16)
+                if (!app.canExecute16thAction)
                     removeVolontario(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 't' -> {
-                if (app.date.getDay() == 16)
+                if (!app.canExecute16thAction)
                     removeTipoVisita(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 'L' -> {
-                if (app.date.getDay() == 16)
+                if (!app.canExecute16thAction)
                     removeLuogo(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
@@ -70,7 +70,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeVolontario(String[] args) {
-        if (!app.alreadyDone16) {
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
                             + "|  + Non puoi rimuovere un volontario se non è il 16 del month: " + args[0],
@@ -84,7 +84,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeTipoVisita(String[] args) {
-        if (!app.alreadyDone16) {
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername()
                             + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del month: " + args[0],
@@ -98,7 +98,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeLuogo(String[] args) {
-        if (!app.alreadyDone16) {
+        if (!app.canExecute16thAction) {
             AssertionControl.logMessage(
                     app.getCurrentUser().getUsername() + "|  + Non puoi rimuovere un luogo se non è il 16 del month: "
                             + args[0],

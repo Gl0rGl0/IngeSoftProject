@@ -35,8 +35,7 @@ public class Date {
     }
 
     public Date() {
-        // this.localDate = LocalDateTime.now();
-        this(16, 1, 2024);
+        this.localDate = LocalDateTime.now();
     }
 
     /**
@@ -69,7 +68,7 @@ public class Date {
     private void setTime(String[] in) {
         int hh = Integer.parseInt(in[0]);
         int mm = Integer.parseInt(in[1]);
-        this.localDate.plusHours(hh).plusMinutes(mm);
+        localDate = this.localDate.plusHours(hh).plusMinutes(mm);
     }
 
     /**

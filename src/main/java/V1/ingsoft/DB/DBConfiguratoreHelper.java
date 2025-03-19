@@ -7,6 +7,9 @@ import V1.ingsoft.persone.PersonaType;
 public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
     public DBConfiguratoreHelper() {
         super(PersonaType.CONFIGURATORE);
+        if (cachedPersons.isEmpty()) {
+            cachedPersons.put("ADMIN", new Configuratore("ADMIN", "PASSWORD", false, true));
+        }
     }
 
     // la psw è salvata con una cifratura hash semplicissima + salting con user dato

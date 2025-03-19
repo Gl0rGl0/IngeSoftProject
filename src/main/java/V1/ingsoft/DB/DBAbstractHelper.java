@@ -20,4 +20,6 @@ public abstract class DBAbstractHelper<T> {
     public boolean saveJson(Collection<T> toSave) {
         return JsonStorage.saveList(fileJson, toSave);
     }
+
+    public abstract void close();
 }

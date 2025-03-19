@@ -102,4 +102,8 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
             return false;
         return cachedLuoghi.containsKey(uidLuogo);
     }
+
+    public void close() {
+        saveJson(getLuoghi());
+    }
 }

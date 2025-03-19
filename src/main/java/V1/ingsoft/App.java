@@ -42,7 +42,7 @@ public class App {
 
     private void initDailyScheduler() {
         dailyTask = Executors.newSingleThreadScheduledExecutor();
-        dailyTask.scheduleAtFixedRate(() -> azioneDelDay(), 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);
+        dailyTask.scheduleAtFixedRate(() -> dailyAction(), 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);
         // OGNI GIORNO VIRTUALE (ogni 12min)
     }
 
@@ -90,17 +90,18 @@ public class App {
         db.addPrecludedDate(new Date(d));
     }
 
-    public boolean alreadyDone16 = true;
+    public boolean canExecute16thAction = true;
 
-    public void azioneDelDay() {
-        db.refresher(this.date);
+    public void dailyAction() {
+        // db.refresher(this.date);
 
         switch (date.getDay()) {
             case 16 -> azioniDel16(true);
-            case 17, 18 -> azioniDel16(!alreadyDone16 && !this.date.holiday());
-            default -> alreadyDone16 = false;
+            case 17, 18 -> azioniDel16(!canExecute16thAction && !this.date.holiday());
+            default -> canExecute16thAction = false;
         }
 
+        canExecute16thAction = true;
     }
 
     private void azioniDel16(boolean eseguo) {
@@ -108,7 +109,14 @@ public class App {
             return;
 
         db.refreshPrecludedDate(this.date);
-        alreadyDone16 = true; // SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il
-                              // primo day feriale)
+        canExecute16thAction = true;
+        // SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il
+        // primo giorno feriale)
+    }
+
+    public void close() {
+        db.closeAll();
+        ViewSE.println("Programma terminato. Arrivederci!");
+        System.exit(0);
     }
 }

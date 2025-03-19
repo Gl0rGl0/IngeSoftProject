@@ -20,11 +20,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     public ArrayList<TipoVisita> getTipiVisita() {
-        ArrayList<TipoVisita> lista = new ArrayList<>(cachedTipiVisita.values());
-        if (lista.isEmpty()) {
-            System.out.println("⚠️ Attenzione: getTipiVisita() sta restituendo una lista vuota!");
-        }
-        return lista;
+        return new ArrayList<>(cachedTipiVisita.values());
     }
 
     public boolean addTipoVisita(TipoVisita toAdd) {
@@ -93,5 +89,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
 
     public boolean isNew() {
         return cachedTipiVisita.size() == 0;
+    }
+
+    public void close() {
+        saveJson(getTipiVisita());
     }
 }
