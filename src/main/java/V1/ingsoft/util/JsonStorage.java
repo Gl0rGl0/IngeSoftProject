@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import V1.ingsoft.ViewSE;
+import V1.ingsoft.view.ViewSE;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class JsonStorage {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            AssertionControl.logMessage("Errore nel carocamento del file JSON", 1, "JsonStorage");
+            AssertionControl.logMessage("Errore nel caricamento del file JSON", 1, "JsonStorage");
             ViewSE.println("Errore nel caricamento del file JSON: " + e.getMessage());
             return new ArrayList<>();
         }

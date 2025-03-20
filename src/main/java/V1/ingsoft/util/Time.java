@@ -34,4 +34,12 @@ public class Time {
     public int getMinutes() {
         return this.hh * 60 + this.mm;
     }
+
+    public boolean greaterThen(Time other) {
+        if (this.hh == other.hh) {
+            return this.mm > other.mm;
+        }
+
+        return this.hh > other.hh;
+    }
 }

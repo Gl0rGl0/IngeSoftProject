@@ -1,7 +1,5 @@
 package V1.ingsoft.util;
 
-import V1.ingsoft.App;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+import V1.ingsoft.controller.Controller;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Date {
@@ -91,7 +91,7 @@ public class Date {
     }
 
     public void incrementa() {
-        this.localDate = localDate.plusSeconds(App.SECONDIVIRTUALI_PS);
+        this.localDate = localDate.plusSeconds(Controller.SECONDIVIRTUALI_PS);
     }
 
     public int getDay() {
@@ -104,6 +104,14 @@ public class Date {
 
     public static int monthLength(Date d) {
         return switch (d.localDate.getMonthValue()) {
+            case 1, 3, 5, 7, 8, 10, 12 -> 31;
+            case 2 -> 28;
+            default -> 30;
+        };
+    }
+
+    public static int monthLength(int numeroMese) {
+        return switch (numeroMese) {
             case 1, 3, 5, 7, 8, 10, 12 -> 31;
             case 2 -> 28;
             default -> 30;
@@ -124,5 +132,9 @@ public class Date {
 
     public String getTime() {
         return this.localDate.getHour() + ":" + this.localDate.getMinute();
+    }
+
+    public int getYear() {
+        return this.localDate.getYear();
     }
 }

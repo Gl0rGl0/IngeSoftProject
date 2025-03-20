@@ -1,18 +1,18 @@
 package V1.ingsoft.util;
 
-import V1.ingsoft.App;
-import V1.ingsoft.commands.HelpCommand;
-import V1.ingsoft.commands.running.AddCommand;
-import V1.ingsoft.commands.running.CommandList;
-import V1.ingsoft.commands.running.ListCommand;
-import V1.ingsoft.commands.running.LoginCommand;
-import V1.ingsoft.commands.running.MyVisitCommand;
-import V1.ingsoft.commands.running.PrecludeCommand;
-import V1.ingsoft.commands.running.RemoveCommand;
+import V1.ingsoft.controller.Controller;
+import V1.ingsoft.controller.commands.HelpCommand;
+import V1.ingsoft.controller.commands.running.AddCommand;
+import V1.ingsoft.controller.commands.running.CommandList;
+import V1.ingsoft.controller.commands.running.ListCommand;
+import V1.ingsoft.controller.commands.running.LoginCommand;
+import V1.ingsoft.controller.commands.running.MyVisitCommand;
+import V1.ingsoft.controller.commands.running.PrecludeCommand;
+import V1.ingsoft.controller.commands.running.RemoveCommand;
 
 public class RunningInterpreter extends Interpreter {
 
-    public RunningInterpreter(App controller) {
+    public RunningInterpreter(Controller controller) {
         super(controller);
 
         commandRegistry.put("add", new AddCommand(controller));

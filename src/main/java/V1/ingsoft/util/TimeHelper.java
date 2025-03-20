@@ -1,12 +1,12 @@
 package V1.ingsoft.util;
 
-import V1.ingsoft.App;
+import V1.ingsoft.controller.Controller;
 
 public class TimeHelper implements Runnable {
 
-    private final App app;
+    private final Controller app;
 
-    public TimeHelper(App app) {
+    public TimeHelper(Controller app) {
         this.app = app;
     }
 

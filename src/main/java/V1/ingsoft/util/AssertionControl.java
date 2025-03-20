@@ -1,11 +1,11 @@
 package V1.ingsoft.util;
 
-import V1.ingsoft.ViewSE;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+
+import V1.ingsoft.view.ViewSE;
 
 public class AssertionControl {
 

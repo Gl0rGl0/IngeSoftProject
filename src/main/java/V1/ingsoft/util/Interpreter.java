@@ -1,16 +1,16 @@
 package V1.ingsoft.util;
 
-import V1.ingsoft.App;
-import V1.ingsoft.ViewSE;
-import V1.ingsoft.commands.AssignCommand;
-import V1.ingsoft.commands.ChangePswCommand;
-import V1.ingsoft.commands.Command;
-import V1.ingsoft.commands.ExitCommand;
-import V1.ingsoft.commands.LogoutCommand;
-import V1.ingsoft.commands.SetPersoneMaxCommand;
-import V1.ingsoft.commands.TimeCommand;
-import V1.ingsoft.persone.Persona;
-import V1.ingsoft.persone.PersonaType;
+import V1.ingsoft.controller.Controller;
+import V1.ingsoft.controller.commands.AssignCommand;
+import V1.ingsoft.controller.commands.ChangePswCommand;
+import V1.ingsoft.controller.commands.Command;
+import V1.ingsoft.controller.commands.ExitCommand;
+import V1.ingsoft.controller.commands.LogoutCommand;
+import V1.ingsoft.controller.commands.SetPersoneMaxCommand;
+import V1.ingsoft.controller.commands.TimeCommand;
+import V1.ingsoft.controller.item.persone.Persona;
+import V1.ingsoft.controller.item.persone.PersonaType;
+import V1.ingsoft.view.ViewSE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public abstract class Interpreter {
     protected HashMap<String, Command> commandRegistry = new HashMap<>();
 
     // Costruttore che riceve la mappa dei comandi
-    public Interpreter(App controller) {
+    public Interpreter(Controller controller) {
         commandRegistry.put("time", new TimeCommand(controller));
         commandRegistry.put("logout", new LogoutCommand(controller));
         commandRegistry.put("changepsw", new ChangePswCommand(controller));
