@@ -13,10 +13,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class AssignCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public AssignCommand(Controller app) {
-        this.app = app;
+    public AssignCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandListSETUP.ASSIGN; // CommandList.ASSIGN appena ho voglia di scriverlo
     }
 
@@ -39,13 +39,13 @@ public class AssignCommand extends AbstractCommand {
         }
         switch (options[0]) {
             case "V" -> {
-                if (app.canExecute16thAction)
+                if (controller.canExecute16thAction)
                     assignVolontario(arg[0], arg[1]);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case "L" -> {
-                if (app.canExecute16thAction)
+                if (controller.canExecute16thAction)
                     assignVisita(arg[0], arg[1]);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
@@ -56,8 +56,8 @@ public class AssignCommand extends AbstractCommand {
     }
 
     private void assignVolontario(String type, String userNameVolontario) {
-        Volontario v = app.db.findVolontario(userNameVolontario);
-        TipoVisita vToAssign = app.db.getTipoVisitaByName(type);
+        Volontario v = controller.db.findVolontario(userNameVolontario);
+        TipoVisita vToAssign = controller.db.getTipoVisitaByName(type);
 
         if (v == null) {
             ViewSE.println("Nessun volontario trovato con quell'username.");
@@ -75,8 +75,8 @@ public class AssignCommand extends AbstractCommand {
     }
 
     private void assignVisita(String name, String type) {
-        Luogo l = app.db.getLuogoByName(name);
-        TipoVisita vToAssign = app.db.getTipoVisitaByName(type);
+        Luogo l = controller.db.getLuogoByName(name);
+        TipoVisita vToAssign = controller.db.getTipoVisitaByName(type);
 
         if (l == null) {
             ViewSE.println("Nessun luogo trovato con quel nome.");
@@ -98,7 +98,7 @@ public class AssignCommand extends AbstractCommand {
                 if (uidTipoVisita.equals(vToAssign.getUID()))
                     continue;
 
-                TipoVisita toOperate = app.db.getTipiByUID(uidTipoVisita);
+                TipoVisita toOperate = controller.db.getTipiByUID(uidTipoVisita);
 
                 if (!toOperate.getDays().contains(d))
                     continue;

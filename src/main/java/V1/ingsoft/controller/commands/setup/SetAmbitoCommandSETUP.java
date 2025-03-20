@@ -7,10 +7,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class SetAmbitoCommandSETUP extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public SetAmbitoCommandSETUP(Controller app) {
-        this.app = app;
+    public SetAmbitoCommandSETUP(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandListSETUP.SETAMBITO;
         this.hasBeenExecuted = false;
     }
@@ -27,7 +27,7 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
             ViewSE.println("Errore nell'utilizzo del comando, richiesto almeno un name. Utilizzo: \"Nome name name\"");
         }
         String[] a = StringUtils.joinQuotedArguments(args);
-        app.db.setAmbito(a[0]);
+        controller.db.setAmbito(a[0]);
 
         this.hasBeenExecuted = true;
     }

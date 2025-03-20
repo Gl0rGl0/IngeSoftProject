@@ -6,10 +6,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class ChangePswCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public ChangePswCommand(Controller app) {
-        this.app = app;
+    public ChangePswCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.CHANGEPSW;
     }
 
@@ -20,8 +20,8 @@ public class ChangePswCommand extends AbstractCommand {
             return;
         }
 
-        if (app.db.changePassword(app.user.getUsername(), args[0], app.user.getType())) {
-            app.user.setAsNotNew();
+        if (controller.db.changePassword(controller.user.getUsername(), args[0], controller.user.getType())) {
+            controller.user.setAsNotNew();
             ViewSE.println("Password cambiata con successo!");
             this.hasBeenExecuted = true;
         } else {

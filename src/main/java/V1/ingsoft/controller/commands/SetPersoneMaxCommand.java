@@ -6,10 +6,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class SetPersoneMaxCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public SetPersoneMaxCommand(Controller app) {
-        this.app = app;
+    public SetPersoneMaxCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandListSETUP.SETMAX;
         this.hasBeenExecuted = false;
     }
@@ -21,7 +21,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
             return;
         }
         try {
-            app.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
+            controller.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             return;
         }

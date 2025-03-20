@@ -8,10 +8,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class AddCommandSETUP extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public AddCommandSETUP(Controller app) {
-        this.app = app;
+    public AddCommandSETUP(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandListSETUP.ADD;
         this.hasBeenExecuted = false;
     }
@@ -45,6 +45,6 @@ public class AddCommandSETUP extends AbstractCommand {
     public void addLuogo(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        app.db.addLuogo(a[0], a[1], new GPS(a[2]));
+        controller.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 }

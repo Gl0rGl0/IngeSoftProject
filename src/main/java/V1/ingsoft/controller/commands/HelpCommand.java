@@ -6,10 +6,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class HelpCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public HelpCommand(Controller app, ListInterface commandInfo) {
-        this.app = app;
+    public HelpCommand(Controller controller, ListInterface commandInfo) {
+        this.controller = controller;
         super.commandInfo = commandInfo;
     }
 
@@ -25,7 +25,7 @@ public class HelpCommand extends AbstractCommand {
         }
         // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al
         // livello dell'utente
-        ViewSE.println(super.commandInfo.getHelpMessage(app.getCurrentUser().getPriority()));
+        ViewSE.println(super.commandInfo.getHelpMessage(controller.getCurrentUser().getPriority()));
     }
 
 }

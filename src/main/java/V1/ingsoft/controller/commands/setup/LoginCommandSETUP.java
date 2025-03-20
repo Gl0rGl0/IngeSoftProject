@@ -8,10 +8,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class LoginCommandSETUP extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public LoginCommandSETUP(Controller app) {
-        this.app = app;
+    public LoginCommandSETUP(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandListSETUP.LOGIN;
 
         this.hasBeenExecuted = false;
@@ -23,23 +23,23 @@ public class LoginCommandSETUP extends AbstractCommand {
             ViewSE.println("Errore nell'utilizzo del prompt");
             return;
         }
-        if (app.user.getType() != PersonaType.GUEST) {
+        if (controller.user.getType() != PersonaType.GUEST) {
             ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
 
         Persona p = login(args[0], args[1]);
-        app.user = p;
+        controller.user = p;
 
-        if (app.user.getType() == PersonaType.CONFIGURATORE) { // SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
-            ViewSE.println("Login effettuato con successo (" + app.user.getType() + ")");
-            if (app.user.isNew()) {
+        if (controller.user.getType() == PersonaType.CONFIGURATORE) { // SOLO UN CONFIGURATORE PUÒ ACCEDERE AL SETUP
+            ViewSE.println("Login effettuato con successo (" + controller.user.getType() + ")");
+            if (controller.user.isNew()) {
                 ViewSE.println(
                         "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire dei servizi");
             }
             this.hasBeenExecuted = true;
         } else {
-            if (app.user.getType() != PersonaType.GUEST) {
+            if (controller.user.getType() != PersonaType.GUEST) {
                 ViewSE.println("Errore di login, riprova.");
             } else {
                 ViewSE.println("Solo i configuratori possono accedere, riprova.");
@@ -48,7 +48,7 @@ public class LoginCommandSETUP extends AbstractCommand {
     }
 
     private Persona login(String username, String psw) {
-        return app.db.login(username, psw);
+        return controller.db.login(username, psw);
     }
 
 }

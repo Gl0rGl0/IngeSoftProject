@@ -8,10 +8,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class LoginCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public LoginCommand(Controller app) {
-        this.app = app;
+    public LoginCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.LOGIN;
     }
 
@@ -21,16 +21,16 @@ public class LoginCommand extends AbstractCommand {
             ViewSE.println("Errore nell'utilizzo del prompt");
             return;
         }
-        if (app.user.getType() != PersonaType.GUEST) {
+        if (controller.user.getType() != PersonaType.GUEST) {
             ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
             return;
         }
 
-        app.user = login(args[0], args[1]);
+        controller.user = login(args[0], args[1]);
 
-        if (app.user.getType() != PersonaType.GUEST) {
-            ViewSE.println("Login effettuato con successo (" + app.user.getType() + ")");
-            if (app.user.isNew()) {
+        if (controller.user.getType() != PersonaType.GUEST) {
+            ViewSE.println("Login effettuato con successo (" + controller.user.getType() + ")");
+            if (controller.user.isNew()) {
                 ViewSE.println(
                         "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire dei servizi");
             }
@@ -40,7 +40,7 @@ public class LoginCommand extends AbstractCommand {
     }
 
     private Persona login(String username, String psw) {
-        return app.db.login(username, psw);
+        return controller.db.login(username, psw);
     }
 
 }

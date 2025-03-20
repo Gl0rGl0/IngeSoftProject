@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Model {
-    private final DBConfiguratoreHelper dbConfiguratoreHelper;
-    private final DBFruitoreHelper dbFruitoreHelper;
+    public final DBConfiguratoreHelper dbConfiguratoreHelper;
+    public final DBFruitoreHelper dbFruitoreHelper;
     public final DBVolontarioHelper dbVolontarioHelper;
     public final DBTipoVisiteHelper dbTipoVisiteHelper;
     public final DBVisiteHelper dbVisiteHelper;

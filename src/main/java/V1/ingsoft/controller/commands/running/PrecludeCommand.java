@@ -7,10 +7,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class PrecludeCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public PrecludeCommand(Controller app) {
-        this.app = app;
+    public PrecludeCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.PRECLUDE;
     }
 
@@ -29,7 +29,7 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        if (!twoMonthsDifference(toOperate, app.date)) {
+        if (!twoMonthsDifference(toOperate, controller.date)) {
             ViewSE.println(
                     "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al month successivo al prossimo");
             return;
@@ -59,11 +59,11 @@ public class PrecludeCommand extends AbstractCommand {
 
     private void addPrecludedDate(String[] args) {
         ViewSE.println("Eseguo: Aggiungo data da precludere");
-        app.db.addPrecludedDate(new Date(args[0])); // aggiunge una data speciale
+        controller.db.addPrecludedDate(new Date(args[0])); // aggiunge una data speciale
     }
 
     private void removePrecludedDate(String[] args) {
         ViewSE.println("Eseguo: Rimuovo data da precludere");
-        app.db.removePrecludedDate(new Date(args[0]));
+        controller.db.removePrecludedDate(new Date(args[0]));
     }
 }

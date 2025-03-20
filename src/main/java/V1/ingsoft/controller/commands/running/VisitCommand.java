@@ -10,11 +10,11 @@ import V1.ingsoft.util.StringUtils;
 import V1.ingsoft.view.ViewSE;
 
 public class VisitCommand extends AbstractCommand {
-    private final Controller app;
+    private final Controller controller;
     private final String CLASSNAME = this.getClass().getSimpleName();
 
-    public VisitCommand(Controller app) {
-        this.app = app;
+    public VisitCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.ASSIGN; // VISIT;
     }
 
@@ -41,7 +41,7 @@ public class VisitCommand extends AbstractCommand {
 
     private void addFruitoreToVisita(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
-        Visita v = app.db.getVisitaByName(a[0], a[1]);
+        Visita v = controller.db.getVisitaByName(a[0], a[1]);
 
         if (v == null) {
             ViewSE.println("Non ci sono visite disponibili con quel nome...");
@@ -49,7 +49,7 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (app.getCurrentUser().getType() != PersonaType.FRUITORE) {
+        if (controller.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso iscrivere un NON fruitore alla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
                     CLASSNAME);
@@ -65,14 +65,15 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (quantita > app.maxPrenotazioniPerPersona) {
-            ViewSE.println("Non puoi iscrivere cosi tante persone, il massimo è: " + app.maxPrenotazioniPerPersona);
+        if (quantita > controller.maxPrenotazioniPerPersona) {
+            ViewSE.println(
+                    "Non puoi iscrivere cosi tante persone, il massimo è: " + controller.maxPrenotazioniPerPersona);
             AssertionControl.logMessage("Superato massimale prenotazioni per persona", 3,
                     CLASSNAME);
             return;
         }
 
-        Fruitore f = (Fruitore) app.getCurrentUser();
+        Fruitore f = (Fruitore) controller.getCurrentUser();
 
         switch (v.addPartecipants(f, quantita)) {
             case "capienza" -> {
@@ -95,7 +96,7 @@ public class VisitCommand extends AbstractCommand {
 
     private void removeFromVisita(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
-        Visita v = app.db.getVisitaByName(a[0], a[1]);
+        Visita v = controller.db.getVisitaByName(a[0], a[1]);
 
         if (v == null) {
             ViewSE.println("Non ci sono visite disponibili con quel name...");
@@ -103,14 +104,14 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (app.getCurrentUser().getType() != PersonaType.FRUITORE) {
+        if (controller.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Non posso disiscrivere un NON fruitore dalla visita");
             AssertionControl.logMessage("Tentativo iscrizione da config/volont, non può essere arrivato fino a qua", 1,
                     CLASSNAME);
             return;
         }
 
-        Fruitore f = (Fruitore) app.getCurrentUser();
+        Fruitore f = (Fruitore) controller.getCurrentUser();
         f.removeFromVisita(v.getUID());
         v.removePartecipant(f.getUsername());
     }

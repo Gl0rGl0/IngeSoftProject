@@ -65,40 +65,18 @@ public class Main {
     }
 
     public static void initDBInterprete(Controller controller) {
-        String addVisita = "add -t ";
-        visiteList.forEach(v -> controller.interpreter(addVisita + StringUtils.arrayToStringClean(v)));
+        visiteList.forEach(v -> controller.interpreter("add -t " + StringUtils.arrayToStringClean(v)));
 
-        String addLuogo = "add -L ";
-        luoghiList.forEach(v -> controller.interpreter(addLuogo + StringUtils.arrayToStringClean(v)));
+        luoghiList.forEach(v -> controller.interpreter("add -L " + StringUtils.arrayToStringClean(v)));
 
-        String addCofig = "add -c ";
-        String configuratore1 = "config1 pass1C";
-        String configuratore2 = "config2 pass2C";
+        for (int i = 1; i <= 3; i++)
+            controller.interpreter(String.format("add -c config%d pass%dC", i, i));
 
-        controller.interpreter(addCofig + configuratore1);
-        controller.interpreter(addCofig + configuratore2);
+        for (int i = 1; i <= 5; i++)
+            controller.interpreter(String.format("add -v volont%d pass%dV", i, i));
 
-        String addVolont = "add -v ";
-        String volontario1 = "volont1 pass1V";
-        String volontario2 = "volont2 pass2V";
-        String volontario3 = "volont3 pass3V";
-        String volontario4 = "volont4 pass4V";
-        String volontario5 = "volont5 pass5V";
-
-        controller.interpreter(addVolont + volontario1);
-        controller.interpreter(addVolont + volontario2);
-        controller.interpreter(addVolont + volontario3);
-        controller.interpreter(addVolont + volontario4);
-        controller.interpreter(addVolont + volontario5);
-
-        String addFruit = "add -f ";
-        String fruitore1 = "fruit1 pass1F";
-        String fruitore2 = "fruit2 pass2F";
-        String fruitore3 = "fruit3 pass3F";
-
-        controller.interpreter(addFruit + fruitore1);
-        controller.interpreter(addFruit + fruitore2);
-        controller.interpreter(addFruit + fruitore3);
+        for (int i = 1; i <= 3; i++)
+            controller.interpreter(String.format("add -f fruit%d pass%dF", i, i));
     }
 
     public static void initAssign(Controller controller) {

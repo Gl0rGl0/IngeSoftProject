@@ -7,17 +7,17 @@ import V1.ingsoft.controller.item.persone.PersonaType;
 import V1.ingsoft.view.ViewSE;
 
 public class MyVisitCommand extends AbstractCommand {
-    private final Controller app;
+    private final Controller controller;
 
-    public MyVisitCommand(Controller app) {
-        this.app = app;
+    public MyVisitCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.MYVISIT; // MYVISIT;
     }
 
     @Override
     public void execute(String[] options, String[] args) {
 
-        PersonaType tipo = app.getCurrentUser().getType();
+        PersonaType tipo = controller.getCurrentUser().getType();
 
         switch (tipo) {
             case FRUITORE -> listFruitore();
@@ -27,13 +27,14 @@ public class MyVisitCommand extends AbstractCommand {
     }
 
     private void listVolontari() {
-        String uidCV = app.getCurrentUser().getUsername();
+        String uidCV = controller.getCurrentUser().getUsername();
         StringBuilder out = new StringBuilder();
 
         out.append("Lista delle visite al quale sei convocato: \n");
-        // app.db.dbVisiteHelper.getConfermate() non si può fare perchè una visita può
+        // controller.db.dbVisiteHelper.getConfermate() non si può fare perchè una
+        // visita può
         // avere piu volontari disponibili
-        for (Visita v : app.db.dbVisiteHelper.getVisite()) {
+        for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
             if (v.getUidVolontario().equals(uidCV))
                 out.append(v + "\n");
         }
@@ -42,11 +43,11 @@ public class MyVisitCommand extends AbstractCommand {
     }
 
     private void listFruitore() {
-        String userF = app.getCurrentUser().getUsername();
+        String userF = controller.getCurrentUser().getUsername();
         StringBuilder out = new StringBuilder();
 
         out.append("Lista delle visite al quale sei iscritto: ");
-        for (Visita v : app.db.dbVisiteHelper.getVisite()) {
+        for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
             if (v.hasFruitore(userF))
                 out.append(v + "\n");
         }

@@ -55,7 +55,8 @@ public abstract class Persona {
         return this.personaType;
     }
 
-    // se si disattiva non si potranno vedere le psw del database dall'app (come
+    // se si disattiva non si potranno vedere le psw del database dall'controller
+    // (come
     // giusto che sia)
     @JsonIgnore
     boolean testPsw = true;

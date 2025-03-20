@@ -25,24 +25,24 @@ public class ViewSE implements Runnable {
     // Classe istanziabile...
     private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
 
-    private final Controller app;
+    private final Controller controller;
 
-    public ViewSE(Controller app) {
-        this.app = app;
+    public ViewSE(Controller controller) {
+        this.controller = controller;
     }
 
     @Override
     public void run() {
         println(MESSAGGIO_START);
 
-        while (!app.setupCompleted()) {
-            app.interpreterSETUP(read("\n[SETUP] " + app.getCurrentUser().getUsername() + "> "));
+        while (!controller.setupCompleted()) {
+            controller.interpreterSETUP(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> "));
         }
 
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
         ViewSE.println("SETUP COMPLETATO");
 
         while (true)
-            app.interpreter(read("\n" + app.getCurrentUser().getUsername() + "> "));
+            controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));
     }
 }

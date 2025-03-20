@@ -12,10 +12,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class ListCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public ListCommand(Controller app) {
-        this.app = app;
+    public ListCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.LIST;
     }
 
@@ -46,9 +46,9 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void listLuoghi() {
-        for (Luogo l : app.db.getLuoghi()) {
+        for (Luogo l : controller.db.getLuoghi()) {
             ViewSE.println(l.getName());
-            for (Visita visita : app.db.trovaVisiteByLuogo(l)) {
+            for (Visita visita : controller.db.trovaVisiteByLuogo(l)) {
                 ViewSE.println(visita);
             }
         }
@@ -56,11 +56,12 @@ public class ListCommand extends AbstractCommand {
 
     private void listVolontari() {
         StringBuilder out;
-        for (Volontario v : app.db.getVolontari()) {
+        for (Volontario v : controller.db.getVolontari()) {
             out = new StringBuilder();
             out.append(v.getUsername() + ":\n");
-            for (TipoVisita tv : app.db.trovaTipoVisiteByVolontario(v)) {
-                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVisita.PROPOSTA ? "proposta" : "attesa") + "\n");
+            for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
+                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVisita.PROPOSTA ? "proposta" : "attesa")
+                        + "\n");
             }
             ViewSE.println(out);
         }
@@ -81,17 +82,17 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printAvailabilityVolontari() {
-        if (app.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
+        if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println("Opzione non riconosciuta per 'list'.");
             return;
         }
 
-        int targetMonth = app.date.getMonth() + 2;
-        if (app.date.getDay() > 16)
+        int targetMonth = controller.date.getMonth() + 2;
+        if (controller.date.getDay() > 16)
             targetMonth++;
 
         StringBuilder out = new StringBuilder();
-        for (Volontario v : app.db.dbVolontarioHelper.getPersonList()) {
+        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
             out.append(v.getUsername() + ":\n");
             int i = 1;
             for (boolean b : v.getAvailability()) {
@@ -102,13 +103,13 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printTipiVisita() {
-        if (app.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
+        if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println("Opzione non riconosciuta per 'list'.");
             return;
         }
 
         StringBuilder out = new StringBuilder();
-        for (TipoVisita t : app.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
+        for (TipoVisita t : controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
             out.append(t);
         }
         ViewSE.println(out);
@@ -141,25 +142,25 @@ public class ListCommand extends AbstractCommand {
 
     private String getVisiteProposte() {
         StringBuilder sb = new StringBuilder();
-        app.db.dbVisiteHelper.getVisiteProposte().forEach(v -> sb.append(v).append("\n"));
+        controller.db.dbVisiteHelper.getVisiteProposte().forEach(v -> sb.append(v).append("\n"));
         return sb.toString();
     }
 
     private String getVisiteComplete() {
         StringBuilder sb = new StringBuilder();
-        app.db.dbVisiteHelper.getCompletate().forEach(v -> sb.append(v).append("\n"));
+        controller.db.dbVisiteHelper.getCompletate().forEach(v -> sb.append(v).append("\n"));
         return sb.toString();
     }
 
     private String getVisiteCancellate() {
         StringBuilder sb = new StringBuilder();
-        app.db.dbVisiteHelper.getVisiteCancellate().forEach(v -> sb.append(v).append("\n"));
+        controller.db.dbVisiteHelper.getVisiteCancellate().forEach(v -> sb.append(v).append("\n"));
         return sb.toString();
     }
 
     private String getVisiteEffettuate() {
         StringBuilder sb = new StringBuilder();
-        app.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> sb.append(v).append("\n"));
+        controller.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> sb.append(v).append("\n"));
         return sb.toString();
     }
 }

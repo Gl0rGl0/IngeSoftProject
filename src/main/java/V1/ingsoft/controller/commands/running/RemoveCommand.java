@@ -8,11 +8,11 @@ import V1.ingsoft.view.ViewSE;
 
 public class RemoveCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
     private final String CLASSNAME = this.getClass().getSimpleName();
 
-    public RemoveCommand(Controller app) {
-        this.app = app;
+    public RemoveCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.REMOVE;
     }
 
@@ -38,19 +38,19 @@ public class RemoveCommand extends AbstractCommand {
             case 'c' -> removeConfiguratore(ar);
             case 'f' -> removeFruitore(ar);
             case 'v' -> {
-                if (!app.canExecute16thAction)
+                if (!controller.canExecute16thAction)
                     removeVolontario(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 't' -> {
-                if (!app.canExecute16thAction)
+                if (!controller.canExecute16thAction)
                     removeTipoVisita(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
             }
             case 'L' -> {
-                if (!app.canExecute16thAction)
+                if (!controller.canExecute16thAction)
                     removeLuogo(ar);
                 else
                     ViewSE.println("Azione possibile solo il 16 del month!");
@@ -61,18 +61,18 @@ public class RemoveCommand extends AbstractCommand {
 
     private void removeConfiguratore(String[] args) {
         ViewSE.println("Eseguo: Rimuovo configuratore");
-        app.db.removeConfiguratore(args[0]);
+        controller.db.removeConfiguratore(args[0]);
     }
 
     private void removeFruitore(String[] args) {
         ViewSE.println("Eseguo: Rimuovo fruitore");
-        app.db.removeFruitore(args[0]);
+        controller.db.removeFruitore(args[0]);
     }
 
     private void removeVolontario(String[] args) {
-        if (!app.canExecute16thAction) {
+        if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername()
+                    controller.getCurrentUser().getUsername()
                             + "|  + Non puoi rimuovere un volontario se non è il 16 del month: " + args[0],
                     1,
                     CLASSNAME);
@@ -80,13 +80,13 @@ public class RemoveCommand extends AbstractCommand {
         }
 
         ViewSE.println("Eseguo: Rimuovo volontario");
-        app.db.removeVolontario(args[0]);
+        controller.db.removeVolontario(args[0]);
     }
 
     private void removeTipoVisita(String[] args) {
-        if (!app.canExecute16thAction) {
+        if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername()
+                    controller.getCurrentUser().getUsername()
                             + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del month: " + args[0],
                     1,
                     CLASSNAME);
@@ -94,13 +94,14 @@ public class RemoveCommand extends AbstractCommand {
         }
 
         ViewSE.println("Eseguo: Rimuovo tipo visita");
-        app.db.removeTipoVisita(args[0]);
+        controller.db.removeTipoVisita(args[0]);
     }
 
     private void removeLuogo(String[] args) {
-        if (!app.canExecute16thAction) {
+        if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "|  + Non puoi rimuovere un luogo se non è il 16 del month: "
+                    controller.getCurrentUser().getUsername()
+                            + "|  + Non puoi rimuovere un luogo se non è il 16 del month: "
                             + args[0],
                     1,
                     CLASSNAME);
@@ -108,6 +109,6 @@ public class RemoveCommand extends AbstractCommand {
         }
 
         ViewSE.println("Eseguo: Rimuovo luogo");
-        app.db.removeLuogo(args[0]);
+        controller.db.removeLuogo(args[0]);
     }
 }

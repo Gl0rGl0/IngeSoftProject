@@ -8,10 +8,10 @@ import V1.ingsoft.view.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public LogoutCommand(Controller app) {
-        this.app = app;
+    public LogoutCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.LOGOUT;
     }
 
@@ -20,11 +20,11 @@ public class LogoutCommand extends AbstractCommand {
      * Effettua il logout impostando l'utente corrente come Guest.
      */
     public void execute(String[] options, String[] args) {
-        if (app.user.getType() == PersonaType.GUEST) {
+        if (controller.user.getType() == PersonaType.GUEST) {
             ViewSE.println("Nessun utente loggato, effettua il login prima.");
         } else {
             ViewSE.println("Logout effettuato con successo.");
-            app.user = new Guest();
+            controller.user = new Guest();
         }
     }
 }

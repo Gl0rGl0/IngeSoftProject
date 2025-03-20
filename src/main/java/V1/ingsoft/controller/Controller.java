@@ -33,7 +33,7 @@ public class Controller {
 
     public Controller(Model db) {
         this.db = db;
-        // Registra i comandi nel costruttore
+
         initVirtualTime();
         initDailyScheduler();
 
@@ -78,7 +78,7 @@ public class Controller {
         boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.isNew();
 
         if (out)
-            AssertionControl.logMessage("SetUp completato", 3, this.getClass().getSimpleName());
+            AssertionControl.logMessage("Setup completato", 3, this.getClass().getSimpleName());
 
         return out;
     }

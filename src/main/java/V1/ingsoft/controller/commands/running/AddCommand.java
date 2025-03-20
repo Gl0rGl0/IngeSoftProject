@@ -15,11 +15,11 @@ import V1.ingsoft.util.StringUtils;
 import V1.ingsoft.view.ViewSE;
 
 public class AddCommand extends AbstractCommand {
-    private final Controller app;
+    private final Controller controller;
     private final String CLASSNAME = this.getClass().getSimpleName();
 
-    public AddCommand(Controller app) {
-        this.app = app;
+    public AddCommand(Controller controller) {
+        this.controller = controller;
         super.commandInfo = CommandList.ADD;
     }
 
@@ -34,7 +34,8 @@ public class AddCommand extends AbstractCommand {
         if (options.length < 1) {
             ViewSE.println("Errore nell'utilizzo del comando 'add'");
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2,
+                    CLASSNAME);
             return;
         }
 
@@ -52,34 +53,34 @@ public class AddCommand extends AbstractCommand {
 
     private void addConfiguratore(String[] args) {
         // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
-        if (app.db.addConfiguratore(args[0], args[1])) {
+        if (controller.db.addConfiguratore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto configuratore", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Non aggiunto configuratore", 2, CLASSNAME);
         }
     }
 
     private void addFruitore(String[] args) {
         // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
-        if (app.db.addFruitore(args[0], args[1])) {
+        if (controller.db.addFruitore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto fruitore", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Non aggiunto fruitore", 2, CLASSNAME);
         }
     }
 
     private void addVolontario(String[] args) {
         // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
-        if (args.length > 1 && app.db.addVolontario(args[0], args[1])) {
+        if (args.length > 1 && controller.db.addVolontario(args[0], args[1])) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non aggiunto volontario", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Non aggiunto volontario", 2, CLASSNAME);
         }
     }
 
@@ -87,41 +88,42 @@ public class AddCommand extends AbstractCommand {
 
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if (!app.canExecute16thAction) {
+        if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername()
+                    controller.getCurrentUser().getUsername()
                             + "| Non puoi aggiungere un tipo di visita se non è il 16 del month: " + a[0],
                     1,
                     CLASSNAME);
             return;
         }
 
-        app.db.addTipoVisita(a, app.date);
+        controller.db.addTipoVisita(a, controller.date);
     }
 
     private void addLuogo(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
-        if (!app.canExecute16thAction) {
+        if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
-                    app.getCurrentUser().getUsername() + "| Non puoi aggiungere un luogo se non è il 16 del month: "
+                    controller.getCurrentUser().getUsername()
+                            + "| Non puoi aggiungere un luogo se non è il 16 del month: "
                             + a[0],
                     1,
                     CLASSNAME);
             return;
         }
         // NON PUOI USARLO ADESSO, ASPETTA LA V3...
-        // app.db.addLuogo(a[0], a[1], new GPS(a[2]));
+        // controller.db.addLuogo(a[0], a[1], new GPS(a[2]));
     }
 
     private void makeorario() {
-        if(!app.canExecute16thAction)
+        if (!controller.canExecute16thAction)
             return;
-        
-        ArrayList<TipoVisita> tipi = app.db.getTipoVisiteIstanziabili();
+
+        ArrayList<TipoVisita> tipi = controller.db.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
-        for (int i = 1; i <= Date.monthLength(app.date.getMonth() + 1); i++) {
-            Date toOperate = new Date(i, app.date.getMonth() + 1, app.date.getYear());
+        for (int i = 1; i <= Date.monthLength(controller.date.getMonth() + 1); i++) {
+            Date toOperate = new Date(i, controller.date.getMonth() + 1, controller.date.getYear());
             for (TipoVisita t : tipi) {
                 if (t.getStatus() != StatusVisita.PROPOSTA)
                     continue;
@@ -130,18 +132,18 @@ public class AddCommand extends AbstractCommand {
                     continue;
 
                 for (String volontarioUID : t.getVolontariUIDs()) {
-                    Volontario v = app.db.dbVolontarioHelper.getVolontarioByUID(volontarioUID);
+                    Volontario v = controller.db.dbVolontarioHelper.getVolontarioByUID(volontarioUID);
                     if (v == null)
                         continue;
 
                     if (!v.getAvailability()[i])
                         continue;
 
-                    app.db.dbVisiteHelper.addVisita(new Visita(t, toOperate, volontarioUID));
+                    controller.db.dbVisiteHelper.addVisita(new Visita(t, toOperate, volontarioUID));
                 }
             }
         }
 
-        System.out.println(app.db.dbVisiteHelper.getVisite());
+        System.out.println(controller.db.dbVisiteHelper.getVisite());
     }
 }

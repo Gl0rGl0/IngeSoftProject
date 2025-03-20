@@ -4,15 +4,15 @@ import V1.ingsoft.controller.Controller;
 
 public class TimeHelper implements Runnable {
 
-    private final Controller app;
+    private final Controller controller;
 
-    public TimeHelper(Controller app) {
-        this.app = app;
+    public TimeHelper(Controller controller) {
+        this.controller = controller;
     }
 
     @Override
     public void run() {
         // Esempio: aggiorna la data simulata secondo la logica che preferisci
-        app.date.incrementa();
+        controller.date.incrementa();
     }
 }
