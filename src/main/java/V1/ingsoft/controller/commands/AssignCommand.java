@@ -95,6 +95,9 @@ public class AssignCommand extends AbstractCommand {
                 continue;
 
             for (String uidTipoVisita : l.getTipoVisitaUID()) {
+                if (uidTipoVisita.equals(vToAssign.getUID()))
+                    continue;
+
                 TipoVisita toOperate = app.db.getTipiByUID(uidTipoVisita);
 
                 if (!toOperate.getDays().contains(d))
@@ -107,8 +110,13 @@ public class AssignCommand extends AbstractCommand {
                         || oraInizioT2 > (oraInizioT1 + toOperate.getDuration())) {
 
                 } else {
+                    AssertionControl.logMessage("Mi accavallo con " + toOperate.getTitle(), 3,
+                            this.getClass().getSimpleName());
                     dayPlausibles = false;
                 }
+
+                if (!dayPlausibles)
+                    break;
             }
 
             // if (!dayPlausibles) {

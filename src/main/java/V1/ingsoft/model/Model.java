@@ -8,6 +8,7 @@ import V1.ingsoft.util.Date;
 import V1.ingsoft.util.GPS;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Model {
     private final DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -218,12 +219,21 @@ public class Model {
     // DB
     // Per ogni visita non trovata si toglie l'uid dalle sue visite
     private void refreshVolontari() {
-        for (Volontario v : dbVolontarioHelper.getPersonList()) {
+        Iterator<Volontario> iterator = dbVolontarioHelper.getPersonList().iterator();
+
+        while (iterator.hasNext()) {
+            Volontario v = iterator.next();
             boolean toRemove = true;
-            for (String tv : v.getTipiVisiteUIDs()) {
+
+            // Usa un iteratore per evitare ConcurrentModificationException
+            Iterator<String> uidIterator = v.getTipiVisiteUIDs().iterator();
+
+            while (uidIterator.hasNext()) {
+                String tv = uidIterator.next();
                 TipoVisita toCheck = dbTipoVisiteHelper.getTipiVisitaByUID(tv);
+
                 if (toCheck == null) {
-                    v.removeUIDVisita(tv);
+                    uidIterator.remove(); // Rimozione sicura
                     continue;
                 }
 
@@ -233,8 +243,9 @@ public class Model {
                     break;
             }
 
-            if (toRemove)
-                dbVolontarioHelper.removePersona(v.getUsername());
+            if (toRemove) {
+                iterator.remove(); // Rimozione sicura del volontario
+            }
         }
     }
 
@@ -398,8 +409,8 @@ public class Model {
     public ArrayList<TipoVisita> trovaTipoVisiteByVolontario(Volontario v) {
         ArrayList<TipoVisita> out = new ArrayList<>();
         String uidV = v.getUsername();
-        for(TipoVisita t : dbTipoVisiteHelper.getTipiVisita()){
-            if(t.assignedTo(uidV))
+        for (TipoVisita t : dbTipoVisiteHelper.getTipiVisita()) {
+            if (t.assignedTo(uidV))
                 out.add(t);
         }
         return out;

@@ -45,4 +45,12 @@ public class StringUtils {
     public static String removeParentheses(String out) {
         return out.replaceAll("[()]", "");
     }
+
+    public static String arrayToStringClean(String[] s) {
+        StringBuilder out = new StringBuilder();
+        for (String a : s) {
+            out.append("\"" + a + "\" ");
+        }
+        return out.toString().stripTrailing();
+    }
 }
