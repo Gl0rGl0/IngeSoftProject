@@ -50,34 +50,6 @@ public class Model {
     }
 
     // ================================================================
-    // Getters per gli oggetti persistenti
-    // ================================================================
-    public ArrayList<Configuratore> getConfiguratori() {
-        return dbConfiguratoreHelper.getPersonList();
-    }
-
-    public ArrayList<Fruitore> getFruitori() {
-        return dbFruitoreHelper.getPersonList();
-    }
-
-    public ArrayList<Volontario> getVolontari() {
-        return dbVolontarioHelper.getPersonList();
-    }
-
-    public ArrayList<Luogo> getLuoghi() {
-        return dbLuoghiHelper.getLuoghi();
-    }
-
-    public ArrayList<TipoVisita> getTipi() {
-        return dbTipoVisiteHelper.getTipiVisita();
-    }
-
-    // GETTER VARIABILI
-    public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {
-        return dbTipoVisiteHelper.getTipoVisiteIstanziabili();
-    }
-
-    // ================================================================
     // Adders per oggetti già creati
     // ================================================================
     public boolean addConfiguratore(Configuratore c) {
@@ -397,15 +369,6 @@ public class Model {
         return out;
     }
 
-    public void closeAll() {
-        dbConfiguratoreHelper.close();
-        dbFruitoreHelper.close();
-        dbVolontarioHelper.close();
-        dbLuoghiHelper.close();
-        dbVisiteHelper.close();
-        dbTipoVisiteHelper.close();
-    }
-
     public ArrayList<TipoVisita> trovaTipoVisiteByVolontario(Volontario v) {
         ArrayList<TipoVisita> out = new ArrayList<>();
         String uidV = v.getUsername();
@@ -414,5 +377,14 @@ public class Model {
                 out.add(t);
         }
         return out;
+    }
+
+    public void closeAll() {
+        dbConfiguratoreHelper.close();
+        dbFruitoreHelper.close();
+        dbVolontarioHelper.close();
+        dbLuoghiHelper.close();
+        dbVisiteHelper.close();
+        dbTipoVisiteHelper.close();
     }
 }

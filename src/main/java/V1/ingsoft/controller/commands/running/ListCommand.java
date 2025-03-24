@@ -46,7 +46,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void listLuoghi() {
-        for (Luogo l : controller.db.getLuoghi()) {
+        for (Luogo l : controller.db.dbLuoghiHelper.getLuoghi()) {
             ViewSE.println(l.getName());
             for (Visita visita : controller.db.trovaVisiteByLuogo(l)) {
                 ViewSE.println(visita);
@@ -56,7 +56,7 @@ public class ListCommand extends AbstractCommand {
 
     private void listVolontari() {
         StringBuilder out;
-        for (Volontario v : controller.db.getVolontari()) {
+        for (Volontario v : controller.db.dbVolontarioHelper.getVolontari()) {
             out = new StringBuilder();
             out.append(v.getUsername() + ":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {

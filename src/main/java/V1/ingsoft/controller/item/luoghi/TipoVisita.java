@@ -215,7 +215,8 @@ public class TipoVisita {
     }
 
     public void addVolontario(String uidVolontario) {
-        this.volontariUID.add(uidVolontario);
+        if (!volontariUID.contains(uidVolontario))
+            this.volontariUID.add(uidVolontario);
     }
 
     public void removeVolontario(String uidVolontario) {

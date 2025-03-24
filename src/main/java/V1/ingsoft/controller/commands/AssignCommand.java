@@ -108,7 +108,6 @@ public class AssignCommand extends AbstractCommand {
 
                 if (oraInizioT1 > (oraInizioT2 + vToAssign.getDuration())
                         || oraInizioT2 > (oraInizioT1 + toOperate.getDuration())) {
-
                 } else {
                     AssertionControl.logMessage("Mi accavallo con " + toOperate.getTitle(), 3,
                             this.getClass().getSimpleName());

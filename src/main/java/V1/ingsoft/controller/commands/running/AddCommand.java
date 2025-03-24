@@ -119,15 +119,16 @@ public class AddCommand extends AbstractCommand {
         if (!controller.canExecute16thAction)
             return;
 
-        ArrayList<TipoVisita> tipi = controller.db.getTipoVisiteIstanziabili();
+        ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
         for (int i = 1; i <= Date.monthLength(controller.date.getMonth() + 1); i++) {
             Date toOperate = new Date(i, controller.date.getMonth() + 1, controller.date.getYear());
             for (TipoVisita t : tipi) {
+                // Verifica che la visita sia in stato PROPOSTA e compatibile con il giorno
+                // della settimana
                 if (t.getStatus() != StatusVisita.PROPOSTA)
                     continue;
-
                 if (!t.getDays().contains(toOperate.dayOfTheWeek()))
                     continue;
 
@@ -136,9 +137,16 @@ public class AddCommand extends AbstractCommand {
                     if (v == null)
                         continue;
 
+                    // Controlla che il volontario sia disponibile nel giorno specifico
                     if (!v.getAvailability()[i])
                         continue;
 
+                    // Aggiungi qui il controllo per verificare se il volontario ha già visite che
+                    // si accavallano.
+                    if (controller.db.dbVisiteHelper.volontarioHaConflitto(v, toOperate, t))
+                        continue;
+
+                    // Se tutti i controlli sono superati, aggiungi la visita
                     controller.db.dbVisiteHelper.addVisita(new Visita(t, toOperate, volontarioUID));
                 }
             }

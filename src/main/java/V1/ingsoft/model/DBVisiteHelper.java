@@ -1,10 +1,14 @@
 package V1.ingsoft.model;
 
 import V1.ingsoft.controller.item.luoghi.StatusVisita;
+import V1.ingsoft.controller.item.luoghi.TipoVisita;
 import V1.ingsoft.controller.item.luoghi.Visita;
+import V1.ingsoft.controller.item.persone.Volontario;
 import V1.ingsoft.util.Date;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DBVisiteHelper extends DBAbstractHelper<Visita> {
 
@@ -130,5 +134,34 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
 
     public void close() {
         saveJson(archivio);
+    }
+
+    public List<Visita> getVisiteByVolontarioAndData(String usernameV, Date d) {
+        List<Visita> out = new ArrayList<>();
+
+        for (Visita v : getVisite()) {
+            if (v.getUidVolontario().equals(usernameV) && v.getDate().equals(d))
+                out.add(v);
+        }
+        return out;
+    }
+
+    public boolean volontarioHaConflitto(Volontario v, Date data, TipoVisita t) {
+        List<Visita> visiteGiornaliere = this.getVisiteByVolontarioAndData(v.getUsername(), data);
+        int initTime = t.getInitTime().getMinutes();
+        int duration = t.getDuration();
+        for (Visita visita : visiteGiornaliere) {
+            int initTimeV = visita.getTipoVisita().getInitTime().getMinutes();
+            int durationV = visita.getTipoVisita().getDuration();
+            if (beetwen(initTimeV, initTime, initTimeV + durationV)
+                    || beetwen(initTime, initTimeV, initTime + duration)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean beetwen(int a, int b, int c) {
+        return a < b && b < c;
     }
 }

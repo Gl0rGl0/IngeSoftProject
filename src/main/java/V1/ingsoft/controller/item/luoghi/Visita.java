@@ -63,7 +63,7 @@ public class Visita {
         return this.tipo.getUID();
     }
 
-    public TipoVisita getTipo() {
+    public TipoVisita getTipoVisita() {
         return tipo;
     }
 
