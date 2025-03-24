@@ -3,8 +3,8 @@ package V1.Ingsoft.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V1.Ingsoft.Controller.item.luoghi.StatusVisita;
-import V1.Ingsoft.Controller.item.luoghi.TipoVisita;
+import V1.Ingsoft.controller.item.luoghi.StatusVisita;
+import V1.Ingsoft.controller.item.luoghi.TipoVisita;
 import V1.Ingsoft.util.Date;
 
 public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {

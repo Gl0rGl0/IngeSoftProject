@@ -1,8 +1,8 @@
 package V1.Ingsoft.model;
 
-import V1.Ingsoft.Controller.item.persone.Configuratore;
-import V1.Ingsoft.Controller.item.persone.Persona;
-import V1.Ingsoft.Controller.item.persone.PersonaType;
+import V1.Ingsoft.controller.item.persone.Configuratore;
+import V1.Ingsoft.controller.item.persone.Persona;
+import V1.Ingsoft.controller.item.persone.PersonaType;
 
 public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
     public DBConfiguratoreHelper() {

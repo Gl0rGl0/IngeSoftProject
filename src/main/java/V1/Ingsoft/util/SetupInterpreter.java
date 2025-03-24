@@ -1,12 +1,12 @@
 package V1.Ingsoft.util;
 
-import V1.Ingsoft.Controller.Controller;
-import V1.Ingsoft.Controller.commands.HelpCommand;
-import V1.Ingsoft.Controller.commands.setup.AddCommandSETUP;
-import V1.Ingsoft.Controller.commands.setup.CommandListSETUP;
-import V1.Ingsoft.Controller.commands.setup.DoneCommandSETUP;
-import V1.Ingsoft.Controller.commands.setup.LoginCommandSETUP;
-import V1.Ingsoft.Controller.commands.setup.SetAmbitoCommandSETUP;
+import V1.Ingsoft.controller.Controller;
+import V1.Ingsoft.controller.commands.HelpCommand;
+import V1.Ingsoft.controller.commands.setup.AddCommandSETUP;
+import V1.Ingsoft.controller.commands.setup.CommandListSETUP;
+import V1.Ingsoft.controller.commands.setup.DoneCommandSETUP;
+import V1.Ingsoft.controller.commands.setup.LoginCommandSETUP;
+import V1.Ingsoft.controller.commands.setup.SetAmbitoCommandSETUP;
 
 public class SetupInterpreter extends Interpreter {
 

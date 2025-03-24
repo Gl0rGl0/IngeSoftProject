@@ -3,16 +3,16 @@ package V1.Ingsoft.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V1.Ingsoft.Controller.Controller;
-import V1.Ingsoft.Controller.commands.AssignCommand;
-import V1.Ingsoft.Controller.commands.ChangePswCommand;
-import V1.Ingsoft.Controller.commands.Command;
-import V1.Ingsoft.Controller.commands.ExitCommand;
-import V1.Ingsoft.Controller.commands.LogoutCommand;
-import V1.Ingsoft.Controller.commands.SetPersoneMaxCommand;
-import V1.Ingsoft.Controller.commands.TimeCommand;
-import V1.Ingsoft.Controller.item.persone.Persona;
-import V1.Ingsoft.Controller.item.persone.PersonaType;
+import V1.Ingsoft.controller.Controller;
+import V1.Ingsoft.controller.commands.AssignCommand;
+import V1.Ingsoft.controller.commands.ChangePswCommand;
+import V1.Ingsoft.controller.commands.Command;
+import V1.Ingsoft.controller.commands.ExitCommand;
+import V1.Ingsoft.controller.commands.LogoutCommand;
+import V1.Ingsoft.controller.commands.SetPersoneMaxCommand;
+import V1.Ingsoft.controller.commands.TimeCommand;
+import V1.Ingsoft.controller.item.persone.Persona;
+import V1.Ingsoft.controller.item.persone.PersonaType;
 import V1.Ingsoft.view.ViewSE;
 
 public abstract class Interpreter {

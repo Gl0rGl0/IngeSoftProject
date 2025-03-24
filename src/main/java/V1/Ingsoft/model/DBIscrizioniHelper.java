@@ -3,7 +3,7 @@ package V1.Ingsoft.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V1.Ingsoft.Controller.item.persone.Iscrizione;
+import V1.Ingsoft.controller.item.persone.Iscrizione;
 
 public class DBIscrizioniHelper {
     private HashMap<String, Iscrizione> iscrizioniRepo = new HashMap<>();

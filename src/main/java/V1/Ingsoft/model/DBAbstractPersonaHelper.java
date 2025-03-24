@@ -4,8 +4,9 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V1.Ingsoft.Controller.item.persone.Persona;
-import V1.Ingsoft.Controller.item.persone.PersonaType;
+import V1.Ingsoft.controller.item.persone.Persona;
+import V1.Ingsoft.controller.item.persone.PersonaType;
+import V1.Ingsoft.util.AssertionControl;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
     protected final HashMap<String, T> cachedPersons = new HashMap<>();
@@ -50,7 +51,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             cachedPersons.put(username, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
             return saveJson(getPersonList());
         } catch (Exception e) {
-            e.printStackTrace();
+            AssertionControl.logMessage(e.getMessage(), 1, this.getClass().getSimpleName());
         }
 
         return false;

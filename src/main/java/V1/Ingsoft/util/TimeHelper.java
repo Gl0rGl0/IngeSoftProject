@@ -1,6 +1,6 @@
 package V1.Ingsoft.util;
 
-import V1.Ingsoft.Controller.Controller;
+import V1.Ingsoft.controller.Controller;
 
 public class TimeHelper implements Runnable {
 

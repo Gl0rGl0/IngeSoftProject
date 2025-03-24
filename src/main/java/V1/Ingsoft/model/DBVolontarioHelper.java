@@ -2,8 +2,8 @@ package V1.Ingsoft.model;
 
 import java.util.ArrayList;
 
-import V1.Ingsoft.Controller.item.persone.PersonaType;
-import V1.Ingsoft.Controller.item.persone.Volontario;
+import V1.Ingsoft.controller.item.persone.PersonaType;
+import V1.Ingsoft.controller.item.persone.Volontario;
 
 public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
     public DBVolontarioHelper() {

@@ -1,14 +1,14 @@
 package V1.Ingsoft.util;
 
-import V1.Ingsoft.Controller.Controller;
-import V1.Ingsoft.Controller.commands.HelpCommand;
-import V1.Ingsoft.Controller.commands.running.AddCommand;
-import V1.Ingsoft.Controller.commands.running.CommandList;
-import V1.Ingsoft.Controller.commands.running.ListCommand;
-import V1.Ingsoft.Controller.commands.running.LoginCommand;
-import V1.Ingsoft.Controller.commands.running.MyVisitCommand;
-import V1.Ingsoft.Controller.commands.running.PrecludeCommand;
-import V1.Ingsoft.Controller.commands.running.RemoveCommand;
+import V1.Ingsoft.controller.Controller;
+import V1.Ingsoft.controller.commands.HelpCommand;
+import V1.Ingsoft.controller.commands.running.AddCommand;
+import V1.Ingsoft.controller.commands.running.CommandList;
+import V1.Ingsoft.controller.commands.running.ListCommand;
+import V1.Ingsoft.controller.commands.running.LoginCommand;
+import V1.Ingsoft.controller.commands.running.MyVisitCommand;
+import V1.Ingsoft.controller.commands.running.PrecludeCommand;
+import V1.Ingsoft.controller.commands.running.RemoveCommand;
 
 public class RunningInterpreter extends Interpreter {
 

@@ -2,7 +2,7 @@ package V1.Ingsoft.view;
 
 import java.util.Scanner;
 
-import V1.Ingsoft.Controller.Controller;
+import V1.Ingsoft.controller.Controller;
 import V1.Ingsoft.util.AssertionControl;
 
 //Letteralmente gestione input/output...

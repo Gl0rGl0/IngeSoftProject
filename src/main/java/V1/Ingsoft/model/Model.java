@@ -3,10 +3,10 @@ package V1.Ingsoft.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import V1.Ingsoft.Controller.item.luoghi.Luogo;
-import V1.Ingsoft.Controller.item.luoghi.TipoVisita;
-import V1.Ingsoft.Controller.item.luoghi.Visita;
-import V1.Ingsoft.Controller.item.persone.*;
+import V1.Ingsoft.controller.item.luoghi.Luogo;
+import V1.Ingsoft.controller.item.luoghi.TipoVisita;
+import V1.Ingsoft.controller.item.luoghi.Visita;
+import V1.Ingsoft.controller.item.persone.*;
 import V1.Ingsoft.util.Date;
 import V1.Ingsoft.util.GPS;
 

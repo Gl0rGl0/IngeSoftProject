@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import V1.Ingsoft.Controller.item.luoghi.StatusVisita;
-import V1.Ingsoft.Controller.item.luoghi.TipoVisita;
-import V1.Ingsoft.Controller.item.luoghi.Visita;
-import V1.Ingsoft.Controller.item.persone.Volontario;
+import V1.Ingsoft.controller.item.luoghi.StatusVisita;
+import V1.Ingsoft.controller.item.luoghi.TipoVisita;
+import V1.Ingsoft.controller.item.luoghi.Visita;
+import V1.Ingsoft.controller.item.persone.Volontario;
 import V1.Ingsoft.util.Date;
 
 public class DBVisiteHelper extends DBAbstractHelper<Visita> {
