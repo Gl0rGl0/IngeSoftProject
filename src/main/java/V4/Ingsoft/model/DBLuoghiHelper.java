@@ -1,10 +1,10 @@
-package V1.Ingsoft.model;
+package V4.Ingsoft.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V1.Ingsoft.controller.item.luoghi.Luogo;
-import V1.Ingsoft.util.GPS;
+import V4.Ingsoft.controller.item.luoghi.Luogo;
+import V4.Ingsoft.util.GPS;
 
 public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 

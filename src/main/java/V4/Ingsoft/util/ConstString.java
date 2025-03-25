@@ -1,4 +1,4 @@
-package V1.Ingsoft.util;
+package V4.Ingsoft.util;
 
 public class ConstString {
     // --- Comandi della modalità RUNNING ---

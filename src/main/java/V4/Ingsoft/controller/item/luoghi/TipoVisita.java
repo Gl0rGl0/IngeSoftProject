@@ -1,4 +1,4 @@
-package V1.Ingsoft.controller.item.luoghi;
+package V4.Ingsoft.controller.item.luoghi;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-import V1.Ingsoft.util.Date;
-import V1.Ingsoft.util.DayOfWeekConverter;
-import V1.Ingsoft.util.GPS;
-import V1.Ingsoft.util.Time;
-import V1.Ingsoft.view.ViewSE;
+import V4.Ingsoft.util.Date;
+import V4.Ingsoft.util.DayOfWeekConverter;
+import V4.Ingsoft.util.GPS;
+import V4.Ingsoft.util.Time;
+import V4.Ingsoft.view.ViewSE;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class TipoVisita {

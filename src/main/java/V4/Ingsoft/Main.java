@@ -1,9 +1,10 @@
-package V1.Ingsoft;
+package V4.Ingsoft;
 
-import V1.Ingsoft.controller.Controller;
-import V1.Ingsoft.model.Model;
-import V1.Ingsoft.util.Initer;
-import V1.Ingsoft.view.ViewSE;
+import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.model.Model;
+import V4.Ingsoft.util.Initer;
+import V4.Ingsoft.util.StringUtils;
+import V4.Ingsoft.view.ViewSE;
 
 //UTILIZZO TIPO
 //init: Main -> test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
@@ -18,6 +19,7 @@ import V1.Ingsoft.view.ViewSE;
 // passare dalla tastiera
 public class Main {
     public static void main(String[] args) {
+
         Model model = new Model();
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
