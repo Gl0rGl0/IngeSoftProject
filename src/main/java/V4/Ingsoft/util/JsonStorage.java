@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class JsonStorage {
-    
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
     public static String BASE_PATH = "data/";
 
@@ -50,6 +50,18 @@ public class JsonStorage {
         } catch (IOException e) {
             AssertionControl.logMessage("Errore nel salvataggio del file JSON", 1, "JsonStorage");
             ViewSE.println("Errore nel salvataggio del file JSON: " + e.getMessage());
+            return false;
+        }
+    }
+
+    synchronized public static <T> boolean clearList(String fileName) {
+        try {
+            objectMapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(new File(BASE_PATH + fileName + ".json"), new ArrayList<T>());
+            return true;
+        } catch (IOException e) {
+            AssertionControl.logMessage("Errore nel pulire il file JSON", 1, "JsonStorage");
+            ViewSE.println("Errore nel pulire il file JSON: " + e.getMessage());
             return false;
         }
     }

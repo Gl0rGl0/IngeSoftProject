@@ -49,27 +49,6 @@ public class Model {
         return this.ambitoTerritoriale;
     }
 
-    // ================================================================
-    // Adders per oggetti già creati
-    // ================================================================
-    public boolean addConfiguratore(Configuratore c) {
-        if (findUser(c.getUsername()) != null)
-            return false;
-        return dbConfiguratoreHelper.addPersona(c);
-    }
-
-    public boolean addFruitore(Fruitore f) {
-        if (findUser(f.getUsername()) != null)
-            return false;
-        return dbFruitoreHelper.addPersona(f);
-    }
-
-    public boolean addVolontario(Volontario v) {
-        if (findUser(v.getUsername()) != null)
-            return false;
-        return dbVolontarioHelper.addPersona(v);
-    }
-
     public boolean addLuogo(String name, String description, GPS gps) {
         return dbLuoghiHelper.addLuogo(name, description, gps);
     }
@@ -80,27 +59,6 @@ public class Model {
 
     public void addVisita(Visita visita) {
         dbVisiteHelper.addVisita(visita);
-    }
-
-    // ================================================================
-    // Adders per oggetti da creare tramite username/psw - String
-    // ================================================================
-    public boolean addConfiguratore(String user, String psw) {
-        if (findUser(user) != null)
-            return false;
-        return dbConfiguratoreHelper.addPersona(new Configuratore(user, psw, true, true));
-    }
-
-    public boolean addFruitore(String user, String psw) {
-        if (findUser(user) != null)
-            return false;
-        return dbFruitoreHelper.addPersona(new Fruitore(user, psw, true, true));
-    }
-
-    public boolean addVolontario(String user, String psw) {
-        if (findUser(user) != null)
-            return false;
-        return dbVolontarioHelper.addPersona(new Volontario(user, psw, true, true));
     }
 
     public boolean addTipoVisita(String[] args, Date d) {
@@ -268,15 +226,15 @@ public class Model {
     public Persona findUser(String username) {
         Persona out;
 
-        out = dbConfiguratoreHelper.findPersona(username);
+        out = dbConfiguratoreHelper.getPersona(username);
         if (out != null)
             return out;
 
-        out = dbVolontarioHelper.findPersona(username);
+        out = dbVolontarioHelper.getPersona(username);
         if (out != null)
             return out;
 
-        out = dbFruitoreHelper.findPersona(username);
+        out = dbFruitoreHelper.getPersona(username);
         if (out != null)
             return out;
 
@@ -284,7 +242,7 @@ public class Model {
     }
 
     public Volontario findVolontario(String username) {
-        return dbVolontarioHelper.findPersona(username);
+        return dbVolontarioHelper.getPersona(username);
     }
 
     public Persona login(String user, String psw) {
@@ -386,5 +344,14 @@ public class Model {
         dbLuoghiHelper.close();
         dbVisiteHelper.close();
         dbTipoVisiteHelper.close();
+    }
+
+    public void clearAll() {
+        dbConfiguratoreHelper.clear();
+        dbFruitoreHelper.clear();
+        dbVolontarioHelper.clear();
+        dbLuoghiHelper.clear();
+        dbVisiteHelper.clear();
+        dbTipoVisiteHelper.clear();
     }
 }

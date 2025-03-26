@@ -55,7 +55,7 @@ public class AddCommand extends AbstractCommand {
 
     private void addConfiguratore(String[] args) {
         // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
-        if (controller.db.addConfiguratore(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbConfiguratoreHelper.addConfiguratore(args[0], args[1])) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, CLASSNAME);
         } else {
@@ -66,7 +66,7 @@ public class AddCommand extends AbstractCommand {
 
     private void addFruitore(String[] args) {
         // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
-        if (controller.db.addFruitore(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbFruitoreHelper.addFruitore(args[0], args[1])) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, CLASSNAME);
         } else {
@@ -77,7 +77,7 @@ public class AddCommand extends AbstractCommand {
 
     private void addVolontario(String[] args) {
         // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
-        if (args.length > 1 && controller.db.addVolontario(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbVolontarioHelper.addVolontario(args[0], args[1])) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, CLASSNAME);
         } else {
@@ -99,7 +99,7 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if(controller.db.addTipoVisita(a, controller.date)){
+        if (controller.db.addTipoVisita(a, controller.date)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Aggiunto TipoVisita: " + args[0], 3, CLASSNAME);
         } else {
@@ -119,8 +119,8 @@ public class AddCommand extends AbstractCommand {
                     CLASSNAME);
             return;
         }
-        
-        if(a.length > 2 && controller.db.addLuogo(a[0], a[1], new GPS(a[2]))){
+
+        if (a.length > 2 && controller.db.addLuogo(a[0], a[1], new GPS(a[2]))) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Aggiunto luogo: " + args[0], 3, CLASSNAME);
         } else {
@@ -177,7 +177,7 @@ public class AddCommand extends AbstractCommand {
      */
     private void assignVisitForEligibleVolunteers(TipoVisita visita, Date date) {
         for (String volontarioUID : visita.getVolontariUIDs()) {
-            Volontario volontario = controller.db.dbVolontarioHelper.getVolontarioByUID(volontarioUID);
+            Volontario volontario = controller.db.dbVolontarioHelper.getPersona(volontarioUID);
             if (volontario == null)
                 continue;
 

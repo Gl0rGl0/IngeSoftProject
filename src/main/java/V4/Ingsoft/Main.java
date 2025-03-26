@@ -27,8 +27,10 @@ public class Main {
 
         test(controller);
 
-        controller.interpreter("login config1 pass1C");
-        controller.interpreter("changepsw pass1C pass1C");
+        controller.db.clearAll();
+
+        controller.interpreter("login fruit1 pass1F");
+        // controller.interpreter("changepsw pass1C pass1C");
 
         view.run();
     }

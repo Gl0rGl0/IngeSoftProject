@@ -1,7 +1,6 @@
 package V4.Ingsoft.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import V4.Ingsoft.controller.item.luoghi.StatusVisita;
@@ -11,8 +10,6 @@ import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.Date;
 
 public class DBVisiteHelper extends DBAbstractHelper<Visita> {
-
-    private final HashMap<String, Visita> cachedVisite = new HashMap<>();
     private ArrayList<Visita> archivio = new ArrayList<>();
 
     public DBVisiteHelper() {
@@ -26,7 +23,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Visita.
      */
     public ArrayList<Visita> getVisite() {
-        return new ArrayList<>(cachedVisite.values());
+        return super.getItems();
     }
 
     /**
@@ -37,7 +34,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
     public void addVisita(Visita toAdd) {
-        cachedVisite.put(toAdd.getUID(), toAdd);
+        cachedItems.put(toAdd.getUID(), toAdd);
     }
 
     /**
@@ -51,7 +48,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         Visita toRemove = findVisita(name, date);
         if (toRemove == null)
             return;
-        cachedVisite.remove(toRemove.getUID());
+        cachedItems.remove(toRemove.getUID());
     }
 
     /**
@@ -61,7 +58,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return la Visita trovata, oppure null se non esiste.
      */
     public Visita findVisita(String title, String data) {
-        for (Visita v : cachedVisite.values()) {
+        for (Visita v : cachedItems.values()) {
             if (v.getTitle().equalsIgnoreCase(title) && v.getDate().toString().equals(data)) {
                 return v;
             }
@@ -114,7 +111,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
             v.isThreeDaysFrom(d);
             if (v.getStatus() == StatusVisita.CANCELLATA) {
                 writeVisiteCancellate(v);
-                cachedVisite.remove(v.getUID());
+                cachedItems.remove(v.getUID());
             }
         }
     }
@@ -129,7 +126,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     }
 
     public Visita getVisitaByUID(String uid) {
-        return cachedVisite.get(uid);
+        return cachedItems.get(uid);
     }
 
     public void close() {

@@ -8,14 +8,14 @@ import V4.Ingsoft.util.GPS;
 
 public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 
-    private final HashMap<String, Luogo> cachedLuoghi = new HashMap<>();
+    private final HashMap<String, Luogo> cachedItems = new HashMap<>();
 
     private ArrayList<String> tipoVisitaUIDs;
 
     public DBLuoghiHelper() {
         super(Luogo.PATH, Luogo.class);
 
-        getJson().forEach(l -> cachedLuoghi.put(l.getUID(), l));
+        getJson().forEach(l -> cachedItems.put(l.getUID(), l));
     }
 
     public void addTipoVisita(String tipoVisitaUID) {
@@ -28,11 +28,11 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
     }
 
     public Luogo getLuogoByUID(String uid) {
-        return cachedLuoghi.get(uid);
+        return cachedItems.get(uid);
     }
 
     public ArrayList<Luogo> getLuoghi() {
-        return new ArrayList<>(cachedLuoghi.values());
+        return super.getItems();
     }
 
     public boolean addLuogo(String name, String description, GPS gps) {
@@ -47,10 +47,10 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
     public boolean addLuogo(Luogo toAdd) {
-        if (cachedLuoghi.get(toAdd.getUID()) != null)
+        if (cachedItems.get(toAdd.getUID()) != null)
             return false;
 
-        cachedLuoghi.put(toAdd.getUID(), toAdd);
+        cachedItems.put(toAdd.getUID(), toAdd);
         return saveJson(getLuoghi());
     }
 
@@ -67,15 +67,15 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         if (toFind == null)
             return false;
 
-        cachedLuoghi.remove(toFind.getUID());
+        cachedItems.remove(toFind.getUID());
         return saveJson(getLuoghi());
     }
 
     public boolean removeLuogoByUID(String toRemoveUID) {
-        if (cachedLuoghi.get(toRemoveUID) == null)
+        if (cachedItems.get(toRemoveUID) == null)
             return false;
 
-        cachedLuoghi.remove(toRemoveUID);
+        cachedItems.remove(toRemoveUID);
         return saveJson(getLuoghi());
     }
 
@@ -95,13 +95,13 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
     }
 
     public boolean isNew() {
-        return cachedLuoghi.size() == 0;
+        return cachedItems.size() == 0;
     }
 
     public boolean containsLuogoUID(String uidLuogo) {
         if (uidLuogo == null || uidLuogo.strip().length() == 0) // PRECONDIZIONE
             return false;
-        return cachedLuoghi.containsKey(uidLuogo);
+        return cachedItems.containsKey(uidLuogo);
     }
 
     public void close() {

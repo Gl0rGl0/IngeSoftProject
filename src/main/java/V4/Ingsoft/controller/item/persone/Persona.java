@@ -55,17 +55,8 @@ public abstract class Persona {
         return this.personaType;
     }
 
-    // se si disattiva non si potranno vedere le psw del database dall'controller
-    // (come
-    // giusto che sia)
-    @JsonIgnore
-    boolean testPsw = true;
-
     @Override
     public String toString() {
-        if (testPsw)
-            return "Username: " + getUsername() + " - Password: " + getPsw() + " - Nuovo: " + isNew();
-        // return "Username: " + getUsername() + " - Password: " + getPsw();
         return "Username: " + getUsername() + " - Password: *****";
     }
 

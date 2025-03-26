@@ -21,7 +21,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     public ArrayList<TipoVisita> getTipiVisita() {
-        return new ArrayList<>(cachedTipiVisita.values());
+        return super.getItems();
     }
 
     public boolean addTipoVisita(TipoVisita toAdd) {

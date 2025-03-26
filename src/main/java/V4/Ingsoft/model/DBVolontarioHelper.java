@@ -1,7 +1,5 @@
 package V4.Ingsoft.model;
 
-import java.util.ArrayList;
-
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
 
@@ -10,11 +8,12 @@ public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
         super(PersonaType.VOLONTARIO);
     }
 
-    public Volontario getVolontarioByUID(String volontarioUID) {
-        return super.cachedPersons.get(volontarioUID);
+    public boolean addVolontario(String username, String password) {
+        if (cachedItems.get(username) != null)
+            return false;
+
+        cachedItems.put(username, new Volontario(username, password, true));
+        return saveJson(getPersonList());
     }
 
-    public ArrayList<Volontario> getVolontari() {
-        return new ArrayList<>(cachedPersons.values());
-    }
 }

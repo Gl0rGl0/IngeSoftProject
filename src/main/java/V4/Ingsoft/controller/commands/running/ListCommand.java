@@ -42,8 +42,6 @@ public class ListCommand extends AbstractCommand {
             case 'V' -> printVisite(options);
             default -> ViewSE.println(ERRORE_NON_RICONOSCIUTO);
         }
-        // Puoi aggiungere ulteriori casi per altri tipi (ad esempio 'V' per visita, 'L'
-        // per luogo)
     }
 
     private void listLuoghi() {
@@ -57,7 +55,7 @@ public class ListCommand extends AbstractCommand {
 
     private void listVolontari() {
         StringBuilder out;
-        for (Volontario v : controller.db.dbVolontarioHelper.getVolontari()) {
+        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
             out = new StringBuilder();
             out.append(v.getUsername() + ":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
