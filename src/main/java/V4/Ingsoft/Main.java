@@ -3,7 +3,6 @@ package V4.Ingsoft;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.Initer;
-import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 //UTILIZZO TIPO

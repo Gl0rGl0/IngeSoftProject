@@ -37,6 +37,12 @@ public abstract class Interpreter {
      * @param currentUser l'utente corrente (necessario per controllare i permessi)
      */
     public void interpret(String prompt, Persona currentUser) {
+        if(prompt == null || prompt == "") {
+            AssertionControl.logMessage("ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
+            ViewSE.println("Errore: nessun comando fornito.");
+            return;
+        }
+
         String[] tokens = prompt.trim().split("\\s+");
 
         if (tokens.length == 0 || tokens[0].isEmpty()) {

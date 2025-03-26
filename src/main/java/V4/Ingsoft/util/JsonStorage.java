@@ -14,7 +14,7 @@ import java.util.Collection;
 public class JsonStorage {
     
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static String BASE_PATH = "data/";
+    public static String BASE_PATH = "data/";
 
     static {
         objectMapper.registerModule(new JavaTimeModule());

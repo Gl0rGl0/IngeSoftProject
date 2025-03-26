@@ -3,9 +3,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.Initer;
-import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,17 +39,12 @@ public class AppTest {
         controller.interpreter("login config1 pass1C");
         controller.interpreter("changepsw pass1C pass1C");
     }
-    
-
-    @Test
-    public void testSum() {
-        int result = 2 + 3;
-        assertEquals(5, result, "La somma non è corretta!");
-    }
 
     @Test
     public void visualizzaVisiteFruitore(){
-        controller.interpreter("login fruitore1 pass1F");
-        controller.interpreter(null);
+        controller.interpreter("logout");
+        assert(controller.user.getType()==PersonaType.GUEST);
+        controller.interpreter("login fruit1 pass1F");
+        assert(controller.user.getType()==PersonaType.FRUITORE);
     }
 }

@@ -12,7 +12,7 @@ public class AssertionControl {
     public final static String VERSION = "V4";
     private static final Scanner scanner = new Scanner(System.in);
     // Specifica il name del file di log
-    private static final String LOG_FILE = "log.log";
+    private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log"; 
 
     public static void print(Object out) {
         ViewSE.println(out);

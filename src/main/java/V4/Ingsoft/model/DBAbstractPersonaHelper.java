@@ -63,6 +63,12 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     // IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
     public Persona login(String user, String psw) {
+        for (Persona p : getPersonList()) {
+            if (p.getUsername().equals(user)) {
+                if (p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw)))
+                    return p;
+            }
+        }
         return null;
     }
 
