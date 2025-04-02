@@ -12,10 +12,11 @@ public class SetupInterpreter extends Interpreter {
 
     public SetupInterpreter(Controller controller) {
         super(controller);
-        commandRegistry.put("add", new AddCommandSETUP(controller)); // DA ESEGUIRE
-        commandRegistry.put("done", new DoneCommandSETUP());// DA ESEGUIRE
-        commandRegistry.put("login", new LoginCommandSETUP(controller)); // DA ESEGUIRE
-        commandRegistry.put("setambito", new SetAmbitoCommandSETUP(controller)); // DA ESEGUIRE
+        commandRegistry.put("add", new AddCommandSETUP(controller)); // TO BE EXECUTED
+        commandRegistry.put("done", new DoneCommandSETUP());// TO BE EXECUTED
+        commandRegistry.put("login", new LoginCommandSETUP(controller)); // TO BE EXECUTED
+        commandRegistry.put("setambito", new SetAmbitoCommandSETUP(controller)); // TO BE EXECUTED
+        // Note: setmax command seems missing here compared to AbstractCommand comment
         commandRegistry.put("help", new HelpCommand(controller, CommandListSETUP.HELP));
     }
 

@@ -2,13 +2,11 @@ package V4.Ingsoft.controller.commands;
 
 public abstract class AbstractCommand implements Command {
     protected ListInterface commandInfo;
-    protected boolean hasBeenExecuted = true; // di default, ogni comando lo segno come già eseguito, così il controllo
-                                              // in 'and'
-    // sull'esecuzione di tutti i comandi di setup va a buon fine
-    // al momento di creazione dei comandi ADD, SETMAX, SETAMBITO, LOGINSETUP,
-    // CHANGEPSW e DONE lo imposto a false, solo per questi però
-    // vivere la vita è un gioco da ragazzi, me lo diceva mamma e io cadevo giù
-    // dagli alberi
+    protected boolean hasBeenExecuted = true; // by default, mark every command as already executed, so the 'and' check
+                                              // on the execution of all setup commands succeeds
+    // when creating ADD, SETMAX, SETAMBITO, LOGINSETUP,
+    // CHANGEPSW, and DONE commands, set it to false, but only for these
+    // living life is child's play, mom told me so and I fell from the trees (Note: This seems like a personal/unrelated comment)
 
     @Override
     public boolean canBeExecutedBy(int userPriority) {
@@ -17,6 +15,6 @@ public abstract class AbstractCommand implements Command {
 
     @Override
     public boolean hasBeenExecuted() {
-        return hasBeenExecuted; // COSI QUELLI CHE VENGONO IMPLEMENTATI IN SETUP POSSONO MODIFICARLO
+        return hasBeenExecuted; // SO THOSE IMPLEMENTED IN SETUP CAN MODIFY IT
     }
 }

@@ -57,13 +57,13 @@ public enum CommandListSETUP implements ListInterface {
                                 out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
                         }
                 }
-                return out.toString().substring(0, out.length() - 2); // rimuove l'ultimo "\n"
+                return out.toString().substring(0, out.length() - 2); // removes the last "\n"
         }
 
         private final String message;
         private final String lineInfo;
-        private final int minRequiredPermission; // livello minimo richiesto
-        private final int maxRequiredPermission; // livello massimo richiesto
+        private final int minRequiredPermission; // minimum required level
+        private final int maxRequiredPermission; // maximum required level
 
         CommandListSETUP(String message, String lineInfo, int minRequiredPermission, int maxRequiredPermission) {
                 this.message = message;

@@ -5,20 +5,19 @@ import java.time.DayOfWeek;
 public class DayOfWeekConverter {
 
     /**
-     * Converte una stringa formata da abbreviazioni a 2 lettere in un array di
-     * DayOfWeek.
-     * Ad esempio: "MaMeVe" -> [TUESDAY, WEDNESDAY, FRIDAY]
+     * Converts a string formed by 2-letter abbreviations into an array of DayOfWeek.
+     * Example: "MaMeVe" -> [TUESDAY, WEDNESDAY, FRIDAY] (Using Italian abbreviations)
+     * Note: The abbreviations used are Italian (Lu, Ma, Me, Gi, Ve, Sa, Do).
      *
-     * @param input la stringa con le abbreviazioni
-     * @return un array di DayOfWeek corrispondente
-     * @throws IllegalArgumentException se la stringa è nulla, la lunghezza non è
-     *                                  multiplo di 2
-     *                                  o se viene trovata un'abbreviazione
-     *                                  sconosciuta
+     * @param input the string with the abbreviations
+     * @return a corresponding array of DayOfWeek
+     * @throws IllegalArgumentException if the string is null, the length is not a
+     *                                  multiple of 2, or if an unknown
+     *                                  abbreviation is found
      */
     public static DayOfWeek[] stringToDays(String input) {
         if (input == null || input.length() % 2 != 0) {
-            throw new IllegalArgumentException("La stringa deve essere non nulla e avere una lunghezza multipla di 2");
+            throw new IllegalArgumentException("String must be non-null and have a length that is a multiple of 2");
         }
         int numDays = input.length() / 2;
         DayOfWeek[] days = new DayOfWeek[numDays];
@@ -48,21 +47,21 @@ public class DayOfWeekConverter {
                     days[i] = DayOfWeek.SUNDAY;
                     break;
                 default:
-                    throw new IllegalArgumentException("Abbreviazione non riconosciuta: " + abbr);
+                    throw new IllegalArgumentException("Unrecognized abbreviation: " + abbr);
             }
         }
         return days;
     }
 
     /**
-     * Converte un array di DayOfWeek in una stringa concatenando le abbreviazioni a
-     * 2 lettere.
-     * Ad esempio: [TUESDAY, WEDNESDAY, FRIDAY] -> "MaMeVe"
+     * Converts an array of DayOfWeek into a string by concatenating the 2-letter
+     * abbreviations.
+     * Example: [TUESDAY, WEDNESDAY, FRIDAY] -> "MaMeVe" (Using Italian abbreviations)
+     * Note: The abbreviations generated are Italian (Lu, Ma, Me, Gi, Ve, Sa, Do).
      *
-     * @param days l'array di DayOfWeek
-     * @return la stringa con le abbreviazioni corrispondenti
-     * @throws IllegalArgumentException se viene trovato un valore DayOfWeek non
-     *                                  gestito
+     * @param days the array of DayOfWeek
+     * @return the string with the corresponding abbreviations
+     * @throws IllegalArgumentException if an unhandled DayOfWeek value is found
      */
     public static String daysToString(DayOfWeek[] days) {
         StringBuilder sb = new StringBuilder();
@@ -90,7 +89,8 @@ public class DayOfWeekConverter {
                     sb.append("Do");
                     break;
                 default:
-                    throw new IllegalArgumentException("Day non riconosciuto: " + day);
+                    // This case should theoretically not be reachable with standard DayOfWeek enum
+                    throw new IllegalArgumentException("Unrecognized DayOfWeek: " + day);
             }
         }
         return sb.toString();

@@ -16,16 +16,16 @@ import V4.Ingsoft.util.TimeHelper;
 import V4.Ingsoft.view.ViewSE;
 
 public class Controller {
-    public static final int SECONDIVIRTUALI_PS = 120; // 12minuti reali sono 1gg nella simulazione -> 1rs : 120vs =
-    // 12rmin : 24hv
-    public int maxPrenotazioniPerPersona;
+    public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
+    // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
+    public int maxPrenotazioniPerPersona; // Max bookings per person
 
     public final Model db;
-    // Inizialmente l'utente è un Guest (non loggato)
+    // Initially the user is a Guest (not logged in)
     public Persona user = new Guest();
     private final Interpreter interpreter;
     private final Interpreter setupInterpreter;
-    public Date date = new Date(); // mette oggi semplicemente
+    public Date date = new Date(); // simply sets today's date
 
     private ScheduledExecutorService dailyTask;
     private ScheduledExecutorService virtualTimer;
@@ -43,31 +43,30 @@ public class Controller {
     private void initDailyScheduler() {
         dailyTask = Executors.newSingleThreadScheduledExecutor();
         dailyTask.scheduleAtFixedRate(() -> dailyAction(), 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);
-        // OGNI GIORNO VIRTUALE (ogni 12min)
+        // EVERY VIRTUAL DAY (every 12min)
     }
 
     private void initVirtualTime() {
         virtualTimer = Executors.newSingleThreadScheduledExecutor();
         TimeHelper timeHelper = new TimeHelper(this); // (runnable)
-        // Supponiamo che ogni secondo di tempo reale rappresenti un intervallo di
-        // aggiornamento
+        // Assume that each real second represents an update interval
         virtualTimer.scheduleAtFixedRate(timeHelper, 0, 1, TimeUnit.SECONDS);
     }
 
     /**
-     * Metodo interprete che analizza la stringa di comando immessa dall'utente,
-     * ne estrae il comando, le options (precedute dal carattere '-') e gli
-     * argomenti, e poi esegue l'azione corrispondente.
+     * Interpreter method that analyzes the command string entered by the user,
+     * extracts the command, options (preceded by the '-' character), and
+     * arguments, and then executes the corresponding action.
      *
-     * @param prompt la stringa di comando immessa
+     * @param prompt the entered command string
      */
     public void interpreter(String prompt) {
-        AssertionControl.logMessage("Tentativo di eseguire: " + prompt, 3, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
         interpreter.interpret(prompt, user);
     }
 
     public void interpreterSETUP(String prompt) {
-        AssertionControl.logMessage("Tentativo di eseguire: " + prompt, 3, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
         setupInterpreter.interpret(prompt, user);
     }
 
@@ -77,7 +76,7 @@ public class Controller {
         boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.isNew();
 
         if (out)
-            AssertionControl.logMessage("Setup completato", 3, this.getClass().getSimpleName());
+            AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
 
         return out;
     }
@@ -110,13 +109,13 @@ public class Controller {
 
         db.refreshPrecludedDate(this.date);
         canExecute16thAction = true;
-        // SI PUO USARE QUESTA VARIABILE PER PERMETTERE CERTI COMANDI SOLO IL 16 (o il
-        // primo giorno feriale)
+        // THIS VARIABLE CAN BE USED TO ALLOW CERTAIN COMMANDS ONLY ON THE 16TH (or the
+        // first working day)
     }
 
     public void close() {
         db.closeAll();
-        ViewSE.println("Programma terminato. Arrivederci!");
+        ViewSE.println("Program terminated. Goodbye!");
         System.exit(0);
     }
 }

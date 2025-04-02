@@ -18,23 +18,22 @@ public class AddCommandSETUP extends AbstractCommand {
 
     @Override
     /**
-     * Implementazione del comando "add".
+     * Implementation of the "add" command.
      *
-     * @param options le options (solo -L per i luoghi)
-     * @param args    eventuali argomenti aggiuntivi
+     * @param options the options (only -L for places)
+     * @param args    any additional arguments
      */
     public void execute(String[] options, String[] args) {
-        // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (deve essere
-        // 'L')
+        // For example, we expect the first argument to be the option (must be 'L')
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'add'");
+            ViewSE.println("Error using the 'add' command");
             return;
         }
         char option = options[0].charAt(0);
         switch (option) {
             case 'L' -> addLuogo(args);
             default -> {
-                ViewSE.println("Opzione non riconosciuta per 'add' durante il SETUP.");
+                ViewSE.println("Option not recognized for 'add' during SETUP.");
                 return;
             }
         }

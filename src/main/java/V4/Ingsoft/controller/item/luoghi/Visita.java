@@ -24,7 +24,7 @@ public class Visita {
 
     @JsonIgnore
     public String volontarioUID;
-    public StatusVisita status = StatusVisita.PROPOSTA;
+    public StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
     @JsonIgnore
     public ArrayList<Iscrizione> fruitori = new ArrayList<>();
 
@@ -88,18 +88,18 @@ public class Visita {
 
     public String addPartecipants(Fruitore f, int n) {
         if (tipo.numMaxPartecipants - getCurrentNumber() < n) {
-            return "capienza";
+            return "capacity"; // Indicates full capacity
         }
 
         if (hasFruitore(f.getUsername())) {
-            return "presente";
+            return "present"; // Indicates user already registered
         }
 
         Iscrizione newIscrizione = new Iscrizione(f.getUsername(), n);
         fruitori.add(newIscrizione);
 
         if (getCurrentNumber() == tipo.numMaxPartecipants) {
-            setStatus(StatusVisita.COMPLETA);
+            setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
         return newIscrizione.getUIDFruitore();
     }
@@ -109,7 +109,7 @@ public class Visita {
         for (Iscrizione i : fruitori) {
             if (i.getUIDFruitore().equals(user)) {
                 if (fruitori.remove(i) && capienzaAttuale == tipo.getNumMaxPartecipants())
-                    setStatus(StatusVisita.PROPOSTA);
+                    setStatus(StatusVisita.PROPOSED); // Updated enum constant
                 return;
             }
         }
@@ -126,22 +126,22 @@ public class Visita {
     public void isThreeDaysFrom(Date d) {
         if (date.dayOfTheYear() - d.dayOfTheYear() <= 3) {
             if (getCurrentNumber() < this.tipo.numMinPartecipants) {
-                this.status = StatusVisita.CANCELLATA;
+                this.status = StatusVisita.CANCELLED; // Updated enum constant
             } else {
-                this.status = StatusVisita.CONFERMATA;
+                this.status = StatusVisita.CONFIRMED; // Updated enum constant
             }
         }
     }
 
     @Override
     public String toString() {
-        return "Titolo: " + tipo.getTitle()
-                + "\nVolontario: " + getUidVolontario()
-                + "\nDescrizione: " + tipo.getDescription()
-                + "\nPunto Incontro: " + tipo.getMeetingPlace()
-                + "\nData: " + date
+        return "Title: " + tipo.getTitle()
+                + "\nVolunteer: " + getUidVolontario()
+                + "\nDescription: " + tipo.getDescription()
+                + "\nMeeting Point: " + tipo.getMeetingPlace()
+                + "\nDate: " + date
                 + "\nTime: " + tipo.getInitTime()
-                + "\nBiglietto necessario: " + tipo.isFree()
+                + "\nTicket required: " + tipo.isFree() // Assuming 'Biglietto necessario' means 'Ticket required'
                 + "\n";
     }
 

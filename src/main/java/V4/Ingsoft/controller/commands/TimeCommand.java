@@ -28,9 +28,9 @@ public class TimeCommand extends AbstractCommand {
                 case "d" -> jumpDays(args[0], 1);
                 case "m" -> jumpDays(args[0], 30);
                 case "a" -> jumpDays(args[0], 365);
-                case "n" -> controller.addPrecludedDate(args[0]);
-                case "l" -> ViewSE.println(controller.db.getPrecludedDates());
-                default -> ViewSE.println("Opzione non riconosciuta per il comando 'time'.");
+                case "n" -> controller.addPrecludedDate(args[0]); // Add precluded date
+                case "l" -> ViewSE.println(controller.db.getPrecludedDates()); // List precluded dates
+                default -> ViewSE.println("Option not recognized for the 'time' command.");
             }
         } else {
             ViewSE.println(controller.date);
@@ -42,15 +42,16 @@ public class TimeCommand extends AbstractCommand {
         try {
             g = Integer.parseInt(d) * mult;
         } catch (NumberFormatException e) {
-            ViewSE.println("Uso sbagliato del prompt");
+            ViewSE.println("Incorrect prompt usage");
             return;
         }
 
         controller.date.update(g);
         if (g > 0) {
-            ViewSE.println("Saltati con successo " + g + " giorni.");
-        } else {
-            ViewSE.println("Tornato indietro di " + g + " giorni con successo.");
+            ViewSE.println("Successfully skipped " + g + " days.");
+        } else if (g < 0) { // Handle negative case explicitly for clarity
+            ViewSE.println("Successfully went back " + (-g) + " days.");
         }
+        // If g is 0, no message is printed, which seems reasonable.
     }
 }

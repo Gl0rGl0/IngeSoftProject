@@ -17,13 +17,13 @@ public class AssignCommand extends AbstractCommand {
 
     public AssignCommand(Controller controller) {
         this.controller = controller;
-        super.commandInfo = CommandListSETUP.ASSIGN; // CommandList.ASSIGN appena ho voglia di scriverlo
+        super.commandInfo = CommandListSETUP.ASSIGN; // CommandList.ASSIGN when I feel like writing it
     }
 
     @Override
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'assign'");
+            ViewSE.println("Error using the 'assign' command");
             return;
         }
 
@@ -31,9 +31,9 @@ public class AssignCommand extends AbstractCommand {
 
         if (arg.length < 2) {
             if ("V".equals(options[0])) {
-                ViewSE.println("Errore nell'utilizzo del comando 'assign': assign -V NomeVisita UsernameVolontario");
+                ViewSE.println("Error using the 'assign' command: assign -V VisitName VolunteerUsername");
             } else {
-                ViewSE.println("Errore nell'utilizzo del comando 'assign': assign -L NomeLuogo NomeVisita");
+                ViewSE.println("Error using the 'assign' command: assign -L PlaceName VisitName");
             }
             return;
         }
@@ -42,16 +42,16 @@ public class AssignCommand extends AbstractCommand {
                 if (controller.canExecute16thAction)
                     assignVolontario(arg[0], arg[1]);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del month!");
+                    ViewSE.println("Action only possible on the 16th of the month!");
             }
             case "L" -> {
                 if (controller.canExecute16thAction)
                     assignVisita(arg[0], arg[1]);
                 else
-                    ViewSE.println("Azione possibile solo il 16 del month!");
+                    ViewSE.println("Action only possible on the 16th of the month!");
             }
             default ->
-                ViewSE.println("Errore nell'utilizzo del comando 'assign'"); // Non può arrivare qua
+                ViewSE.println("Error using the 'assign' command"); // Cannot reach here
         }
     }
 
@@ -60,18 +60,18 @@ public class AssignCommand extends AbstractCommand {
         TipoVisita vToAssign = controller.db.getTipoVisitaByName(type);
 
         if (v == null) {
-            ViewSE.println("Nessun volontario trovato con quell'username.");
+            ViewSE.println("No volunteer found with that username.");
             return;
         }
 
         if (vToAssign == null) {
-            ViewSE.println("Nessuna visita trovata con quel titolo.");
+            ViewSE.println("No visit found with that title.");
             return;
         }
 
         v.addTipoVisita(vToAssign.getUID());
         vToAssign.addVolontario(v.getUsername());
-        ViewSE.println("Assegnato il volontario " + v.getUsername() + " alla visita " + vToAssign.getTitle());
+        ViewSE.println("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle());
     }
 
     private void assignVisita(String name, String type) {
@@ -79,17 +79,16 @@ public class AssignCommand extends AbstractCommand {
         TipoVisita visitaDaAssegnare = controller.db.getTipoVisitaByName(type);
 
         if (luogo == null) {
-            ViewSE.println("Nessun luogo trovato con quel nome.");
+            ViewSE.println("No place found with that name.");
             return;
         }
         if (visitaDaAssegnare == null) {
-            ViewSE.println("Nessuna visita trovata con quel titolo.");
+            ViewSE.println("No visit found with that title.");
             return;
         }
 
-        // Controlla, per ogni giorno in cui la visita può essere fatta, che non ci
-        // siano conflitti
-        boolean giorniPlausibili = true;
+        // Check, for each day the visit can take place, that there are no conflicts
+        boolean giorniPlausibili = true; // Plausible days
         for (DayOfWeek day : visitaDaAssegnare.getDays()) {
             if (!isAssignmentPlausibleOnDay(visitaDaAssegnare, luogo, day)) {
                 giorniPlausibili = false;
@@ -100,37 +99,36 @@ public class AssignCommand extends AbstractCommand {
         if (giorniPlausibili) {
             luogo.addTipoVisita(visitaDaAssegnare.getUID());
             visitaDaAssegnare.setLuogo(luogo.getUID());
-            ViewSE.println("Assegnata la visita " + visitaDaAssegnare.getTitle() + " al luogo " + luogo.getName());
+            ViewSE.println("Assigned visit " + visitaDaAssegnare.getTitle() + " to place " + luogo.getName());
         } else {
-            AssertionControl.logMessage("Non posso assegnare questa visita perchè si accavalla a qualche altra",
+            AssertionControl.logMessage("Cannot assign this visit because it overlaps with another one",
                     2, this.getClass().getSimpleName());
         }
     }
 
     /**
-     * Verifica che la visita da assegnare non si sovrapponga ad altre già assegnate
-     * al luogo
-     * per il giorno specificato.
+     * Checks that the visit to be assigned does not overlap with others already assigned
+     * to the place for the specified day.
      */
     private boolean isAssignmentPlausibleOnDay(TipoVisita visitaDaAssegnare, Luogo luogo, DayOfWeek day) {
         for (String uidTipoVisita : luogo.getTipoVisitaUID()) {
-            // Se è la stessa visita, la saltiamo
+            // If it's the same visit, skip it
             if (uidTipoVisita.equals(visitaDaAssegnare.getUID()))
                 continue;
 
-            TipoVisita altraVisita = controller.db.getTipiByUID(uidTipoVisita);
-            // Se l'altra visita non è programmata per questo giorno, prosegui
+            TipoVisita altraVisita = controller.db.getTipiByUID(uidTipoVisita); // otherVisit
+            // If the other visit is not scheduled for this day, continue
             if (!altraVisita.getDays().contains(day))
                 continue;
 
-            int startAltra = altraVisita.getInitTime().getMinutes();
-            int startDaAssegnare = visitaDaAssegnare.getInitTime().getMinutes();
+            int startAltra = altraVisita.getInitTime().getMinutes(); // startOther
+            int startDaAssegnare = visitaDaAssegnare.getInitTime().getMinutes(); // startToAssign
 
-            // Controlla che gli orari non si accavallino.
-            // Se non sono in conflitto, uno inizia dopo la fine dell'altro.
+            // Check that the times do not overlap.
+            // If they are not in conflict, one starts after the end of the other.
             if (!(startAltra > (startDaAssegnare + visitaDaAssegnare.getDuration())
                     || startDaAssegnare > (startAltra + altraVisita.getDuration()))) {
-                AssertionControl.logMessage("Mi accavallo con " + altraVisita.getTitle(),
+                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), // "I overlap with"
                         3, this.getClass().getSimpleName());
                 return false;
             }

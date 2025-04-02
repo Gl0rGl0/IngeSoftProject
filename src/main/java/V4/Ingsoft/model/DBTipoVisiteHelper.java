@@ -8,16 +8,15 @@ import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.util.Date;
 
 public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
-    private final HashMap<String, TipoVisita> cachedTipiVisita = new HashMap<>();
 
     public DBTipoVisiteHelper() {
         super(TipoVisita.PATH, TipoVisita.class);
 
-        getJson().forEach(tv -> cachedTipiVisita.put(tv.getUID(), tv));
+        getJson().forEach(tv -> cachedItems.put(tv.getUID(), tv));
     }
 
     public TipoVisita getTipiVisitaByUID(String uid) {
-        return cachedTipiVisita.get(uid);
+        return cachedItems.get(uid);
     }
 
     public ArrayList<TipoVisita> getTipiVisita() {
@@ -25,9 +24,9 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     public boolean addTipoVisita(TipoVisita toAdd) {
-        if (cachedTipiVisita.get(toAdd.getUID()) != null)
+        if (cachedItems.get(toAdd.getUID()) != null)
             return false;
-        cachedTipiVisita.put(toAdd.getUID(), toAdd);
+            cachedItems.put(toAdd.getUID(), toAdd);
         return saveJson(getTipiVisita());
     }
 
@@ -44,15 +43,15 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         if (toFind == null)
             return false;
 
-        cachedTipiVisita.remove(toFind.getUID());
+            cachedItems.remove(toFind.getUID());
         return saveJson(getTipiVisita());
     }
 
     public boolean removeTipoVisitaByUID(String toRemoveUID) {
-        if (cachedTipiVisita.get(toRemoveUID) == null)
+        if (cachedItems.get(toRemoveUID) == null)
             return false;
 
-        cachedTipiVisita.remove(toRemoveUID);
+            cachedItems.remove(toRemoveUID);
         return saveJson(getTipiVisita());
     }
 
@@ -73,7 +72,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
 
     public void checkTipoVisiteAttese(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() == StatusVisita.ATTESA)
+            if (tv.getStatus() == StatusVisita.PENDING)
                 tv.isMonthExpired(d);
         }
     }
@@ -82,14 +81,14 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() != StatusVisita.ATTESA)
+            if (tv.getStatus() != StatusVisita.PENDING)
                 out.add(tv);
         }
         return out;
     }
 
     public boolean isNew() {
-        return cachedTipiVisita.size() == 0;
+        return cachedItems.size() == 0;
     }
 
     public void close() {

@@ -46,17 +46,17 @@ public class Luogo {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Luogo {")
-                .append("Nome='").append(name).append('\'')
-                .append(", Descrizione='").append(description).append('\'')
-                .append(", Posizione=").append(position)
-                .append(", Visite=[");
+        sb.append("Place {") // Changed "Luogo" to "Place"
+                .append("Name='").append(name).append('\'') // Changed "Nome" to "Name"
+                .append(", Description='").append(description).append('\'') // Changed "Descrizione" to "Description"
+                .append(", Position=").append(position) // Changed "Posizione" to "Position"
+                .append(", Visits=["); // Changed "Visite" to "Visits"
 
         if (visiteUID != null && !visiteUID.isEmpty()) {
             visiteUID.forEach(visita -> {
                 sb.append("\n    ").append(visita).append(",");
             });
-            sb.setLength(sb.length() - 1); // Rimuove l'ultima virgola
+            sb.setLength(sb.length() - 1); // Removes the last comma
             sb.append("\n");
         }
 

@@ -2,10 +2,10 @@ package V4.Ingsoft.controller.commands;
 
 public interface Command {
     /**
-     * Esegue il comando dato l'array delle options e l'array degli argomenti.
+     * Executes the command given the array of options and the array of arguments.
      *
-     * @param options le options (senza il trattino iniziale)
-     * @param args    gli argomenti
+     * @param options the options (without the initial hyphen)
+     * @param args    the arguments
      */
     void execute(String[] options, String[] args);
 

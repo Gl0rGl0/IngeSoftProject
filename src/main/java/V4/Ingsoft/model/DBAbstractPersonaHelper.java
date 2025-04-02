@@ -2,14 +2,12 @@ package V4.Ingsoft.model;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.AssertionControl;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
-    protected final HashMap<String, T> cachedItems = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     public DBAbstractPersonaHelper(PersonaType personaType) {
@@ -40,7 +38,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             constructor = clazz.getConstructor(String.class, String.class, boolean.class);
             T newPersona = constructor.newInstance(username, DBAbstractPersonaHelper.securePsw(username, newPsw),
                     false);
-            cachedItems.put(username, newPersona); // AL POSTO DI RIMUOVERE/AGGIUNGERE, SOVRASCRIVO
+            cachedItems.put(username, newPersona); // INSTEAD OF REMOVING/ADDING, OVERWRITE
             return saveJson(getPersonList());
         } catch (Exception e) {
             AssertionControl.logMessage(e.getMessage(), 1, this.getClass().getSimpleName());
@@ -53,7 +51,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         return cachedItems.get(user);
     }
 
-    // IMPLEMENTATO NELLE SOTTOCLASSI COSI DA RISPETTARE LE VERSIONI
+    // IMPLEMENTED IN SUBCLASSES TO RESPECT VERSIONS
     public T login(String user, String psw) {
         for (T p : getPersonList()) {
             if (p.getUsername().equals(user)) {

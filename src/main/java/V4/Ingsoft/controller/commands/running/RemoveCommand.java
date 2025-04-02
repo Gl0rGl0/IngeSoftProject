@@ -10,7 +10,7 @@ public class RemoveCommand extends AbstractCommand {
 
     private final Controller controller;
     private final String CLASSNAME = this.getClass().getSimpleName();
-    private final String ERRORE_16 = "Azione possibile solo il 16 del mese!";
+    private final String ERROR_16 = "Action only possible on the 16th of the month!";
 
     public RemoveCommand(Controller controller) {
         this.controller = controller;
@@ -19,16 +19,15 @@ public class RemoveCommand extends AbstractCommand {
 
     @Override
     /**
-     * Implementazione del comando "remove".
+     * Implementation of the "remove" command.
      *
-     * @param options le options (es. -c per configuratore)
-     * @param args    eventuali argomenti aggiuntivi
+     * @param options the options (e.g., -c for configurator)
+     * @param args    any additional arguments
      */
     public void execute(String[] options, String[] args) {
-        // Ad esempio, ci aspettiamo che il primo argomento sia l'opzione (es. "c" per
-        // configuratore)
+        // For example, we expect the first argument to be the option (e.g., "c" for configurator)
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'remove'");
+            ViewSE.println("Error using the 'remove' command");
             return;
         }
         char option = options[0].charAt(0);
@@ -42,31 +41,31 @@ public class RemoveCommand extends AbstractCommand {
                 if (!controller.canExecute16thAction)
                     removeVolontario(ar);
                 else
-                    ViewSE.println(ERRORE_16);
+                    ViewSE.println(ERROR_16);
             }
             case 't' -> {
                 if (!controller.canExecute16thAction)
                     removeTipoVisita(ar);
                 else
-                    ViewSE.println(ERRORE_16);
+                    ViewSE.println(ERROR_16);
             }
             case 'L' -> {
                 if (!controller.canExecute16thAction)
                     removeLuogo(ar);
                 else
-                    ViewSE.println(ERRORE_16);
+                    ViewSE.println(ERROR_16);
             }
-            default -> ViewSE.println("Opzione non riconosciuta per 'remove'.");
+            default -> ViewSE.println("Option not recognized for 'remove'.");
         }
     }
 
     private void removeConfiguratore(String[] args) {
-        ViewSE.println("Eseguo: Rimuovo configuratore");
+        ViewSE.println("Executing: Removing configurator");
         controller.db.removeConfiguratore(args[0]);
     }
 
     private void removeFruitore(String[] args) {
-        ViewSE.println("Eseguo: Rimuovo fruitore");
+        ViewSE.println("Executing: Removing fruitore (user/visitor)");
         controller.db.removeFruitore(args[0]);
     }
 
@@ -74,13 +73,13 @@ public class RemoveCommand extends AbstractCommand {
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Non puoi rimuovere un volontario se non è il 16 del month: " + args[0],
+                            + "|  + Cannot remove a volunteer if it's not the 16th of the month: " + args[0],
                     1,
                     CLASSNAME);
             return;
         }
 
-        ViewSE.println("Eseguo: Rimuovo volontario");
+        ViewSE.println("Executing: Removing volunteer");
         controller.db.removeVolontario(args[0]);
     }
 
@@ -88,13 +87,13 @@ public class RemoveCommand extends AbstractCommand {
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Non puoi rimuovere un tipo di visita se non è il 16 del month: " + args[0],
+                            + "|  + Cannot remove a visit type if it's not the 16th of the month: " + args[0],
                     1,
                     CLASSNAME);
             return;
         }
 
-        ViewSE.println("Eseguo: Rimuovo tipo visita");
+        ViewSE.println("Executing: Removing visit type");
         controller.db.removeTipoVisita(args[0]);
     }
 
@@ -102,14 +101,14 @@ public class RemoveCommand extends AbstractCommand {
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Non puoi rimuovere un luogo se non è il 16 del month: "
+                            + "|  + Cannot remove a place if it's not the 16th of the month: "
                             + args[0],
                     1,
                     CLASSNAME);
             return;
         }
 
-        ViewSE.println("Eseguo: Rimuovo luogo");
+        ViewSE.println("Executing: Removing place");
         controller.db.removeLuogo(args[0]);
     }
 }

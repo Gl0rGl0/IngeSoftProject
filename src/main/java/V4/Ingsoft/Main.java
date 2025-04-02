@@ -5,17 +5,17 @@ import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.Initer;
 import V4.Ingsoft.view.ViewSE;
 
-//UTILIZZO TIPO
-//init: Main -> test -> Comandi lanciati da interpeter in anticipo -> start dell'controller
-//controller: MessaggioBenvenuto -> while(Interpreter)
-//Interpreter: [comando] [-options] [argomenti], ogni comando è passato al suo Command(>Abstract|Interface) dove viene gestito
-//DB: Crea 5 sotto helper che gestiscono ognuno una parte di dati, Configuratori,ecc
-//Classi di Utilita: letteralmente classi di utilita, ora, data, interazione con esterno ecc...
+//USAGE TYPE
+//init: Main -> test -> Commands launched by interpreter in advance -> start of the controller
+//controller: WelcomeMessage -> while(Interpreter)
+//Interpreter: [command] [-options] [arguments], each command is passed to its Command(>Abstract|Interface) where it is handled
+//DB: Creates 5 sub-helpers that each manage a part of the data, Configurators, etc.
+//Utility Classes: literally utility classes, time, date, external interaction, etc...
 
-// Usi controller.intepreter per dare direttamente i comandi anche prima
-// dell'interazione con l'utente
-// -> Guadagno: GUI in cui si manda la stringa direttamente all'controller senza
-// passare dalla tastiera
+// Use controller.interpreter to give commands directly even before
+// user interaction
+// -> Benefit: GUI where the string is sent directly to the controller without
+// going through the keyboard
 public class Main {
     public static void main(String[] args) {
 
@@ -24,12 +24,12 @@ public class Main {
         ViewSE view = new ViewSE(controller);
 
         controller.dailyAction();
+        //controller.db.clearAll();
 
         test(controller);
 
-        controller.db.clearAll();
 
-        controller.interpreter("login fruit1 pass1F");
+        controller.interpreter("login config1 pass1C");
         // controller.interpreter("changepsw pass1C pass1C");
 
         view.run();

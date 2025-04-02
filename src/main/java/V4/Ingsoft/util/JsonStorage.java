@@ -21,7 +21,7 @@ public class JsonStorage {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         if (!new File(BASE_PATH).exists()) {
             BASE_PATH = "/tmp/ingesoft/";
-            ViewSE.println("Cartella 'data/' non disponibile. Uso /tmp/ per il salvataggio.");
+            ViewSE.println("'data/' folder not available. Using /tmp/ for saving.");
             new File(BASE_PATH).mkdirs();
         }
     }
@@ -36,8 +36,8 @@ public class JsonStorage {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            AssertionControl.logMessage("Errore nel caricamento del file JSON", 1, "JsonStorage");
-            ViewSE.println("Errore nel caricamento del file JSON: " + e.getMessage());
+            AssertionControl.logMessage("Error loading JSON file", 1, "JsonStorage");
+            ViewSE.println("Error loading JSON file: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -48,8 +48,8 @@ public class JsonStorage {
                     collection);
             return true;
         } catch (IOException e) {
-            AssertionControl.logMessage("Errore nel salvataggio del file JSON", 1, "JsonStorage");
-            ViewSE.println("Errore nel salvataggio del file JSON: " + e.getMessage());
+            AssertionControl.logMessage("Error saving JSON file", 1, "JsonStorage");
+            ViewSE.println("Error saving JSON file: " + e.getMessage());
             return false;
         }
     }
@@ -60,8 +60,8 @@ public class JsonStorage {
                     .writeValue(new File(BASE_PATH + fileName + ".json"), new ArrayList<T>());
             return true;
         } catch (IOException e) {
-            AssertionControl.logMessage("Errore nel pulire il file JSON", 1, "JsonStorage");
-            ViewSE.println("Errore nel pulire il file JSON: " + e.getMessage());
+            AssertionControl.logMessage("Error clearing JSON file", 1, "JsonStorage");
+            ViewSE.println("Error clearing JSON file: " + e.getMessage());
             return false;
         }
     }

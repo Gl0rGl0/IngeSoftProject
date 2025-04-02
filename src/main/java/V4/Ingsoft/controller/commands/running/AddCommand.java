@@ -27,16 +27,16 @@ public class AddCommand extends AbstractCommand {
 
     @Override
     /**
-     * Implementazione del comando "add".
+     * Implementation of the "add" command.
      *
-     * @param options le options (es. -c per configuratore)
-     * @param args    eventuali argomenti aggiuntivi
+     * @param options the options (e.g., -c for configurator)
+     * @param args    any additional arguments
      */
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'add'");
+            ViewSE.println("Error using the 'add' command");
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Errore nell'utilizzo del comando 'add'", 2,
+                    controller.getCurrentUser().getUsername() + "| Error using the 'add' command", 2,
                     CLASSNAME);
             return;
         }
@@ -47,42 +47,42 @@ public class AddCommand extends AbstractCommand {
             case 'f' -> addFruitore(args);
             case 'v' -> addVolontario(args);
             case 'L' -> addLuogo(args);
-            case 'V' -> makeorario();
+            case 'V' -> makeorario(); // Assuming this generates the schedule (orario)
             case 't' -> addTipoVisita(args);
-            default -> ViewSE.println("Opzione non riconosciuta per 'add'.");
+            default -> ViewSE.println("Option not recognized for 'add'.");
         }
     }
 
     private void addConfiguratore(String[] args) {
-        // aggiunge un nuovo configuratore che dovrà cambiare psw al primo accesso
+        // adds a new configurator who will need to change password on first login
         if (args.length > 1 && controller.db.dbConfiguratoreHelper.addConfiguratore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Aggiunto configuratore: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Added configurator: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Non aggiunto configuratore", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Configurator not added", 2, CLASSNAME);
         }
     }
 
     private void addFruitore(String[] args) {
-        // aggiunge un nuovo fruitore che dovrà cambiare psw al primo accesso
+        // adds a new fruitore (visitor/user) who will need to change password on first login
         if (args.length > 1 && controller.db.dbFruitoreHelper.addFruitore(args[0], args[1])) {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Aggiunto fruitore: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Added fruitore: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Non aggiunto fruitore", 2, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Fruitore not added", 2, CLASSNAME);
         }
     }
 
     private void addVolontario(String[] args) {
-        // aggiunge un nuovo volontario che dovrà cambiare psw al primo accesso
+        // adds a new volunteer who will need to change password on first login
         if (args.length > 1 && controller.db.dbVolontarioHelper.addVolontario(args[0], args[1])) {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Aggiunto volontario: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Added volunteer: " + args[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Non aggiunto volontario", 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Volunteer not added", 3, CLASSNAME);
         }
     }
 
@@ -93,7 +93,7 @@ public class AddCommand extends AbstractCommand {
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "| Non puoi aggiungere un tipo di visita se non è il 16 del month: " + a[0],
+                            + "| Cannot add a visit type if it's not the 16th of the month: " + a[0],
                     1,
                     CLASSNAME);
             return;
@@ -101,10 +101,10 @@ public class AddCommand extends AbstractCommand {
 
         if (controller.db.addTipoVisita(a, controller.date)) {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Aggiunto TipoVisita: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Added TipoVisita: " + a[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Non aggiunto TipoVisita", 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| TipoVisita not added", 3, CLASSNAME);
         }
     }
 
@@ -113,7 +113,7 @@ public class AddCommand extends AbstractCommand {
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "| Non puoi aggiungere un luogo se non è il 16 del month: "
+                            + "| Cannot add a place if it's not the 16th of the month: "
                             + a[0],
                     1,
                     CLASSNAME);
@@ -122,10 +122,10 @@ public class AddCommand extends AbstractCommand {
 
         if (a.length > 2 && controller.db.addLuogo(a[0], a[1], new GPS(a[2]))) {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Aggiunto luogo: " + args[0], 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Added place: " + a[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Non aggiunto luogo", 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Place not added", 3, CLASSNAME);
         }
     }
 
@@ -149,7 +149,7 @@ public class AddCommand extends AbstractCommand {
     }
 
     /**
-     * Elabora le visite per una data specifica.
+     * Processes visits for a specific date.
      */
     private void processVisitsForDate(Date date, List<TipoVisita> tipi) {
         for (TipoVisita visita : tipi) {
@@ -161,19 +161,18 @@ public class AddCommand extends AbstractCommand {
     }
 
     /**
-     * Verifica se una visita è eleggibile per la data:
-     * - Stato PROPOSTA
-     * - Il giorno della settimana della data è presente tra quelli della visita
+     * Checks if a visit is eligible for the date:
+     * - Status PROPOSTA (Proposed)
+     * - The day of the week of the date is present among those of the visit
      */
     private boolean isVisitEligibleOnDate(TipoVisita visita, Date date) {
-        return visita.getStatus() == StatusVisita.PROPOSTA
+        return visita.getStatus() == StatusVisita.PROPOSED // Updated enum constant
                 && visita.getDays().contains(date.dayOfTheWeek());
     }
 
     /**
-     * Per una visita eleggibile, controlla e assegna la visita ai volontari
-     * disponibili
-     * che non hanno conflitti.
+     * For an eligible visit, checks and assigns the visit to available volunteers
+     * who do not have conflicts.
      */
     private void assignVisitForEligibleVolunteers(TipoVisita visita, Date date) {
         for (String volontarioUID : visita.getVolontariUIDs()) {
@@ -181,15 +180,15 @@ public class AddCommand extends AbstractCommand {
             if (volontario == null)
                 continue;
 
-            // Verifica la disponibilità del volontario per il giorno corrente
+            // Check volunteer availability for the current day
             if (!volontario.getAvailability()[date.getDay()])
                 continue;
 
-            // Controlla conflitti per il volontario e la data
-            if (controller.db.dbVisiteHelper.volontarioHaConflitto(volontario, date, visita))
+            // Check conflicts for the volunteer and the date
+            if (controller.db.dbVisiteHelper.volontarioHaConflitto(volontario, date, visita)) // volunteerHasConflict
                 continue;
 
-            // Se tutti i controlli sono superati, assegna la visita
+            // If all checks pass, assign the visit
             controller.db.dbVisiteHelper.addVisita(new Visita(visita, date, volontarioUID));
         }
     }

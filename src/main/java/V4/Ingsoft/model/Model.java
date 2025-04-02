@@ -23,7 +23,7 @@ public class Model {
     private boolean isNew;
     public String ambitoTerritoriale;
 
-    // Costruttore e inizializzazione degli helper
+    // Constructor and helper initialization
     public Model() {
         dbConfiguratoreHelper = new DBConfiguratoreHelper();
         dbFruitoreHelper = new DBFruitoreHelper();
@@ -73,7 +73,7 @@ public class Model {
     }
 
     public boolean removeFruitore(String username) {
-        // eliminare tutte le iscrizioni a lui collegate
+        // delete all registrations linked to him
         return dbFruitoreHelper.removePersona(username);
     }
 
@@ -114,7 +114,7 @@ public class Model {
     }
 
     // ================================================================
-    // Metodi di aggiornamento (change password)
+    // Update methods (change password)
     // ================================================================
     public boolean changePassword(String username, String newPsw, PersonaType type) {
         return switch (type) {
@@ -130,24 +130,23 @@ public class Model {
     }
 
     public void refresher(Date d) {
-        // Prima tolgo le eventuali tipologie di visite dal DB
+        // First remove any visit types from the DB
         refreshTipoVisite();
 
-        // Poi rimuovo i volontari per evitare di NON rimuovere un volontario
-        // appartenente a un tipovisita non esistente
+        // Then remove volunteers to avoid NOT removing a volunteer
+        // belonging to a non-existent visit type
         refreshVolontari();
 
-        dbTipoVisiteHelper.checkTipoVisiteAttese(d);
+        dbTipoVisiteHelper.checkTipoVisiteAttese(d); // Check pending visit types
         dbVisiteHelper.checkVisiteInTerminazione(d);
 
         refreshIscrizioni();
     }
 
-    // Controlla ogni volontario
-    // Se almeno una visita dentro la sua lista di (tipi)Visite esiste ancora => OK
-    // Se TUTTE le visite non esistono (o è vuoto) => si elimina il volontario dal
-    // DB
-    // Per ogni visita non trovata si toglie l'uid dalle sue visite
+    // Check each volunteer
+    // If at least one visit in their list of (types)Visits still exists => OK
+    // If ALL visits do not exist (or list is empty) => delete the volunteer from the DB
+    // For each visit not found, remove the uid from their visits
     private void refreshVolontari() {
         Iterator<Volontario> iterator = dbVolontarioHelper.getPersonList().iterator();
 
@@ -155,7 +154,7 @@ public class Model {
             Volontario v = iterator.next();
             boolean toRemove = true;
 
-            // Usa un iteratore per evitare ConcurrentModificationException
+            // Use an iterator to avoid ConcurrentModificationException
             Iterator<String> uidIterator = v.getTipiVisiteUIDs().iterator();
 
             while (uidIterator.hasNext()) {
@@ -163,7 +162,7 @@ public class Model {
                 TipoVisita toCheck = dbTipoVisiteHelper.getTipiVisitaByUID(tv);
 
                 if (toCheck == null) {
-                    uidIterator.remove(); // Rimozione sicura
+                    uidIterator.remove(); // Safe removal
                     continue;
                 }
 
@@ -174,13 +173,13 @@ public class Model {
             }
 
             if (toRemove) {
-                iterator.remove(); // Rimozione sicura del volontario
+                iterator.remove(); // Safe removal of the volunteer
             }
         }
     }
 
-    // Controlla ogni TipoVisita
-    // Se l'uid è 'null' o non è presente nei luoghi => rimuovo il tipo visita
+    // Check each TipoVisita
+    // If the uid is 'null' or not present in the places => remove the visit type
     private void refreshTipoVisite() {
         for (TipoVisita v : dbTipoVisiteHelper.getTipiVisita()) {
             String uidLuogo = v.getLuogo();
@@ -191,14 +190,10 @@ public class Model {
     }
 
     /*
-     * Per ogni iscrizione si assume inizialmente che debba essere rimossa (toRemove
-     * = true).
-     * Si itera su tutte le visite e sulle loro iscrizioni per verificare se
-     * l'iscrizione corrente è referenziata.
-     * Se viene trovata una corrispondenza, il flag toRemove diventa false e
-     * l'iterazione viene interrotta.
-     * Alla fine, se toRemove rimane true, l'iscrizione viene eliminata dal
-     * database.
+     * For each registration (iscrizione), it is initially assumed it should be removed (toRemove = true).
+     * Iterate through all visits and their registrations to check if the current registration is referenced.
+     * If a match is found, the toRemove flag becomes false, and the iteration is interrupted.
+     * Finally, if toRemove remains true, the registration is deleted from the database.
      */
     private void refreshIscrizioni() {
         for (Iscrizione i : dbIscrizionisHelper.getIscrizioni()) {
@@ -221,7 +216,7 @@ public class Model {
     }
 
     // ================================================================
-    // Metodi di ricerca e login
+    // Search and login methods
     // ================================================================
     public Persona findUser(String username) {
         Persona out;
@@ -263,7 +258,7 @@ public class Model {
     }
 
     // ================================================================
-    // Gestione delle date precluse
+    // Management of precluded dates
     // ================================================================
     public ArrayList<Date> getPrecludedDates() {
         return dbDatesHelper.getPrecludedDates();
@@ -278,7 +273,7 @@ public class Model {
     }
 
     // ================================================================
-    // Recupero di TipoVisita e Luogo tramite name
+    // Retrieval of TipoVisita and Luogo via name
     // ================================================================
     public TipoVisita getTipoVisitaByName(String title) {
         return dbTipoVisiteHelper.findTipoVisita(title);
@@ -293,7 +288,7 @@ public class Model {
     }
 
     // ================================================================
-    // Getter tramite UID
+    // Getters via UID
     // ================================================================
     public Luogo getLuoghiByUID(String uid) {
         return dbLuoghiHelper.getLuogoByUID(uid);

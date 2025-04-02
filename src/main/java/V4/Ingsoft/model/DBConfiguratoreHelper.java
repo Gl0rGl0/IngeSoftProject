@@ -15,12 +15,12 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
         if (cachedItems.get(username) != null)
             return false;
 
-        cachedItems.put(username, new Configuratore(username, password, true));
+        cachedItems.put(username, new Configuratore(username, password, true, true));
         return saveJson(getPersonList());
     }
 
-    // la psw è salvata con una cifratura hash semplicissima + salting con user dato
-    // che è univoco...
+    // the psw is saved with a very simple hash encryption + salting with user given
+    // that it is unique...
     // @Override
     // public Persona login(String user, String psw) {
     // for (Persona p : getPersonList()) {

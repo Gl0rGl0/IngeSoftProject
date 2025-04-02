@@ -16,10 +16,10 @@ import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.view.ViewSE;
 
 public abstract class Interpreter {
-    // Mappa dei comandi passata durante il setup
+    // Map of commands passed during setup
     protected HashMap<String, Command> commandRegistry = new HashMap<>();
 
-    // Costruttore che riceve la mappa dei comandi
+    // Constructor that receives the command map
     public Interpreter(Controller controller) {
         commandRegistry.put("time", new TimeCommand(controller));
         commandRegistry.put("logout", new LogoutCommand(controller));
@@ -30,24 +30,24 @@ public abstract class Interpreter {
     }
 
     /**
-     * Interpreta il prompt fornito dall'utente e, in base alla mappa dei comandi,
-     * esegue l'azione corrispondente.
+     * Interprets the prompt provided by the user and, based on the command map,
+     * executes the corresponding action.
      *
-     * @param prompt      la stringa di comando immessa
-     * @param currentUser l'utente corrente (necessario per controllare i permessi)
+     * @param prompt      the entered command string
+     * @param currentUser the current user (necessary for permission checks)
      */
     public void interpret(String prompt, Persona currentUser) {
-        if(prompt == null || prompt == "") {
-            AssertionControl.logMessage("ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
-            ViewSE.println("Errore: nessun comando fornito.");
+        if(prompt == null || prompt.isEmpty()) { // Use isEmpty() for clarity
+            AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
+            ViewSE.println("Error: no command provided.");
             return;
         }
 
         String[] tokens = prompt.trim().split("\\s+");
 
         if (tokens.length == 0 || tokens[0].isEmpty()) {
-            AssertionControl.logMessage("ERRORE NESSUN COMANDO", 2, this.getClass().getSimpleName());
-            ViewSE.println("Errore: nessun comando fornito.");
+            AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
+            ViewSE.println("Error: no command provided.");
             return;
         }
 
@@ -55,7 +55,7 @@ public abstract class Interpreter {
         ArrayList<String> optionsList = new ArrayList<>();
         ArrayList<String> argsList = new ArrayList<>();
 
-        // Separa options (token che iniziano con '-') e argomenti
+        // Separate options (tokens starting with '-') and arguments
         for (int i = 1; i < tokens.length; i++) {
             String token = tokens[i];
             if (token.startsWith("-") && token.length() > 1) {
@@ -71,22 +71,22 @@ public abstract class Interpreter {
         Command command = commandRegistry.get(cmd);
         if (command != null) {
             int userPriority = currentUser.getType().getPriority();
-            // Controlla i permessi
+            // Check permissions
             if (!command.canBeExecutedBy(userPriority)) {
-                ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd + "'.");
+                ViewSE.println("You do not have the necessary permissions to execute the command '" + cmd + "'.");
                 return;
             }
-            // Se l'utente è in stato di "firstAccess", limita i comandi eseguibili
+            // If the user is in "firstAccess" state, limit executable commands
             if (currentUser.isNew() &&
                     !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
-                ViewSE.println("Non hai i permessi necessari per eseguire il comando '" + cmd +
-                        "' finché non viene cambiata la password con 'changepsw [nuovapsw]'.");
+                ViewSE.println("You do not have the necessary permissions to execute the command '" + cmd +
+                        "' until the password is changed using 'changepsw [newpassword]'.");
                 return;
             }
-            // Esegue il comando
+            // Execute the command
             command.execute(options, args);
         } else {
-            ViewSE.println("\"" + cmd + "\" non è riconosciuto come comando interno.");
+            ViewSE.println("\"" + cmd + "\" is not recognized as an internal command.");
         }
     }
 
@@ -97,6 +97,6 @@ public abstract class Interpreter {
             if (!out)
                 return out;
         }
-        return out; // Ne basta una false per dare false come risultato
+        return out; // Just one false is enough to return false as the result
     }
 }

@@ -24,11 +24,11 @@ public class Date {
     }
 
     /**
-     * Costruisce una data completa (day, month e anno).
+     * Constructs a complete date (day, month, and year).
      *
      * @param gg day
      * @param mm month
-     * @param aa anno
+     * @param aa year
      */
     public Date(int gg, int mm, int aa) {
         this.localDate = LocalDate.of(aa, mm, gg).atStartOfDay();
@@ -39,11 +39,10 @@ public class Date {
     }
 
     /**
-     * Costruisce una data partendo da una stringa nel formato "gg/mm[/aa]-[hh:mm]".
-     * Se
-     * l'anno non è presente, viene impostato a -1.
+     * Constructs a date from a string in the format "dd/mm[/yy]-[hh:mm]".
+     * If the year is not present, it is set to -1 (Note: This behavior seems incorrect, LocalDate requires a year).
      *
-     * @param d la stringa contenente la data e opzionalmente un commento
+     * @param in the string containing the date and optionally a time part (comment seems outdated)
      */
     public Date(String in) {
         String[] parts = in.split("-");
@@ -72,11 +71,10 @@ public class Date {
     }
 
     /**
-     * Modifica la data incrementandola (o decrementandola, se g è negativo) di
-     * g days. Se l'anno non è noto (ossia -1), l'operazione non viene
-     * eseguita.
+     * Modifies the date by incrementing it (or decrementing, if g is negative) by
+     * g days. (Note: The comment about year -1 seems irrelevant as LocalDate always has a year).
      *
-     * @param g numero di days da aggiungere (o sottrarre se negativo)
+     * @param g number of days to add (or subtract if negative)
      */
     public synchronized void update(int g) {
         this.localDate = this.localDate.plusDays(g);

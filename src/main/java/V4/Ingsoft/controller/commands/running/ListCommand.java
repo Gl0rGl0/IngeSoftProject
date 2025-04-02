@@ -13,7 +13,7 @@ import V4.Ingsoft.view.ViewSE;
 public class ListCommand extends AbstractCommand {
 
     private final Controller controller;
-    private static final String ERRORE_NON_RICONOSCIUTO = "Opzione non riconosciuta per 'list'.";
+    private static final String ERROR_NOT_RECOGNIZED = "Option not recognized for 'list'.";
 
     public ListCommand(Controller controller) {
         this.controller = controller;
@@ -22,14 +22,14 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     /**
-     * Implementazione del comando "add".
+     * Implementation of the "list" command. // Corrected command name
      *
-     * @param options le options (es. -c per configuratore)
-     * @param args    eventuali argomenti aggiuntivi
+     * @param options the options (e.g., -c for configurator)
+     * @param args    any additional arguments
      */
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'list'");
+            ViewSE.println("Error using the 'list' command");
             return;
         }
 
@@ -40,7 +40,7 @@ public class ListCommand extends AbstractCommand {
             case 'L', 'l' -> listLuoghi();
             case 't' -> printTipiVisita();
             case 'V' -> printVisite(options);
-            default -> ViewSE.println(ERRORE_NON_RICONOSCIUTO);
+            default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
     }
 
@@ -59,7 +59,8 @@ public class ListCommand extends AbstractCommand {
             out = new StringBuilder();
             out.append(v.getUsername() + ":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
-                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVisita.PROPOSTA ? "proposta" : "attesa")
+                // Use the translated enum constant PROPOSED
+                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVisita.PROPOSED ? "proposed" : "pending")
                         + "\n");
             }
             ViewSE.println(out);
@@ -76,13 +77,13 @@ public class ListCommand extends AbstractCommand {
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
             case 'e' -> printEffettuate();
-            default -> ViewSE.println(ERRORE_NON_RICONOSCIUTO);
+            default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
     }
 
     private void printAvailabilityVolontari() {
         if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
-            ViewSE.println(ERRORE_NON_RICONOSCIUTO);
+            ViewSE.println(ERROR_NOT_RECOGNIZED);
             return;
         }
 
@@ -103,7 +104,7 @@ public class ListCommand extends AbstractCommand {
 
     private void printTipiVisita() {
         if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
-            ViewSE.println(ERRORE_NON_RICONOSCIUTO);
+            ViewSE.println(ERROR_NOT_RECOGNIZED);
             return;
         }
 
@@ -116,10 +117,10 @@ public class ListCommand extends AbstractCommand {
 
     private void printAllTipi() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Visite proposte:\n").append(getVisiteProposte());
-        sb.append("Visite complete:\n").append(getVisiteComplete());
-        sb.append("Visite cancellate:\n").append(getVisiteCancellate());
-        sb.append("Visite effettuate:\n").append(getVisiteEffettuate());
+        sb.append("Proposed visits:\n").append(getVisiteProposte());
+        sb.append("Completed visits:\n").append(getVisiteComplete());
+        sb.append("Cancelled visits:\n").append(getVisiteCancellate());
+        sb.append("Performed visits:\n").append(getVisiteEffettuate());
         ViewSE.println(sb.toString());
     }
 

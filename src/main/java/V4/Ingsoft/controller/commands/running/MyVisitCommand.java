@@ -22,7 +22,7 @@ public class MyVisitCommand extends AbstractCommand {
         switch (tipo) {
             case FRUITORE -> listFruitore();
             case VOLONTARIO -> listVolontari();
-            default -> ViewSE.println("Opzione valida solo per volontari e fruitori");
+            default -> ViewSE.println("Option valid only for volunteers and visitors (fruitori)");
         }
     }
 
@@ -30,10 +30,10 @@ public class MyVisitCommand extends AbstractCommand {
         String uidCV = controller.getCurrentUser().getUsername();
         StringBuilder out = new StringBuilder();
 
-        out.append("Lista delle visite al quale sei convocato: \n");
-        // controller.db.dbVisiteHelper.getConfermate() non si può fare perchè una
-        // visita può
-        // avere piu volontari disponibili
+        out.append("List of visits you are assigned to: \n");
+        // controller.db.dbVisiteHelper.getConfermate() cannot be done because a
+        // visit can
+        // have multiple available volunteers
         for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
             if (v.getUidVolontario().equals(uidCV))
                 out.append(v + "\n");
@@ -46,7 +46,7 @@ public class MyVisitCommand extends AbstractCommand {
         String userF = controller.getCurrentUser().getUsername();
         StringBuilder out = new StringBuilder();
 
-        out.append("Lista delle visite al quale sei iscritto: ");
+        out.append("List of visits you are registered for: ");
         for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
             if (v.hasFruitore(userF))
                 out.append(v + "\n");

@@ -17,15 +17,14 @@ public class SetPersoneMaxCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del prompt");
+            ViewSE.println("Error in prompt usage");
             return;
         }
         try {
             controller.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            return;
+            ViewSE.println("Invalid value.");
         }
-
-        this.hasBeenExecuted = true; // DEVE ESSERE ESEGUITO ANCHE A SETUP
+        this.hasBeenExecuted = true; // MUST ALSO BE EXECUTED DURING SETUP
     }
 }

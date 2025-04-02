@@ -1,0 +1,660 @@
+**USE CASES DOCUMENT**
+
+*Nota: Questo documento combina i casi d'uso da `documentazione.pdf` (usato come template) e `Elaborato_SE_2024_25_def.pdf`, indicando la versione di introduzione per ciascuno.*
+
+---
+**VERSIONE 1**
+---
+
+**Nome (UC1 - V1) Login Configuratore**
+Attore: Configuratore (non autenticato)
+Precondizioni: Il configuratore non è autenticato.
+Scenario principale:
+1. Il configuratore seleziona la modalità di login.
+2. Il configuratore inserisce username e password.
+3. Precondizioni:
+   i. Le credenziali sono corrette.
+   ii. Non è il primo accesso assoluto dell'applicazione.
+   iii. Non è il primo accesso personale del configuratore (ha già cambiato la password iniziale).
+4. Il configuratore ha accesso al sistema e viene portato al <<include>> “Menu Principale (UC3)”.
+Scenario alternativo 3a:
+3a. Precondizione: le credenziali sono sbagliate. Torna al punto 1.
+Scenario alternativo 3b (Primo accesso personale):
+3b. Precondizioni:
+    i. Le credenziali sono quelle predefinite (primo accesso personale).
+    ii. Non è il primo accesso assoluto dell'applicazione.
+4b. Viene forzato dal sistema a cambiare la password con <<include>> “Cambio Password Configuratore (UC2)”.
+5b. Precondizione: il configuratore cerca di fare un’azione che non sia cambiare la password. Torna al punto 4b.
+Scenario alternativo 3c (Primo accesso assoluto):
+3c. Precondizioni:
+    i. Le credenziali sono quelle predefinite.
+    ii. È il primo accesso assoluto all'applicazione.
+4c. Viene forzato dal sistema a cambiare la password con <<include>> “Cambio Password Configuratore (UC2)”. La postcondizione di UC2 lo porterà a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+Postcondizioni:
+1. Se è il primo accesso assoluto all'applicazione, dopo il cambio password (UC2), il configuratore è autenticato e viene portato a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+2. Se non è il primo accesso assoluto e non è il primo accesso personale, il configuratore è autenticato e viene portato a <<include>> “Menu Principale (UC3)”.
+3. Se è il primo accesso personale (ma non assoluto), dopo il cambio password (UC2), il configuratore è autenticato e viene portato a <<include>> “Menu Principale (UC3)”.
+
+---
+
+**Nome (UC2 - V1) Cambio Password Configuratore**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore si è autenticato tramite <<include>> “Login Configuratore (UC1)”.
+2. Potrebbe essere richiesto obbligatoriamente al primo accesso personale.
+Scenario principale:
+1. Il configuratore seleziona la modalità del cambio password (se non forzato).
+2. Il configuratore inserisce la nuova password.
+3. La nuova password viene salvata per gli accessi futuri.
+Postcondizioni:
+1. Precondizioni: il configuratore è il primo utente a fare accesso all’applicazione (primo accesso assoluto).
+   Il configuratore è autenticato e viene portato a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+2. Precondizioni: il configuratore non è il primo utente a fare accesso all’applicazione.
+   Il configuratore è autenticato e viene portato a <<include>> “Menu Principale (UC3)”.
+
+---
+
+**Nome (UC3 - V1) Menu Principale**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore si è autenticato tramite <<include>> “Login Configuratore (UC1)”.
+2. Se il configuratore è il primo utente dell’applicazione, ha completato la <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+Scenario principale:
+1. Il sistema presenta al configuratore le azioni disponibili in base alla fase (setup o regime) e alla versione dell'applicazione.
+2. Il configuratore seleziona un'azione da compiere (es. <<include>> UC5-UC15, UC20-UC27).
+
+---
+
+**Nome (UC4 - V1) Creazione Corpo Dati Iniziale (Setup)**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore si è autenticato tramite <<include>> “Login Configuratore (UC1)” ed è il primo utente assoluto ad accedere all'applicazione.
+2. Ha completato il <<include>> “Cambio Password Configuratore (UC2)”.
+Scenario principale:
+1. Il configuratore esegue, in ordine arbitrario e almeno una volta ciascuna:
+   ● <<include>> “Assegnazione Ambito Territoriale (Setup) (UC5)”.
+   ● <<include>> “Assegnazione Numero Massimo Persone per Iscrizione (Setup) (UC6)”.
+   ● <<include>> “Aggiunta Luoghi, Tipi Visita e Volontari (Setup) (UC7, UC8, UC9 aggregate)”.
+2. Il configuratore indica al sistema di aver inserito tutti i dati richiesti per passare alla fase successiva (es. comando 'done').
+3. Il configuratore ha accesso alla fase di regime dell’applicazione.
+Scenario alternativo 2a:
+2a. Precondizione: il configuratore tenta di concludere il setup (punto 2) ma non ha eseguito almeno una volta una o più azioni richieste del punto 1.
+3a. Il sistema notifica l'incompletezza e torna al punto 1.
+Postcondizioni: Il configuratore viene portato a <<include>> “Menu Principale (UC3)”.
+
+---
+
+**Nome (UC5 - V1) Assegnazione Ambito Territoriale (Setup)**
+Attore: Configuratore (autenticato, durante Setup)
+Precondizioni: Il configuratore è nella fase di <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+Scenario principale:
+1. Il configuratore seleziona la modalità per assegnare l’ambito territoriale al sistema.
+2. Il configuratore inserisce l’informazione (es. nome comune/area).
+3. Precondizione: l’informazione è valida (es. non vuota).
+4. L’ambito territoriale è assegnato in modo definitivo e non potrà più essere modificato.
+Scenario Alternativo 3a:
+3a. Precondizione: l’informazione non è valida (es. vuota o formattata male).
+4a. Il sistema rifiuta l’informazione indicando l’errore all’utente. Torna al punto 1.
+Postcondizioni: Il configuratore torna a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+
+---
+
+**Nome (UC6 - V1) Assegnazione Numero Massimo Persone per Iscrizione (Setup)**
+Attore: Configuratore (autenticato, durante Setup)
+Precondizioni: Il configuratore è nella fase di <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+Scenario principale:
+1. Il configuratore seleziona la modalità per assegnare il numero massimo di persone per singola iscrizione.
+2. Il configuratore inserisce la quantità massima (numero intero).
+3. Precondizione: il numero inserito è strettamente positivo (> 0).
+4. Il dato viene aggiunto al corpo dati.
+Scenario alternativo 3a:
+3a. Precondizione: il configuratore non inserisce un numero oppure ne inserisce uno non positivo (<= 0).
+4a. Il sistema rifiuta l'inserimento, notificando l'errore. Il corpo dati non viene modificato. Torna al punto 1.
+Postcondizioni: Il configuratore torna a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+
+---
+
+**Nome (UC7 - V1) Aggiunta Luogo (Setup)**
+Attore: Configuratore (autenticato, durante Setup)
+Precondizioni: Il configuratore è nella fase di <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+Scenario principale:
+1. Il configuratore seleziona la modalità per aggiungere un luogo al corpo dati.
+2. Il configuratore inserisce:
+   ● Titolo univoco del luogo.
+   ● Descrizione (opzionale).
+   ● Posizione geografica (indirizzo o coordinate).
+3. Precondizione: Titolo e posizione sono compilati e validi (formato corretto per posizione, titolo non esistente).
+4. Il luogo è correttamente inserito nel corpo dati.
+Scenario alternativo 3a:
+3a. Precondizione: la posizione geografica non è nel formato corretto o non è valida.
+4a. Il sistema rifiuta il luogo proposto dal configuratore, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3b:
+3b. Precondizione: il campo titolo è vuoto.
+4b. Il sistema rifiuta l'inserimento, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3c:
+3c. Precondizione: il luogo (identificato dal titolo) è già presente nel corpo dati.
+4c. Il sistema rifiuta l'inserimento, notificando l'errore. Torna al punto 1.
+Postcondizioni: Il configuratore torna a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”. *Nota: L'Elaborato V1 suggerisce che l'aggiunta di tipi visita e volontari avvenga contestualmente qui.*
+
+---
+
+**Nome (UC8 - V1) Associazione Volontario-TipoVisita (Setup)**
+Attore: Configuratore (autenticato, durante Setup)
+Precondizioni:
+1. Il configuratore è nella fase di <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+2. Esistono volontari e tipi visita nel corpo dati (potrebbero essere stati aggiunti implicitamente con UC7 o tramite azioni specifiche non dettagliate in doc.pdf ma suggerite da Elaborato V1).
+Scenario principale:
+1. Il configuratore seleziona la modalità per associare un volontario ad un tipo visita.
+2. Il configuratore inserisce l'identificativo del volontario e del tipo visita.
+3. Precondizioni:
+   i. Il volontario esiste nella base dati.
+   ii. Il tipo visita esiste nella base dati.
+   iii. L'associazione non esiste già.
+4. Il volontario è correttamente associato al tipo visita.
+Scenario alternativo 3a:
+3a. Precondizione: il volontario non è presente nel corpo dati.
+4a. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3b:
+3b. Precondizione: il tipo visita non è presente nel corpo dati.
+4b. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3c:
+3c. Precondizione: uno o entrambi i campi sono vuoti.
+4c. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3d:
+3d. Precondizione: l'associazione esiste già.
+4d. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Postcondizioni: Il configuratore torna a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+
+---
+
+**Nome (UC9 - V1) Associazione TipoVisita-Luogo (Setup)**
+Attore: Configuratore (autenticato, durante Setup)
+Precondizioni:
+1. Il configuratore è nella fase di <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+2. Esistono tipi visita e luoghi nel corpo dati (potrebbero essere stati aggiunti implicitamente con UC7 o tramite azioni specifiche).
+Scenario principale:
+1. Il configuratore seleziona la modalità per associare un tipo visita ad un luogo.
+2. Il configuratore inserisce l'identificativo del tipo visita e del luogo.
+3. Precondizioni:
+   i. Il tipo visita esiste nella base dati.
+   ii. Il luogo esiste nella base dati.
+   iii. L'associazione non esiste già.
+   iv. Vengono rispettati i vincoli temporali (non sovrapposizione di visite nello stesso luogo/giorno, vedi Elaborato pag. 5-6). *Questo controllo potrebbe essere complesso.*
+4. Il tipo visita è correttamente associato al luogo.
+Scenario alternativo 3a:
+3a. Precondizione: il tipo visita non è presente nel corpo dati.
+4a. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3b:
+3b. Precondizione: il luogo non è presente nel corpo dati.
+4b. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3c:
+3c. Precondizione: uno o entrambi i campi sono vuoti.
+4c. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3d:
+3d. Precondizione: l'associazione esiste già.
+4d. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3e:
+3e. Precondizione: l'associazione viola i vincoli temporali di sovrapposizione.
+4e. Il sistema rifiuta l’associazione, notificando l'errore. Torna al punto 1.
+Postcondizioni: Il configuratore torna a <<include>> “Creazione Corpo Dati Iniziale (Setup) (UC4)”.
+
+*Nota: UC7, UC8, UC9 sono presentate separatamente in documentazione.pdf, ma Elaborato V1 suggerisce un'azione più integrata durante il setup per introdurre luoghi, tipi visita e volontari associati.*
+
+---
+
+**Nome (UC10 - V1) Preclusione Data**
+Attore: Configuratore (autenticato, regime)
+Precondizioni:
+1. Il configuratore è autenticato e in fase di regime (ha completato UC4 se era il primo utente).
+2. È nel periodo temporale corretto per definire le preclusioni per un mese futuro (es. tra giorno 16 mese i e giorno 15 mese i+1 per precludere date del mese i+3, come da Elaborato pag. 7-8).
+Scenario principale:
+1. Il configuratore seleziona la modalità per precludere una data per tutte le visite.
+2. Il configuratore inserisce la data specifica (giorno/mese/anno).
+3. Precondizioni:
+   i. La data è valida e nel formato corretto.
+   ii. La data appartiene al mese futuro corretto per cui si stanno definendo le preclusioni.
+   iii. La data non è già stata preclusa.
+4. La data è inserita nel sistema come preclusa per il mese specificato.
+Scenario alternativo 3a:
+3a. Precondizione: la data è già presente nel sistema come preclusa per quel mese.
+4a. Il sistema rifiuta l’inserimento, notificando l'errore. Torna al punto 1.
+Scenario alternativo 3b:
+3b. Precondizione: la data non esiste (es. 31 Febbraio), è nel formato sbagliato, o non appartiene al mese corretto.
+4b. Il sistema rifiuta l’inserimento, notificando l'errore. Torna al punto 1.
+Postcondizioni: Il configuratore viene portato a <<include>> “Menu Principale (UC3)”.
+
+---
+
+**Nome (UC11 - V1) Modifica Numero Massimo Persone per Iscrizione**
+Attore: Configuratore (autenticato, regime)
+Precondizioni:
+1. Il configuratore è autenticato e in fase di regime.
+2. Il valore è stato inizializzato durante il setup (UC6).
+Scenario principale:
+1. Il configuratore seleziona la modalità per modificare il numero massimo di persone iscrivibili per singola iscrizione.
+2. <<include>>”Assegnazione Numero Massimo Persone per Iscrizione (UC6)” con la differenza che ora è una modifica e non un'impostazione iniziale.
+Postcondizioni: Il configuratore viene portato a <<include>> “Menu Principale (UC3)”.
+
+---
+
+**Nome (UC12 - V1) Elenco Volontari e Tipi Visita Associati**
+Attore: Configuratore (autenticato, regime)
+Precondizioni: Il configuratore è autenticato e in fase di regime.
+Scenario principale:
+1. Il configuratore seleziona la modalità per visualizzare l’elenco dei volontari con i tipi di visita associati.
+2. Il sistema recupera e visualizza l'elenco richiesto (Volontario -> Lista Tipi Visita).
+Scenario alternativo 2a:
+2a. Precondizione: Non ci sono volontari o associazioni nel sistema.
+3a. Il sistema non ha nulla da mostrare e lo notifica all’utente.
+Postcondizioni: Il configuratore rimane nel menu o visualizza l'elenco.
+
+---
+
+**Nome (UC13 - V1) Elenco Luoghi Visitabili**
+Attore: Configuratore (autenticato, regime)
+Precondizioni: Il configuratore è autenticato e in fase di regime.
+Scenario principale:
+1. Il configuratore seleziona la modalità per visualizzare l’elenco di ogni luogo visitabile presente nel corpo dati.
+2. Il sistema recupera e visualizza l’elenco dei luoghi con i loro dettagli (titolo, descrizione, posizione).
+Scenario alternativo 2a:
+2a. Precondizione: Non ci sono luoghi nel sistema.
+3a. Il sistema non ha nulla da mostrare e lo notifica all’utente.
+Postcondizioni: Il configuratore rimane nel menu o visualizza l'elenco.
+
+---
+
+**Nome (UC14 - V1) Elenco Tipi Visita per Luogo**
+Attore: Configuratore (autenticato, regime)
+Precondizioni: Il configuratore è autenticato e in fase di regime.
+Scenario principale:
+1. Il configuratore seleziona la modalità per visualizzare l’elenco di ogni tipo di visita associato al relativo luogo.
+2. Il sistema recupera e visualizza l’elenco richiesto (Luogo -> Lista Tipi Visita con dettagli).
+Scenario alternativo 2a:
+2a. Precondizione: Non ci sono luoghi o tipi visita o associazioni nel sistema.
+3a. Il sistema non ha nulla da mostrare e lo notifica all’utente.
+Postcondizioni: Il configuratore rimane nel menu o visualizza l'elenco.
+
+---
+
+**Nome (UC15 - V1) Elenco Visite per Stato**
+Attore: Configuratore (autenticato, regime)
+Precondizioni: Il configuratore è autenticato e in fase di regime.
+Scenario principale:
+1. Il configuratore seleziona la modalità per visualizzare l’elenco delle visite in un preciso stato.
+2. Il configuratore inserisce lo stato interessato [proposta | completa | confermata | cancellata | effettuata].
+3. Il sistema recupera e visualizza l’elenco delle visite (con dettagli rilevanti come titolo, luogo, data, ora, stato, volontario assegnato se applicabile) che corrispondono allo stato richiesto.
+Scenario alternativo 3a:
+3a. Precondizione: Lo stato inserito dal configuratore non è valido (non è uno dei valori attesi).
+4a. Il sistema rileva che lo stato inserito non esiste e segnala l’errore. Torna al punto 2.
+Scenario alternativo 3b:
+3b. Precondizione: Non ci sono visite nello stato richiesto.
+4b. Il sistema non ha nulla da mostrare e lo notifica all’utente.
+Postcondizioni: Il configuratore rimane nel menu o visualizza l'elenco.
+
+---
+**VERSIONE 2**
+---
+
+**Nome (UC16 - V2) Login Volontario**
+Attore: Volontario (non autenticato)
+Precondizioni:
+1. Il volontario non è autenticato.
+2. Il volontario è stato registrato nel sistema dal configuratore (durante UC4 o UC21/UC23) e gli sono state comunicate le credenziali iniziali (nickname e password temporanea).
+Scenario principale:
+1. Il volontario seleziona la modalità di login.
+2. Il volontario inserisce username (coincide col nickname) e password.
+3. Precondizioni:
+   i. Le credenziali sono corrette.
+   ii. Non è il primo accesso personale del volontario.
+4. Il volontario ha accesso al sistema.
+Scenario alternativo 3a:
+3a. Precondizione: le credenziali sono sbagliate. Torna al punto 1.
+Scenario alternativo 3b (Primo accesso personale):
+3b. Precondizioni: Le credenziali sono quelle temporanee fornite dall'organizzazione.
+4b. Viene forzato dal sistema a cambiare la password con <<include>> “Cambio Password Volontario (UC17)”.
+5b. Precondizione: il volontario cerca di fare un’azione che non sia cambiare la password. Torna al punto 4b.
+Postcondizioni:
+1. Se non è il primo accesso personale, il volontario è autenticato e accede alle funzionalità V2 (UC18, UC19) e V4 (UC34).
+2. Se è il primo accesso personale, dopo il cambio password (UC17), il volontario è autenticato e accede alle funzionalità V2/V4.
+
+---
+
+**Nome (UC17 - V2) Cambio Password Volontario**
+Attore: Volontario (autenticato)
+Precondizioni:
+1. Il volontario si è autenticato tramite <<include>> “Login Volontario (UC16)”.
+2. Potrebbe essere richiesto obbligatoriamente al primo accesso personale.
+Scenario principale:
+1. Il volontario seleziona la modalità del cambio password (se non forzato).
+2. Il volontario inserisce la nuova password.
+3. La nuova password viene salvata per gli accessi futuri.
+Postcondizioni: Il volontario è autenticato e può accedere alle sue funzionalità (UC18, UC19, UC34).
+
+---
+
+**Nome (UC18 - V2) Visualizzazione Tipi Visita Associati (Volontario)**
+Attore: Volontario (autenticato)
+Precondizioni: Il volontario è autenticato.
+Scenario principale:
+1. Il volontario seleziona l'opzione per visualizzare i tipi di visita a cui è associato.
+2. Il sistema recupera e visualizza l'elenco dei tipi di visita per cui il volontario è abilitato a fare da guida, con i relativi dettagli (titolo, luogo, descrizione, periodo, giorni, orario, ecc.).
+Scenario alternativo 2a:
+2a. Precondizione: Il volontario non è associato a nessun tipo di visita (caso anomalo secondo i requisiti).
+3a. Il sistema non ha nulla da mostrare e lo notifica all’utente.
+Postcondizioni: Il volontario rimane nel menu o visualizza l'elenco.
+
+---
+
+**Nome (UC19 - V2) Dichiarazione Disponibilità Volontario**
+Attore: Volontario (autenticato)
+Precondizioni:
+1. Il volontario è autenticato.
+2. È nel periodo temporale corretto per dichiarare le disponibilità per il mese successivo (entro il giorno 15 del mese corrente per il mese successivo, come da Elaborato pag. 8).
+3. Il configuratore ha già inserito le eventuali date precluse per il mese successivo (UC10).
+Scenario principale:
+1. Il volontario seleziona l'opzione per dichiarare le disponibilità.
+2. Il sistema presenta il calendario del mese successivo, evidenziando le date precluse (da UC10) e i giorni della settimana non compatibili con nessun tipo di visita associato al volontario.
+3. Il volontario seleziona le date del mese successivo in cui è disponibile a fare da guida.
+4. Precondizione: Le date selezionate non sono precluse e corrispondono a giorni della settimana in cui almeno un tipo di visita associato al volontario è programmabile.
+5. Il sistema registra le disponibilità del volontario per il mese successivo.
+Scenario alternativo 4a:
+4a. Precondizione: Il volontario tenta di selezionare una data preclusa o non valida per i suoi tipi di visita.
+5a. Il sistema impedisce la selezione o la ignora, notificando l'errore. Torna al punto 3.
+Scenario alternativo (Mancata dichiarazione):
+1a. Precondizione: Il volontario non accede o non completa la dichiarazione entro la scadenza (giorno 15).
+2a. Il sistema considera il volontario non disponibile per l'intero mese successivo.
+Postcondizioni: Le disponibilità (o la non disponibilità) sono registrate e verranno usate in <<include>> “Produzione Piano Visite Mensile (UC20)”. Il volontario torna al menu.
+
+---
+**VERSIONE 3**
+---
+
+**Nome (UC20 - V3) Produzione Piano Visite Mensile**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È il momento opportuno per generare il piano per il mese successivo (idealmente il giorno 16 del mese, o il primo giorno lavorativo utile dopo il 15, come da Elaborato pag. 7-8).
+3. La raccolta delle disponibilità dei volontari per il mese successivo è chiusa (automaticamente o manualmente dal configuratore).
+4. Le date precluse per il mese successivo sono state definite (UC10).
+Scenario principale:
+1. Il configuratore seleziona l'opzione per generare il piano delle visite proposte per il mese successivo.
+2. Il sistema elabora:
+   a. Tipi di visita esistenti e loro vincoli (periodo, giorni settimana, orari, min/max partecipanti).
+   b. Luoghi associati.
+   c. Volontari associati a ciascun tipo di visita.
+   d. Disponibilità dichiarate dai volontari per il mese (da UC19).
+   e. Date precluse per il mese (da UC10).
+3. Il sistema determina l'insieme delle visite proponibili per il mese successivo, rispettando i vincoli:
+   a. Una visita per tipo al giorno massimo.
+   b. Un volontario per una visita al giorno massimo.
+   c. La visita cade in un giorno/periodo valido per il tipo.
+   d. La data non è preclusa.
+   e. Esiste almeno un volontario disponibile e associato per quella data/tipo visita.
+4. Il sistema assegna un volontario disponibile a ciascuna visita proponibile (cercando di massimizzare il numero di visite, ma senza garanzie sull'ottimalità secondo Elaborato Nota 3).
+5. Le visite generate vengono salvate nello stato "proposta".
+6. Il sistema notifica il completamento della generazione del piano.
+Postcondizioni:
+1. L'elenco delle visite proposte per il mese successivo è disponibile per la visualizzazione (UC15, UC30).
+2. Le iscrizioni per queste visite sono aperte (UC31).
+3. Il configuratore può procedere con le attività di aggiunta/rimozione (UC21-UC26).
+
+---
+
+**Nome (UC21 - V3) Aggiunta Luogo (Regime)**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche (dopo UC20 e prima della riapertura della raccolta disponibilità, come da Elaborato pag. 16).
+Scenario principale:
+1. Il configuratore seleziona la modalità per aggiungere un nuovo luogo (con tipi visita e volontari associati).
+2. Simile a <<include>> UC7, ma eseguito in fase di regime. Include l'associazione di tipi visita (nuovi o esistenti) e volontari (nuovi o esistenti) al nuovo luogo, rispettando i vincoli.
+Postcondizioni: Il nuovo luogo e le relative associazioni sono aggiunti al corpo dati e saranno considerati dalla prossima generazione del piano (UC20). Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC22 - V3) Aggiunta Tipo Visita a Luogo Esistente**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche.
+3. Esiste il luogo a cui aggiungere il tipo visita.
+Scenario principale:
+1. Il configuratore seleziona la modalità per aggiungere un tipo visita a un luogo esistente.
+2. Inserisce i dettagli del nuovo tipo visita (titolo, descrizione, punto incontro, periodo, giorni, ora, durata, biglietto, min/max partecipanti).
+3. Associa almeno un volontario (nuovo o esistente) al nuovo tipo visita.
+4. Precondizioni:
+   i. Il luogo esiste.
+   ii. I volontari associati esistono (se non nuovi).
+   iii. Il tipo visita non esiste già per quel luogo.
+   iv. Vengono rispettati i vincoli temporali di non sovrapposizione con altri tipi visita dello stesso luogo (Elaborato pag. 5-6).
+5. Il nuovo tipo visita e le associazioni vengono aggiunti.
+Scenario alternativo 4a/b/c/d: Fallimento delle precondizioni i, ii, iii, iv. Il sistema rifiuta l'aggiunta notificando l'errore.
+Postcondizioni: Il nuovo tipo visita è aggiunto e sarà considerato dalla prossima generazione del piano. Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC23 - V3) Aggiunta Volontario a Tipo Visita Esistente**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche.
+3. Esiste il tipo visita a cui aggiungere il volontario.
+Scenario principale:
+1. Il configuratore seleziona la modalità per aggiungere un volontario (nuovo o esistente) a un tipo visita esistente.
+2. Inserisce l'identificativo del tipo visita e del volontario (se esistente) o i dati del nuovo volontario (nickname, password iniziale).
+3. Precondizioni:
+   i. Il tipo visita esiste.
+   ii. Il volontario esiste (se non nuovo).
+   iii. L'associazione non esiste già.
+4. Il volontario (nuovo o esistente) viene associato al tipo visita. Se nuovo, viene creato nel sistema.
+Scenario alternativo 3a/b/c: Fallimento delle precondizioni i, ii, iii. Il sistema rifiuta l'aggiunta notificando l'errore.
+Postcondizioni: L'associazione è creata/aggiornata. Il volontario (se nuovo) è aggiunto. Saranno considerati dalla prossima generazione del piano. Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC24 - V3) Rimozione Luogo**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche.
+3. Esiste il luogo da rimuovere.
+Scenario principale:
+1. Il configuratore seleziona la modalità per rimuovere un luogo.
+2. Inserisce l'identificativo del luogo da rimuovere.
+3. Precondizione: Il luogo esiste.
+4. Il sistema chiede conferma.
+5. Il configuratore conferma.
+6. Il sistema rimuove il luogo e gestisce gli effetti collaterali (come da Elaborato pag. 16-17):
+   a. Rimuove tutti i tipi di visita associati a quel luogo.
+   b. Per ogni tipo di visita rimosso, elimina le associazioni con i volontari.
+   c. Se un volontario rimane senza alcun tipo di visita associato a seguito delle rimozioni, rimuove anche quel volontario (vedi UC26 per effetti collaterali ulteriori).
+7. Il sistema notifica il completamento della rimozione.
+Scenario alternativo 3a: Il luogo non esiste. Il sistema notifica l'errore.
+Scenario alternativo 5a: Il configuratore non conferma. L'operazione è annullata.
+Postcondizioni: Il luogo e le entità dipendenti sono rimossi e non saranno considerati dalla prossima generazione del piano. Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC25 - V3) Rimozione Tipo Visita**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche.
+3. Esiste il tipo visita da rimuovere.
+Scenario principale:
+1. Il configuratore seleziona la modalità per rimuovere un tipo visita.
+2. Inserisce l'identificativo del tipo visita da rimuovere (potrebbe richiedere anche il luogo per disambiguare).
+3. Precondizione: Il tipo visita esiste.
+4. Il sistema chiede conferma.
+5. Il configuratore conferma.
+6. Il sistema rimuove il tipo visita e gestisce gli effetti collaterali (come da Elaborato pag. 17):
+   a. Rimuove l'associazione con il luogo.
+   b. Rimuove le associazioni con tutti i volontari relativi a quel tipo visita.
+   c. Se il luogo rimane senza tipi di visita associati, rimuove anche quel luogo (vedi UC24).
+   d. Se un volontario rimane senza tipi di visita associati, rimuove anche quel volontario (vedi UC26).
+7. Il sistema notifica il completamento della rimozione.
+Scenario alternativo 3a: Il tipo visita non esiste. Il sistema notifica l'errore.
+Scenario alternativo 5a: Il configuratore non conferma. L'operazione è annullata.
+Postcondizioni: Il tipo visita e le entità dipendenti sono rimossi. Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC26 - V3) Rimozione Volontario**
+Attore: Configuratore (autenticato)
+Precondizioni:
+1. Il configuratore è autenticato.
+2. È nel periodo temporale corretto per le modifiche.
+3. Esiste il volontario da rimuovere.
+Scenario principale:
+1. Il configuratore seleziona la modalità per rimuovere un volontario.
+2. Inserisce l'identificativo (nickname) del volontario da rimuovere.
+3. Precondizione: Il volontario esiste.
+4. Il sistema chiede conferma.
+5. Il configuratore conferma.
+6. Il sistema rimuove il volontario e gestisce gli effetti collaterali (come da Elaborato pag. 17):
+   a. Rimuove tutte le associazioni del volontario con i tipi di visita.
+   b. Se un tipo di visita rimane senza volontari associati, rimuove anche quel tipo di visita (vedi UC25).
+   c. Se la rimozione di un tipo di visita causa la rimozione di un luogo (perché rimane senza tipi visita), rimuove anche il luogo (vedi UC24).
+   d. Interdice l'accesso futuro al volontario rimosso.
+7. Il sistema notifica il completamento della rimozione.
+Scenario alternativo 3a: Il volontario non esiste. Il sistema notifica l'errore.
+Scenario alternativo 5a: Il configuratore non conferma. L'operazione è annullata.
+Postcondizioni: Il volontario e le entità dipendenti sono rimossi. Il volontario non può più accedere. Il configuratore torna al menu delle modifiche.
+
+---
+
+**Nome (UC27 - V3) Gestione Ciclo Mensile (Meta UC)**
+Attore: Configuratore (autenticato)
+Precondizioni: Il configuratore è autenticato.
+Scenario principale:
+1. (Giorno 15 o prima) Il configuratore inserisce le date precluse per il mese i+3 (UC10). I volontari inseriscono disponibilità per il mese i+2 (UC19).
+2. (Giorno 16 o primo utile) Il configuratore chiude la raccolta disponibilità per il mese i+2.
+3. Il configuratore avvia la produzione del piano visite per il mese i+2 (UC20).
+4. Dopo la generazione del piano, il configuratore effettua eventuali aggiunte/rimozioni (UC21-UC26) che avranno effetto dal mese i+3.
+5. Il configuratore riapre la raccolta delle disponibilità dei volontari per il mese i+3.
+Postcondizioni: Il ciclo mensile avanza, il piano per il mese successivo è generato, le modifiche sono applicate per il futuro, la raccolta disponibilità per il mese ancora dopo è aperta.
+
+---
+**VERSIONE 4**
+---
+
+**Nome (UC28 - V4) Registrazione/Login Fruitore**
+Attore: Fruitore (non autenticato)
+Precondizioni: Il fruitore non è autenticato.
+Scenario principale (Login):
+1. Il fruitore seleziona l'opzione di login.
+2. Inserisce username e password scelti in fase di registrazione.
+3. Precondizione: Credenziali corrette.
+4. Il fruitore è autenticato e accede alle funzionalità V4 (UC30-UC33).
+Scenario principale (Registrazione):
+1. Il fruitore seleziona l'opzione di registrazione.
+2. Inserisce uno username desiderato e una password.
+3. Precondizione: Lo username non è già in uso da altri fruitori, configuratori o volontari. La password rispetta eventuali criteri.
+4. Le credenziali vengono salvate. Il fruitore è autenticato e accede alle funzionalità V4.
+Scenario alternativo Login 3a: Credenziali errate. Torna al punto 1 (Login).
+Scenario alternativo Registrazione 3a: Username già in uso o password non valida. Torna al punto 1 (Registrazione).
+Postcondizioni: Il fruitore è autenticato.
+
+---
+
+**Nome (UC29 - V4) Cambio Password Fruitore**
+Attore: Fruitore (autenticato)
+Precondizioni: Il fruitore è autenticato tramite <<include>> “Registrazione/Login Fruitore (UC28)”.
+Scenario principale:
+1. Il fruitore seleziona la modalità del cambio password.
+2. Il fruitore inserisce la vecchia password (opzionale, per sicurezza) e la nuova password.
+3. Precondizione: Vecchia password corretta (se richiesta), nuova password valida.
+4. La nuova password viene salvata per gli accessi futuri.
+Scenario alternativo 3a: Vecchia password errata o nuova password non valida. Il sistema rifiuta, notificando l'errore. Torna al punto 1.
+Postcondizioni: La password è aggiornata. Il fruitore rimane autenticato.
+
+---
+
+**Nome (UC30 - V4) Visualizzazione Visite Disponibili (Fruitore)**
+Attore: Fruitore (autenticato) *Elaborato V4 implica autenticato per iscriversi, quindi probabilmente anche per visualizzare*
+Precondizioni: Il fruitore è autenticato.
+Scenario principale:
+1. Il fruitore seleziona l'opzione per visualizzare le visite.
+2. Il sistema recupera e visualizza l'elenco delle visite attualmente negli stati proposta, confermata, cancellata.
+3. Per ogni visita proposta/confermata vengono mostrati: titolo, descrizione, punto di incontro, data, ora inizio, eventuale biglietto.
+4. Per ogni visita cancellata vengono mostrati: titolo, data (mancato) svolgimento.
+Scenario alternativo 2a: Non ci sono visite in nessuno degli stati visualizzabili. Il sistema notifica che non ci sono visite da mostrare.
+Postcondizioni: Il fruitore visualizza l'elenco.
+
+---
+
+**Nome (UC31 - V4) Iscrizione a Visita Proposta**
+Attore: Fruitore (autenticato)
+Precondizioni:
+1. Il fruitore è autenticato.
+2. Esistono visite nello stato "proposta" (generate da UC20).
+3. Le iscrizioni per la visita selezionata sono ancora aperte (non sono passati i 3 giorni prima della data di svolgimento).
+Scenario principale:
+1. Il fruitore seleziona una visita dallo stato "proposta" (da UC30).
+2. Il fruitore indica il numero di persone da iscrivere (N).
+3. Precondizioni:
+   i. 1 <= N <= Numero Massimo Persone per Iscrizione (impostato in UC6/UC11).
+   ii. Il numero totale di iscritti attuali + N <= Numero Massimo Partecipanti del tipo visita.
+4. L'iscrizione viene accettata.
+5. Il sistema genera un codice di prenotazione unico per questa iscrizione.
+6. Il sistema associa l'iscrizione (codice, N persone) allo username del fruitore e alla visita specifica.
+7. Il sistema aggiorna il numero di iscritti per la visita.
+8. Se il numero di iscritti raggiunge il massimo, lo stato della visita passa da "proposta" a "completa".
+9. Il codice di prenotazione viene mostrato al fruitore.
+Scenario alternativo 3a: N non è valido (fuori range). Il sistema rifiuta, notificando l'errore. Torna al punto 2.
+Scenario alternativo 3b: L'aggiunta di N persone supererebbe il numero massimo di partecipanti. Il sistema rifiuta, notificando l'errore (eventualmente indicando quanti posti sono rimasti). Torna al punto 2.
+Postcondizioni: L'iscrizione è registrata, il fruitore ha il codice. Lo stato della visita può essere cambiato in "completa".
+
+---
+
+**Nome (UC32 - V4) Visualizzazione Proprie Iscrizioni (Fruitore)**
+Attore: Fruitore (autenticato)
+Precondizioni: Il fruitore è autenticato.
+Scenario principale:
+1. Il fruitore seleziona l'opzione per visualizzare le proprie iscrizioni.
+2. Il sistema recupera tutte le iscrizioni attive associate allo username del fruitore (per visite in stato proposta, completa, confermata, cancellata).
+3. Per ogni iscrizione, visualizza i dettagli della visita (come in UC30) e il codice di prenotazione associato.
+Scenario alternativo 2a: Il fruitore non ha iscrizioni attive. Il sistema notifica che non ci sono iscrizioni da mostrare.
+Postcondizioni: Il fruitore visualizza l'elenco delle sue iscrizioni.
+
+---
+
+**Nome (UC33 - V4) Disdetta Iscrizione (Fruitore)**
+Attore: Fruitore (autenticato)
+Precondizioni:
+1. Il fruitore è autenticato.
+2. Il fruitore ha effettuato almeno un'iscrizione (UC31) e possiede il relativo codice di prenotazione.
+3. La visita associata al codice è ancora in stato "proposta" o "completa".
+4. Le iscrizioni per la visita sono ancora aperte (non sono passati i 3 giorni prima della data di svolgimento).
+Scenario principale:
+1. Il fruitore seleziona l'opzione per disdire un'iscrizione.
+2. Il fruitore inserisce il codice di prenotazione da disdire.
+3. Precondizioni:
+   i. Il codice di prenotazione esiste ed è valido.
+   ii. Il codice appartiene a un'iscrizione effettuata da questo fruitore.
+   iii. La visita associata è in stato "proposta" o "completa".
+   iv. Le iscrizioni sono aperte.
+4. L'iscrizione viene cancellata (per tutte le persone associate a quel codice).
+5. Il sistema aggiorna il numero di iscritti per la visita.
+6. Se la visita era in stato "completa", ritorna allo stato "proposta".
+7. Il sistema notifica l'avvenuta cancellazione.
+Scenario alternativo 3a: Il codice non è valido o non appartiene al fruitore. Il sistema rifiuta, notificando l'errore. Torna al punto 2.
+Scenario alternativo 3b: La visita non è più in stato "proposta" o "completa" (es. è confermata o cancellata) o le iscrizioni sono chiuse. Il sistema rifiuta, notificando l'impossibilità di cancellare. Torna al punto 2.
+Postcondizioni: L'iscrizione è cancellata. Lo stato della visita può essere cambiato in "proposta".
+
+---
+
+**Nome (UC34 - V4) Visualizzazione Visite Assegnate (Volontario)**
+Attore: Volontario (autenticato)
+Precondizioni: Il volontario è autenticato.
+Scenario principale:
+1. Il volontario seleziona l'opzione per visualizzare le visite confermate a cui è assegnato.
+2. Il sistema recupera tutte le visite in stato "confermata" per le quali il volontario è la guida assegnata (da UC20).
+3. Per ogni visita confermata, visualizza:
+   a. Dettagli della visita (titolo, descrizione, punto incontro, data, ora inizio, eventuale biglietto).
+   b. Elenco dei codici di prenotazione validi per quella visita.
+   c. Per ciascun codice, il numero di persone iscritte.
+Scenario alternativo 2a: Il volontario non è assegnato a nessuna visita confermata al momento. Il sistema notifica che non ci sono visite assegnate da mostrare.
+Postcondizioni: Il volontario visualizza l'elenco delle visite che dovrà guidare e i dettagli degli iscritti.
+
+---

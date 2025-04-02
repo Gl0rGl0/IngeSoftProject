@@ -24,12 +24,12 @@ public class AssertionControl {
     }
 
     /**
-     * Aggiunge il messaggio passato al file di log in modalità append.
-     * Se il file non esiste, viene creato.
+     * Appends the passed message to the log file in append mode.
+     * If the file does not exist, it is created.
      * level [1-4] ERROR/WARNING/INFO/DEBUG
      *
-     * @param msg il messaggio da loggare
-     * @return true se la scrittura va a buon fine
+     * @param msg the message to log
+     * @return true if the write is successful
      */
     public static boolean logMessage(String msg, int level, String path) {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {
@@ -42,7 +42,7 @@ public class AssertionControl {
             String out = String.format("%4s | %8s | %15s | %-29s | %s", VERSION, type, path, LocalDateTime.now(), msg);
             fw.write(out + System.lineSeparator());
         } catch (IOException e) {
-            // In caso di errore, stampiamo lo stack trace
+            // In case of error, print the stack trace (commented out)
             // e.printStackTrace();
             print(e.getMessage());
             return false;

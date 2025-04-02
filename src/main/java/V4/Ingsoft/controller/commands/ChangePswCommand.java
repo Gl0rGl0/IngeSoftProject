@@ -16,16 +16,16 @@ public class ChangePswCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del prompt");
+            ViewSE.println("Error in prompt usage");
             return;
         }
 
         if (controller.db.changePassword(controller.user.getUsername(), args[0], controller.user.getType())) {
             controller.user.setAsNotNew();
-            ViewSE.println("Password cambiata con successo!");
+            ViewSE.println("Password changed successfully!");
             this.hasBeenExecuted = true;
         } else {
-            ViewSE.println("Errore nel cambio psw riprova...");
+            ViewSE.println("Error changing password, please try again...");
         }
     }
 }

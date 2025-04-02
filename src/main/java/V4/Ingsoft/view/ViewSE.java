@@ -5,7 +5,7 @@ import java.util.Scanner;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.util.AssertionControl;
 
-//Letteralmente gestione input/output...
+//Literally input/output management...
 public class ViewSE implements Runnable {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -22,8 +22,8 @@ public class ViewSE implements Runnable {
         return scanner.nextLine();
     }
 
-    // Classe istanziabile...
-    private static final String MESSAGGIO_START = "Benvenuto nel sistema di gestione di Visite Guidate, scrivi 'help' per aiuto";
+    // Instantiable class...
+    private static final String MESSAGGIO_START = "Welcome to the Guided Tours management system, type 'help' for assistance";
 
     private final Controller controller;
 
@@ -40,7 +40,7 @@ public class ViewSE implements Runnable {
         }
 
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
-        ViewSE.println("SETUP COMPLETATO");
+        ViewSE.println("SETUP COMPLETED");
 
         while (true)
             controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));

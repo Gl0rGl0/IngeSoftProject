@@ -65,7 +65,7 @@ public class Initer {
         luoghi.add(new String[]{"Luogo Test", "Descrizione luogo test", "12.34:56.78"});
 
         visite.forEach(v -> c.interpreter("add -t " + StringUtils.arrayToStringClean(v)));
-        luoghi.forEach(v -> c.interpreterSETUP("add -L " + StringUtils.arrayToStringClean(v)));
+        luoghi.forEach(v -> c.interpreter("add -L " + StringUtils.arrayToStringClean(v)));
 
         for (int i = 0; i < 13; i++)
             c.interpreter("assign -L \"" + luoghi.get(i)[0] + "\" \"" + visite.get(i)[0] + "\"");

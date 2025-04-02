@@ -22,11 +22,11 @@ public class HelpCommand extends AbstractCommand {
                 ViewSE.println(cl.toString());
                 return;
             } catch (IllegalArgumentException ex) {
-                AssertionControl.logMessage("Help nullo", 3, this.getClass().getSimpleName());
+                AssertionControl.logMessage("Help null", 3, this.getClass().getSimpleName()); // Assuming "nullo" means null
             }
         }
-        // Se non c'è alcun argomento o se il valueOf fallisce, mostra help in base al
-        // livello dell'utente
+        // If there is no argument or if valueOf fails, show help based on the
+        // user's level
         ViewSE.println(super.commandInfo.getHelpMessage(controller.getCurrentUser().getPriority()));
     }
 

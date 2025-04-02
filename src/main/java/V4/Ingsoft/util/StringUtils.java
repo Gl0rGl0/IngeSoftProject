@@ -40,23 +40,22 @@ public class StringUtils {
     }
 
     /**
-     * Processes a sequence of tokens that start with a quote and returns a
-     * QuotedToken
-     * with the joined value (with outer quotes removed) and the last token index of
-     * the sequence.
+     * Processes a sequence of tokens starting with a quote.
+     * Returns a QuotedToken containing the joined value (with outer quotes removed)
+     * and the index of the last token in the sequence.
      */
     private static QuotedToken processQuotedToken(String[] tokens, int startIndex) {
         if(tokens == null || startIndex < 0)
             return null;
 
         String token = tokens[startIndex];
-        // If the token both starts and ends with a quote and is longer than 1 char,
+        // If the token starts and ends with a quote and is longer than 1 char,
         // it's a complete quoted argument.
         if (token.endsWith("\"") && token.length() > 1) {
             return new QuotedToken(token.substring(1, token.length() - 1), startIndex);
         }
 
-        // Otherwise, accumulate tokens until we find a token that ends with a quote.
+        // Otherwise, accumulate tokens until a token ending with a quote is found.
         StringBuilder sb = new StringBuilder(token.substring(1)); // Remove starting quote
         int currentIndex = startIndex;
         while (currentIndex < tokens.length - 1) {

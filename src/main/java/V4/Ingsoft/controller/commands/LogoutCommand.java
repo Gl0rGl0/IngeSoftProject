@@ -17,13 +17,13 @@ public class LogoutCommand extends AbstractCommand {
 
     @Override
     /**
-     * Effettua il logout impostando l'utente corrente come Guest.
+     * Performs logout by setting the current user to Guest.
      */
     public void execute(String[] options, String[] args) {
         if (controller.user.getType() == PersonaType.GUEST) {
-            ViewSE.println("Nessun utente loggato, effettua il login prima.");
+            ViewSE.println("No user logged in, please log in first.");
         } else {
-            ViewSE.println("Logout effettuato con successo.");
+            ViewSE.println("Logout successful.");
             controller.user = new Guest();
         }
     }

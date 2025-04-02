@@ -69,7 +69,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getCompletate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.COMPLETA)
+            if (v.getStatus() == StatusVisita.COMPLETED)
                 out.add(v);
         }
 
@@ -79,7 +79,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getConfermate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.CONFERMATA)
+            if (v.getStatus() == StatusVisita.CONFIRMED)
                 out.add(v);
         }
 
@@ -89,7 +89,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getVisiteCancellate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.CANCELLATA)
+            if (v.getStatus() == StatusVisita.CANCELLED)
                 out.add(v);
         }
 
@@ -99,7 +99,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getVisiteProposte() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.PROPOSTA)
+            if (v.getStatus() == StatusVisita.PROPOSED)
                 out.add(v);
         }
 
@@ -109,7 +109,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public void checkVisiteInTerminazione(Date d) {
         for (Visita v : getVisite()) {
             v.isThreeDaysFrom(d);
-            if (v.getStatus() == StatusVisita.CANCELLATA) {
+            if (v.getStatus() == StatusVisita.CANCELLED) {
                 writeVisiteCancellate(v);
                 cachedItems.remove(v.getUID());
             }

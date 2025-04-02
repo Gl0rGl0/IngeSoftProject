@@ -17,14 +17,15 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
 
     @Override
     /**
-     * Implementazione del comando "add".
+     * Implementation of the "setambito" command. // Corrected command name
      *
-     * @param options le options (es. -c per configuratore)
-     * @param args    eventuali argomenti aggiuntivi
+     * @param options the options (e.g., -c for configurator) - Note: Options seem unused here.
+     * @param args    any additional arguments (the territorial scope name)
      */
     public void execute(String[] options, String[] args) {
         if (args.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando, richiesto almeno un name. Utilizzo: \"Nome name name\"");
+            // Updated the error message to reflect the actual command usage
+            ViewSE.println("Error using the command, at least one name is required. Usage: setambito \"Scope Name\"");
         }
         String[] a = StringUtils.joinQuotedArguments(args);
         controller.db.setAmbito(a[0]);

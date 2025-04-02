@@ -1,14 +1,11 @@
 package V4.Ingsoft.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.util.GPS;
 
 public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
-
-    private final HashMap<String, Luogo> cachedItems = new HashMap<>();
 
     private ArrayList<String> tipoVisitaUIDs;
 

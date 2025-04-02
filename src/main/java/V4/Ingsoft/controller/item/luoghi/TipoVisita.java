@@ -32,7 +32,7 @@ public class TipoVisita {
     ArrayList<DayOfWeek> days;
     Date insertionDay;
     String UID;
-    public StatusVisita sv = StatusVisita.ATTESA;
+    public StatusVisita sv = StatusVisita.PENDING; // Updated enum constant
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
@@ -73,7 +73,7 @@ public class TipoVisita {
         this.UID = UID;
     }
 
-    // Costruttore
+    // Constructor
     public TipoVisita(
             String title, String description, GPS meetingPlace,
             Date initDay, Date finishDay, Time initTime, int duration,
@@ -133,7 +133,7 @@ public class TipoVisita {
         return this.volontariUID;
     }
 
-    // da spezzettare in qualche funzione (?)
+    // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) {
         int length = args.length;
         try {
@@ -154,7 +154,7 @@ public class TipoVisita {
         } catch (NumberFormatException e) {
             ViewSE.println(e);
             ViewSE.println(
-                    "Errore semantico: inserito una stringa al posto di un numero, o qualcosa di simile. VISITA NON CREATA");
+                    "Semantic error: inserted a string instead of a number, or something similar. VISIT NOT CREATED");
         }
     }
 
@@ -225,19 +225,19 @@ public class TipoVisita {
 
     @Override
     public String toString() {
-        return "Tipo di visita {"
-                + "Titolo='" + title + '\''
-                + ", Descrizione='" + description + '\''
-                + ", Punto di Incontro=" + meetingPlace
-                + ", Periodo Inizio=" + initDay
-                + ", Periodo Fine=" + finishDay
-                + ", Time Inizio=" + initTime
-                + ", Durata=" + duration + " minuti"
-                + ", Gratuita=" + (free ? "Gratuita" : "Biglietto necessario")
-                + ", Numero Min Partecipanti=" + numMinPartecipants
-                + ", Numero Max Partecipanti=" + numMaxPartecipants
-                + ", Days disponibilit=" + getDaysString()
-                + ", Stato visita=" + sv
+        return "Visit Type {" // Changed "Tipo di visita"
+                + "Title='" + title + '\'' // Changed "Titolo"
+                + ", Description='" + description + '\'' // Changed "Descrizione"
+                + ", Meeting Point=" + meetingPlace // Changed "Punto di Incontro"
+                + ", Start Period=" + initDay // Changed "Periodo Inizio"
+                + ", End Period=" + finishDay // Changed "Periodo Fine"
+                + ", Start Time=" + initTime // Changed "Time Inizio"
+                + ", Duration=" + duration + " minutes" // Changed "minuti"
+                + ", Free=" + (free ? "Free" : "Ticket required") // Changed "Gratuita", "Biglietto necessario"
+                + ", Min Participants=" + numMinPartecipants // Changed "Numero Min Partecipanti"
+                + ", Max Participants=" + numMaxPartecipants // Changed "Numero Max Partecipanti"
+                + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
+                + ", Visit Status=" + sv // Changed "Stato visita"
                 + "}\n";
     }
 
@@ -245,11 +245,11 @@ public class TipoVisita {
         // System.out.println("AAAAAA " + (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= Date
         //         .monthLength(insertionDay)) + d.dayOfTheYear() + " " + insertionDay.dayOfTheYear() + this.title);
 
-        if (this.sv == StatusVisita.PROPOSTA)
+        if (this.sv == StatusVisita.PROPOSED) // Updated enum constant
             return;
 
         if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= Date.monthLength(insertionDay))
-            this.sv = StatusVisita.PROPOSTA;
+            this.sv = StatusVisita.PROPOSED; // Updated enum constant
     }
 
     public StatusVisita getStatus() {

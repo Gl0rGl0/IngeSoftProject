@@ -18,24 +18,24 @@ public class LoginCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (args.length < 2) {
-            ViewSE.println("Errore nell'utilizzo del prompt");
+            ViewSE.println("Error in prompt usage");
             return;
         }
         if (controller.user.getType() != PersonaType.GUEST) {
-            ViewSE.println("Accesso già effettuato, effettua il logout se vuoi cambiare account");
+            ViewSE.println("Already logged in, please log out if you want to change accounts");
             return;
         }
 
         controller.user = login(args[0], args[1]);
 
         if (controller.user.getType() != PersonaType.GUEST) {
-            ViewSE.println("Login effettuato con successo (" + controller.user.getType() + ")");
+            ViewSE.println("Login successful (" + controller.user.getType() + ")");
             if (controller.user.isNew()) {
                 ViewSE.println(
-                        "Effettuato il primo accesso, e' richiesto di cambiare la psw con il comando 'changepsw [nuovapsw]' per usufruire dei servizi");
+                        "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
             }
         } else {
-            ViewSE.println("Errore di login, riprova");
+            ViewSE.println("Login error, please try again");
         }
     }
 

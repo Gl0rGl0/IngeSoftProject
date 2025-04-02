@@ -18,20 +18,20 @@ public class PrecludeCommand extends AbstractCommand {
     public void execute(String[] options, String[] args) {
 
         if (options.length < 1) {
-            ViewSE.println("Errore nell'utilizzo del comando 'preclude'");
+            ViewSE.println("Error using the 'preclude' command");
             return;
         }
 
-        // Controllo interno
+        // Internal check
         Date toOperate = new Date(args[0]);
         if (toOperate.toString().equals("00/00/00")) {
-            ViewSE.println("Errore nell'inserimento della data, ricontrollare");
+            ViewSE.println("Error entering the date, please double-check");
             return;
         }
 
         if (!twoMonthsDifference(toOperate, controller.date)) {
             ViewSE.println(
-                    "Non è possibile aggiungere una data cosi avanti/indietro nel tempo, attenersi al month successivo al prossimo");
+                    "It is not possible to add a date so far forward/backward in time, stick to the month after the next");
             return;
         }
 
@@ -42,7 +42,7 @@ public class PrecludeCommand extends AbstractCommand {
             case 'r' ->
                 removePrecludedDate(args);
             default ->
-                ViewSE.println("Opzione non riconosciuta per 'preclude'.");
+                ViewSE.println("Option not recognized for 'preclude'.");
         }
     }
 
@@ -58,12 +58,12 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private void addPrecludedDate(String[] args) {
-        ViewSE.println("Eseguo: Aggiungo data da precludere");
-        controller.db.addPrecludedDate(new Date(args[0])); // aggiunge una data speciale
+        ViewSE.println("Executing: Adding precluded date");
+        controller.db.addPrecludedDate(new Date(args[0])); // adds a special date
     }
 
     private void removePrecludedDate(String[] args) {
-        ViewSE.println("Eseguo: Rimuovo data da precludere");
+        ViewSE.println("Executing: Removing precluded date");
         controller.db.removePrecludedDate(new Date(args[0]));
     }
 }

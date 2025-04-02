@@ -42,7 +42,7 @@ public abstract class Persona {
         this.psw = psw;
     }
 
-    @JsonIgnore // Jackson is[qualcosa] lo salva come [qualcosa]: return value...
+    @JsonIgnore // Jackson saves is[something] as [something]: return value...
     public boolean isNew() {
         return this.isNew;
     }

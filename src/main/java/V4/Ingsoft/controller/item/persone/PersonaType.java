@@ -1,10 +1,10 @@
 package V4.Ingsoft.controller.item.persone;
 
 public enum PersonaType {
-        // Priority tutte in un unico posto in caso si aggiungano altre persone...
-        MAX("", Persona.class, 100),
-        CONFIGURATORE("configuratori", Configuratore.class, 4),
-        FRUITORE("fruitori", Fruitore.class, 2),
+    // Priorities all in one place in case other person types are added...
+    MAX("", Persona.class, 100),
+    CONFIGURATORE("configuratori", Configuratore.class, 4),
+    FRUITORE("fruitori", Fruitore.class, 2),
         VOLONTARIO("volontari", Volontario.class, 3),
         CAMBIOPSW("", Persona.class, 1),
         GUEST("", Persona.class, 0),
