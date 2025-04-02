@@ -54,15 +54,15 @@ public class UserActionsTests {
     // Helper method to complete setup, generate visits (hypothetically), and login as fruitore
     private void setupAndLoginAsFruitore(String username, String password) {
         // 1. Admin setup
-        controller.interpreter("login ADMIN PASSWORD");
-        controller.interpreter("changepsw newAdminPass");
+        controller.interpreterSETUP("login ADMIN PASSWORD");
+        controller.interpreterSETUP("changepsw newAdminPass");
 
         // 2. Setup steps using known setup commands
-        controller.interpreter("setambito TestAreaUser");
-        controller.interpreter("setpersonemax 5");
+        controller.interpreterSETUP("setambito TestAreaUser");
+        controller.interpreterSETUP("setpersonemax 5");
         // Ensure 3 arguments for add -L: title, description, gps
-        controller.interpreter("add -L PlaceUser \"User Place\" 10.0,20.0");
-        controller.interpreter("done");
+        controller.interpreterSETUP("add -L PlaceUser \"User Place\" 10.0,20.0");
+        controller.interpreterSETUP("done");
 
         // 3. Add required entities using running commands (logged in as ADMIN/Configurator)
         // Ensure all arguments for add -t are provided, using "" for optional description if needed
@@ -108,10 +108,12 @@ public class UserActionsTests {
         // TODO: Generate visits
 
         // Act
-        controller.interpreter("list visits"); // Assumed command - uncommented
+        controller.interpreter("list visits"); // Assumed command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Cannot assert console output. Assume command runs if setup is correct.
+        // TODO: Add assertion if a method exists to get list of subscribable visits.
+        assertTrue(true, "List command executed (cannot verify output). Needs UC20.");
     }
 
     @Test
@@ -121,25 +123,41 @@ public class UserActionsTests {
         // Ensure no visits generated
 
         // Act
-        controller.interpreter("list visits"); // Assumed command - uncommented
+        controller.interpreter("list visits"); // Assumed command
 
         // Assert
-      assertTrue(true); // Placeholder
+        // Cannot assert console output. Assume command runs.
+        // TODO: Add assertion if a method exists to get list of subscribable visits (should be empty).
+        assertTrue(true, "List command executed for empty visits (cannot verify output). Needs UC20.");
     }
 
     // UC31 - Iscrizione a Visita Proposta
+    // NOTE: These tests assume UC20 (Plan Generation) has run and created visits.
+    // NOTE: Assumes 'assign <VisitUID> <NumPeople>' command format for subscription.
     @Test
     public void testUserSubscribeVisitSuccess() {
         // Arrange
-        setupAndLoginAsFruitore("userSub", "passUS");
+        String username = "userSub";
+        setupAndLoginAsFruitore(username, "passUS");
         String visitUID = "TVUser_10-07-2025"; // Hypothetical Visit UID
         // TODO: Ensure this visit actually exists in 'proposta' state via UC20 setup in helper.
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // assertEquals(V4.Ingsoft.controller.item.luoghi.StatusVisita.PROPOSED, visita.getStatus(), "Prerequisite: Visit must be in PROPOSED state.");
+        // int initialParticipants = visita.getCurrentNumber();
 
         // Act
-        controller.interpreter("assign " + visitUID + " 2"); // Assumed command - uncommented
+        controller.interpreter("assign " + visitUID + " 2"); // Subscribe for 2 people
 
         // Assert
-        assertTrue(true); // Placeholder
+        // visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID); // Re-fetch visit
+        // assertEquals(initialParticipants + 2, visita.getCurrentNumber(), "Participant count should increase by 2.");
+        // assertTrue(visita.hasFruitore(username), "User should be listed as subscribed.");
+        // Find the specific Iscrizione and check quantity
+        // V4.Ingsoft.controller.item.persone.Iscrizione iscrizione = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals(username)).findFirst().orElse(null);
+        // assertNotNull(iscrizione, "Iscrizione object should exist for the user.");
+        // assertEquals(2, iscrizione.getQuantity(), "Iscrizione quantity should be 2.");
+        assertTrue(true, "Executed subscribe command (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
     }
 
     @Test
@@ -150,10 +168,16 @@ public class UserActionsTests {
         // TODO: Ensure visit exists.
 
         // Act
-        controller.interpreter("assign " + visitUID + " 0"); // Assumed command - uncommented
+        controller.interpreter("assign " + visitUID + " 0"); // Subscribe for 0 people (should fail)
 
         // Assert
-        assertTrue(true); // Placeholder
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // int initialParticipants = visita.getCurrentNumber(); // Get initial count before failed attempt
+        // assertEquals(initialParticipants, visita.getCurrentNumber(), "Participant count should not change.");
+        // assertFalse(visita.hasFruitore(username), "User should not be listed as subscribed.");
+        assertTrue(true, "Executed subscribe command with 0 people (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
+        // TODO: Check log output for error.
     }
 
     @Test
@@ -164,10 +188,16 @@ public class UserActionsTests {
         // TODO: Ensure visit exists.
 
         // Act
-        controller.interpreter("assign " + visitUID + " 6"); // Assumed command - uncommented
+        controller.interpreter("assign " + visitUID + " 6"); // Subscribe for 6 (max is 5)
 
         // Assert
-        assertTrue(true); // Placeholder
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // int initialParticipants = visita.getCurrentNumber();
+        // assertEquals(initialParticipants, visita.getCurrentNumber(), "Participant count should not change.");
+        // assertFalse(visita.hasFruitore(username), "User should not be listed as subscribed.");
+         assertTrue(true, "Executed subscribe command exceeding max per inscription (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
+        // TODO: Check log output for error.
     }
 
     @Test
@@ -186,10 +216,15 @@ public class UserActionsTests {
         assertNotNull(controller.user);
 
         // Act
-        controller.interpreter("assign " + visitUID + " 6"); // Assumed command - uncommented
+        controller.interpreter("assign " + visitUID + " 6"); // Try to subscribe for 6 (only 5 spots left)
 
         // Assert
-        assertTrue(true); // Placeholder
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // assertEquals(5, visita.getCurrentNumber(), "Participant count should remain 5."); // User 2's 5 people
+        // assertFalse(visita.hasFruitore("userSubCap1"), "User 1 should not be listed as subscribed.");
+        assertTrue(true, "Executed subscribe command exceeding capacity (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
+        // TODO: Check log output for error.
     }
 
      @Test
@@ -207,10 +242,15 @@ public class UserActionsTests {
          controller.interpreter("login userSubComp1 passUSC1");
 
          // Act
-         controller.interpreter("assign " + visitUID + " 5"); // Assumed command - uncommented
+         controller.interpreter("assign " + visitUID + " 5"); // Subscribe for the remaining 5 spots
 
          // Assert
-         assertTrue(true); // Placeholder
+         // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+         // assertNotNull(visita, "Prerequisite: Visit must exist.");
+         // assertEquals(10, visita.getCurrentNumber(), "Participant count should be 10.");
+         // assertTrue(visita.hasFruitore("userSubComp1"), "User 1 should be subscribed.");
+         // assertEquals(V4.Ingsoft.controller.item.luoghi.StatusVisita.COMPLETED, visita.getStatus(), "Visit status should change to COMPLETED.");
+         assertTrue(true, "Executed subscribe command filling capacity (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
      }
 
      // TODO: Add test for subscribing when inscriptions are closed (3 days before visit) - requires date simulation.
@@ -229,10 +269,12 @@ public class UserActionsTests {
         controller.interpreter("assign " + visitUID2 + " 3"); // Assumed command - uncommented
 
         // Act
-        controller.interpreter("list myvisits"); // Assumed command - uncommented
+        controller.interpreter("list myvisits"); // Assumed command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Cannot assert console output. Assume command runs.
+        // TODO: Add assertion if a method exists to get user's subscriptions (should contain 2).
+        assertTrue(true, "List command executed (cannot verify output). Needs UC20.");
     }
 
     @Test
@@ -241,28 +283,42 @@ public class UserActionsTests {
         setupAndLoginAsFruitore("userViewSubsEmpty", "passUVSE");
 
         // Act
-        controller.interpreter("list myvisits"); // Assumed command - uncommented
+        controller.interpreter("list myvisits"); // Assumed command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Cannot assert console output. Assume command runs.
+        // TODO: Add assertion if a method exists to get user's subscriptions (should be empty).
+        assertTrue(true, "List command executed for no subscriptions (cannot verify output).");
      }
 
 
     // UC33 - Disdetta Iscrizione (Fruitore)
+    // NOTE: These tests assume UC20 (Plan Generation) has run and created visits.
+    // NOTE: Assumes 'remove <BookingCode>' command format for cancellation.
+    // NOTE: Requires a way to get the actual BookingCode (Iscrizione UID) after subscribing.
     @Test
     public void testUserCancelSubscriptionSuccess() {
         // Arrange
-        setupAndLoginAsFruitore("userCancel", "passUC");
+        String username = "userCancel";
+        setupAndLoginAsFruitore(username, "passUC");
         String visitUID = "TVUser_10-07-2025"; // Hypothetical Visit UID
         // TODO: Ensure visit exists in 'proposta' state.
-        controller.interpreter("assign " + visitUID + " 2"); // Assumed command - uncommented
-        String bookingCode = "BOOKING_CODE_123"; // Placeholder - TODO: Get actual code
+        controller.interpreter("assign " + visitUID + " 2"); // Subscribe
+        // TODO: Need a reliable way to get the booking code (Iscrizione UID) here.
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // V4.Ingsoft.controller.item.persone.Iscrizione iscrizione = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals(username)).findFirst().orElse(null);
+        // assertNotNull(iscrizione, "Prerequisite: User must have an Iscrizione.");
+        // String bookingCode = iscrizione.getUIDIscrizione();
+        String bookingCode = "PLACEHOLDER_CODE"; // Placeholder
 
         // Act
-        controller.interpreter("remove " + bookingCode); // Assumed command - uncommented
+        controller.interpreter("remove " + bookingCode);
 
         // Assert
-        assertTrue(true); // Placeholder
+        // visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID); // Re-fetch
+        // assertFalse(visita.hasFruitore(username), "User should no longer be subscribed after cancellation.");
+        // assertEquals(0, visita.getCurrentNumber(), "Participant count should be 0 after cancellation."); // Assuming only user subscribed
+        assertTrue(true, "Executed cancel command (cannot verify state without UC20/Visita/BookingCode access)."); // Placeholder
     }
 
     @Test
@@ -283,10 +339,15 @@ public class UserActionsTests {
         String bookingCodeUser1 = "BOOKING_CODE_USER1"; // Placeholder - TODO: Get actual code
 
         // Act
-        controller.interpreter("remove " + bookingCodeUser1); // Assumed command - uncommented
+        controller.interpreter("remove " + bookingCodeUser1);
 
         // Assert
-        assertTrue(true); // Placeholder
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // assertFalse(visita.hasFruitore("userCancelComp1"), "User 1 should no longer be subscribed.");
+        // assertEquals(5, visita.getCurrentNumber(), "Participant count should be 5 (User 2's).");
+        // assertEquals(V4.Ingsoft.controller.item.luoghi.StatusVisita.PROPOSED, visita.getStatus(), "Visit status should change back to PROPOSED.");
+        assertTrue(true, "Executed cancel command from COMPLETED state (cannot verify state without UC20/Visita/BookingCode access)."); // Placeholder
     }
 
     @Test
@@ -298,10 +359,15 @@ public class UserActionsTests {
         controller.interpreter("assign " + visitUID + " 1"); // Assumed command - uncommented
 
         // Act
-        controller.interpreter("remove INVALID_CODE"); // Assumed command - uncommented
+        controller.interpreter("remove INVALID_CODE"); // Try to remove with invalid code
 
         // Assert
-        assertTrue(true); // Placeholder
+        // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+        // assertNotNull(visita, "Prerequisite: Visit must exist.");
+        // assertTrue(visita.hasFruitore("userCancelInvalid"), "User should still be subscribed.");
+        // assertEquals(1, visita.getCurrentNumber(), "Participant count should remain 1.");
+        assertTrue(true, "Executed cancel command with invalid code (cannot verify state without UC20/Visita access)."); // Placeholder
+        // TODO: Check log output for error.
     }
 
      @Test
@@ -321,10 +387,18 @@ public class UserActionsTests {
          controller.interpreter("login userCancelOwner1 passUCO1");
 
          // Act
-         controller.interpreter("remove " + bookingCodeUser2); // Assumed command - uncommented
+         controller.interpreter("remove " + bookingCodeUser2); // User 1 tries to remove User 2's booking
 
          // Assert
-         assertTrue(true); // Placeholder
+         // V4.Ingsoft.controller.item.luoghi.Visita visita = controller.db.dbVisiteHelper.getVisitaByUID(visitUID);
+         // assertNotNull(visita, "Prerequisite: Visit must exist.");
+         // Check User 2's subscription still exists
+         // V4.Ingsoft.controller.item.persone.Iscrizione iscrizione2 = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals("userCancelOwner2")).findFirst().orElse(null);
+         // assertNotNull(iscrizione2, "User 2's subscription should still exist.");
+         // assertEquals(bookingCodeUser2, iscrizione2.getUIDIscrizione(), "User 2's booking code should match.");
+         // assertEquals(1, visita.getCurrentNumber(), "Participant count should remain 1.");
+         assertTrue(true, "Executed cancel command for another user's booking (cannot verify state without UC20/Visita/BookingCode access)."); // Placeholder
+         // TODO: Check log output for error.
      }
 
      // TODO: Add test for cancelling when inscriptions are closed (3 days before visit) - requires date simulation.

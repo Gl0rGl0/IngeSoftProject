@@ -56,12 +56,12 @@ public class SetupPhaseTests {
     // to enter the setup phase for most tests.
     private void enterSetupPhase() {
         // First absolute login with default credentials
-        controller.interpreter("login ADMIN PASSWORD");
+        controller.interpreterSETUP("login ADMIN PASSWORD");
         assertNotNull(controller.user, "Admin should login with default credentials.");
         assertEquals(PersonaType.CONFIGURATORE.toString(), controller.user.getType().toString());
 
         // Change password (mandatory)
-        controller.interpreter("changepsw newAdminPass");
+        controller.interpreterSETUP("changepsw newAdminPass");
         // TODO: Add assertion here if controller state for forced change is lifted
 
         // Now the controller should be in the setup phase
@@ -100,10 +100,12 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("setambito "); // Correct setup command
+        controller.interpreterSETUP("setambito "); // Empty ambito, should fail or set to default/empty
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Assuming empty string is invalid and it should retain default or previous value (likely null or empty initially)
+        assertNull(controller.db.ambitoTerritoriale, "Ambito should remain null/default after attempting to set an empty string.");
+        // TODO: Check log output for error.
     }
 
     @Test
@@ -114,16 +116,17 @@ public class SetupPhaseTests {
          controller.interpreterSETUP("setpersonemax 5"); // Correct setup command
          controller.interpreterSETUP("add -L Place1 \"Initial Place\" 10.0,20.0"); // Correct setup command
          // TODO: Add commands for TipoVisita and Volontario if they exist in setup
-         // controller.interpreter("add tipovisita TV1 Place1 10:00 60 1 10"); // Command likely doesn't exist in setup
-         // controller.interpreter("add volontario Vol1 PassV1"); // Command likely doesn't exist in setup
-         // controller.interpreter("assign Vol1 TV1"); // Command likely doesn't exist in setup
+         // controller.interpreterSETUP("add tipovisita TV1 Place1 10:00 60 1 10"); // Command likely doesn't exist in setup
+         // controller.interpreterSETUP("add volontario Vol1 PassV1"); // Command likely doesn't exist in setup
+         // controller.interpreterSETUP("assign Vol1 TV1"); // Command likely doesn't exist in setup
          controller.interpreterSETUP("done"); // Correct setup command
 
          // Act: Try to set ambito again
          controller.interpreterSETUP("setambito NewAreaAttempt"); // Correct setup command (should fail)
 
          // Assert
-         assertTrue(true); // Placeholder
+         assertEquals("InitialArea", controller.db.ambitoTerritoriale, "Ambito should remain 'InitialArea' after setup is done.");
+         // TODO: Check log output for error indicating command failed because setup is complete.
     }
 
 
@@ -134,10 +137,12 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("setpersonemax 5"); // Correct setup command
+        controller.interpreterSETUP("setpersonemax 5"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        assertEquals(5, controller.maxPrenotazioniPerPersona, "Max persone should be set to 5.");
+        // Check if model/settings reflect this if applicable
+        // assertEquals(5, model.db.getSettings().getMaxPersonePerIscrizione());
     }
 
     @Test
@@ -146,10 +151,13 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("setpersonemax 0"); // Correct setup command
+        controller.interpreterSETUP("setpersonemax 0"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Assuming 0 is invalid, the value should not change from its default (likely 0 or some initial value before set)
+        // Let's assume default is 0 if not set previously.
+        assertEquals(0, controller.maxPrenotazioniPerPersona, "Max persone should remain default/0 after attempting to set 0.");
+        // TODO: Check log output for error.
     }
 
     @Test
@@ -158,10 +166,12 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("setpersonemax -1"); // Correct setup command
+        controller.interpreterSETUP("setpersonemax -1"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Assuming negative is invalid
+        assertEquals(0, controller.maxPrenotazioniPerPersona, "Max persone should remain default/0 after attempting to set negative value.");
+        // TODO: Check log output for error.
     }
 
      @Test
@@ -170,27 +180,30 @@ public class SetupPhaseTests {
          enterSetupPhase();
 
          // Act
-         controller.interpreter("setpersonemax five"); // Correct setup command
+         controller.interpreterSETUP("setpersonemax five"); // Correct setup command
 
          // Assert
-         assertTrue(true); // Placeholder
+         // Assuming non-number is invalid
+         assertEquals(0, controller.maxPrenotazioniPerPersona, "Max persone should remain default/0 after attempting to set non-number.");
+         // TODO: Check log output for error.
      }
 
      @Test
      public void testSetupSetPersoneMaxFailAfterSetupComplete() {
           // Arrange: Complete the setup first
           enterSetupPhase();
-          controller.interpreter("setambito InitialArea"); // Correct setup command
-          controller.interpreter("setpersonemax 5"); // Correct setup command
-          controller.interpreter("add -L Place1 \"Initial Place\" 10.0,20.0"); // Correct setup command
+          controller.interpreterSETUP("setambito InitialArea"); // Correct setup command
+          controller.interpreterSETUP("setpersonemax 5"); // Correct setup command
+          controller.interpreterSETUP("add -L Place1 \"Initial Place\" 10.0,20.0"); // Correct setup command
           // TODO: Add commands for TipoVisita and Volontario if they exist in setup
-          controller.interpreter("done"); // Correct setup command
+          controller.interpreterSETUP("done"); // Correct setup command
 
           // Act: Try to set persone max again
-          controller.interpreter("setpersonemax 10"); // Correct setup command (should fail)
+          controller.interpreterSETUP("setpersonemax 10"); // Correct setup command (should fail)
 
           // Assert
-          assertTrue(true); // Placeholder
+          assertEquals(5, controller.maxPrenotazioniPerPersona, "Max persone should remain 5 after setup is done.");
+          // TODO: Check log output for error indicating command failed.
      }
 
     // UC7 - Aggiunta Luogo (Setup)
@@ -200,10 +213,12 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("add -L Place1 \"Test Description\" 10.1,20.2"); // Correct setup command
+        controller.interpreterSETUP("add -L Place1 \"Test Description\" 10.1,20.2"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place1"), "Place1 should exist after adding.");
+        assertEquals("Test Description", controller.db.dbLuoghiHelper.findLuogo("Place1").getDescription());
+        // Could also check coordinates if GPS class has getters/equals
     }
 
      @Test
@@ -212,23 +227,27 @@ public class SetupPhaseTests {
          enterSetupPhase();
 
          // Act
-         controller.interpreter("add -L Place2 \"123 Main St, City\" \"Address based location\""); // Correct setup command (assuming GPS string can be address)
+         controller.interpreterSETUP("add -L Place2 \"123 Main St, City\" \"Address based location\""); // Correct setup command (assuming GPS string can be address)
 
          // Assert
-         assertTrue(true); // Placeholder
+         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place2"), "Place2 should exist after adding with address.");
+         assertEquals("Address based location", controller.db.dbLuoghiHelper.findLuogo("Place2").getDescription());
+         // Could check GPS object if it stores the address string
      }
 
     @Test
     public void testSetupAddLuogoFailDuplicateTitle() {
         // Arrange
         enterSetupPhase();
-        controller.interpreter("add -L Place1 \"First Place\" 10.1,20.2"); // Correct setup command
+        controller.interpreterSETUP("add -L Place1 \"First Place\" 10.1,20.2"); // Correct setup command
 
         // Act
-        controller.interpreter("add -L Place1 \"Second Place\" 30.3,40.4"); // Correct setup command
+        controller.interpreterSETUP("add -L Place1 \"Second Place\" 30.3,40.4"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place1"), "Place1 should still exist.");
+        assertEquals("First Place", controller.db.dbLuoghiHelper.findLuogo("Place1").getDescription(), "Place1 description should not change on duplicate add attempt.");
+        // TODO: Check log output for error. Check count of places.
     }
 
     @Test
@@ -237,10 +256,12 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("add -L \"\" \"Empty Title\" 10.1,20.2"); // Correct setup command
+        controller.interpreterSETUP("add -L \"\" \"Empty Title\" 10.1,20.2"); // Correct setup command
 
         // Assert
-        assertTrue(true); // Placeholder
+        // Assuming empty title is invalid
+        assertNull(controller.db.dbLuoghiHelper.findLuogo(""), "Place with empty title should not be added.");
+        // TODO: Check log output for error.
     }
 
      @Test
@@ -249,27 +270,31 @@ public class SetupPhaseTests {
          enterSetupPhase();
 
          // Act
-         controller.interpreter("add -L PlaceInvalidPos \"Invalid Coords\" invalid-coords"); // Correct setup command
+         controller.interpreterSETUP("add -L PlaceInvalidPos \"Invalid Coords\" invalid-coords"); // Correct setup command
 
          // Assert
-         assertTrue(true); // Placeholder
+         // Assuming invalid coords lead to failure
+         assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceInvalidPos"), "Place with invalid position should not be added.");
+         // TODO: Check log output for error.
      }
 
      @Test
      public void testSetupAddLuogoFailAfterSetupComplete() {
           // Arrange: Complete the setup first
           enterSetupPhase();
-          controller.interpreter("setambito InitialArea");
-          controller.interpreter("setpersonemax 5");
-          controller.interpreter("add -L Place1 \"Initial Place\" 10.0,20.0");
+          controller.interpreterSETUP("setambito InitialArea");
+          controller.interpreterSETUP("setpersonemax 5");
+          controller.interpreterSETUP("add -L Place1 \"Initial Place\" 10.0,20.0");
           // TODO: Add commands for TipoVisita and Volontario if they exist in setup
-          controller.interpreter("done");
+          controller.interpreterSETUP("done");
 
           // Act: Try to add another place
-          controller.interpreter("add -L PlaceAfterDone \"After Done\" 50.0,60.0"); // Correct setup command (should fail)
+          controller.interpreterSETUP("add -L PlaceAfterDone \"After Done\" 50.0,60.0"); // Correct setup command (should fail)
 
           // Assert
-          assertTrue(true); // Placeholder
+          assertTrue(controller.setupCompleted(), "Setup should be marked as complete.");
+          assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceAfterDone"), "Place should not be added after setup is done.");
+          // TODO: Check log output for error.
      }
 
     // Implicit part of UC7/UC4: Aggiunta TipoVisita (Setup) - Command does not exist in setup
@@ -344,67 +369,74 @@ public class SetupPhaseTests {
     public void testSetupDoneSuccess() {
         // Arrange: Complete all required setup steps
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
-        controller.interpreter("setpersonemax 5");
-        controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
+        controller.interpreterSETUP("setambito TestArea");
+        controller.interpreterSETUP("setpersonemax 5");
+        controller.interpreterSETUP("add -L Place1 \"Desc\" 10.0,20.0");
         // TODO: Add commands for TipoVisita and Volontario if they exist in setup
 
         // Act
-        controller.interpreter("done"); // Correct setup command
+        controller.interpreterSETUP("done"); // Correct setup command
 
         // Assert
-        // TODO: Verify setup is complete and setup commands fail
-        // controller.interpreter("setambito AnotherArea"); // Should fail
-        assertTrue(true); // Placeholder
+        assertTrue(controller.setupCompleted(), "Setup should be marked as complete after 'done'.");
+        // Try a setup command again, it should fail (state shouldn't change)
+        controller.interpreterSETUP("setambito AnotherArea");
+        assertEquals("TestArea", controller.db.ambitoTerritoriale, "Ambito should not change after setup is done.");
+        // TODO: Check log output for error on second setambito.
     }
 
     @Test
     public void testSetupDoneFailMissingAmbito() {
         // Arrange: Miss setambito
         enterSetupPhase();
-        controller.interpreter("setpersonemax 5");
-        controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
+        controller.interpreterSETUP("setpersonemax 5");
+        controller.interpreterSETUP("add -L Place1 \"Desc\" 10.0,20.0");
         // TODO: Add commands for TipoVisita and Volontario if they exist in setup
 
         // Act
-        controller.interpreter("done"); // Correct setup command
+        controller.interpreterSETUP("done"); // Correct setup command
 
         // Assert
-        // TODO: Verify setup is not complete
-        // controller.interpreter("setambito ShouldWorkNow"); // Should succeed
-        assertTrue(true); // Placeholder
+        assertFalse(controller.setupCompleted(), "Setup should not be complete if ambito is missing.");
+        // Verify ambito can still be set
+        controller.interpreterSETUP("setambito ShouldWorkNow");
+        assertEquals("ShouldWorkNow", controller.db.ambitoTerritoriale, "Should be able to set ambito if 'done' failed.");
     }
 
     @Test
     public void testSetupDoneFailMissingPersoneMax() {
         // Arrange: Miss setpersonemax
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
-        controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
+        controller.interpreterSETUP("setambito TestArea");
+        controller.interpreterSETUP("add -L Place1 \"Desc\" 10.0,20.0");
         // TODO: Add commands for TipoVisita and Volontario if they exist in setup
 
         // Act
-        controller.interpreter("done"); // Correct setup command
+        controller.interpreterSETUP("done"); // Correct setup command
 
         // Assert
-        // TODO: Verify setup is not complete
-        assertTrue(true); // Placeholder
+        assertFalse(controller.setupCompleted(), "Setup should not be complete if personeMax is missing.");
+        // Verify personeMax can still be set
+        controller.interpreterSETUP("setpersonemax 10");
+        assertEquals(10, controller.maxPrenotazioniPerPersona, "Should be able to set personeMax if 'done' failed.");
     }
 
     @Test
     public void testSetupDoneFailMissingLuogo() {
         // Arrange: Miss adding luogo
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
-        controller.interpreter("setpersonemax 5");
+        controller.interpreterSETUP("setambito TestArea");
+        controller.interpreterSETUP("setpersonemax 5");
         // TODO: Add commands for Volontario if they exist in setup
 
         // Act
-        controller.interpreter("done"); // Correct setup command
+        controller.interpreterSETUP("done"); // Correct setup command
 
         // Assert
-        // TODO: Verify setup is not complete
-        assertTrue(true); // Placeholder
+        assertFalse(controller.setupCompleted(), "Setup should not be complete if luogo is missing.");
+        // Verify luogo can still be added
+        controller.interpreterSETUP("add -L PlaceAfterFail \"Added after fail\" 1.1,2.2");
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceAfterFail"), "Should be able to add luogo if 'done' failed.");
     }
 
      // Tests for missing TipoVisita, Volontario, Assign are removed as those commands don't exist in setup

@@ -1,5 +1,6 @@
 package V4.ingsoft;
 
+import static org.junit.jupiter.api.Assertions.assertEquals; // Import assertEquals
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,13 +17,13 @@ public class AppTest {
 
     public static void test(Controller controller) {
         controller.skipSetupTesting = true;
-        controller.interpreter("login ADMIN PASSWORD");
+        controller.interpreterSETUP("login ADMIN PASSWORD");
 
         Initer.initPersone(controller);
         // Initer.initVisiteLuoghi(controller);
         // Initer.initAvailability(controller);
 
-        controller.interpreter("logout");
+        controller.interpreterSETUP("logout");
     }
 
     @BeforeEach
@@ -37,18 +38,18 @@ public class AppTest {
     @Test
     public void loginConfiguratore() {
         controller.interpreter("login config1 pass1C");
-        assert (controller.user.getType() == PersonaType.CONFIGURATORE);
+        assertEquals(PersonaType.CONFIGURATORE, controller.user.getType(), "User should be CONFIGURATORE after login.");
     }
 
     @Test
     public void loginVolontario() {
         controller.interpreter("login volont1 pass1V");
-        assert (controller.user.getType() == PersonaType.VOLONTARIO);
+        assertEquals(PersonaType.VOLONTARIO, controller.user.getType(), "User should be VOLONTARIO after login.");
     }
 
     @Test
     public void loginFruitore() {
         controller.interpreter("login fruit1 pass1F");
-        assert (controller.user.getType() == PersonaType.FRUITORE);
+        assertEquals(PersonaType.FRUITORE, controller.user.getType(), "User should be FRUITORE after login.");
     }
 }
