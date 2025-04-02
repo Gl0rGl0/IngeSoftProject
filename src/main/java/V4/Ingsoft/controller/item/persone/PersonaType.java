@@ -7,7 +7,7 @@ public enum PersonaType {
     FRUITORE("fruitori", Fruitore.class, 2),
         VOLONTARIO("volontari", Volontario.class, 3),
         CAMBIOPSW("", Persona.class, 1),
-        GUEST("", Persona.class, 0),
+        GUEST("guest", Persona.class, 0),
         ERROR("error", Persona.class, 0);
 
         private final int priority;

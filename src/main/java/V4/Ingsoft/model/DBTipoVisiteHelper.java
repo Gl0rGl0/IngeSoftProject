@@ -1,7 +1,6 @@
 package V4.Ingsoft.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;

@@ -12,7 +12,7 @@ public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
         if (cachedItems.get(username) != null)
             return false;
 
-        cachedItems.put(username, new Volontario(username, password, true));
+        cachedItems.put(username, new Volontario(username, password, true, true));
         return saveJson(getPersonList());
     }
 

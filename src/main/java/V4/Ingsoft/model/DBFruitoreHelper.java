@@ -12,7 +12,7 @@ public class DBFruitoreHelper extends DBAbstractPersonaHelper<Fruitore> {
         if (cachedItems.get(username) != null)
             return false;
 
-        cachedItems.put(username, new Fruitore(username, password, true));
+        cachedItems.put(username, new Fruitore(username, password, true, true));
         return saveJson(getPersonList());
     }
 }
