@@ -2,10 +2,7 @@ package V4.Ingsoft.controller.commands.running;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.controller.item.luoghi.Luogo;
-import V4.Ingsoft.controller.item.luoghi.StatusVisita;
-import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.controller.item.luoghi.Visita;
+import V4.Ingsoft.controller.item.luoghi.*;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.view.ViewSE;
@@ -76,7 +73,7 @@ public class ListCommand extends AbstractCommand {
             case 'p' -> printProposte();
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
-            case 'e' -> printEffettuate();
+            case 'e' -> printEffettuate(); 
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
     }
