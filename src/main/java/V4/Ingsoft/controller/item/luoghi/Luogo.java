@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-import V4.Ingsoft.util.GPS;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
@@ -17,7 +15,7 @@ public class Luogo {
 
     String name;
     String description;
-    GPS position;
+    String position;
     String UID;
     ArrayList<String> visiteUID = new ArrayList<>();
 
@@ -25,7 +23,7 @@ public class Luogo {
     public Luogo(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
-            @JsonProperty("position") GPS position,
+            @JsonProperty("position") String position,
             @JsonProperty("UID") String UID) {
         this.name = name;
         this.description = description;
@@ -36,7 +34,8 @@ public class Luogo {
     public Luogo(
             String name,
             String description,
-            GPS position) {
+            String position) {
+
         this.name = name;
         this.description = description;
         this.position = position;
@@ -84,7 +83,7 @@ public class Luogo {
         return this.description;
     }
 
-    public GPS getMeetingPlace() {
+    public String getMeetingPlace() {
         return this.position;
     }
 

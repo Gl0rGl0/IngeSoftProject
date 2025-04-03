@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.DayOfWeekConverter;
-import V4.Ingsoft.util.GPS;
 import V4.Ingsoft.util.Time;
 import V4.Ingsoft.view.ViewSE;
 
@@ -21,7 +20,7 @@ public class TipoVisita {
 
     String title;
     String description;
-    GPS meetingPlace;
+    String meetingPlace;
     Date initDay;
     Date finishDay;
     Time initTime;
@@ -41,7 +40,7 @@ public class TipoVisita {
     public TipoVisita(
             @JsonProperty("title") String title,
             @JsonProperty("description") String description,
-            @JsonProperty("meetingPlace") GPS meetingPlace,
+            @JsonProperty("meetingPlace") String meetingPlace,
             @JsonProperty("initDay") Date initDay,
             @JsonProperty("finishDay") Date finishDay,
             @JsonProperty("initTime") Time initTime,
@@ -75,7 +74,7 @@ public class TipoVisita {
 
     // Constructor
     public TipoVisita(
-            String title, String description, GPS meetingPlace,
+            String title, String description, String meetingPlace,
             Date initDay, Date finishDay, Time initTime, int duration,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, String UID, Date dataI) {
         this.title = title;
@@ -96,7 +95,7 @@ public class TipoVisita {
     }
 
     public TipoVisita(
-            String title, String description, GPS meetingPlace,
+            String title, String description, String meetingPlace,
             Date initDay, Date finishDay, Time initTime, int duration,
             boolean free, int numMinPartecipants, int numMaxPartecipants, String days, Date dateI) {
         this.title = title;
@@ -136,10 +135,11 @@ public class TipoVisita {
     // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) {
         int length = args.length;
+        
         try {
-            this.title = (length > 0 && !args[0].equals("/")) ? args[0] : null;
+            this.title = args[0];
             this.description = (length > 1 && !args[1].equals("/")) ? args[1] : null;
-            this.meetingPlace = (length > 2 && !args[2].equals("/")) ? new GPS(args[2]) : null;
+            this.meetingPlace = (length > 2 && !args[2].equals("/")) ? new String(args[2]) : null;
             this.initDay = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
             this.finishDay = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
             this.initTime = (length > 5 && !args[5].equals("/")) ? new Time(args[5]) : null;
@@ -174,7 +174,7 @@ public class TipoVisita {
         return this.description;
     }
 
-    public GPS getMeetingPlace() {
+    public String getMeetingPlace() {
         return this.meetingPlace;
     }
 

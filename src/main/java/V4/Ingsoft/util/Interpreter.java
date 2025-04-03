@@ -26,7 +26,7 @@ public abstract class Interpreter {
         commandRegistry.put("logout", new LogoutCommand(controller));
         commandRegistry.put("changepsw", new ChangePswCommand(controller));
         commandRegistry.put("assign", new AssignCommand(controller));
-        commandRegistry.put("setmax", new SetPersoneMaxCommand(controller));
+        commandRegistry.put("setmax", new SetPersoneMaxCommand(controller, true));
         commandRegistry.put("exit", new ExitCommand(controller));
     }
 
@@ -94,10 +94,25 @@ public abstract class Interpreter {
     public boolean haveAllBeenExecuted() {
         boolean out = true;
         for (Command c : commandRegistry.values()) {
+            if(c instanceof DoneCommandSETUP){
+                continue;
+            }
             out &= c.hasBeenExecuted();
             if (!out)
                 return out;
         }
         return out; // Just one false is enough to return false as the result
+    }
+
+    public void printHaveAllBeenExecuted() {
+        for (Command c : commandRegistry.values()) {
+            System.out.println(c.toString() + " " + c.hasBeenExecuted());
+        }
+    }
+
+    public boolean doneAll(){
+        if(!(this instanceof SetupInterpreter))
+            return true;
+        return haveAllBeenExecuted() && commandRegistry.get("done").hasBeenExecuted();
     }
 }

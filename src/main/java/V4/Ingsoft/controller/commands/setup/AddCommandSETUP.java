@@ -2,7 +2,7 @@ package V4.Ingsoft.controller.commands.setup;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.util.GPS;
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
@@ -44,6 +44,21 @@ public class AddCommandSETUP extends AbstractCommand {
     public void addLuogo(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        controller.db.addLuogo(a[0], a[1], new GPS(a[2]));
+        if(a.length < 3){
+            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
+            return;
+        }
+
+        if(a[0].trim() == ""){
+            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
+            return;
+        }
+
+        if(a[2].trim() == ""){
+            AssertionControl.logMessage("You can't add an empty position", 3, getClass().getSimpleName());
+            return;
+        }
+
+        controller.db.addLuogo(a[0], a[1], a[2]);
     }
 }

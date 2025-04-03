@@ -3,7 +3,6 @@ package V4.Ingsoft.model;
 import java.util.ArrayList;
 
 import V4.Ingsoft.controller.item.luoghi.Luogo;
-import V4.Ingsoft.util.GPS;
 
 public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 
@@ -32,7 +31,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         return super.getItems();
     }
 
-    public boolean addLuogo(String name, String description, GPS gps) {
+    public boolean addLuogo(String name, String description, String gps) {
         return addLuogo(new Luogo(name, description, gps));
     }
 

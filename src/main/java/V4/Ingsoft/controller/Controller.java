@@ -23,8 +23,7 @@ public class Controller {
     public final Model db;
     // Initially the user is a Guest (not logged in)
     public Persona user = new Guest();
-    private final Interpreter interpreter;
-    private final Interpreter setupInterpreter;
+    public Interpreter interpreter;
     public Date date = new Date(); // simply sets today's date
 
     private ScheduledExecutorService dailyTask;
@@ -36,8 +35,7 @@ public class Controller {
         initVirtualTime();
         initDailyScheduler();
 
-        interpreter = new RunningInterpreter(this);
-        setupInterpreter = new SetupInterpreter(this);
+        interpreter = new SetupInterpreter(this);
     }
 
     private void initDailyScheduler() {
@@ -62,23 +60,31 @@ public class Controller {
      */
     public void interpreter(String prompt) {
         AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
+
         interpreter.interpret(prompt, user);
     }
 
-    public void interpreterSETUP(String prompt) {
-        AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
-        setupInterpreter.interpret(prompt, user);
+    public void switchInterpreter(){
+        this.interpreter = new RunningInterpreter(this);
     }
 
     public boolean skipSetupTesting = false;
 
     public boolean setupCompleted() {
-        boolean out = setupInterpreter.haveAllBeenExecuted() || skipSetupTesting || !db.isNew();
+        boolean out = interpreter.doneAll() || skipSetupTesting;
 
         if (out)
             AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
 
         return out;
+    }
+
+    public boolean haveAllBeenExecuted(){
+        return interpreter.haveAllBeenExecuted();
+    }
+
+    public boolean doneAll(){
+        return interpreter.doneAll();
     }
 
     public Persona getCurrentUser() {

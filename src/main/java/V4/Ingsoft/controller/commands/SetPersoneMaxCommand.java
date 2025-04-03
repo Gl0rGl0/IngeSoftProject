@@ -8,10 +8,10 @@ public class SetPersoneMaxCommand extends AbstractCommand {
 
     private final Controller controller;
 
-    public SetPersoneMaxCommand(Controller controller) {
+    public SetPersoneMaxCommand(Controller controller, boolean hasBeenExecuted) {
         this.controller = controller;
         super.commandInfo = CommandListSETUP.SETMAX;
-        this.hasBeenExecuted = false;
+        this.hasBeenExecuted = hasBeenExecuted;
     }
 
     @Override
@@ -24,6 +24,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
             controller.maxPrenotazioniPerPersona = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             ViewSE.println("Invalid value.");
+            return;
         }
         this.hasBeenExecuted = true; // MUST ALSO BE EXECUTED DURING SETUP
     }

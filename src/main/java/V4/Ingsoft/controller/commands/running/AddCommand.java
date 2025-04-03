@@ -12,7 +12,6 @@ import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
-import V4.Ingsoft.util.GPS;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
@@ -99,6 +98,16 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
+        if(a.length < 10){
+            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
+            return;
+        }
+
+        if(a[0].trim() == ""){
+            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
+            return;
+        }
+
         if (controller.db.addTipoVisita(a, controller.date)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added TipoVisita: " + a[0], 3, CLASSNAME);
@@ -110,6 +119,11 @@ public class AddCommand extends AbstractCommand {
 
     private void addLuogo(String[] args) {
         String[] a = StringUtils.joinQuotedArguments(args);
+        if(a.length < 3){
+            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
+            return;
+        }
+
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
@@ -120,7 +134,17 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (a.length > 2 && controller.db.addLuogo(a[0], a[1], new GPS(a[2]))) {
+        if(a[0].trim() == ""){
+            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
+            return;
+        }
+
+        // if(a[2].trim() == ""){
+        //     AssertionControl.logMessage("You can't add an empty position", 3, getClass().getSimpleName());
+        //     return;
+        // }
+
+        if (a.length > 2 && controller.db.addLuogo(a[0], a[1], a[2])) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added place: " + a[0], 3, CLASSNAME);
         } else {
@@ -144,8 +168,6 @@ public class AddCommand extends AbstractCommand {
             Date currentDate = new Date(day, month, year);
             processVisitsForDate(currentDate, tipi);
         }
-
-        System.out.println(controller.db.dbVisiteHelper.getVisite());
     }
 
     /**
@@ -166,8 +188,9 @@ public class AddCommand extends AbstractCommand {
      * - The day of the week of the date is present among those of the visit
      */
     private boolean isVisitEligibleOnDate(TipoVisita visita, Date date) {
-        return visita.getStatus() == StatusVisita.PROPOSED // Updated enum constant
-                && visita.getDays().contains(date.dayOfTheWeek());
+        return visita.getStatus() == StatusVisita.PROPOSED
+                && visita.getDays().contains(date.dayOfTheWeek())
+                && !controller.db.dbDatesHelper.getPrecludedDates().contains(date);
     }
 
     /**

@@ -8,7 +8,6 @@ import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.*;
 import V4.Ingsoft.util.Date;
-import V4.Ingsoft.util.GPS;
 
 public class Model {
     public final DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -20,7 +19,6 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
-    private boolean isNew;
     public String ambitoTerritoriale = null;
 
     // Constructor and helper initialization
@@ -33,12 +31,6 @@ public class Model {
         dbLuoghiHelper = new DBLuoghiHelper();
         dbDatesHelper = new DBDatesHelper();
         dbIscrizionisHelper = new DBIscrizioniHelper();
-
-        this.isNew = dbConfiguratoreHelper.isNew() && dbLuoghiHelper.isNew();
-    }
-
-    public boolean isNew() {
-        return this.isNew;
     }
 
     public void setAmbito(String ambito) {
@@ -49,7 +41,7 @@ public class Model {
         return this.ambitoTerritoriale;
     }
 
-    public boolean addLuogo(String name, String description, GPS gps) {
+    public boolean addLuogo(String name, String description, String gps) {
         return dbLuoghiHelper.addLuogo(name, description, gps);
     }
 
