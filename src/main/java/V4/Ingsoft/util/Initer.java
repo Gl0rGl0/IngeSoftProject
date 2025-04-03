@@ -1,5 +1,6 @@
 package V4.Ingsoft.util;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -81,15 +82,15 @@ public class Initer {
     }
 
     public static void initAvailability(Controller c) {
-        int meseNum = c.date.getMonth() + 3;
+        Month meseNum = c.date.getMonth().plus(3);
 
         if (c.date.getDay() < 16)
-            meseNum--;
+            meseNum.minus(1);
 
         for (Volontario v : c.db.dbVolontarioHelper.getPersonList()) {
             for (int i = 0; i < 15; i++)
                 v.setAvailability(c.date,
-                        new Date(String.format("%d/%d/2025", r.nextInt(1, Date.monthLength(meseNum)), meseNum)));
+                        new Date(String.format("%d/%d/2025", r.nextInt(1, meseNum.maxLength()))));
             System.out.println(v.getNumAvailability());
         }
     }

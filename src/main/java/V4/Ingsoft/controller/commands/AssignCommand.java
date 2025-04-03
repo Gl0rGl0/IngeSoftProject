@@ -14,6 +14,7 @@ import V4.Ingsoft.view.ViewSE;
 public class AssignCommand extends AbstractCommand {
 
     private final Controller controller;
+    private final String CLASS_NAME = getClass().getSimpleName();
 
     public AssignCommand(Controller controller) {
         this.controller = controller;
@@ -32,8 +33,10 @@ public class AssignCommand extends AbstractCommand {
         if (arg.length < 2) {
             if ("V".equals(options[0])) {
                 ViewSE.println("Error using the 'assign' command: assign -V VisitName VolunteerUsername");
+                AssertionControl.logMessage("Error using the 'assign' command: assign -V VisitName VolunteerUsername", 2, CLASS_NAME);
             } else {
                 ViewSE.println("Error using the 'assign' command: assign -L PlaceName VisitName");
+                AssertionControl.logMessage("Error using the 'assign' command: assign -L PlaceName VisitName", 2, CLASS_NAME);
             }
             return;
         }
@@ -41,14 +44,18 @@ public class AssignCommand extends AbstractCommand {
             case "V" -> {
                 if (controller.canExecute16thAction)
                     assignVolontario(arg[0], arg[1]);
-                else
+                else {
                     ViewSE.println("Action only possible on the 16th of the month!");
+                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASS_NAME);
+                }
             }
             case "L" -> {
                 if (controller.canExecute16thAction)
                     assignVisita(arg[0], arg[1]);
-                else
+                else{
                     ViewSE.println("Action only possible on the 16th of the month!");
+                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASS_NAME);
+                }
             }
             default ->
                 ViewSE.println("Error using the 'assign' command"); // Cannot reach here
@@ -57,21 +64,25 @@ public class AssignCommand extends AbstractCommand {
 
     private void assignVolontario(String type, String userNameVolontario) {
         Volontario v = controller.db.findVolontario(userNameVolontario);
-        TipoVisita vToAssign = controller.db.getTipoVisitaByName(type);
+        TipoVisita vToAssign = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
 
         if (v == null) {
             ViewSE.println("No volunteer found with that username.");
+            AssertionControl.logMessage("No volunteer found with that username.", 3, CLASS_NAME);
             return;
         }
 
         if (vToAssign == null) {
-            ViewSE.println("No visit found with that title.");
+            ViewSE.println("No type found with that title.");
+            AssertionControl.logMessage("No type found with that title.", 3, CLASS_NAME);
             return;
         }
 
         v.addTipoVisita(vToAssign.getUID());
         vToAssign.addVolontario(v.getUsername());
         ViewSE.println("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle());
+        AssertionControl.logMessage("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 3, CLASS_NAME);
+        
     }
 
     private void assignVisita(String name, String type) {

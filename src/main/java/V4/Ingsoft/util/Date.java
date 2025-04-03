@@ -3,6 +3,7 @@ package V4.Ingsoft.util;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -96,24 +97,8 @@ public class Date {
         return this.localDate.getDayOfMonth();
     }
 
-    public int getMonth() {
-        return this.localDate.getMonthValue();
-    }
-
-    public static int monthLength(Date d) {
-        return switch (d.localDate.getMonthValue()) {
-            case 1, 3, 5, 7, 8, 10, 12 -> 31;
-            case 2 -> 28;
-            default -> 30;
-        };
-    }
-
-    public static int monthLength(int numeroMese) {
-        return switch (numeroMese) {
-            case 1, 3, 5, 7, 8, 10, 12 -> 31;
-            case 2 -> 28;
-            default -> 30;
-        };
+    public Month getMonth() {
+        return this.localDate.getMonth();
     }
 
     public DayOfWeek dayOfTheWeek() {

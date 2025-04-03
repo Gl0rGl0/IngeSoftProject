@@ -17,13 +17,13 @@
 
 //     public static void test(Controller controller) {
 //         controller.skipSetupTesting = true;
-//         controller.interpreterSETUP("login ADMIN PASSWORD");
+//         controller.interpreter("login ADMIN PASSWORD");
 
 //         Initer.initPersone(controller);
 //         // Initer.initVisiteLuoghi(controller);
 //         // Initer.initAvailability(controller);
 
-//         controller.interpreterSETUP("logout");
+//         controller.interpreter("logout");
 //     }
 
 //     @BeforeEach

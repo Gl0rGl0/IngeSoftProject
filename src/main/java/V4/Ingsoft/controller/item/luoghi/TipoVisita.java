@@ -248,7 +248,7 @@ public class TipoVisita {
         if (this.sv == StatusVisita.PROPOSED) // Updated enum constant
             return;
 
-        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= Date.monthLength(insertionDay))
+        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= insertionDay.getMonth().getValue())
             this.sv = StatusVisita.PROPOSED; // Updated enum constant
     }
 

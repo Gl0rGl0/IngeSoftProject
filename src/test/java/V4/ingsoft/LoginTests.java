@@ -36,15 +36,15 @@
 
 //     private void enterRegimePhase() {
 //         // 1. First absolute login and password change for ADMIN
-//         controller.interpreterSETUP("login ADMIN PASSWORD");
-//         controller.interpreterSETUP("changepsw newAdminPass");
+//         controller.interpreter("login ADMIN PASSWORD");
+//         controller.interpreter("changepsw newAdminPass");
 
 //         // 2. Complete Setup Steps using known setup commands
-//         controller.interpreterSETUP("setambito TestAreaRegime");
-//         controller.interpreterSETUP("setmax 5");
-//         controller.interpreterSETUP("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
+//         controller.interpreter("setambito TestAreaRegime");
+//         controller.interpreter("setmax 5");
+//         controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
 //         // Cannot add types/volunteers/assignments during setup via commands
-//         controller.interpreterSETUP("done"); // Finalize setup
+//         controller.interpreter("done"); // Finalize setup
 //     }
 
 //     // Helper to reset data files before each test

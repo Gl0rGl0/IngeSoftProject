@@ -1,5 +1,6 @@
 package V4.Ingsoft.controller.item.persone;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -80,13 +81,13 @@ public class Volontario extends Persona {
     }
 
     private boolean twoMonthsDifference(Date d1, Date d2) {
-        int currentMonth = d1.getMonth();
-        int targetMonth = d2.getMonth();
+        Month currentMonth = d1.getMonth();
+        Month targetMonth = d2.getMonth();
 
         if (d1.getDay() < 16) {
-            return (currentMonth + 2) == targetMonth;
+            return (currentMonth.plus(2)) == targetMonth;
         } else {
-            return (currentMonth + 3) == targetMonth;
+            return (currentMonth.plus(3)) == targetMonth;
         }
     }
 

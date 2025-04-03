@@ -1,5 +1,6 @@
 package V4.Ingsoft.model;
 
+import java.time.Month;
 import java.util.ArrayList;
 
 import V4.Ingsoft.util.Date;
@@ -36,7 +37,7 @@ public class DBDatesHelper {
     }
 
     public void refreshPrecludedDate(Date date) {
-        int monthCorrente = date.getMonth();
+        Month monthCorrente = date.getMonth();
 
         for (Date d : precludedDates) {
             if (d.getMonth() == monthCorrente)

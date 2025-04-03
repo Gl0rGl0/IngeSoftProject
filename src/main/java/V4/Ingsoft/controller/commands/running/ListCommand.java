@@ -1,5 +1,7 @@
 package V4.Ingsoft.controller.commands.running;
 
+import java.time.Month;
+
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.luoghi.*;
@@ -84,16 +86,16 @@ public class ListCommand extends AbstractCommand {
             return;
         }
 
-        int targetMonth = controller.date.getMonth() + 2;
+        Month targetMonth = controller.date.getMonth().plus(2);
         if (controller.date.getDay() > 16)
-            targetMonth++;
+        targetMonth.plus(1);
 
         StringBuilder out = new StringBuilder();
         for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
             out.append(v.getUsername() + ":\n");
             int i = 1;
             for (boolean b : v.getAvailability()) {
-                out.append(String.format("%d:%d [%b]", i++, targetMonth, b));
+                out.append(String.format("%d:%d [%b]", i++, targetMonth.getValue(), b));
             }
         }
         ViewSE.println(out);

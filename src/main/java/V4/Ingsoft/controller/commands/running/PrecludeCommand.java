@@ -1,5 +1,8 @@
 package V4.Ingsoft.controller.commands.running;
 
+import java.lang.management.MonitorInfo;
+import java.time.Month;
+
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.util.Date;
@@ -47,13 +50,13 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private boolean twoMonthsDifference(Date d1, Date d2) {
-        int currentMonth = d2.getMonth();
-        int targetMonth = d1.getMonth();
+        Month currentMonth = d2.getMonth();
+        Month targetMonth = d1.getMonth();
 
         if (d1.getDay() < 16) {
-            return (currentMonth + 2) == targetMonth;
+            return (currentMonth.plus(2)) == targetMonth;
         } else {
-            return (currentMonth + 3) == targetMonth;
+            return (currentMonth.plus(3)) == targetMonth;
         }
     }
 

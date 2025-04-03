@@ -1,5 +1,6 @@
 package V4.Ingsoft.controller.commands.running;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -160,12 +161,12 @@ public class AddCommand extends AbstractCommand {
         ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
-        int month = controller.date.getMonth() + 1;
+        Month month = controller.date.getMonth().plus(1);
         int year = controller.date.getYear();
-        int daysInMonth = Date.monthLength(month);
+        int daysInMonth = month.maxLength();
 
         for (int day = 1; day <= daysInMonth; day++) {
-            Date currentDate = new Date(day, month, year);
+            Date currentDate = new Date(day, month.getValue(), year);
             processVisitsForDate(currentDate, tipi);
         }
     }
