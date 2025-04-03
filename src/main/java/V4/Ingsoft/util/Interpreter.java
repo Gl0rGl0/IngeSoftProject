@@ -11,6 +11,7 @@ import V4.Ingsoft.controller.commands.ExitCommand;
 import V4.Ingsoft.controller.commands.LogoutCommand;
 import V4.Ingsoft.controller.commands.SetPersoneMaxCommand;
 import V4.Ingsoft.controller.commands.TimeCommand;
+import V4.Ingsoft.controller.commands.setup.DoneCommandSETUP;
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.view.ViewSE;

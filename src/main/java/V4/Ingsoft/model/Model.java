@@ -21,7 +21,7 @@ public class Model {
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
     private boolean isNew;
-    public String ambitoTerritoriale;
+    public String ambitoTerritoriale = null;
 
     // Constructor and helper initialization
     public Model() {
