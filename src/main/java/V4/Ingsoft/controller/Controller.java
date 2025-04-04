@@ -68,10 +68,8 @@ public class Controller {
         this.interpreter = new RunningInterpreter(this);
     }
 
-    public boolean skipSetupTesting = false;
-
     public boolean setupCompleted() {
-        boolean out = interpreter.doneAll() || skipSetupTesting;
+        boolean out = interpreter.doneAll();
 
         if (out)
             AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());

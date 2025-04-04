@@ -23,11 +23,7 @@ public class Main {
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 
-        controller.dailyAction();
-        //controller.db.clearAll();
-
         test(controller);
-
 
         controller.interpreter("login config1 pass1C");
         // controller.interpreter("changepsw pass1C pass1C");
@@ -36,9 +32,9 @@ public class Main {
     }
 
     public static void test(Controller controller) {
-        controller.skipSetupTesting = true;
         controller.interpreter("login ADMIN PASSWORD");
 
+        Initer.setupPhase(controller);
         Initer.initPersone(controller);
         Initer.initVisiteLuoghi(controller);
         Initer.initAvailability(controller);

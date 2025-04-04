@@ -32,6 +32,8 @@ public class LoginCommandSETUP extends AbstractCommand {
         Persona p = login(args[0], args[1]);
         controller.user = p;
 
+        System.out.println(p);
+
         if (controller.user.getType() == PersonaType.CONFIGURATORE) { // ONLY A CONFIGURATOR CAN ACCESS SETUP
             ViewSE.println("Login successful (" + controller.user.getType() + ")");
             if (controller.user.isNew()) {
