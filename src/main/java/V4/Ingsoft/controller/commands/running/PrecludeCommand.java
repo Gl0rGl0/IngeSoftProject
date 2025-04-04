@@ -1,8 +1,5 @@
 package V4.Ingsoft.controller.commands.running;
 
-import java.lang.management.MonitorInfo;
-import java.time.Month;
-
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.util.Date;
@@ -32,7 +29,7 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        if (!twoMonthsDifference(toOperate, controller.date)) {
+        if (!Date.twoMonthsDifference(toOperate, controller.date)) {
             ViewSE.println(
                     "It is not possible to add a date so far forward/backward in time, stick to the month after the next");
             return;
@@ -46,17 +43,6 @@ public class PrecludeCommand extends AbstractCommand {
                 removePrecludedDate(args);
             default ->
                 ViewSE.println("Option not recognized for 'preclude'.");
-        }
-    }
-
-    private boolean twoMonthsDifference(Date d1, Date d2) {
-        Month currentMonth = d2.getMonth();
-        Month targetMonth = d1.getMonth();
-
-        if (d1.getDay() < 16) {
-            return (currentMonth.plus(2)) == targetMonth;
-        } else {
-            return (currentMonth.plus(3)) == targetMonth;
         }
     }
 

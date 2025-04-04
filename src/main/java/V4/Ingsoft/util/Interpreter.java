@@ -38,7 +38,7 @@ public abstract class Interpreter {
      * @param currentUser the current user (necessary for permission checks)
      */
     public void interpret(String prompt, Persona currentUser) {
-        if(prompt == null || prompt.isEmpty()) { // Use isEmpty() for clarity
+        if(prompt == null || prompt.isBlank()) { // Use isBlank() for clarity
             AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
             ViewSE.println("Error: no command provided.");
             return;
@@ -46,7 +46,7 @@ public abstract class Interpreter {
 
         String[] tokens = prompt.trim().split("\\s+");
 
-        if (tokens.length == 0 || tokens[0].isEmpty()) {
+        if (tokens.length == 0 || tokens[0].isBlank()) {
             AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
             ViewSE.println("Error: no command provided.");
             return;

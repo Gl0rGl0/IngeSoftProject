@@ -1,6 +1,7 @@
 package V4.Ingsoft.controller.commands;
 
 public abstract class AbstractCommand implements Command {
+    protected final String CLASSNAME = this.getClass().getSimpleName();
     protected ListInterface commandInfo;
     protected boolean hasBeenExecuted = true; // by default, mark every command as already executed, so the 'and' check
                                               // on the execution of all setup commands succeeds

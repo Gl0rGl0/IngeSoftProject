@@ -9,9 +9,6 @@ import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;
-import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date; // Assuming Date utility exists
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,7 +34,7 @@ public class ConfiguratorRegimeTests {
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
 
         // Re-initialize model and controller for a fresh start
-        model = new Model(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
+        model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
         controller = new Controller(model);
         // DO NOT skip setup testing here, as these tests ARE the setup phase
     }
@@ -226,8 +223,8 @@ public class ConfiguratorRegimeTests {
     // @Test
     // public void testRegimeListVolontariTipiVisita() {
     //     // Arrange (VolRegime assigned to TVRegime in setup helper)
-    //     assertFalse(controller.db.dbVolontarioHelper.getPersonList().isEmpty(), "Prerequisite: Volunteer should exist.");
-    //     assertFalse(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().isEmpty(), "Prerequisite: Volunteer should be assigned.");
+    //     assertFalse(controller.db.dbVolontarioHelper.getPersonList().isBlank(), "Prerequisite: Volunteer should exist.");
+    //     assertFalse(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().isBlank(), "Prerequisite: Volunteer should be assigned.");
 
     //     // Act
     //     controller.interpreter("list volontari");
@@ -242,7 +239,7 @@ public class ConfiguratorRegimeTests {
     //     // Arrange
     //     // Remove the default volunteer added in setup
     //     controller.interpreter("remove volontario VolRegime");
-    //     assertTrue(controller.db.dbVolontarioHelper.getPersonList().isEmpty(), "Prerequisite: No volunteers should exist.");
+    //     assertTrue(controller.db.dbVolontarioHelper.getPersonList().isBlank(), "Prerequisite: No volunteers should exist.");
 
     //     // Act
     //     controller.interpreter("list volontari");
@@ -257,7 +254,7 @@ public class ConfiguratorRegimeTests {
     // @Test
     // public void testRegimeListLuoghi() {
     //     // Arrange (PlaceRegime added in setup)
-    //     assertFalse(controller.db.dbLuoghiHelper.getLuoghi().isEmpty(), "Prerequisite: Place should exist.");
+    //     assertFalse(controller.db.dbLuoghiHelper.getLuoghi().isBlank(), "Prerequisite: Place should exist.");
 
     //     // Act
     //     controller.interpreter("list luoghi");
@@ -272,7 +269,7 @@ public class ConfiguratorRegimeTests {
     //      // Arrange
     //      // Remove the default place added in setup
     //      controller.interpreter("remove luogo PlaceRegime"); // This will also cascade-remove TVRegime
-    //      assertTrue(controller.db.dbLuoghiHelper.getLuoghi().isEmpty(), "Prerequisite: No places should exist.");
+    //      assertTrue(controller.db.dbLuoghiHelper.getLuoghi().isBlank(), "Prerequisite: No places should exist.");
 
     //      // Act
     //      controller.interpreter("list luoghi");
@@ -321,7 +318,7 @@ public class ConfiguratorRegimeTests {
     //      controller.interpreter("remove tipovisita TVRegime");
     //      assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
     //      assertNull(controller.db.dbTipoVisiteHelper.getTipiVisitaByUID("TVRegime"), "Prerequisite: Type should not exist.");
-    //      // assertTrue(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime").getTipiVisiteAssociati().isEmpty()); // Check association list
+    //      // assertTrue(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime").getTipiVisiteAssociati().isBlank()); // Check association list
 
     //      // Act
     //      controller.interpreter("list tipivisitaperluogo PlaceRegime");
@@ -340,7 +337,7 @@ public class ConfiguratorRegimeTests {
     //     // TODO: Implement and call plan generation (UC20) here.
     //     // controller.interpreter("generate plan <month>"); // Hypothetical command
     //     // Assume plan generation creates visits in PROPOSED state.
-    //     // assertFalse(controller.db.dbVisiteHelper.getVisiteProposte().isEmpty(), "Prerequisite: Visits in PROPOSED state should exist.");
+    //     // assertFalse(controller.db.dbVisiteHelper.getVisiteProposte().isBlank(), "Prerequisite: Visits in PROPOSED state should exist.");
 
     //     // Act
     //     controller.interpreter("list visite proposta");
@@ -366,7 +363,7 @@ public class ConfiguratorRegimeTests {
     //  public void testRegimeListVisitePerStatoEmpty() {
     //      // Arrange
     //      // Ensure no visits exist in the 'confirmed' state (likely true after reset)
-    //      assertTrue(controller.db.dbVisiteHelper.getConfermate().isEmpty(), "Prerequisite: No visits in CONFIRMED state should exist.");
+    //      assertTrue(controller.db.dbVisiteHelper.getConfermate().isBlank(), "Prerequisite: No visits in CONFIRMED state should exist.");
 
     //      // Act
     //      controller.interpreter("list visite confermata");

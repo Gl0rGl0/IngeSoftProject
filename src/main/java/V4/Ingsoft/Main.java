@@ -19,7 +19,7 @@ import V4.Ingsoft.view.ViewSE;
 public class Main {
     public static void main(String[] args) {
 
-        Model model = new Model();
+        Model model = Model.getInstance();
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 

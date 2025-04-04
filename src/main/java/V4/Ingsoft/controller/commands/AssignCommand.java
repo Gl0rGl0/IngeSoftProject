@@ -14,7 +14,6 @@ import V4.Ingsoft.view.ViewSE;
 public class AssignCommand extends AbstractCommand {
 
     private final Controller controller;
-    private final String CLASS_NAME = getClass().getSimpleName();
 
     public AssignCommand(Controller controller) {
         this.controller = controller;
@@ -24,7 +23,7 @@ public class AssignCommand extends AbstractCommand {
     @Override
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
-            ViewSE.println("Error using the 'assign' command");
+            ViewSE.error("Error using the 'assign' command");
             return;
         }
 
@@ -32,11 +31,11 @@ public class AssignCommand extends AbstractCommand {
 
         if (arg.length < 2) {
             if ("V".equals(options[0])) {
-                ViewSE.println("Error using the 'assign' command: assign -V VisitName VolunteerUsername");
-                AssertionControl.logMessage("Error using the 'assign' command: assign -V VisitName VolunteerUsername", 2, CLASS_NAME);
+                ViewSE.error("Error using the 'assign' command: assign -V VisitName VolunteerUsername");
+                AssertionControl.logMessage("Error using the 'assign' command: assign -V VisitName VolunteerUsername", 2, CLASSNAME);
             } else {
-                ViewSE.println("Error using the 'assign' command: assign -L PlaceName VisitName");
-                AssertionControl.logMessage("Error using the 'assign' command: assign -L PlaceName VisitName", 2, CLASS_NAME);
+                ViewSE.error("Error using the 'assign' command: assign -L PlaceName VisitName");
+                AssertionControl.logMessage("Error using the 'assign' command: assign -L PlaceName VisitName", 2, CLASSNAME);
             }
             return;
         }
@@ -45,20 +44,20 @@ public class AssignCommand extends AbstractCommand {
                 if (controller.canExecute16thAction)
                     assignVolontario(arg[0], arg[1]);
                 else {
-                    ViewSE.println("Action only possible on the 16th of the month!");
-                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASS_NAME);
+                    ViewSE.error("Action only possible on the 16th of the month!");
+                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASSNAME);
                 }
             }
             case "L" -> {
                 if (controller.canExecute16thAction)
                     assignVisita(arg[0], arg[1]);
                 else{
-                    ViewSE.println("Action only possible on the 16th of the month!");
-                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASS_NAME);
+                    ViewSE.error("Action only possible on the 16th of the month!");
+                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASSNAME);
                 }
             }
             default ->
-                ViewSE.println("Error using the 'assign' command"); // Cannot reach here
+                ViewSE.error("Error using the 'assign' command"); // Cannot reach here
         }
     }
 
@@ -67,21 +66,21 @@ public class AssignCommand extends AbstractCommand {
         TipoVisita vToAssign = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
 
         if (v == null) {
-            ViewSE.println("No volunteer found with that username.");
-            AssertionControl.logMessage("No volunteer found with that username.", 3, CLASS_NAME);
+            ViewSE.error("No volunteer found with that username.");
+            AssertionControl.logMessage("No volunteer found with that username.", 3, CLASSNAME);
             return;
         }
 
         if (vToAssign == null) {
-            ViewSE.println("No type found with that title.");
-            AssertionControl.logMessage("No type found with that title.", 3, CLASS_NAME);
+            ViewSE.error("No type found with that title.");
+            AssertionControl.logMessage("No type found with that title.", 3, CLASSNAME);
             return;
         }
 
         v.addTipoVisita(vToAssign.getUID());
         vToAssign.addVolontario(v.getUsername());
         ViewSE.println("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle());
-        AssertionControl.logMessage("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 3, CLASS_NAME);
+        AssertionControl.logMessage("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 3, CLASSNAME);
         
     }
 
@@ -113,7 +112,7 @@ public class AssignCommand extends AbstractCommand {
             ViewSE.println("Assigned visit " + visitaDaAssegnare.getTitle() + " to place " + luogo.getName());
         } else {
             AssertionControl.logMessage("Cannot assign this visit because it overlaps with another one",
-                    2, this.getClass().getSimpleName());
+                    2, CLASSNAME);
         }
     }
 
@@ -127,7 +126,7 @@ public class AssignCommand extends AbstractCommand {
             if (uidTipoVisita.equals(visitaDaAssegnare.getUID()))
                 continue;
 
-            TipoVisita altraVisita = controller.db.getTipiByUID(uidTipoVisita); // otherVisit
+            TipoVisita altraVisita = controller.db.dbTipoVisiteHelper.getTipiVisitaByUID(uidTipoVisita); // otherVisit
             // If the other visit is not scheduled for this day, continue
             if (!altraVisita.getDays().contains(day))
                 continue;
@@ -140,7 +139,7 @@ public class AssignCommand extends AbstractCommand {
             if (!(startAltra > (startDaAssegnare + visitaDaAssegnare.getDuration())
                     || startDaAssegnare > (startAltra + altraVisita.getDuration()))) {
                 AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), // "I overlap with"
-                        3, this.getClass().getSimpleName());
+                        3, CLASSNAME);
                 return false;
             }
         }

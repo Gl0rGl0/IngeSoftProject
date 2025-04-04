@@ -20,7 +20,7 @@ public class DoneCommandSETUP extends AbstractCommand {
             System.out.println("DONE FATTO");
             c.switchInterpreter();
         }else{
-            AssertionControl.logMessage("Non puoi eseguire il done se non hai eseguito tutti i comandi precedenti", 3, getClass().getSimpleName());
+            AssertionControl.logMessage("Non puoi eseguire il done se non hai eseguito tutti i comandi precedenti", 3, CLASSNAME);
         }
     }
 }

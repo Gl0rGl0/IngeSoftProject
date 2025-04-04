@@ -22,7 +22,7 @@ public class HelpCommand extends AbstractCommand {
                 ViewSE.println(cl.toString());
                 return;
             } catch (IllegalArgumentException ex) {
-                AssertionControl.logMessage("Help null", 3, this.getClass().getSimpleName()); // Assuming "nullo" means null
+                AssertionControl.logMessage("Help null", 3, CLASSNAME); // Assuming "nullo" means null
             }
         }
         // If there is no argument or if valueOf fails, show help based on the

@@ -44,4 +44,9 @@ public class ViewSE implements Runnable {
         while (true)
             controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));
     }
+
+    //VIEW OUT
+    public static void error(String e){
+        print(e);
+    }
 }

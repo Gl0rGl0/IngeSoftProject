@@ -7,9 +7,12 @@ import java.util.List;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
+import V4.Ingsoft.controller.item.persone.Configuratore;
+import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
@@ -18,7 +21,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class AddCommand extends AbstractCommand {
     private final Controller controller;
-    private final String CLASSNAME = this.getClass().getSimpleName();
 
     public AddCommand(Controller controller) {
         this.controller = controller;
@@ -54,8 +56,15 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addConfiguratore(String[] args) {
+        Configuratore c;
+        try {
+            c = new Configuratore(args);
+        } catch (Exception e) {
+            AssertionControl.logMessage("Error while creating fruitore", 2, CLASSNAME);
+            return;
+        }
         // adds a new configurator who will need to change password on first login
-        if (args.length > 1 && controller.db.dbConfiguratoreHelper.addConfiguratore(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbConfiguratoreHelper.addConfiguratore(c)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added configurator: " + args[0], 3, CLASSNAME);
         } else {
@@ -65,8 +74,15 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addFruitore(String[] args) {
+        Fruitore f;
+        try {
+            f = new Fruitore(args);
+        } catch (Exception e) {
+            AssertionControl.logMessage("Error while creating fruitore", 2, CLASSNAME);
+            return;
+        }
         // adds a new fruitore (visitor/user) who will need to change password on first login
-        if (args.length > 1 && controller.db.dbFruitoreHelper.addFruitore(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbFruitoreHelper.addFruitore(f)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added fruitore: " + args[0], 3, CLASSNAME);
         } else {
@@ -76,8 +92,15 @@ public class AddCommand extends AbstractCommand {
     }
 
     private void addVolontario(String[] args) {
+        Volontario v;
+        try {
+            v = new Volontario(args);
+        } catch (Exception e) {
+            AssertionControl.logMessage("Error while creating fruitore", 2, CLASSNAME);
+            return;
+        }
         // adds a new volunteer who will need to change password on first login
-        if (args.length > 1 && controller.db.dbVolontarioHelper.addVolontario(args[0], args[1])) {
+        if (args.length > 1 && controller.db.dbVolontarioHelper.addVolontario(v)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added volunteer: " + args[0], 3, CLASSNAME);
         } else {
@@ -98,32 +121,27 @@ public class AddCommand extends AbstractCommand {
                     CLASSNAME);
             return;
         }
-
-        if(a.length < 10){
-            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
+        
+        TipoVisita t;
+        try {
+            t = new TipoVisita(a, controller.date);
+        } catch (Exception e) {
+            AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
             return;
         }
 
-        if(a[0].trim() == ""){
-            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
-            return;
-        }
-
-        if (controller.db.addTipoVisita(a, controller.date)) {
+        if (controller.db.dbTipoVisiteHelper.addTipoVisita(t)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added TipoVisita: " + a[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| TipoVisita not added", 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| TipoVisita not added: " + a[0], 3, CLASSNAME);
         }
     }
 
     private void addLuogo(String[] args) {
+
         String[] a = StringUtils.joinQuotedArguments(args);
-        if(a.length < 3){
-            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
-            return;
-        }
 
         if (!controller.canExecute16thAction) {
             AssertionControl.logMessage(
@@ -135,22 +153,20 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if(a[0].trim() == ""){
-            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
+        Luogo l;
+        try {
+            l = new Luogo(a);
+        } catch (Exception e) {
+            AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
             return;
         }
 
-        // if(a[2].trim() == ""){
-        //     AssertionControl.logMessage("You can't add an empty position", 3, getClass().getSimpleName());
-        //     return;
-        // }
-
-        if (a.length > 2 && controller.db.addLuogo(a[0], a[1], a[2])) {
+        if (a.length > 2 && controller.db.dbLuoghiHelper.addLuogo(l)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added place: " + a[0], 3, CLASSNAME);
         } else {
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Place not added", 3, CLASSNAME);
+                    controller.getCurrentUser().getUsername() + "| Place not added: " + a[0], 3, CLASSNAME);
         }
     }
 

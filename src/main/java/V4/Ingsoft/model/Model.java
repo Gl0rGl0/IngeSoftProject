@@ -21,8 +21,21 @@ public class Model {
 
     public String ambitoTerritoriale = null;
 
+    private static volatile Model instance = null;
+
+    public static Model getInstance() {
+        if (instance == null) {
+            synchronized(Model.class) {
+                if (instance == null) {
+                    instance = new Model();
+                }
+            }
+        }
+        return instance;
+    }
+
     // Constructor and helper initialization
-    public Model() {
+    private Model() {
         dbConfiguratoreHelper = new DBConfiguratoreHelper();
         dbFruitoreHelper = new DBFruitoreHelper();
         dbVolontarioHelper = new DBVolontarioHelper();
@@ -41,31 +54,13 @@ public class Model {
         return this.ambitoTerritoriale;
     }
 
-    public boolean addLuogo(String name, String description, String gps) {
-        return dbLuoghiHelper.addLuogo(name, description, gps);
-    }
-
-    public boolean addTipoVisita(TipoVisita tv) {
-        return dbTipoVisiteHelper.addTipoVisita(tv);
-    }
-
-    public void addVisita(Visita visita) {
-        dbVisiteHelper.addVisita(visita);
-    }
-
-    public boolean addTipoVisita(String[] args, Date d) {
-        return dbTipoVisiteHelper.addTipoVisita(new TipoVisita(args, d));
-    }
-
     // ================================================================
     // Remove methods
     // ================================================================
-    public boolean removeConfiguratore(String username) {
-        return dbConfiguratoreHelper.removePersona(username);
-    }
-
     public boolean removeFruitore(String username) {
-        // delete all registrations linked to him
+        // dbIscrizionisHelper.removeAllIscrizioni
+        Volontario v = dbVolontarioHelper.getPersona(username);
+        //DA RIMUOVERE TUTTE LE ISCRIZIONI
         return dbFruitoreHelper.removePersona(username);
     }
 
@@ -94,6 +89,7 @@ public class Model {
     }
 
     public void removeVisita(String type, String date) {
+        //DA RIMUOVERE TUTTE LE ISCRIZIONI
         dbVisiteHelper.removeVisita(type, date);
     }
 
@@ -282,23 +278,12 @@ public class Model {
     // ================================================================
     // Getters via UID
     // ================================================================
-    public Luogo getLuoghiByUID(String uid) {
-        return dbLuoghiHelper.getLuogoByUID(uid);
-    }
-
-    public TipoVisita getTipiByUID(String uid) {
-        return dbTipoVisiteHelper.getTipiVisitaByUID(uid);
-    }
-
-    public Visita getVisitaByUID(String uid) {
-        return dbVisiteHelper.getVisitaByUID(uid);
-    }
 
     public ArrayList<Visita> trovaVisiteByVolontario(Volontario v) {
         ArrayList<Visita> out = new ArrayList<>();
 
         for (String visitaUID : v.getTipiVisiteUIDs()) {
-            out.add(getVisitaByUID(visitaUID));
+            out.add(dbVisiteHelper.getVisitaByUID(visitaUID));
         }
 
         return out;
@@ -308,7 +293,7 @@ public class Model {
         ArrayList<Visita> out = new ArrayList<>();
 
         for (String visitaUID : l.getTipoVisitaUID()) {
-            out.add(getVisitaByUID(visitaUID));
+            out.add(dbVisiteHelper.getVisitaByUID(visitaUID));
         }
 
         return out;

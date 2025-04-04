@@ -31,15 +31,16 @@ public class Luogo {
         this.UID = UID;
     }
 
-    public Luogo(
-            String name,
-            String description,
-            String position) {
-
-        this.name = name;
-        this.description = description;
-        this.position = position;
-        this.UID = name.hashCode() + "";
+    public Luogo(String[] a) throws Exception{
+        try {
+            this.name = a[0];
+        } catch (Exception e) {
+            throw new Exception("Title name can't be empty");
+        }
+        
+        this.description = a[1];
+        this.position = a[2];
+        this.UID = name.hashCode() + "l";
     }
 
     @Override

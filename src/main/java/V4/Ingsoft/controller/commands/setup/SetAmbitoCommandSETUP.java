@@ -31,13 +31,13 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
         }
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if(a[0].trim() == "") {
-            AssertionControl.logMessage("Ambito non può essere stringa vuota", 2, this.getClass().getSimpleName());
+        if(a[0].isBlank()) {
+            AssertionControl.logMessage("Ambito non può essere stringa vuota", 2, CLASSNAME);
             ViewSE.println("La stringa setambito non può essere vuota");
             return;
         }
 
-        controller.db.setAmbito(a[0].trim());
+        controller.db.setAmbito(a[0]);
 
         this.hasBeenExecuted = true;
     }

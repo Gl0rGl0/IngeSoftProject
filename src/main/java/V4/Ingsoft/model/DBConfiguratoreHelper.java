@@ -7,28 +7,22 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
     public DBConfiguratoreHelper() {
         super(PersonaType.CONFIGURATORE);
         if (cachedItems.isEmpty()) {
-            cachedItems.put("ADMIN", new Configuratore("ADMIN", "PASSWORD", false, true));
+            Configuratore admin;
+            try {
+                admin = new Configuratore(new String[]{"ADMIN, PASSWORD"});
+            } catch (Exception e) {
+                return;
+            }
+            admin.setAsNotNew();
+            cachedItems.put("ADMIN", admin);
         }
     }
 
-    public boolean addConfiguratore(String username, String password) {
-        if (cachedItems.get(username) != null)
+    public boolean addConfiguratore(Configuratore c) {
+        if (cachedItems.get(c.getUsername()) != null)
             return false;
 
-        cachedItems.put(username, new Configuratore(username, password, true, true));
+        cachedItems.put(c.getUsername(), c);
         return saveJson(getPersonList());
     }
-
-    // the psw is saved with a very simple hash encryption + salting with user given
-    // that it is unique...
-    // @Override
-    // public Persona login(String user, String psw) {
-    // for (Persona p : getPersonList()) {
-    // if (p.getUsername().equals(user)) {
-    // if (p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw)))
-    // return p;
-    // }
-    // }
-    // return null;
-    // }
 }

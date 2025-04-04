@@ -2,12 +2,12 @@ package V4.Ingsoft.controller.commands.setup;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 public class AddCommandSETUP extends AbstractCommand {
-
     private final Controller controller;
 
     public AddCommandSETUP(Controller controller) {
@@ -41,24 +41,34 @@ public class AddCommandSETUP extends AbstractCommand {
         this.hasBeenExecuted = true;
     }
 
-    public void addLuogo(String[] args) {
+    private void addLuogo(String[] args) {
+
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if(a.length < 3){
-            AssertionControl.logMessage("Comando 'add' errato", 3, getClass().getSimpleName());
+        if (!controller.canExecute16thAction) {
+            AssertionControl.logMessage(
+                    controller.getCurrentUser().getUsername()
+                            + "| Cannot add a place if it's not the 16th of the month: "
+                            + a[0],
+                    1,
+                    CLASSNAME);
             return;
         }
 
-        if(a[0].trim() == ""){
-            AssertionControl.logMessage("You can't add an empty title", 3, getClass().getSimpleName());
+        Luogo l;
+        try {
+            l = new Luogo(a);
+        } catch (Exception e) {
+            AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
             return;
         }
 
-        if(a[2].trim() == ""){
-            AssertionControl.logMessage("You can't add an empty position", 3, getClass().getSimpleName());
-            return;
+        if (a.length > 2 && controller.db.dbLuoghiHelper.addLuogo(l)) {
+            AssertionControl.logMessage(
+                    controller.getCurrentUser().getUsername() + "| Added place: " + a[0], 3, CLASSNAME);
+        } else {
+            AssertionControl.logMessage(
+                    controller.getCurrentUser().getUsername() + "| Place not added: " + a[0], 3, CLASSNAME);
         }
-
-        controller.db.addLuogo(a[0], a[1], a[2]);
     }
 }

@@ -31,10 +31,6 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
         return super.getItems();
     }
 
-    public boolean addLuogo(String name, String description, String gps) {
-        return addLuogo(new Luogo(name, description, gps));
-    }
-
     /**
      * Aggiunge un nuovo Luogo nel file delle proprietà.
      * Simile a addPersona(), ma adattato per Luogo.

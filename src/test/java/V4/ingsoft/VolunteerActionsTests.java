@@ -32,7 +32,7 @@ public class VolunteerActionsTests {
         try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
         // Re-initialize model and controller
-        model = new Model();
+        model = Model.getInstance();
         controller = new Controller(model);
     }
 

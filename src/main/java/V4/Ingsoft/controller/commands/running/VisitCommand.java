@@ -11,7 +11,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class VisitCommand extends AbstractCommand {
     private final Controller controller;
-    private final String CLASSNAME = this.getClass().getSimpleName();
 
     public VisitCommand(Controller controller) {
         this.controller = controller;

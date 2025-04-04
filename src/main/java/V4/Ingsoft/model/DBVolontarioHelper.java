@@ -8,11 +8,11 @@ public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
         super(PersonaType.VOLONTARIO);
     }
 
-    public boolean addVolontario(String username, String password) {
-        if (cachedItems.get(username) != null)
+    public boolean addVolontario(Volontario v) {
+        if (cachedItems.get(v.getUsername()) != null)
             return false;
 
-        cachedItems.put(username, new Volontario(username, password, true, true));
+        cachedItems.put(v.getUsername(), v);
         return saveJson(getPersonList());
     }
 

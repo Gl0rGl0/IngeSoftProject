@@ -1,6 +1,5 @@
 package V4.Ingsoft.controller.item.persone;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,6 +29,7 @@ public class Volontario extends Persona {
         return this.UIDvisitePresentabili;
     }
 
+
     public static final String PATH = "volontari";
 
     public boolean[] availability = new boolean[31];
@@ -45,7 +45,7 @@ public class Volontario extends Persona {
             @JsonProperty("new") boolean isNew,
             @JsonProperty("visite") ArrayList<String> visite,
             @JsonProperty("disponibilita") boolean[] disponibilita) {
-        this(username, psw, isNew);
+        this(username, psw, isNew, false);
         this.visiteUIDs = visite;
         if (disponibilita != null)
             this.availability = disponibilita;
@@ -55,8 +55,8 @@ public class Volontario extends Persona {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 
-    public Volontario(String username, String psw, boolean isNew) {
-        this(username, psw, isNew, false);
+    public Volontario(String[] a) throws Exception{
+        this(a[0], a[1], true, true);
     }
 
     /**
@@ -71,24 +71,13 @@ public class Volontario extends Persona {
      * @param disp la data per cui si vuole impostare la disponibilità
      */
     public void setAvailability(Date oggi, Date disp) {
-        if (!twoMonthsDifference(oggi, disp)) {
+        if (!Date.twoMonthsDifference(oggi, disp)) {
             ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return;
         }
 
         valid = false;
         availability[disp.getDay()] = true;
-    }
-
-    private boolean twoMonthsDifference(Date d1, Date d2) {
-        Month currentMonth = d1.getMonth();
-        Month targetMonth = d2.getMonth();
-
-        if (d1.getDay() < 16) {
-            return (currentMonth.plus(2)) == targetMonth;
-        } else {
-            return (currentMonth.plus(3)) == targetMonth;
-        }
     }
 
     public void clearAvailability() {

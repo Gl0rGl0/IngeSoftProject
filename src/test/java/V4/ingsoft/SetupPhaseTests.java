@@ -31,7 +31,7 @@ public class SetupPhaseTests {
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
 
         // Re-initialize model and controller for a fresh start
-        model = new Model(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
+        model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
         controller = new Controller(model);
         // DO NOT skip setup testing here, as these tests ARE the setup phase
     }

@@ -9,7 +9,6 @@ import V4.Ingsoft.view.ViewSE;
 public class RemoveCommand extends AbstractCommand {
 
     private final Controller controller;
-    private final String CLASSNAME = this.getClass().getSimpleName();
     private final String ERROR_16 = "Action only possible on the 16th of the month!";
 
     public RemoveCommand(Controller controller) {
@@ -61,7 +60,7 @@ public class RemoveCommand extends AbstractCommand {
 
     private void removeConfiguratore(String[] args) {
         ViewSE.println("Executing: Removing configurator");
-        controller.db.removeConfiguratore(args[0]);
+        controller.db.dbConfiguratoreHelper.removePersona(args[0]);
     }
 
     private void removeFruitore(String[] args) {

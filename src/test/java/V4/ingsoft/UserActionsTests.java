@@ -42,7 +42,7 @@ public class UserActionsTests {
         try { Files.deleteIfExists(Paths.get(settingsPath)); } catch (IOException e) { /* Ignore */ }
 
         // Re-initialize model and controller
-        model = new Model();
+        model = Model.getInstance();
         controller = new Controller(model);
     }
 

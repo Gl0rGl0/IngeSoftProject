@@ -120,4 +120,15 @@ public class Date {
     public int getYear() {
         return this.localDate.getYear();
     }
+
+    public static boolean twoMonthsDifference(Date d1, Date d2) {
+        Month currentMonth = d1.getMonth();
+        Month targetMonth = d2.getMonth();
+
+        if (d1.getDay() < 16) {
+            return (currentMonth.plus(2).equals(targetMonth));
+        } else {
+            return (currentMonth.plus(3).equals(targetMonth));
+        }
+    }
 }

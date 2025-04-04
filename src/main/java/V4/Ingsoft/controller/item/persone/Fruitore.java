@@ -15,8 +15,12 @@ public class Fruitore extends Persona {
         this(username, psw, isNew, false);
     }
 
-    public Fruitore(String username, String psw, boolean isNew, boolean hash) {
+    private Fruitore(String username, String psw, boolean isNew, boolean hash) {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
+    }
+
+    public Fruitore(String[] a){    //added with command
+        this(a[0], a[1], true, true);
     }
 
     @Override

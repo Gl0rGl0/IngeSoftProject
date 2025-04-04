@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.DayOfWeekConverter;
 import V4.Ingsoft.util.Time;
-import V4.Ingsoft.view.ViewSE;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class TipoVisita {
@@ -133,7 +132,11 @@ public class TipoVisita {
     }
 
     // Should this be split into some function? (?)
-    public TipoVisita(String[] args, Date d) {
+    public TipoVisita(String[] args, Date d) throws Exception {
+
+        if(args[0].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Title is empty");
+
         int length = args.length;
         
         try {
@@ -152,9 +155,7 @@ public class TipoVisita {
 
             this.insertionDay = d;
         } catch (NumberFormatException e) {
-            ViewSE.println(e);
-            ViewSE.println(
-                    "Semantic error: inserted a string instead of a number, or something similar. VISIT NOT CREATED");
+            throw new Exception("Error in TipoVisita constructor: " + e.getMessage());
         }
     }
 
