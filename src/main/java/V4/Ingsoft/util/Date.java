@@ -40,12 +40,11 @@ public class Date {
     }
 
     /**
-     * Constructs a date from a string in the format "dd/mm[/yy]-[hh:mm]".
-     * If the year is not present, it is set to -1 (Note: This behavior seems incorrect, LocalDate requires a year).
+     * Constructs a date from a string in the format "dd/mm/yy-[hh:mm]".
      *
      * @param in the string containing the date and optionally a time part (comment seems outdated)
      */
-    public Date(String in) {
+    public Date(String in) throws Exception{
         String[] parts = in.split("-");
 
         setDate(parts[0].split("/"));
@@ -57,7 +56,7 @@ public class Date {
         }
     }
 
-    private void setDate(String[] in) {
+    private void setDate(String[] in) throws NumberFormatException{
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
         int year = Integer.parseInt(in[2]);

@@ -37,6 +37,10 @@ public enum CommandList implements ListInterface {
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.MAX.getPriority()),
 
+        AVAILABILITY(ConstString.AVAILABILITY_INFO, ConstString.AVAILABILITY_LINE_INFO,
+                        PersonaType.VOLONTARIO.getPriority(),
+                        PersonaType.VOLONTARIO.getPriority()),
+
         PRECLUDE(ConstString.PRECLUDE_INFO, ConstString.PRECLUDE_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.MAX.getPriority()),

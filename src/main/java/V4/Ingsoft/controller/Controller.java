@@ -89,10 +89,6 @@ public class Controller {
         return this.user;
     }
 
-    public void addPrecludedDate(String d) {
-        db.addPrecludedDate(new Date(d));
-    }
-
     public boolean canExecute16thAction = true;
 
     public void dailyAction() {

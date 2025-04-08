@@ -40,7 +40,6 @@
 //         controller.interpreter("changepsw newAdminPass");
 
 //         // 2. Complete Setup Steps using known setup commands
-//         controller.interpreter("setambito TestAreaRegime");
 //         controller.interpreter("setmax 5");
 //         controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
 //         // Cannot add types/volunteers/assignments during setup via commands

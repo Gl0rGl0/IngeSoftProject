@@ -9,7 +9,7 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
         if (cachedItems.isEmpty()) {
             Configuratore admin;
             try {
-                admin = new Configuratore(new String[]{"ADMIN, PASSWORD"});
+                admin = new Configuratore(new String[]{"ADMIN", "PASSWORD"});
             } catch (Exception e) {
                 return;
             }

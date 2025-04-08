@@ -89,14 +89,18 @@ public class Initer {
 
         for (Volontario v : c.db.dbVolontarioHelper.getPersonList()) {
             for (int i = 0; i < 15; i++)
-                v.setAvailability(c.date,
-                        new Date(String.format("%d/%d/2025", r.nextInt(1, meseNum.maxLength()), meseNum.getValue())));
+                try {
+                    v.setAvailability(c.date, new Date(String.format("%d/%d/2025", 
+                                                r.nextInt(1, meseNum.maxLength()), 
+                                                meseNum.getValue())));
+                } catch (Exception e) {
+                   continue;
+                }
             System.out.println(v.getNumAvailability());
         }
     }
 
     public static void setupPhase(Controller controller) {
-        controller.interpreter("setambito InitialArea"); // Correct setup command
         controller.interpreter("setmax 5"); // Correct setup command
         controller.interpreter("add -L Universita \"Descrizione universitaria\" \"Via Branze 38\""); // Correct setup command
         controller.interpreter("done"); // Correct setup command

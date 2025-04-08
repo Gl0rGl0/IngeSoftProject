@@ -29,6 +29,7 @@ public class SetupPhaseTests {
         try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
+        Model.instance = null;
 
         // Re-initialize model and controller for a fresh start
         model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
@@ -57,41 +58,6 @@ public class SetupPhaseTests {
     public void testSetupSetAmbitoSuccess() {
         // Arrange
         enterSetupPhase();
-
-        // Act
-        controller.interpreter("setambito TestArea"); // Correct setup command
-
-        // Assert
-        assertTrue(controller.db.ambitoTerritoriale.equals("TestArea"));
-    }
-
-    @Test
-    public void testSetupSetAmbitoFailEmpty() {
-        // Arrange
-        enterSetupPhase();
-
-        // Act
-        controller.interpreter("setambito "); // Empty ambito, should fail or set to default/empty
-
-        // Assert
-        // Assuming empty string is invalid and it should retain default or previous value (likely null or empty initially)
-        assertNull(controller.db.ambitoTerritoriale, "Ambito should remain null/default after attempting to set an empty string.");
-    }
-
-    @Test
-    public void testSetupSetAmbitoFailAfterSetupComplete() {
-         // Arrange: Complete the setup first
-         enterSetupPhase();
-         controller.interpreter("setambito InitialArea"); // Correct setup command
-         controller.interpreter("setmax 5"); // Correct setup command
-         controller.interpreter("add -L Place1 \"Initial Place\" 10.0,20.0"); // Correct setup command
-         controller.interpreter("done"); // Correct setup command
-
-         // Act: Try to set ambito again
-         controller.interpreter("setambito NewAreaAttempt"); // Correct setup command (should fail)
-
-         // Assert
-         assertEquals("InitialArea", controller.db.ambitoTerritoriale, "Ambito should remain 'InitialArea' after setup is done.");
     }
 
     // // UC6 - Assegnazione Numero Massimo Persone per Iscrizione (Setup)
@@ -155,11 +121,11 @@ public class SetupPhaseTests {
         enterSetupPhase();
 
         // Act
-        controller.interpreter("add -L Place1 \"Test Description\" 10.1,20.2"); // Correct setup command
+        controller.interpreter("add -L TestPlace \"Test Description\" 10.1,20.2"); // Correct setup command
 
         // Assert
-        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place1"), "Place1 should exist after adding.");
-        assertEquals("Test Description", controller.db.dbLuoghiHelper.findLuogo("Place1").getDescription());
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should exist after adding.");
+        assertEquals("Test Description", controller.db.dbLuoghiHelper.findLuogo("TestPlace").getDescription());
         // Could also check coordinates if GPS class has getters/equals
     }
 
@@ -181,14 +147,14 @@ public class SetupPhaseTests {
     public void testSetupAddLuogoFailDuplicateTitle() {
         // Arrange
         enterSetupPhase();
-        controller.interpreter("add -L Place1 \"First Place\" 10.1,20.2"); // Correct setup command
+        controller.interpreter("add -L TestPlace \"First Place\" 10.1,20.2");
 
         // Act
-        controller.interpreter("add -L Place1 \"Second Place\" 30.3,40.4"); // Correct setup command
+        controller.interpreter("add -L TestPlace \"Second Place\" 30.3,40.4");
 
         // Assert
-        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place1"), "Place1 should still exist.");
-        assertEquals("First Place", controller.db.dbLuoghiHelper.findLuogo("Place1").getDescription(), "Place1 description should not change on duplicate add attempt.");
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should still exist.");
+        assertEquals("First Place", controller.db.dbLuoghiHelper.findLuogo("TestPlace").getDescription(), "Place1 description should not change on duplicate add attempt.");
     }
 
     @Test
@@ -276,7 +242,6 @@ public class SetupPhaseTests {
     public void testSetupDoneSuccess() {
         // Arrange: Complete all required setup steps
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
         controller.interpreter("setmax 5");
         controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
         
@@ -285,33 +250,12 @@ public class SetupPhaseTests {
         
         // Assert
         assertTrue(controller.setupCompleted(), "Setup should be marked as complete after 'done'.");
-        // Try a setup command again, it should fail (state shouldn't change)
-        controller.interpreter("setambito AnotherArea");
-        assertEquals("TestArea", controller.db.ambitoTerritoriale, "Ambito should not change after setup is done.");
-    }
-
-    @Test
-    public void testSetupDoneFailMissingAmbito() {
-        // Arrange: Miss setambito
-        enterSetupPhase();
-        controller.interpreter("setmax 5");
-        controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
-
-        // Act
-        controller.interpreter("done"); // Correct setup command
-
-        // Assert
-        assertFalse(controller.setupCompleted(), "Setup should not be complete if ambito is missing.");
-        // Verify ambito can still be set
-        controller.interpreter("setambito ShouldWorkNow");
-        assertEquals("ShouldWorkNow", controller.db.ambitoTerritoriale, "Should be able to set ambito if 'done' failed.");
     }
 
     @Test
     public void testSetupDoneFailMissingPersoneMax() {
         // Arrange: Miss setmax
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
         controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
 
         // Act
@@ -328,7 +272,6 @@ public class SetupPhaseTests {
     public void testSetupDoneFailMissingLuogo() {
         // Arrange: Miss adding luogo
         enterSetupPhase();
-        controller.interpreter("setambito TestArea");
         controller.interpreter("setmax 5");
 
         // Act

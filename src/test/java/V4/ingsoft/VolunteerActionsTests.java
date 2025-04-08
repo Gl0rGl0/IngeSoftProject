@@ -2,7 +2,6 @@ package V4.ingsoft;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import V4.Ingsoft.controller.Controller;
@@ -31,6 +30,7 @@ public class VolunteerActionsTests {
         try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
+        Model.instance = null;
         // Re-initialize model and controller
         model = Model.getInstance();
         controller = new Controller(model);
@@ -41,7 +41,6 @@ public class VolunteerActionsTests {
         controller.interpreter("changepsw newAdminPass");
 
         // 2. Setup steps using known setup commands
-        controller.interpreter("setambito TestAreaUser");
         controller.interpreter("setmax 5");
         // Ensure 3 arguments for add -L: title, description, gps
         controller.interpreter("add -L PlaceUser \"User Place\" 10.0,20.0");
@@ -54,18 +53,16 @@ public class VolunteerActionsTests {
     private void setupAndLoginAsVolunteer(String username, String password) {
         // Ensure all arguments for add -t are provided, using "" for optional description if needed
         // Format: add -t <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione] ...
-        controller.interpreter("add -v VolUser PassVUser");
-        controller.interpreter("assign -V VolUser TVUser");
-        controller.interpreter("assign -L PlaceUser TVUser");
-
-        // 4. Register the fruitore using running command
+        setupDone();
+        controller.interpreter("login ADMIN PASSWORD");
         controller.interpreter("add -v " + username + " " + password);
 
         // 6. Login as fruitore
         controller.interpreter("logout"); // Ensure logged out first
         controller.interpreter("login " + username + " " + password);
         controller.interpreter("changepsw " + password);
-        assertEquals(PersonaType.VOLONTARIO.toString(), controller.user.getType().toString(), "User should be of type FRUITORE.");
+
+        assertEquals(PersonaType.VOLONTARIO, controller.user.getType(), "User should be of type VOLONTARIO.");
     }
 
 
@@ -100,7 +97,6 @@ public class VolunteerActionsTests {
         controller.interpreter("changepsw newAdminPass");
 
         // 2. Setup steps using known setup commands
-        controller.interpreter("setambito TestAreaUser");
         controller.interpreter("setmax 5");
         // Ensure 3 arguments for add -L: title, description, gps
         controller.interpreter("add -L PlaceUser \"User Place\" 10.0,20.0");

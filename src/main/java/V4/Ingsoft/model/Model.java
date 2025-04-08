@@ -21,12 +21,13 @@ public class Model {
 
     public String ambitoTerritoriale = null;
 
-    private static volatile Model instance = null;
+    public static volatile Model instance = null;
 
     public static Model getInstance() {
         if (instance == null) {
             synchronized(Model.class) {
                 if (instance == null) {
+                    System.out.println("nuovo");
                     instance = new Model();
                 }
             }

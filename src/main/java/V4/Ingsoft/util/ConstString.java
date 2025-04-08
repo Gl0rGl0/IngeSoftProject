@@ -171,4 +171,13 @@ public class ConstString {
             """;
 
     public static final String HELP_LINE_INFO = "Provides information about available commands.";
+
+    public static final String AVAILABILITY_INFO = """
+            setav [-a | -r ] [Date: dateAvailable] [Date...]
+                -a              Add a date
+                -r              Remove a date
+                dateAvailable   Date to set the availability. Format <GG/MM/AAAA>
+            You can add/remove multiple date
+            """;
+    public static final String AVAILABILITY_LINE_INFO = "Add or remove at least one availability date from your calendar";
 }

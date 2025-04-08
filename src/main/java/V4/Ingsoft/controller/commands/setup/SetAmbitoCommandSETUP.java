@@ -8,6 +8,8 @@ import V4.Ingsoft.view.ViewSE;
 
 public class SetAmbitoCommandSETUP extends AbstractCommand {
 
+    //NON UTILIZZATO
+
     private final Controller controller;
 
     public SetAmbitoCommandSETUP(Controller controller) {

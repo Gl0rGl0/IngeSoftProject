@@ -22,13 +22,19 @@ public class TimeCommand extends AbstractCommand {
         if (options.length > 0 && args.length > 0) {
             switch (options[0]) {
                 case "s" -> {
-                    controller.date = new Date(args[0]);
+                    Date toSet;
+                    try {
+                        toSet = new Date(args[0]);
+                    } catch (Exception e) {
+                        return;
+                    }
+                    controller.date = toSet;
                     controller.dailyAction();
                 }
                 case "d" -> jumpDays(args[0], 1);
                 case "m" -> jumpDays(args[0], 30);
                 case "a" -> jumpDays(args[0], 365);
-                case "n" -> controller.addPrecludedDate(args[0]); // Add precluded date
+                case "n" -> addPrecluded(args);
                 case "l" -> ViewSE.println(controller.db.getPrecludedDates()); // List precluded dates
                 default -> ViewSE.println("Option not recognized for the 'time' command.");
             }
@@ -53,5 +59,15 @@ public class TimeCommand extends AbstractCommand {
             ViewSE.println("Successfully went back " + (-g) + " days.");
         }
         // If g is 0, no message is printed, which seems reasonable.
+    }
+
+    private void addPrecluded(String[] args){
+        Date d;
+        try {
+            d = new Date(args[0]);
+        } catch (Exception e) {
+            return;
+        }
+        controller.db.addPrecludedDate(d);
     }
 }

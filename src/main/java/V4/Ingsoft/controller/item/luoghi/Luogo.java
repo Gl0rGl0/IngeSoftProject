@@ -1,6 +1,8 @@
 package V4.Ingsoft.controller.item.luoghi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,6 +39,9 @@ public class Luogo {
         } catch (Exception e) {
             throw new Exception("Title name can't be empty");
         }
+
+        if(a[0].isBlank())
+            throw new Exception("Title name can't be empty");
         
         this.description = a[1];
         this.position = a[2];

@@ -9,7 +9,7 @@ public class PeriodOfTheYear {
         this.finishDay = finishDay;
     }
 
-    public PeriodOfTheYear(String in) {
+    public PeriodOfTheYear(String in) throws Exception {
         String[] use = in.split("-");
 
         this.initDay = new Date(use[0]);

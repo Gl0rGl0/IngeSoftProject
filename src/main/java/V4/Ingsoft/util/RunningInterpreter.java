@@ -3,6 +3,7 @@ package V4.Ingsoft.util;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.HelpCommand;
 import V4.Ingsoft.controller.commands.running.AddCommand;
+import V4.Ingsoft.controller.commands.running.AvailabilityCommand;
 import V4.Ingsoft.controller.commands.running.CommandList;
 import V4.Ingsoft.controller.commands.running.ListCommand;
 import V4.Ingsoft.controller.commands.running.LoginCommand;
@@ -21,6 +22,7 @@ public class RunningInterpreter extends Interpreter {
         commandRegistry.put("preclude", new PrecludeCommand(controller));
         commandRegistry.put("remove", new RemoveCommand(controller));
         commandRegistry.put("myvisit", new MyVisitCommand(controller));
+        commandRegistry.put("setav", new AvailabilityCommand(controller));
         commandRegistry.put("help", new HelpCommand(controller, CommandList.HELP));
     }
 

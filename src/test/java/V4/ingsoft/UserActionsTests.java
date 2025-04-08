@@ -2,97 +2,92 @@ package V4.ingsoft;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.model.DBAbstractPersonaHelper;
 import V4.Ingsoft.model.Model;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-// Tests for Use Cases UC30-UC33 (Fruitore/User Actions)
+// Tests for Use Cases UC10-UC15, UC20-UC27 (+ Regime Phase)
 public class UserActionsTests {
     private Controller controller;
     private Model model;
     private String configPath = "data/configuratori.json";
     private String volontariPath = "data/volontari.json";
     private String fruitoriPath = "data/fruitori.json";
-    private String visitePath = "data/visite.json";
     private String luoghiPath = "data/luoghi.json";
-    private String tipiVisitaPath = "data/tipi_visita.json";
-    private String iscrizioniPath = "data/iscrizioni.json";
-    private String datePreclusePath = "data/date_precluse.json";
-    private String disponibilitaPath = "data/disponibilita.json";
-    private String settingsPath = "data/settings.json";
+    private String tipiVisitaPath = "data/tipoVisite.json";
+    
 
     // Helper to reset data files before each test
     private void resetDataFiles() {
-        // Delete existing files to ensure clean state
+        // Delete existing files to ensure clean state for setup
         try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(visitePath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(iscrizioniPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(datePreclusePath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(disponibilitaPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(settingsPath)); } catch (IOException e) { /* Ignore */ }
+        Model.instance = null;
 
-        // Re-initialize model and controller
-        model = Model.getInstance();
+        // Re-initialize model and controller for a fresh start
+        model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
         controller = new Controller(model);
+        // DO NOT skip setup testing here, as these tests ARE the setup phase
     }
 
-    // Helper method to complete setup, generate visits (hypothetically), and login as fruitore
-    private void setupAndLoginAsFruitore(String username, String password) {
-        // 1. Admin setup
+    // Helper method to complete the setup phase and log in as a regular configurator
+    private void enterRegimePhase() {
+        // 1. First absolute login and password change for ADMIN
         controller.interpreter("login ADMIN PASSWORD");
-        controller.interpreter("changepsw newAdminPass");
 
-        // 2. Setup steps using known setup commands
-        controller.interpreter("setambito TestAreaUser");
+        // 2. Complete Setup Steps using known setup commands
         controller.interpreter("setmax 5");
-        // Ensure 3 arguments for add -L: title, description, gps
-        controller.interpreter("add -L PlaceUser \"User Place\" 10.0,20.0");
-        controller.interpreter("done");
+        controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
+        // Cannot add types/volunteers/assignments during setup via commands
+        controller.interpreter("done"); // Finalize setup
 
-        // 3. Add required entities using running commands (logged in as ADMIN/Configurator)
-        // Ensure all arguments for add -t are provided, using "" for optional description if needed
-        // Format: add -t <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione] ...
-        controller.interpreter("add -t TVUser Description 1:1 1/1/1 2/2/2 10:00 60 false 1 10 Ma");
-        controller.interpreter("add -v VolUser PassVUser");
-        controller.interpreter("assign -V VolUser TVUser");
-        controller.interpreter("assign -L PlaceUser TVUser");
+        controller.interpreter("time -s 16/1/2025");
 
-        // 4. Register the fruitore using running command
+        // 3. Add another configurator using the running phase command (now logged in as ADMIN)
+        // Add initial TipoVisita and Volontario needed for some regime tests
+        // Assuming 'add -t' format: <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione]
+        // Assuming 'assign' format: <VolUsername> <TipoVisitaUID>
+        controller.interpreter("add -t TVRegime Description 1:1 1/1/2025 31/12/2025 10:00 60 false 1 10 Ma");
+        controller.interpreter("assign -L PlaceRegime TVRegime");
+        controller.interpreter("add -v VolRegime PassVol");
+        controller.interpreter("assign -V TVRegime VolRegime");
+
+        controller.interpreter("login VolRegime PassVol");
+        controller.interpreter("setav");
+
+        // 4. Logout ADMIN and Login as the new configurator
+        controller.interpreter("logout");
+    }
+
+    @BeforeEach
+    public void setup() {
+        resetDataFiles();
+        enterRegimePhase();
+    }
+
+    private void setupAndLoginAsFruitore(String username, String password) {
+         // 4. Register the fruitore using running command
+        controller.interpreter("login ADMIN PASSWORD"); // Use the updated password
         controller.interpreter("add -f " + username + " " + password);
 
         // 5. TODO: Generate visits (UC20) - Requires correct setup and plan generation command
 
         // 6. Login as fruitore
         controller.interpreter("logout"); // Ensure logged out first
+
         controller.interpreter("login " + username + " " + password);
         assertNotNull(controller.user, "Fruitore should be logged in for tests.");
-        assertEquals(PersonaType.FRUITORE.toString(), controller.user.getType().toString(), "User should be of type FRUITORE.");
+        assertEquals(PersonaType.FRUITORE, controller.user.getType(), "User should be of type FRUITORE.");   
     }
-
-
-    @BeforeEach
-    public void setup() {
-        resetDataFiles();
-        // Specific setup done in each test or helper method
-    }
-
-     @AfterEach
-     public void cleanup() {
-         controller.interpreter("logout"); // Ensure logout
-         // Optional: Clean up files again after test if needed
-         // resetDataFiles();
-     }
-
     // --- Fruitore Action Tests ---
 
     // UC30 - Visualizzazione Visite Disponibili (Fruitore)

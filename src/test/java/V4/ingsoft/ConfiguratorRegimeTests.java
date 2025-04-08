@@ -32,6 +32,7 @@ public class ConfiguratorRegimeTests {
         try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
         try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
+        Model.instance = null;
 
         // Re-initialize model and controller for a fresh start
         model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
@@ -46,7 +47,6 @@ public class ConfiguratorRegimeTests {
         controller.interpreter("changepsw newAdminPass");
 
         // 2. Complete Setup Steps using known setup commands
-        controller.interpreter("setambito TestAreaRegime");
         controller.interpreter("setmax 5");
         controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
         // Cannot add types/volunteers/assignments during setup via commands
@@ -68,8 +68,8 @@ public class ConfiguratorRegimeTests {
         controller.interpreter("logout");
         controller.interpreter("login configRegime passRegime");
         controller.interpreter("changepsw passRegime");
-        assertNotNull(controller.user, "Configurator should be logged in for regime tests.");
-        assertEquals(PersonaType.CONFIGURATORE.toString(), controller.user.getType().toString(), "User should be of type CONFIGURATORE.");
+
+        assertEquals(PersonaType.CONFIGURATORE, controller.user.getType(), "User should be of type CONFIGURATORE.");
     }
 
 
