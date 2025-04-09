@@ -5,10 +5,12 @@ import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.ConstString;
 
 public enum CommandList implements ListInterface {
+        //adder (luoghi,tipivisite,configuratori,volontari)
         ADD(ConstString.RUN_ADD_INFO, ConstString.RUN_ADD_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.CONFIGURATORE.getPriority()),
 
+        //remover (luoghi,tipivisite,configuratori,volontari, fruitori)
         REMOVE(ConstString.REMOVE_INFO, ConstString.REMOVE_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.CONFIGURATORE.getPriority()),
@@ -48,9 +50,10 @@ public enum CommandList implements ListInterface {
         MYVISIT(ConstString.MYVISIT_INFO, ConstString.MYVISIT_LINE_INFO,
                         PersonaType.FRUITORE.getPriority(),
                         PersonaType.VOLONTARIO.getPriority()),
+
         VISIT(ConstString.VISIT_INFO, ConstString.VISIT_LINE_INFO,
-                        PersonaType.CONFIGURATORE.getPriority(),
-                        PersonaType.CONFIGURATORE.getPriority()),
+                        PersonaType.FRUITORE.getPriority(),
+                        PersonaType.FRUITORE.getPriority()),
 
         EXIT(ConstString.EXIT_INFO, ConstString.EXIT_LINE_INFO,
                         PersonaType.GUEST.getPriority(),

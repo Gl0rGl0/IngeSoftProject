@@ -12,7 +12,6 @@ import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Configuratore;
-import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
@@ -46,7 +45,6 @@ public class AddCommand extends AbstractCommand {
         char option = options[0].charAt(0);
         switch (option) {
             case 'c' -> addConfiguratore(args);
-            case 'f' -> addFruitore(args);
             case 'v' -> addVolontario(args);
             case 'L' -> addLuogo(args);
             case 'V' -> makeorario(); // Assuming this generates the schedule (orario)
@@ -70,24 +68,6 @@ public class AddCommand extends AbstractCommand {
         } else {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Configurator not added", 2, CLASSNAME);
-        }
-    }
-
-    private void addFruitore(String[] args) {
-        Fruitore f;
-        try {
-            f = new Fruitore(args);
-        } catch (Exception e) {
-            AssertionControl.logMessage("Error while creating fruitore", 2, CLASSNAME);
-            return;
-        }
-        // adds a new fruitore (visitor/user) who will need to change password on first login
-        if (args.length > 1 && controller.db.dbFruitoreHelper.addFruitore(f)) {
-            AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Added fruitore: " + args[0], 3, CLASSNAME);
-        } else {
-            AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Fruitore not added", 2, CLASSNAME);
         }
     }
 

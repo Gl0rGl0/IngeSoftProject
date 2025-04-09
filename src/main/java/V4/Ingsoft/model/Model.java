@@ -8,6 +8,8 @@ import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.*;
 import V4.Ingsoft.util.Date;
+import V4.Ingsoft.util.Payload;
+import V4.Ingsoft.util.Payload.Status;
 
 public class Model {
     public final DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -78,7 +80,7 @@ public class Model {
     }
 
     public boolean removeTipoVisita(String type) {
-        TipoVisita toRemove = getTipoVisitaByName(type);
+        TipoVisita toRemove = dbTipoVisiteHelper.findTipoVisita(type);
         if (toRemove == null)
             return false;
 
@@ -229,44 +231,27 @@ public class Model {
         return dbVolontarioHelper.getPersona(username);
     }
 
-    public Persona login(String user, String psw) {
-        Persona out;
+    public Payload login(String user, String psw) {
+        Payload out;
+
         out = dbConfiguratoreHelper.login(user, psw);
-        if (out != null)
+        if (out.getData() != null)
             return out;
 
         out = dbVolontarioHelper.login(user, psw);
-        if (out != null)
+        if (out.getData() != null)
             return out;
 
         out = dbFruitoreHelper.login(user, psw);
-        if (out != null)
+        if (out.getData() != null)
             return out;
 
-        return new Guest();
-    }
-
-    // ================================================================
-    // Management of precluded dates
-    // ================================================================
-    public ArrayList<Date> getPrecludedDates() {
-        return dbDatesHelper.getPrecludedDates();
-    }
-
-    public void addPrecludedDate(Date date) {
-        dbDatesHelper.addPrecludedDate(date);
-    }
-
-    public void removePrecludedDate(Date date) {
-        dbDatesHelper.removePrecludedDate(date);
+        return new Payload(Status.ERROR, new Guest());
     }
 
     // ================================================================
     // Retrieval of TipoVisita and Luogo via name
     // ================================================================
-    public TipoVisita getTipoVisitaByName(String title) {
-        return dbTipoVisiteHelper.findTipoVisita(title);
-    }
 
     public Luogo getLuogoByName(String name) {
         return dbLuoghiHelper.findLuogo(name);

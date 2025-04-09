@@ -35,7 +35,7 @@ public class TimeCommand extends AbstractCommand {
                 case "m" -> jumpDays(args[0], 30);
                 case "a" -> jumpDays(args[0], 365);
                 case "n" -> addPrecluded(args);
-                case "l" -> ViewSE.println(controller.db.getPrecludedDates()); // List precluded dates
+                case "l" -> ViewSE.println(controller.db.dbDatesHelper.getPrecludedDates()); // List precluded dates
                 default -> ViewSE.println("Option not recognized for the 'time' command.");
             }
         } else {
@@ -68,6 +68,6 @@ public class TimeCommand extends AbstractCommand {
         } catch (Exception e) {
             return;
         }
-        controller.db.addPrecludedDate(d);
+        controller.db.dbDatesHelper.addPrecludedDate(d);
     }
 }

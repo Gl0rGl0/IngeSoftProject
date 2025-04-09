@@ -23,7 +23,6 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        // Internal check
         Date d;
         try {
             d = new Date(args[0]);
@@ -51,11 +50,11 @@ public class PrecludeCommand extends AbstractCommand {
 
     private void addPrecludedDate(Date d) {
         ViewSE.println("Executing: Adding precluded date");
-        controller.db.addPrecludedDate(d); // adds a special date
+        controller.db.dbDatesHelper.addPrecludedDate(d);
     }
 
     private void removePrecludedDate(Date d) {
         ViewSE.println("Executing: Removing precluded date");
-        controller.db.removePrecludedDate(d);
+        controller.db.dbDatesHelper.removePrecludedDate(d);
     }
 }

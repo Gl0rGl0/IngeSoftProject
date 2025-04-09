@@ -36,7 +36,6 @@ public class Volontario extends Persona {
     @JsonIgnore
     public int numAvailability;
     @JsonIgnore
-    private boolean valid = false;
 
     @JsonCreator
     public Volontario(
@@ -51,7 +50,7 @@ public class Volontario extends Persona {
             this.availability = disponibilita;
     }
 
-    public Volontario(String username, String psw, boolean isNew, boolean hash) {
+    private Volontario(String username, String psw, boolean isNew, boolean hash) {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 
@@ -70,14 +69,13 @@ public class Volontario extends Persona {
      * @param oggi la data corrente (per aggiornare eventualmente il periodo)
      * @param disp la data per cui si vuole impostare la disponibilità
      */
-    public void setAvailability(Date oggi, Date disp) {
+    public void setAvailability(Date oggi, Date disp, boolean toAdd) {
         if (!Date.twoMonthsDifference(oggi, disp)) {
             ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return;
         }
 
-        valid = false;
-        availability[disp.getDay()] = true;
+        availability[disp.getDay()] = toAdd;
     }
 
     public void clearAvailability() {
@@ -93,20 +91,5 @@ public class Volontario extends Persona {
 
     public boolean[] getAvailability() {
         return availability;
-    }
-
-    public int getNumAvailability() {
-        if (valid) {
-            return numAvailability;
-        }
-
-        for (boolean b : availability) {
-            if (b) {
-                numAvailability += 1;
-            }
-        }
-
-        valid = true;
-        return numAvailability;
     }
 }

@@ -2,9 +2,11 @@ package V4.Ingsoft.controller.commands.setup;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.controller.item.persone.Guest; // Added missing import
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.Payload;
+import V4.Ingsoft.util.Payload.Status;
 import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommandSETUP extends AbstractCommand {
@@ -29,27 +31,37 @@ public class LoginCommandSETUP extends AbstractCommand {
             return;
         }
 
-        Persona p = login(args[0], args[1]);
-        controller.user = p;
+        Payload toUse = login(args[0], args[1]);
+        controller.user = (Persona) toUse.getData();
 
-        System.out.println(p);
-
-        if (controller.user.getType() == PersonaType.CONFIGURATORE) { // ONLY A CONFIGURATOR CAN ACCESS SETUP
-            ViewSE.println("Login successful (" + controller.user.getType() + ")");
-            if (controller.user.isNew()) {
-                ViewSE.println(
-                        "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
-            }
-            this.hasBeenExecuted = true;
-        } else {
-            // Reset user to Guest if login failed or was not a configurator
-            controller.user = new Guest();
-            ViewSE.println("Login error or insufficient permissions for setup, please try again.");
+        if(toUse.getStatus() == Status.ERROR){
+            loginError(toUse, args);
+        }else{
+            loginSuccess(toUse, args);
         }
+
     }
 
-    private Persona login(String username, String psw) {
+    private Payload login(String username, String psw) {
         return controller.db.login(username, psw);
     }
 
+    private void loginError(Payload toUse, String[] args){
+        Persona p = (Persona) toUse.getData();
+        if(p.getType() != PersonaType.GUEST){
+            ViewSE.println("Wrong password, please try again");
+            AssertionControl.logMessage("Error password " + p.getUsername(), 3, CLASSNAME);
+        }else{
+            ViewSE.println("This Configuratore doesn't exist, please try again");
+            AssertionControl.logMessage("No configuratore exist " + p.getUsername(), 3, CLASSNAME);
+        }
+    }
+
+    private void loginSuccess(Payload toUse, String[] args){
+        ViewSE.println("Login successful (" + controller.user.getType() + ")");
+        if (controller.user.isNew()) {
+            ViewSE.println(
+                    "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
+        }
+    }
 }

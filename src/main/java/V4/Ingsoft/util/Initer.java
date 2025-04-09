@@ -92,11 +92,10 @@ public class Initer {
                 try {
                     v.setAvailability(c.date, new Date(String.format("%d/%d/2025", 
                                                 r.nextInt(1, meseNum.maxLength()), 
-                                                meseNum.getValue())));
+                                                meseNum.getValue())), true);
                 } catch (Exception e) {
                    continue;
                 }
-            System.out.println(v.getNumAvailability());
         }
     }
 

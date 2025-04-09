@@ -19,7 +19,7 @@ public class Fruitore extends Persona {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
     }
 
-    public Fruitore(String[] a){    //added with command
+    public Fruitore(String[] a) throws Exception{    //added with command
         this(a[0], a[1], true, true);
     }
 

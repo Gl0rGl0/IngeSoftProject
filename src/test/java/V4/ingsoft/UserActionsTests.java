@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.model.DBAbstractPersonaHelper;
 import V4.Ingsoft.model.Model;
 import java.io.IOException;
 import java.nio.file.Files;

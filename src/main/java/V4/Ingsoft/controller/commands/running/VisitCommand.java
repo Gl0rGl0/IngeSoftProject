@@ -42,16 +42,16 @@ public class VisitCommand extends AbstractCommand {
         String[] a = StringUtils.joinQuotedArguments(args);
         Visita v = controller.db.getVisitaByName(a[0], a[1]);
 
-        if (v == null) {
-            ViewSE.println("No visits available with that name...");
-            AssertionControl.logMessage("Visit does not exist", 3, CLASSNAME);
-            return;
-        }
-
         if (controller.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Cannot register a NON-fruitore for the visit");
             AssertionControl.logMessage("Registration attempt from config/volunteer, should not have reached here", 1,
                     CLASSNAME);
+            return;
+        }
+
+        if (v == null) {
+            ViewSE.println("No visits available with that name...");
+            AssertionControl.logMessage("Visit does not exist", 3, CLASSNAME);
             return;
         }
 

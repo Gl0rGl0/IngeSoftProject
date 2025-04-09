@@ -1,7 +1,6 @@
 package V4.Ingsoft.controller.item.luoghi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,15 +33,19 @@ public class Luogo {
     }
 
     public Luogo(String[] a) throws Exception{
-        try {
-            this.name = a[0];
-        } catch (Exception e) {
-            throw new Exception("Title name can't be empty");
-        }
+        if(a.length < 3)
+            throw new Exception("Insufficient number of arguments");
 
         if(a[0].isBlank())
             throw new Exception("Title name can't be empty");
+
+        if(a[1].isBlank())
+            throw new Exception("Description can't be empty");
+
+        if(a[2].isBlank())
+            throw new Exception("Position can't be empty");
         
+        this.name = a[0];
         this.description = a[1];
         this.position = a[2];
         this.UID = name.hashCode() + "l";

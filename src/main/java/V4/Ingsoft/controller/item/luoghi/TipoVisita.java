@@ -71,50 +71,6 @@ public class TipoVisita {
         this.UID = UID;
     }
 
-    // Constructor
-    public TipoVisita(
-            String title, String description, String meetingPlace,
-            Date initDay, Date finishDay, Time initTime, int duration,
-            boolean free, int numMinPartecipants, int numMaxPartecipants, String days, String UID, Date dataI) {
-        this.title = title;
-        this.description = description;
-        this.meetingPlace = meetingPlace;
-        this.initDay = initDay;
-        this.finishDay = finishDay;
-        this.initTime = initTime;
-        this.duration = duration;
-        this.free = free;
-        this.numMinPartecipants = numMinPartecipants;
-        this.numMaxPartecipants = numMaxPartecipants;
-        this.UID = UID;
-
-        this.insertionDay = dataI;
-
-        this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
-    }
-
-    public TipoVisita(
-            String title, String description, String meetingPlace,
-            Date initDay, Date finishDay, Time initTime, int duration,
-            boolean free, int numMinPartecipants, int numMaxPartecipants, String days, Date dateI) {
-        this.title = title;
-        this.description = description;
-        this.meetingPlace = meetingPlace;
-        this.initDay = initDay;
-        this.finishDay = finishDay;
-        this.initTime = initTime;
-        this.duration = duration;
-        this.free = free;
-        this.numMinPartecipants = numMinPartecipants;
-        this.numMaxPartecipants = numMaxPartecipants;
-        this.insertionDay = dateI;
-
-        this.UID = title.hashCode() + "";
-
-        this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(days)));
-
-    }
-
     public String getDaysString() {
         return DayOfWeekConverter.daysToString(days.toArray(new DayOfWeek[0]));
     }
@@ -133,6 +89,17 @@ public class TipoVisita {
 
     // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) throws Exception {
+        if(args.length < 11)
+        throw new Exception("Insufficient number of arguments");
+
+        if(args[0].isBlank())
+            throw new Exception("Title name can't be empty");
+
+        if(args[1].isBlank())
+            throw new Exception("Description can't be empty");
+
+        if(args[2].isBlank())
+            throw new Exception("Position can't be empty");
 
         if(args[0].isBlank())
             throw new Exception("Error in TipoVisita constructor: Title is empty");
@@ -150,13 +117,14 @@ public class TipoVisita {
             this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
             this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
             this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
-            this.UID = title.hashCode() + "";
             this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
-
+            
             this.insertionDay = d;
         } catch (NumberFormatException e) {
             throw new Exception("Error in TipoVisita constructor: " + e.getMessage());
         }
+
+        this.UID = title.hashCode() + "";
     }
 
     public boolean overlaps(TipoVisita other) {

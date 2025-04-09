@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.Payload;
+import V4.Ingsoft.util.Payload.Status;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
 
@@ -52,14 +54,17 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     // IMPLEMENTED IN SUBCLASSES TO RESPECT VERSIONS
-    public T login(String user, String psw) {
+    public Payload login(String user, String psw) {
         for (T p : getPersonList()) {
             if (p.getUsername().equals(user)) {
-                if (p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw)))
-                    return p;
+                if (p.getPsw().equals(DBAbstractPersonaHelper.securePsw(user, psw))){
+                    return new Payload(Status.OK, p);
+                }else{
+                    return new Payload(Status.ERROR, p);
+                }
             }
         }
-        return null;
+        return new Payload(Status.ERROR, null);
     }
 
     public static String securePsw(String user, String psw) {

@@ -3,7 +3,7 @@ package V4.Ingsoft.util;
 public class Payload {
     //Implement in future version
     
-    private enum Status {
+    public enum Status {
         OK,
         ERROR
     }

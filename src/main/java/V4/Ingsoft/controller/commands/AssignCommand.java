@@ -86,7 +86,7 @@ public class AssignCommand extends AbstractCommand {
 
     private void assignVisita(String name, String type) {
         Luogo luogo = controller.db.getLuogoByName(name);
-        TipoVisita visitaDaAssegnare = controller.db.getTipoVisitaByName(type);
+        TipoVisita visitaDaAssegnare = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
 
         if (luogo == null) {
             ViewSE.println("No place found with that name.");

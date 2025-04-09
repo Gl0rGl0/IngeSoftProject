@@ -2,8 +2,12 @@ package V4.Ingsoft.controller.commands.running;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.Payload;
+import V4.Ingsoft.util.Payload.Status;
 import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommand extends AbstractCommand {
@@ -26,21 +30,54 @@ public class LoginCommand extends AbstractCommand {
             return;
         }
 
-        controller.user = login(args[0], args[1]);
+        Payload toUse = login(args[0], args[1]);
 
-        if (controller.user.getType() != PersonaType.GUEST) {
-            ViewSE.println("Login successful (" + controller.user.getType() + ")");
-            if (controller.user.isNew()) {
-                ViewSE.println(
-                        "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
-            }
-        } else {
-            ViewSE.println("Login error, please try again");
+        if(toUse.getStatus() == Status.ERROR){
+            loginError(toUse, args);
+        }else{
+            loginSuccess(toUse, args);
         }
     }
 
-    private Persona login(String username, String psw) {
+    private Payload login(String username, String psw) {
         return controller.db.login(username, psw);
+    }
+
+    private void loginError(Payload toUse, String[] args){
+        Persona p = (Persona) toUse.getData();
+        if(p.getType() != PersonaType.GUEST){
+            ViewSE.println("Wrong password, please try again");
+            AssertionControl.logMessage("Error password " + p.getUsername(), 3, CLASSNAME);
+            return;
+        }
+
+        if(args.length < 3){
+            ViewSE.println("This user doesn't exist, if you want to create an account please put the password 2 times");
+            AssertionControl.logMessage("Wrong registration setup " + p.getUsername(), 3, CLASSNAME);
+            return;
+        }
+
+        if(args[2].equals(args[1])){
+            try {
+                Fruitore f = new Fruitore(args);
+                f.setAsNotNew();
+                controller.db.dbFruitoreHelper.addFruitore(f);
+            } catch (Exception e) {
+                AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
+                return;
+            }
+        }
+
+        ViewSE.println("Login successful (" + controller.user.getType() + ")");
+    }
+
+    private void loginSuccess(Payload toUse, String[] args){
+        controller.user = (Persona) toUse.getData();
+        ViewSE.println("Login successful (" + controller.user.getType() + ")");
+        if (controller.user.isNew()) {
+            ViewSE.println(
+                    "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
+        }
     }
 
 }
