@@ -12,7 +12,7 @@ public class Configuratore extends Persona {
         super(username, psw, PersonaType.CONFIGURATORE, isNew, false);
     }
 
-    private Configuratore(String username, String psw, boolean isNew, boolean hash) throws Exception {
+    public Configuratore(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.CONFIGURATORE, isNew, hash);
     }
 

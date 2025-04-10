@@ -33,10 +33,9 @@ public class Model {
                 if (instance == null) {
                     instance = new Model();
                 }
-                // Removed settings loading logic from Model's getInstance.
-                // Settings are loaded in the Controller constructor.
             }
         }
+
         appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
         if (appSettings == null) {
             AssertionControl.logMessage("Settings file not found or invalid, creating default settings.", 1, "Model");
@@ -367,6 +366,8 @@ public class Model {
         dbLuoghiHelper.clear();
         dbVisiteHelper.clear();
         dbTipoVisiteHelper.clear();
+
+        appSettings.clear();
     }
 
     public boolean isInitialized() {

@@ -1,41 +1,14 @@
 package V4.ingsoft;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 // Tests for Use Cases UC4-UC9 (Setup Phase)
-public class SetupPhaseTests {
-    private Controller controller;
-    private Model model;
-    private String configPath = "data/configuratori.json";
-    private String volontariPath = "data/volontari.json";
-    private String fruitoriPath = "data/fruitori.json";
-    private String luoghiPath = "data/luoghi.json";
-    private String tipiVisitaPath = "data/tipoVisite.json";
-
-    // Helper to reset data files before each test
-    private void resetDataFiles() {
-        // Delete existing files to ensure clean state for setup
-        try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
-        Model.instance = null;
-
-        // Re-initialize model and controller for a fresh start
-        model = Model.getInstance(); // Should implicitly create default ADMIN/PASSWORD if configPath is empty
-        controller = new Controller(model);
-        // DO NOT skip setup testing here, as these tests ARE the setup phase
-    }
+public class SetupPhaseTests extends BaseTest{
+    
 
     // Helper method to perform the initial login and mandatory password change
     // to enter the setup phase for most tests.
@@ -43,12 +16,6 @@ public class SetupPhaseTests {
         // First absolute login with default credentials
         controller.interpreter("login ADMIN PASSWORD");
         assertEquals(PersonaType.CONFIGURATORE.toString(), controller.user.getType().toString());
-    }
-
-
-    @BeforeEach
-    public void setup() {
-        resetDataFiles();
     }
 
     // --- Setup Phase Tests ---
@@ -71,8 +38,6 @@ public class SetupPhaseTests {
 
         // Assert
         assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be set to 5.");
-        // Check if model/settings reflect this if applicable
-        // assertEquals(5, model.db.getSettings().getMaxPersonePerIscrizione());
     }
 
     @Test
@@ -97,7 +62,7 @@ public class SetupPhaseTests {
         controller.interpreter("setmax -1"); // Correct setup command
 
         // Assert
-        // Assuming negative is invalid, should remain default (1) or previous value.
+        // Assuming negative is invalid, should remain default (1).
         // Let's assume default 1 for this test.
         assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set negative value.");
     }
@@ -111,7 +76,7 @@ public class SetupPhaseTests {
          controller.interpreter("setmax five"); // Correct setup command
 
          // Assert
-         // Assuming non-number is invalid, should remain default (1) or previous value.
+         // Assuming non-number is invalid, should remain default (1) or previous value (5).
          // Let's assume default 1 for this test.
          assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set non-number.");
      }
@@ -286,6 +251,4 @@ public class SetupPhaseTests {
         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceAfterFail"), "Should be able to add luogo if 'done' failed.");
     }
 
-     // Tests for missing TipoVisita, Volontario, Assign are removed as those commands don't exist in setup
-
- }
+}

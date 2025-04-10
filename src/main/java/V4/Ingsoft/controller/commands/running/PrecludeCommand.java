@@ -31,7 +31,7 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        if (!Date.twoMonthsDifference(d, controller.date)) {
+        if (!Date.monthsDifference(d, controller.date, 2)) {
             ViewSE.println(
                     "It is not possible to add a date so far forward/backward in time, stick to the month after the next");
             return;
@@ -50,7 +50,11 @@ public class PrecludeCommand extends AbstractCommand {
 
     private void addPrecludedDate(Date d) {
         ViewSE.println("Executing: Adding precluded date");
-        controller.db.dbDatesHelper.addPrecludedDate(d);
+        if(controller.db.dbDatesHelper.addPrecludedDate(d)){
+            AssertionControl.logMessage("Added correctly precluded date: " + d, 3, CLASSNAME);
+        }else{
+            AssertionControl.logMessage("Error while adding precluded date", 3, CLASSNAME);
+        }
     }
 
     private void removePrecludedDate(Date d) {

@@ -15,7 +15,7 @@ public class Fruitore extends Persona {
         this(username, psw, isNew, false);
     }
 
-    private Fruitore(String username, String psw, boolean isNew, boolean hash) throws Exception {
+    public Fruitore(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
     }
 

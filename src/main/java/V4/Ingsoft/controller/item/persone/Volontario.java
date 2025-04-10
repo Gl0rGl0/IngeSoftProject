@@ -3,7 +3,6 @@ package V4.Ingsoft.controller.item.persone;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import V4.Ingsoft.util.Date;
@@ -33,9 +32,6 @@ public class Volontario extends Persona {
     public static final String PATH = "volontari";
 
     public boolean[] availability = new boolean[31];
-    @JsonIgnore
-    public int numAvailability;
-    @JsonIgnore
 
     @JsonCreator
     public Volontario(
@@ -50,7 +46,7 @@ public class Volontario extends Persona {
             this.availability = disponibilita;
     }
 
-    private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
+    public Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 
@@ -70,7 +66,7 @@ public class Volontario extends Persona {
      * @param disp la data per cui si vuole impostare la disponibilità
      */
     public void setAvailability(Date oggi, Date disp, boolean toAdd) {
-        if (!Date.twoMonthsDifference(oggi, disp)) {
+        if (!Date.monthsDifference(oggi, disp, 1)) {
             ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return;
         }

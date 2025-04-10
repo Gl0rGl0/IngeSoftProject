@@ -37,13 +37,12 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
         try {
             Constructor<T> constructor;
-            constructor = clazz.getConstructor(String.class, String.class, boolean.class);
-            T newPersona = constructor.newInstance(username, DBAbstractPersonaHelper.securePsw(username, newPsw),
-                    false);
+            constructor = clazz.getConstructor(String.class, String.class, boolean.class, boolean.class);
+            T newPersona = constructor.newInstance(username, newPsw, false, true);
             cachedItems.put(username, newPersona); // INSTEAD OF REMOVING/ADDING, OVERWRITE
             return saveJson(getPersonList());
         } catch (Exception e) {
-            AssertionControl.logMessage(e.getMessage(), 1, this.getClass().getSimpleName());
+            AssertionControl.logMessage(e.getMessage() + "AAAA", 1, this.getClass().getSimpleName());
         }
 
         return false;

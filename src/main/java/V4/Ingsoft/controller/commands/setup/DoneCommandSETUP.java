@@ -17,7 +17,6 @@ public class DoneCommandSETUP extends AbstractCommand {
     public void execute(String[] options, String[] args) {
         if(c.haveAllBeenExecuted()){
             this.hasBeenExecuted = true;
-            System.out.println("DONE FATTO");
             c.switchInterpreter();
         }else{
             AssertionControl.logMessage("Non puoi eseguire il done se non hai eseguito tutti i comandi precedenti", 3, CLASSNAME);

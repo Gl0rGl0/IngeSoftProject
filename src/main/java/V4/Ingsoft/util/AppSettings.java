@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Simple class to hold application settings that need to be persisted.
  */
-public class AppSettings {
+public class AppSettings{
 
     public static final String PATH = "settings.json"; // Define the settings file path
 
@@ -68,5 +68,10 @@ public class AppSettings {
     public void setMaxPrenotazioniPerPersona(int max) {
         this.maxPrenotazioniPerPersona = Math.max(1, max);
         JsonStorage.saveObject(PATH, this);
+    }
+
+    public void clear(){
+        setAmbitoTerritoriale(null);
+        setMaxPrenotazioniPerPersona(1);
     }
 }

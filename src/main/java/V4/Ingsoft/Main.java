@@ -1,9 +1,8 @@
 package V4.Ingsoft;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.model.Model;
+import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.Initer;
 import V4.Ingsoft.view.ViewSE;
 
@@ -20,12 +19,18 @@ import V4.Ingsoft.view.ViewSE;
 // going through the keyboard
 public class Main {
     public static void main(String[] args) {
+        System.out.println(new Date(33,1,1));
+
         Model model;
-        if(args.length > 0)
+
+        if (args.length > 0)
             model = Model.getInstance(args[0]);
-        else{
+        else {
             model = Model.getInstance();
         }
+
+        model.clearAll();
+        Model.instance = null;
 
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
