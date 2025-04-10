@@ -8,11 +8,11 @@ public class Configuratore extends Persona {
     public Configuratore(
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean isNew) {
+            @JsonProperty("new") boolean isNew) throws Exception {
         super(username, psw, PersonaType.CONFIGURATORE, isNew, false);
     }
 
-    private Configuratore(String username, String psw, boolean isNew, boolean hash) {
+    private Configuratore(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.CONFIGURATORE, isNew, hash);
     }
 

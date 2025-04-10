@@ -90,41 +90,61 @@ public class TipoVisita {
     // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) throws Exception {
         if(args.length < 11)
-        throw new Exception("Insufficient number of arguments");
+        throw new Exception("Error in TipoVisita constructor: Insufficient number of arguments");
 
         if(args[0].isBlank())
-            throw new Exception("Title name can't be empty");
+            throw new Exception("Error in TipoVisita constructor: Title name can't be empty");
 
         if(args[1].isBlank())
-            throw new Exception("Description can't be empty");
+            throw new Exception("Error in TipoVisita constructor: Description can't be empty");
 
         if(args[2].isBlank())
-            throw new Exception("Position can't be empty");
+            throw new Exception("Error in TipoVisita constructor: Position can't be empty");
 
-        if(args[0].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Title is empty");
+        if(args[3].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Initial day is empty");
 
-        int length = args.length;
+        if(args[4].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Last day name can't be empty");
+
+        if(args[5].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Starting time can't be empty");
+
+        if(args[6].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Duration can't be empty");
+
+        if(args[7].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Cost is empty");
+
+        if(args[8].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Minumum number of partecipants can't be empty");
+
+        if(args[9].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Maximum number of partecipants day is empty");
         
-        try {
-            this.title = args[0];
-            this.description = (length > 1 && !args[1].equals("/")) ? args[1] : null;
-            this.meetingPlace = (length > 2 && !args[2].equals("/")) ? new String(args[2]) : null;
-            this.initDay = (length > 3 && !args[3].equals("/")) ? new Date(args[3]) : null;
-            this.finishDay = (length > 4 && !args[4].equals("/")) ? new Date(args[4]) : null;
-            this.initTime = (length > 5 && !args[5].equals("/")) ? new Time(args[5]) : null;
-            this.duration = (length > 6 && !args[6].equals("/")) ? Integer.parseInt(args[6]) : -1;
-            this.free = (length > 7 && !args[7].equals("/")) ? Boolean.parseBoolean(args[7]) : false;
-            this.numMinPartecipants = (length > 8 && !args[8].equals("/")) ? Integer.parseInt(args[8]) : -1;
-            this.numMaxPartecipants = (length > 9 && !args[9].equals("/")) ? Integer.parseInt(args[9]) : -1;
-            this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
+        if(args[10].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Day of visit is empty");
+        
+            try {
+                this.title = args[0];
+                this.description = args[1];
+                this.meetingPlace = args[2];
+                this.initDay = new Date(args[3]);
+                this.finishDay = new Date(args[4]);
+                this.initTime = new Time(args[5]);
+                this.duration = Integer.parseInt(args[6]);
+                this.free = Boolean.parseBoolean(args[7]);
+                this.numMinPartecipants = Integer.parseInt(args[8]);
+                this.numMaxPartecipants = Integer.parseInt(args[9]);
+                this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
             
-            this.insertionDay = d;
-        } catch (NumberFormatException e) {
-            throw new Exception("Error in TipoVisita constructor: " + e.getMessage());
-        }
+                this.insertionDay = d;
+            } catch (Exception e) {
+                throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
+            }
+            
 
-        this.UID = title.hashCode() + "";
+        this.UID = title.hashCode() + "t";
     }
 
     public boolean overlaps(TipoVisita other) {

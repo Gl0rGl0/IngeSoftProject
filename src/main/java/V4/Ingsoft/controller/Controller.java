@@ -22,7 +22,7 @@ public class Controller {
 
     public final Model db;
     // Initially the user is a Guest (not logged in)
-    public Persona user = new Guest();
+    public Persona user;
     public Interpreter interpreter;
     public Date date = new Date(); // simply sets today's date
 
@@ -30,6 +30,11 @@ public class Controller {
     private ScheduledExecutorService virtualTimer;
 
     public Controller(Model db) {
+        try {
+            this.user = new Guest();
+        } catch (Exception e) {
+            AssertionControl.logMessage(e.getMessage(), 1, getClass().getSimpleName());
+        }
         this.db = db;
 
         initVirtualTime();

@@ -43,14 +43,14 @@ public class Volontario extends Persona {
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean isNew,
             @JsonProperty("visite") ArrayList<String> visite,
-            @JsonProperty("disponibilita") boolean[] disponibilita) {
+            @JsonProperty("disponibilita") boolean[] disponibilita) throws Exception {
         this(username, psw, isNew, false);
         this.visiteUIDs = visite;
         if (disponibilita != null)
             this.availability = disponibilita;
     }
 
-    private Volontario(String username, String psw, boolean isNew, boolean hash) {
+    private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
 

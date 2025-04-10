@@ -11,11 +11,11 @@ public class Fruitore extends Persona {
     public Fruitore(
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean isNew) {
+            @JsonProperty("new") boolean isNew) throws Exception {
         this(username, psw, isNew, false);
     }
 
-    private Fruitore(String username, String psw, boolean isNew, boolean hash) {
+    private Fruitore(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
     }
 

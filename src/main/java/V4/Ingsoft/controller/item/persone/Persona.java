@@ -19,11 +19,17 @@ public abstract class Persona {
     @JsonIgnore
     protected ArrayList<String> visiteUIDs = new ArrayList<>();
 
-    public Persona(String username, String psw, PersonaType personaType, boolean isNew) {
+    public Persona(String username, String psw, PersonaType personaType, boolean isNew) throws Exception {
         this(username, psw, PersonaType.VOLONTARIO, isNew, true);
     }
 
-    public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) {
+    public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception{
+        if(username == null || username.isBlank())
+            throw new Exception("Error in " + personaType + " constructor: Username can't be empty");
+
+        if(psw == null || psw.isEmpty())
+            throw new Exception("Error in " + personaType + " constructor: Password can't be empty");
+
         this.username = username;
         this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
         this.personaType = personaType;

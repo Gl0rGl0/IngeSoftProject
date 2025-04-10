@@ -34,16 +34,16 @@ public class Luogo {
 
     public Luogo(String[] a) throws Exception{
         if(a.length < 3)
-            throw new Exception("Insufficient number of arguments");
+            throw new Exception("Error in Luogo constructor: Insufficient number of arguments");
 
         if(a[0].isBlank())
-            throw new Exception("Title name can't be empty");
+            throw new Exception("Error in Luogo constructor: Title name can't be empty");
 
         if(a[1].isBlank())
-            throw new Exception("Description can't be empty");
+            throw new Exception("Error in Luogo constructor: Description can't be empty");
 
         if(a[2].isBlank())
-            throw new Exception("Position can't be empty");
+            throw new Exception("Error in Luogo constructor: Position can't be empty");
         
         this.name = a[0];
         this.description = a[1];
@@ -54,11 +54,11 @@ public class Luogo {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Place {") // Changed "Luogo" to "Place"
-                .append("Name='").append(name).append('\'') // Changed "Nome" to "Name"
-                .append(", Description='").append(description).append('\'') // Changed "Descrizione" to "Description"
-                .append(", Position=").append(position) // Changed "Posizione" to "Position"
-                .append(", Visits=["); // Changed "Visite" to "Visits"
+        sb.append("Place {")
+                .append("Name='").append(name).append('\'')
+                .append(", Description='").append(description).append('\'')
+                .append(", Position=").append(position)
+                .append(", Visits=[");
 
         if (visiteUID != null && !visiteUID.isEmpty()) {
             visiteUID.forEach(visita -> {

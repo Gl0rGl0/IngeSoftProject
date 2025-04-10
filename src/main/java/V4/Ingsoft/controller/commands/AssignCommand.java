@@ -62,7 +62,7 @@ public class AssignCommand extends AbstractCommand {
     }
 
     private void assignVolontario(String type, String userNameVolontario) {
-        Volontario v = controller.db.findVolontario(userNameVolontario);
+        Volontario v = controller.db.dbVolontarioHelper.getPersona(userNameVolontario);
         TipoVisita vToAssign = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
 
         if (v == null) {

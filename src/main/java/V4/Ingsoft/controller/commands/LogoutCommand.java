@@ -4,6 +4,7 @@ import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.running.CommandList;
 import V4.Ingsoft.controller.item.persone.Guest;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.view.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
@@ -24,7 +25,11 @@ public class LogoutCommand extends AbstractCommand {
             ViewSE.println("No user logged in, please log in first.");
         } else {
             ViewSE.println("Logout successful.");
-            controller.user = new Guest();
+            try {
+                controller.user = new Guest();
+            } catch (Exception e) {
+                AssertionControl.logMessage(e.getMessage(), 1, CLASSNAME);
+            }
         }
     }
 }

@@ -19,9 +19,17 @@ public class Payload {
     public Status getStatus() {
         return status;
     }
+
+    public void setStatus(Status s){
+        this.status = s;
+    }
     
     public Object getData() {
         return data;
+    }
+
+    public void setData(Object o) {
+        this.data = o;
     }
     
     @Override

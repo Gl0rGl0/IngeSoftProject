@@ -7,6 +7,7 @@ import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.*;
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.Payload;
 import V4.Ingsoft.util.Payload.Status;
@@ -22,6 +23,7 @@ public class Model {
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
     public String ambitoTerritoriale = null;
+    private boolean setAmbito = false;
 
     public static volatile Model instance = null;
 
@@ -29,7 +31,6 @@ public class Model {
         if (instance == null) {
             synchronized(Model.class) {
                 if (instance == null) {
-                    System.out.println("nuovo");
                     instance = new Model();
                 }
             }
@@ -50,7 +51,10 @@ public class Model {
     }
 
     public void setAmbito(String ambito) {
+        if(setAmbito)
+            return;
         this.ambitoTerritoriale = ambito;
+        setAmbito = true;
     }
 
     public String getAmbito() {
@@ -68,7 +72,7 @@ public class Model {
     }
 
     public boolean removeVolontario(String username) {
-        Volontario toRemove = findVolontario(username);
+        Volontario toRemove = dbVolontarioHelper.getPersona(username);
         if (toRemove == null)
             return false;
 
@@ -209,27 +213,6 @@ public class Model {
     // ================================================================
     // Search and login methods
     // ================================================================
-    public Persona findUser(String username) {
-        Persona out;
-
-        out = dbConfiguratoreHelper.getPersona(username);
-        if (out != null)
-            return out;
-
-        out = dbVolontarioHelper.getPersona(username);
-        if (out != null)
-            return out;
-
-        out = dbFruitoreHelper.getPersona(username);
-        if (out != null)
-            return out;
-
-        return null;
-    }
-
-    public Volontario findVolontario(String username) {
-        return dbVolontarioHelper.getPersona(username);
-    }
 
     public Payload login(String user, String psw) {
         Payload out;
@@ -246,7 +229,14 @@ public class Model {
         if (out.getData() != null)
             return out;
 
-        return new Payload(Status.ERROR, new Guest());
+        out.setStatus(Status.ERROR);
+        try {
+            out.setData(new Guest());
+        } catch (Exception e) {
+            AssertionControl.logMessage(e.getMessage(), 1, getClass().getSimpleName());
+        }
+
+        return out;
     }
 
     // ================================================================
