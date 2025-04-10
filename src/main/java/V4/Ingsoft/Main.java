@@ -1,5 +1,7 @@
 package V4.Ingsoft;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.Initer;
@@ -18,12 +20,17 @@ import V4.Ingsoft.view.ViewSE;
 // going through the keyboard
 public class Main {
     public static void main(String[] args) {
+        Model model;
+        if(args.length > 0)
+            model = Model.getInstance(args[0]);
+        else{
+            model = Model.getInstance();
+        }
 
-        Model model = Model.getInstance();
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 
-        test(controller);
+        init(controller);
 
         controller.interpreter("login config1 pass1C");
         // controller.interpreter("changepsw pass1C pass1C");
@@ -31,7 +38,7 @@ public class Main {
         view.run();
     }
 
-    public static void test(Controller controller) {
+    public static void init(Controller controller) {
         controller.interpreter("login ADMIN PASSWORD");
 
         Initer.setupPhase(controller);

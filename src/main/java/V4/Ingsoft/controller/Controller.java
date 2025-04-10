@@ -18,11 +18,11 @@ import V4.Ingsoft.view.ViewSE;
 public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
-    public int maxPrenotazioniPerPersona; // Max bookings per person
 
     public final Model db;
+    
     // Initially the user is a Guest (not logged in)
-    public Persona user;
+    public Persona user = Guest.getInstance();
     public Interpreter interpreter;
     public Date date = new Date(); // simply sets today's date
 
@@ -30,11 +30,6 @@ public class Controller {
     private ScheduledExecutorService virtualTimer;
 
     public Controller(Model db) {
-        try {
-            this.user = new Guest();
-        } catch (Exception e) {
-            AssertionControl.logMessage(e.getMessage(), 1, getClass().getSimpleName());
-        }
         this.db = db;
 
         initVirtualTime();
@@ -70,6 +65,7 @@ public class Controller {
     }
 
     public void switchInterpreter(){
+        db.dbConfiguratoreHelper.removePersona("ADMIN");
         this.interpreter = new RunningInterpreter(this);
     }
 
@@ -87,35 +83,66 @@ public class Controller {
     }
 
     public boolean doneAll(){
-        return interpreter.doneAll();
+        return interpreter.doneAll() || db.isInitialized();
     }
 
     public Persona getCurrentUser() {
         return this.user;
     }
 
-    public boolean canExecute16thAction = true;
+    // Flag indicating if today is the designated day (16th or first working day after)
+    // for special monthly actions (add/remove/assign/generate plan).
+    // Initialize to false, assuming it's not the 16th initially.
+    public boolean isActionDay16 = false;
 
     public void dailyAction() {
-        db.refresher(this.date);
+        // Perform daily status updates first
+        db.updateDailyStatuses(this.date);
 
-        switch (date.getDay()) {
-            case 16 -> azioniDel16(true);
-            case 17, 18 -> azioniDel16(!canExecute16thAction && !this.date.holiday());
-            default -> canExecute16thAction = false;
+        // Now, manage the flag for the 16th/first working day logic
+        int currentDay = date.getDay();
+        boolean isHolidayToday = this.date.holiday(); // Assumes Date.holiday() checks the current date
+
+        if (currentDay == 15) {
+            // Day before the 16th, reset the flag.
+            isActionDay16 = false;
+            // TODO: Consider adding logic here to "close" volunteer availability collection for the next month, as per spec.
+        } else if (currentDay == 16) {
+            // It's the 16th.
+            if (!isHolidayToday) {
+                // If not a holiday, today is the action day.
+                performDay16Actions();
+            } else {
+                // If it's a holiday, keep the flag false, actions deferred.
+                isActionDay16 = false;
+            }
+        } else if (!isActionDay16 && currentDay > 16) {
+            // It's after the 16th, and the action day hasn't occurred yet (due to holidays).
+            if (!isHolidayToday) {
+                // If today is not a holiday, it becomes the action day.
+                performDay16Actions();
+            }
+            // If it's still a holiday, isActionDay16 remains false.
+        } else if (isActionDay16 && currentDay > 16) {
+             // The action day (16th or later) has already passed. Reset the flag for subsequent days in the month.
+             // This ensures the special commands are only allowed on that single designated day.
+             isActionDay16 = false;
+             // TODO: Consider adding logic here to "reopen" volunteer availability collection for month+2, as per spec.
         }
-
-        canExecute16thAction = true;
+        // If currentDay < 15, the flag remains false.
     }
 
-    private void azioniDel16(boolean eseguo) {
-        if (!eseguo)
-            return;
+    /**
+     * Performs the automatic actions designated for the 16th or the first working day after.
+     * Sets the flag indicating that special commands are now allowed for this day.
+     */
+    private void performDay16Actions() {
+        AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, 3, getClass().getSimpleName());
+        // Perform automatic tasks for the 16th
+        db.refreshPrecludedDate(this.date); // Example task from original code
 
-        db.refreshPrecludedDate(this.date);
-        canExecute16thAction = true;
-        // THIS VARIABLE CAN BE USED TO ALLOW CERTAIN COMMANDS ONLY ON THE 16TH (or the
-        // first working day)
+        // Set the flag to allow special commands for today
+        isActionDay16 = true;
     }
 
     public void close() {

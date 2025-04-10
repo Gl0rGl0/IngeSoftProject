@@ -2,13 +2,17 @@ package V4.Ingsoft.controller.commands.setup;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.model.Model;
+import V4.Ingsoft.util.AppSettings; // Import AppSettings
 import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.JsonStorage; // Import JsonStorage
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
+//COMANDO INUTILIZZATO
 public class SetAmbitoCommandSETUP extends AbstractCommand {
 
-    //NON UTILIZZATO
+    // Used during setup to set the territorial scope once.
 
     private final Controller controller;
 
@@ -39,8 +43,26 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
             return;
         }
 
-        controller.db.setAmbito(a[0]);
+        // Attempt to set the ambito in AppSettings
+        boolean successfullySet = Model.appSettings.setAmbitoTerritoriale(a[0]);
 
-        this.hasBeenExecuted = true;
+        if (successfullySet) {
+            // If successfully set (was not set before), save the settings
+            if (JsonStorage.saveObject(AppSettings.PATH, Model.appSettings)) {
+                ViewSE.println("Territorial scope set to: " + a[0]);
+                this.hasBeenExecuted = true; // Mark as executed only if set successfully
+            } else {
+                ViewSE.println("Error saving settings after setting ambito.");
+                // Consider if hasBeenExecuted should remain false if saving fails
+            }
+        } else {
+            // Ambito was already set or input was invalid
+            if (Model.appSettings.isAmbitoSet()) {
+                 ViewSE.println("Territorial scope has already been set to '" + Model.appSettings.getAmbitoTerritoriale() + "' and cannot be changed.");
+            } else {
+                 ViewSE.println("Invalid input for territorial scope."); // Should not happen due to isBlank check, but good practice
+            }
+            // Do not set hasBeenExecuted = true if it wasn't successfully set now
+        }
     }
 }

@@ -3,6 +3,7 @@ package V4.Ingsoft.view;
 import java.util.Scanner;
 
 import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 
 //Literally input/output management...
@@ -38,16 +39,16 @@ public class ViewSE implements Runnable {
         if(!controller.doneAll()){
             String ambito;
             do{
-                ambito = ViewSE.read("Inserisci l'ambito territoriale per iniziare la fase di setup dell'applicazione");
+                ambito = ViewSE.read("Inserisci l'ambito territoriale per iniziare la fase di setup dell'applicazione: ");
             }while(ambito.isBlank());
-            controller.db.setAmbito(ambito);
+            Model.setAmbito(ambito);
         }
 
         while (!controller.doneAll())
             controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> "));
 
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
-        ViewSE.println("SETUP COMPLETED");
+        //ViewSE.println("SETUP COMPLETED");
 
         while (true)
             controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));
@@ -55,6 +56,6 @@ public class ViewSE implements Runnable {
 
     //VIEW OUT
     public static void error(String e){
-        print(e);
+        println(e);
     }
 }

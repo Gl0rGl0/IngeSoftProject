@@ -5,6 +5,7 @@ import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
@@ -64,9 +65,12 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        if (quantita > controller.maxPrenotazioniPerPersona) {
+        // Get max bookings from AppSettings via Controller
+        int maxPrenotazioni = Model.appSettings.getMaxPrenotazioniPerPersona();
+
+        if (quantita > maxPrenotazioni) {
             ViewSE.println(
-                    "You cannot register so many people, the maximum is: " + controller.maxPrenotazioniPerPersona);
+                    "You cannot register so many people, the maximum is: " + maxPrenotazioni);
             AssertionControl.logMessage("Maximum bookings per person exceeded", 3,
                     CLASSNAME);
             return;

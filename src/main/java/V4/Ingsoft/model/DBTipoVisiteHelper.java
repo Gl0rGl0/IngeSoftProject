@@ -30,11 +30,11 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     /**
-     * Rimuove un Luogo dal file delle proprietà, basandosi sul name.
-     * Simile a removePersona(), ma adattato per Luogo.
+     * Rimuove un TipoVisita dal file delle proprietà, basandosi sul nome.
+     * Simile a removePersona(), ma adattato per TipoVisita.
      *
-     * @param name il name del luogo da rimuovere
-     * @return true se il luogo è stato rimosso, false in caso di errori.
+     * @param name il name del tipovisita da rimuovere
+     * @return true se il tipovisita è stato rimosso, false in caso di errori.
      */
     public boolean removeTipoVisita(String toRemove) {
         TipoVisita toFind = findTipoVisita(toRemove);

@@ -41,7 +41,7 @@ public class AssignCommand extends AbstractCommand {
         }
         switch (options[0]) {
             case "V" -> {
-                if (controller.canExecute16thAction)
+                if (controller.isActionDay16)
                     assignVolontario(arg[0], arg[1]);
                 else {
                     ViewSE.error("Action only possible on the 16th of the month!");
@@ -49,7 +49,7 @@ public class AssignCommand extends AbstractCommand {
                 }
             }
             case "L" -> {
-                if (controller.canExecute16thAction)
+                if (controller.isActionDay16)
                     assignVisita(arg[0], arg[1]);
                 else{
                     ViewSE.error("Action only possible on the 16th of the month!");

@@ -6,7 +6,6 @@ public class ConstString {
             add [-c] [-f] [-v] [String: username] [String: psw]
                 -c        Adds a configurator
                 -f        Adds a fruitore (visitor/user)
-                -v        Adds a volunteer
                 username  Specifies the username of the person being added
                 psw       Specifies the password of the person being added
 
@@ -180,4 +179,10 @@ public class ConstString {
             You can add/remove multiple date
             """;
     public static final String AVAILABILITY_LINE_INFO = "Add or remove at least one availability date from your calendar";
+
+
+    public static final String MAKEPLAN_INFO = """
+            makeplan
+            """;
+    public static final String MAKEPLAN_LINE_INFO = "Start the generation of the plan visits by the System";
 }

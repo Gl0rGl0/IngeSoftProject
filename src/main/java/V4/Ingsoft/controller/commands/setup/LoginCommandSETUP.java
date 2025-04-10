@@ -16,8 +16,6 @@ public class LoginCommandSETUP extends AbstractCommand {
     public LoginCommandSETUP(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandListSETUP.LOGIN;
-
-        this.hasBeenExecuted = false;
     }
 
     @Override

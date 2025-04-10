@@ -35,24 +35,24 @@ public class RemoveCommand extends AbstractCommand {
 
         switch (option) {
             case 'c' -> removeConfiguratore(ar);
-            case 'f' -> removeFruitore(ar);
-            case 'v' -> {
-                if (!controller.canExecute16thAction)
+            case 'f' -> removeFruitore(ar); // No time restriction for Fruitore
+            case 'v' -> { // Volontario removal restricted to action day
+                if (controller.isActionDay16)
                     removeVolontario(ar);
                 else
-                    ViewSE.println(ERROR_16);
+                    ViewSE.println(ERROR_16); // Correctly show error if not action day
             }
-            case 't' -> {
-                if (!controller.canExecute16thAction)
+            case 't' -> { // TipoVisita removal restricted to action day
+                if (controller.isActionDay16)
                     removeTipoVisita(ar);
                 else
-                    ViewSE.println(ERROR_16);
+                    ViewSE.println(ERROR_16); // Correctly show error if not action day
             }
-            case 'L' -> {
-                if (!controller.canExecute16thAction)
+            case 'L' -> { // Luogo removal restricted to action day
+                if (controller.isActionDay16)
                     removeLuogo(ar);
                 else
-                    ViewSE.println(ERROR_16);
+                    ViewSE.println(ERROR_16); // Correctly show error if not action day
             }
             default -> ViewSE.println("Option not recognized for 'remove'.");
         }
@@ -68,46 +68,63 @@ public class RemoveCommand extends AbstractCommand {
         controller.db.removeFruitore(args[0]);
     }
 
+    // Note: The explicit checks within these methods are now redundant
+    // as the main execute method already performs the check based on isActionDay16.
+    // However, keeping them provides defense-in-depth.
     private void removeVolontario(String[] args) {
-        if (!controller.canExecute16thAction) {
+        if (!controller.isActionDay16) { // Check again for safety, though execute() should prevent this call
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Cannot remove a volunteer if it's not the 16th of the month: " + args[0],
+                            + "| Attempted to remove volunteer outside action day: " + args[0],
                     1,
                     CLASSNAME);
+             ViewSE.println(ERROR_16);
             return;
         }
 
         ViewSE.println("Executing: Removing volunteer");
-        controller.db.removeVolontario(args[0]);
+        if (!controller.db.removeVolontario(args[0])) {
+             ViewSE.println("Failed to remove volunteer: " + args[0]);
+        } else {
+             ViewSE.println("Volunteer removed: " + args[0]);
+        }
     }
 
     private void removeTipoVisita(String[] args) {
-        if (!controller.canExecute16thAction) {
+         if (!controller.isActionDay16) { // Check again for safety
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Cannot remove a visit type if it's not the 16th of the month: " + args[0],
+                            + "| Attempted to remove visit type outside action day: " + args[0],
                     1,
                     CLASSNAME);
+             ViewSE.println(ERROR_16);
             return;
         }
 
         ViewSE.println("Executing: Removing visit type");
-        controller.db.removeTipoVisita(args[0]);
+        if (!controller.db.removeTipoVisita(args[0])) {
+             ViewSE.println("Failed to remove visit type: " + args[0]);
+        } else {
+             ViewSE.println("Visit type removed: " + args[0]);
+        }
     }
 
     private void removeLuogo(String[] args) {
-        if (!controller.canExecute16thAction) {
-            AssertionControl.logMessage(
+         if (!controller.isActionDay16) { // Check again for safety
+             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
-                            + "|  + Cannot remove a place if it's not the 16th of the month: "
-                            + args[0],
+                            + "| Attempted to remove place outside action day: " + args[0],
                     1,
                     CLASSNAME);
+             ViewSE.println(ERROR_16);
             return;
         }
 
         ViewSE.println("Executing: Removing place");
-        controller.db.removeLuogo(args[0]);
+        if (!controller.db.removeLuogo(args[0])) {
+             ViewSE.println("Failed to remove place: " + args[0]);
+        } else {
+             ViewSE.println("Place removed: " + args[0]);
+        }
     }
 }

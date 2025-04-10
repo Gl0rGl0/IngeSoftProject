@@ -47,7 +47,6 @@ public class AddCommand extends AbstractCommand {
             case 'c' -> addConfiguratore(args);
             case 'v' -> addVolontario(args);
             case 'L' -> addLuogo(args);
-            case 'V' -> makeorario(); // Assuming this generates the schedule (orario)
             case 't' -> addTipoVisita(args);
             default -> ViewSE.println("Option not recognized for 'add'.");
         }
@@ -93,7 +92,7 @@ public class AddCommand extends AbstractCommand {
 
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if (!controller.canExecute16thAction) {
+        if (!controller.isActionDay16) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
                             + "| Cannot add a visit type if it's not the 16th of the month: " + a[0],
@@ -123,7 +122,7 @@ public class AddCommand extends AbstractCommand {
 
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if (!controller.canExecute16thAction) {
+        if (!controller.isActionDay16) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername()
                             + "| Cannot add a place if it's not the 16th of the month: "
@@ -150,67 +149,6 @@ public class AddCommand extends AbstractCommand {
         }
     }
 
-    private void makeorario() {
-        if (!controller.canExecute16thAction)
-            return;
-
-        ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
-        tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
-
-        Month month = controller.date.getMonth().plus(1);
-        int year = controller.date.getYear();
-        int daysInMonth = month.maxLength();
-
-        for (int day = 1; day <= daysInMonth; day++) {
-            Date currentDate = new Date(day, month.getValue(), year);
-            processVisitsForDate(currentDate, tipi);
-        }
-    }
-
-    /**
-     * Processes visits for a specific date.
-     */
-    private void processVisitsForDate(Date date, List<TipoVisita> tipi) {
-        for (TipoVisita visita : tipi) {
-            if (!isVisitEligibleOnDate(visita, date))
-                continue;
-
-            assignVisitForEligibleVolunteers(visita, date);
-        }
-    }
-
-    /**
-     * Checks if a visit is eligible for the date:
-     * - Status PROPOSTA (Proposed)
-     * - The day of the week of the date is present among those of the visit
-     */
-    private boolean isVisitEligibleOnDate(TipoVisita visita, Date date) {
-        return visita.getStatus() == StatusVisita.PROPOSED
-                && visita.getDays().contains(date.dayOfTheWeek())
-                && !controller.db.dbDatesHelper.getPrecludedDates().contains(date);
-    }
-
-    /**
-     * For an eligible visit, checks and assigns the visit to available volunteers
-     * who do not have conflicts.
-     */
-    private void assignVisitForEligibleVolunteers(TipoVisita visita, Date date) {
-        for (String volontarioUID : visita.getVolontariUIDs()) {
-            Volontario volontario = controller.db.dbVolontarioHelper.getPersona(volontarioUID);
-            if (volontario == null)
-                continue;
-
-            // Check volunteer availability for the current day
-            if (!volontario.getAvailability()[date.getDay()])
-                continue;
-
-            // Check conflicts for the volunteer and the date
-            if (controller.db.dbVisiteHelper.volontarioHaConflitto(volontario, date, visita)) // volunteerHasConflict
-                continue;
-
-            // If all checks pass, assign the visit
-            controller.db.dbVisiteHelper.addVisita(new Visita(visita, date, volontarioUID));
-        }
-    }
+    
 
 }

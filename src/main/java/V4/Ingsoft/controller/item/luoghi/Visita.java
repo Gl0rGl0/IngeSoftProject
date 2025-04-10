@@ -148,4 +148,22 @@ public class Visita {
     public ArrayList<Iscrizione> getIscrizioni() {
         return fruitori;
     }
+
+    /**
+     * Removes an Iscrizione from this Visita based on the Iscrizione's UID.
+     * Also handles potential status change if the visit was full.
+     * @param uidIscrizione The UID of the Iscrizione to remove.
+     * @return true if an Iscrizione was removed, false otherwise.
+     */
+    public boolean removeIscrizioneByUID(String uidIscrizione) {
+        int capienzaAttuale = getCurrentNumber();
+        boolean removed = fruitori.removeIf(iscrizione -> iscrizione.getUIDIscrizione().equals(uidIscrizione));
+
+        // If an iscrizione was removed and the visit was previously full (COMPLETED),
+        // it should become PROPOSED again.
+        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+             setStatus(StatusVisita.PROPOSED);
+        }
+        return removed;
+    }
 }

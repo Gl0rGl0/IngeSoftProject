@@ -65,4 +65,46 @@ public class JsonStorage {
             return false;
         }
     }
+
+    /**
+     * Loads a single object from a JSON file.
+     *
+     * @param <T>      the type of the object
+     * @param filePath the path to the JSON file (relative to BASE_PATH, without .json extension)
+     * @param clazz    the class of the object
+     * @return the loaded object, or null if the file doesn't exist or an error occurs.
+     */
+    synchronized public static <T> T loadObject(String filePath, Class<T> clazz) {
+        File file = new File(BASE_PATH + filePath); // Assuming filePath includes .json
+        if (!file.exists()) {
+            return null; // File not found
+        }
+
+        try {
+            return objectMapper.readValue(file, clazz);
+        } catch (IOException e) {
+            AssertionControl.logMessage("Error loading JSON object file: " + filePath, 1, "JsonStorage");
+            ViewSE.println("Error loading JSON object file: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Saves a single object to a JSON file.
+     *
+     * @param <T>      the type of the object
+     * @param filePath the path to the JSON file (relative to BASE_PATH, without .json extension)
+     * @param object   the object to save
+     * @return true if saving was successful, false otherwise.
+     */
+    synchronized public static <T> boolean saveObject(String filePath, T object) {
+        try {
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(BASE_PATH + filePath), object); // Assuming filePath includes .json
+            return true;
+        } catch (IOException e) {
+            AssertionControl.logMessage("Error saving JSON object file: " + filePath, 1, "JsonStorage");
+            ViewSE.println("Error saving JSON object file: " + e.getMessage());
+            return false;
+        }
+    }
 }

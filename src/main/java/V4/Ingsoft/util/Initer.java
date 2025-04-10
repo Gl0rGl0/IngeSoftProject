@@ -11,7 +11,6 @@ import V4.Ingsoft.controller.item.persone.Volontario;
 public class Initer {
     private static final int NCON = 3;
     private static final int NVOL = 5;
-    private static final int NFRU = 3;
 
     public static Random r = new Random();
 
@@ -21,9 +20,6 @@ public class Initer {
 
         for (int i = 1; i <= NVOL; i++)
             c.interpreter(String.format("add -v volont%d pass%dV", i, i));
-
-        for (int i = 1; i <= NFRU; i++)
-            c.interpreter(String.format("add -f fruit%d pass%dF", i, i));
     }
 
     public static void initVisiteLuoghi(Controller c){

@@ -49,6 +49,21 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         if (toRemove == null)
             return;
         cachedItems.remove(toRemove.getUID());
+        saveJson(); // Save after removal
+    }
+
+    /**
+     * Removes a Visita from the cache and saves the update, based on its UID.
+     *
+     * @param uid the UID of the visita to remove
+     * @return true if the visita was found and removed, false otherwise.
+     */
+    public boolean removeVisitaByUID(String uid) {
+        if (cachedItems.containsKey(uid)) {
+            cachedItems.remove(uid);
+            return saveJson(); // Save after removal
+        }
+        return false;
     }
 
     /**

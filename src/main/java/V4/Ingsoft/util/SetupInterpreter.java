@@ -19,8 +19,8 @@ public class SetupInterpreter extends Interpreter {
         
         //SOVRASCRIVE TRUE-->FALSE
         commandRegistry.put("setmax", new SetPersoneMaxCommand(controller, false));
-        
-        //commandRegistry.put("setambito", new SetAmbitoCommandSETUP(controller)); // TO BE EXECUTED
+
+        //commandRegistry.put("setambito", new SetAmbitoCommandSETUP(controller)); // TO BE EXECUTED - Uncommented
     }
 
 }

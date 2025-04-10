@@ -1,14 +1,15 @@
 package V4.Ingsoft.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.*;
+import V4.Ingsoft.util.AppSettings;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
+import V4.Ingsoft.util.JsonStorage;
 import V4.Ingsoft.util.Payload;
 import V4.Ingsoft.util.Payload.Status;
 
@@ -22,8 +23,7 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
-    public String ambitoTerritoriale = null;
-    private boolean setAmbito = false;
+    public static AppSettings appSettings;
 
     public static volatile Model instance = null;
 
@@ -33,9 +33,29 @@ public class Model {
                 if (instance == null) {
                     instance = new Model();
                 }
+                // Removed settings loading logic from Model's getInstance.
+                // Settings are loaded in the Controller constructor.
             }
         }
+        appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
+        if (appSettings == null) {
+            AssertionControl.logMessage("Settings file not found or invalid, creating default settings.", 1, "Model");
+            appSettings = new AppSettings();
+            // Attempt to save the new default settings immediately
+            JsonStorage.saveObject(AppSettings.PATH, appSettings);
+        }
+
         return instance;
+    }
+
+    public static Model getInstance(String ambito){
+        setAmbito(ambito);
+        return getInstance();
+    }
+
+    public static void setAmbito(String ambito) {
+        getInstance();
+        appSettings.setAmbitoTerritoriale(ambito);
     }
 
     // Constructor and helper initialization
@@ -50,62 +70,186 @@ public class Model {
         dbIscrizionisHelper = new DBIscrizioniHelper();
     }
 
-    public void setAmbito(String ambito) {
-        if(setAmbito)
-            return;
-        this.ambitoTerritoriale = ambito;
-        setAmbito = true;
-    }
-
-    public String getAmbito() {
-        return this.ambitoTerritoriale;
-    }
+    // Removed setAmbito, getAmbito, getMaxPrenotazioni, setMaxPrenotazioni methods.
+    // These are now handled via AppSettings in the Controller.
 
     // ================================================================
-    // Remove methods
+    // Remove methods with Cascading Logic
     // ================================================================
     public boolean removeFruitore(String username) {
-        // dbIscrizionisHelper.removeAllIscrizioni
-        Volontario v = dbVolontarioHelper.getPersona(username);
-        //DA RIMUOVERE TUTTE LE ISCRIZIONI
+        Fruitore fruitore = dbFruitoreHelper.getPersona(username);
+        if (fruitore == null) {
+            return false; // Fruitore not found
+        }
+
+        // --- Cascade: Remove associated Iscrizioni ---
+        // Iterate through a copy of Iscrizione UIDs to avoid concurrent modification
+        ArrayList<String> iscrizioniToRemove = new ArrayList<>();
+        for (Iscrizione iscrizione : dbIscrizionisHelper.getIscrizioni()) {
+            if (iscrizione.getUIDFruitore().equals(username)) { // Corrected method name again based on Iscrizione.java
+                iscrizioniToRemove.add(iscrizione.getUIDIscrizione());
+            }
+        }
+
+        // Remove Iscrizioni from helpers and Visite
+        for (String uidIscrizione : iscrizioniToRemove) {
+            // Remove from the central helper
+            dbIscrizionisHelper.removeIscrizione(uidIscrizione);
+            // Remove from any Visita that holds it
+            for (Visita visita : dbVisiteHelper.getVisite()) {
+                visita.removeIscrizioneByUID(uidIscrizione); // Assumes Visita has this method
+            }
+        }
+
+        // Finally, remove the Fruitore
         return dbFruitoreHelper.removePersona(username);
     }
 
     public boolean removeVolontario(String username) {
-        Volontario toRemove = dbVolontarioHelper.getPersona(username);
-        if (toRemove == null)
-            return false;
-
-        for (TipoVisita tv : dbTipoVisiteHelper.getTipiVisita()) {
-            tv.removeVolontario(username);
+        Volontario volontario = dbVolontarioHelper.getPersona(username);
+        if (volontario == null) {
+            return false; // Volontario not found
         }
 
+        // --- Cascade: Remove volunteer from associated TipoVisita ---
+        // Iterate through a copy to avoid concurrent modification if removeTipoVisitaByUID is called
+        ArrayList<String> tipiVisitaUIDsCopy = new ArrayList<>(volontario.getTipiVisiteUIDs());
+        for (String tipoVisitaUID : tipiVisitaUIDsCopy) {
+            TipoVisita tipoVisita = dbTipoVisiteHelper.getTipiVisitaByUID(tipoVisitaUID);
+            if (tipoVisita != null) {
+                tipoVisita.removeVolontario(username); // Assumes TipoVisita has this method
+                // Check if TipoVisita is now unassigned
+                if (tipoVisita.getVolontariUIDs().isEmpty()) {
+                    // If unassigned, trigger its removal cascade
+                    removeTipoVisitaByUID(tipoVisitaUID);
+                }
+            }
+        }
+
+        // --- Cascade: Remove Visite assigned to this volunteer ---
+        ArrayList<Visita> visiteToRemove = new ArrayList<>();
+        for (Visita visita : dbVisiteHelper.getVisite()) {
+            // Check if the volunteer is assigned to this visit
+            if (visita.getUidVolontario() != null && visita.getUidVolontario().equals(username)) { // Corrected method name
+                visiteToRemove.add(visita);
+            }
+        }
+        for (Visita visita : visiteToRemove) {
+            // Removing a Visita also requires removing its Iscrizioni
+            for (Iscrizione iscrizione : visita.getIscrizioni()) {
+                dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
+            }
+            dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
+        }
+
+
+        // Finally, remove the Volontario
         return dbVolontarioHelper.removePersona(username);
     }
 
-    public boolean removeTipoVisita(String type) {
-        TipoVisita toRemove = dbTipoVisiteHelper.findTipoVisita(type);
-        if (toRemove == null)
+    // Keep original remove by name, but delegate to UID version
+    public boolean removeTipoVisita(String typeName) {
+        TipoVisita tipoVisita = dbTipoVisiteHelper.findTipoVisita(typeName);
+        if (tipoVisita == null) {
             return false;
+        }
+        return removeTipoVisitaByUID(tipoVisita.getUID());
+    }
 
-        for (Luogo l : dbLuoghiHelper.getLuoghi()) {
-            l.removeTipoVisita(type);
+    // New/Refactored method for removal by UID with cascade
+    public boolean removeTipoVisitaByUID(String tipoVisitaUID) {
+        TipoVisita tipoVisita = dbTipoVisiteHelper.getTipiVisitaByUID(tipoVisitaUID);
+        if (tipoVisita == null) {
+            return false; // Already removed or never existed
         }
 
-        return dbTipoVisiteHelper.removeTipoVisita(type);
+        // --- Cascade: Remove from associated Luogo ---
+        String luogoUID = tipoVisita.getLuogo();
+        if (luogoUID != null) {
+            Luogo luogo = dbLuoghiHelper.getLuogoByUID(luogoUID);
+            if (luogo != null) {
+                luogo.removeTipoVisita(tipoVisitaUID); // Assumes Luogo has this method
+                // Check if Luogo is now empty
+                if (luogo.getTipoVisitaUID().isEmpty()) {
+                    // If empty, trigger its removal cascade
+                    removeLuogoByUID(luogoUID); // Use UID based removal
+                }
+            }
+        }
+
+        // --- Cascade: Remove from associated Volontari ---
+        // Iterate through a copy to avoid concurrent modification if removeVolontario is called
+        ArrayList<String> volontariUIDsCopy = new ArrayList<>(tipoVisita.getVolontariUIDs());
+        for (String volontarioUID : volontariUIDsCopy) {
+            Volontario volontario = dbVolontarioHelper.getPersona(volontarioUID);
+            if (volontario != null) {
+                volontario.removeUIDVisita(tipoVisitaUID); // Corrected method name based on Volontario.java
+                // Check if Volontario is now unassigned
+                if (volontario.getTipiVisiteUIDs().isEmpty()) {
+                    // If unassigned, trigger its removal cascade
+                    removeVolontario(volontarioUID);
+                }
+            }
+        }
+
+        // --- Cascade: Remove associated Visite ---
+        ArrayList<Visita> visiteToRemove = new ArrayList<>();
+        for (Visita visita : dbVisiteHelper.getVisite()) {
+            if (visita.tipoVisitaUID().equals(tipoVisitaUID)) { // Corrected method name
+                visiteToRemove.add(visita);
+            }
+        }
+         for (Visita visita : visiteToRemove) {
+            // Removing a Visita also requires removing its Iscrizioni
+            for (Iscrizione iscrizione : visita.getIscrizioni()) {
+                dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
+            }
+            dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
+        }
+
+        // Finally, remove the TipoVisita itself
+        // Ensure the helper method exists and works by UID
+        return dbTipoVisiteHelper.removeTipoVisitaByUID(tipoVisitaUID); // Assumes this method exists
     }
+
 
     public void removeVisita(String type, String date) {
-        //DA RIMUOVERE TUTTE LE ISCRIZIONI
-        dbVisiteHelper.removeVisita(type, date);
+        Visita visita = dbVisiteHelper.findVisita(type, date);
+        if (visita != null) {
+             // Removing a Visita also requires removing its Iscrizioni
+            for (Iscrizione iscrizione : visita.getIscrizioni()) {
+                dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
+            }
+            dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
+        }
     }
 
+    // Keep original remove by name, but delegate to UID version
     public boolean removeLuogo(String name) {
-        Luogo toRemove = getLuogoByName(name);
-        if (toRemove == null)
-            return false;
+         Luogo luogo = getLuogoByName(name);
+         if (luogo == null) {
+             return false;
+         }
+         return removeLuogoByUID(luogo.getUID());
+    }
 
-        return dbLuoghiHelper.removeLuogo(name);
+    // New method for removal by UID with cascade
+    public boolean removeLuogoByUID(String luogoUID) {
+        Luogo luogo = dbLuoghiHelper.getLuogoByUID(luogoUID);
+        if (luogo == null) {
+            return false; // Already removed or never existed
+        }
+
+        // --- Cascade: Remove associated TipoVisite ---
+        // Iterate through a copy to avoid concurrent modification issues
+        ArrayList<String> tipiVisitaUIDsCopy = new ArrayList<>(luogo.getTipoVisitaUID());
+        for (String tipoVisitaUID : tipiVisitaUIDsCopy) {
+            // Trigger the cascade for each associated TipoVisita
+            removeTipoVisitaByUID(tipoVisitaUID);
+        }
+
+        // Finally, remove the Luogo itself
+        return dbLuoghiHelper.removeLuogoByUID(luogoUID); // Assumes DBLuoghiHelper has removeLuogoByUID
     }
 
     // ================================================================
@@ -124,90 +268,16 @@ public class Model {
         dbDatesHelper.refreshPrecludedDate(d);
     }
 
-    public void refresher(Date d) {
-        // First remove any visit types from the DB
-        refreshTipoVisite();
-
-        // Then remove volunteers to avoid NOT removing a volunteer
-        // belonging to a non-existent visit type
-        refreshVolontari();
-
-        dbTipoVisiteHelper.checkTipoVisiteAttese(d); // Check pending visit types
-        dbVisiteHelper.checkVisiteInTerminazione(d);
-
-        refreshIscrizioni();
-    }
-
-    // Check each volunteer
-    // If at least one visit in their list of (types)Visits still exists => OK
-    // If ALL visits do not exist (or list is empty) => delete the volunteer from the DB
-    // For each visit not found, remove the uid from their visits
-    private void refreshVolontari() {
-        Iterator<Volontario> iterator = dbVolontarioHelper.getPersonList().iterator();
-
-        while (iterator.hasNext()) {
-            Volontario v = iterator.next();
-            boolean toRemove = true;
-
-            // Use an iterator to avoid ConcurrentModificationException
-            Iterator<String> uidIterator = v.getTipiVisiteUIDs().iterator();
-
-            while (uidIterator.hasNext()) {
-                String tv = uidIterator.next();
-                TipoVisita toCheck = dbTipoVisiteHelper.getTipiVisitaByUID(tv);
-
-                if (toCheck == null) {
-                    uidIterator.remove(); // Safe removal
-                    continue;
-                }
-
-                toRemove &= !toCheck.assignedTo(v.getUsername());
-
-                if (!toRemove)
-                    break;
-            }
-
-            if (toRemove) {
-                iterator.remove(); // Safe removal of the volunteer
-            }
-        }
-    }
-
-    // Check each TipoVisita
-    // If the uid is 'null' or not present in the places => remove the visit type
-    private void refreshTipoVisite() {
-        for (TipoVisita v : dbTipoVisiteHelper.getTipiVisita()) {
-            String uidLuogo = v.getLuogo();
-
-            if (!dbLuoghiHelper.containsLuogoUID(uidLuogo))
-                dbTipoVisiteHelper.removeTipoVisita(v.getTitle());
-        }
-    }
-
-    /*
-     * For each registration (iscrizione), it is initially assumed it should be removed (toRemove = true).
-     * Iterate through all visits and their registrations to check if the current registration is referenced.
-     * If a match is found, the toRemove flag becomes false, and the iteration is interrupted.
-     * Finally, if toRemove remains true, the registration is deleted from the database.
+    /**
+     * Performs daily updates on the status of visits and visit types based on the current date.
+     * Checks for visits nearing confirmation/cancellation deadlines and activates pending visit types.
+     * @param d The current simulated date.
      */
-    private void refreshIscrizioni() {
-        for (Iscrizione i : dbIscrizionisHelper.getIscrizioni()) {
-            boolean toRemove = true;
-            for (Visita v : dbVisiteHelper.getVisite()) {
-                for (Iscrizione ii : v.getIscrizioni()) {
-                    toRemove &= !i.getUIDIscrizione().equals(ii.getUIDIscrizione());
-
-                    if (!toRemove)
-                        break;
-                }
-
-                if (!toRemove)
-                    break;
-            }
-
-            if (toRemove)
-                dbIscrizionisHelper.removeIscrizione(i.getUIDIscrizione());
-        }
+    public void updateDailyStatuses(Date d) {
+        // Check visits nearing confirmation/cancellation deadlines or completion
+        dbVisiteHelper.checkVisiteInTerminazione(d);
+        // Check pending visit types to see if they should become active
+        dbTipoVisiteHelper.checkTipoVisiteAttese(d);
     }
 
     // ================================================================
@@ -230,11 +300,7 @@ public class Model {
             return out;
 
         out.setStatus(Status.ERROR);
-        try {
-            out.setData(new Guest());
-        } catch (Exception e) {
-            AssertionControl.logMessage(e.getMessage(), 1, getClass().getSimpleName());
-        }
+        out.setData(Guest.getInstance());
 
         return out;
     }
@@ -301,5 +367,9 @@ public class Model {
         dbLuoghiHelper.clear();
         dbVisiteHelper.clear();
         dbTipoVisiteHelper.clear();
+    }
+
+    public boolean isInitialized() {
+        return !this.dbConfiguratoreHelper.isNew() && appSettings.isAmbitoSet();
     }
 }

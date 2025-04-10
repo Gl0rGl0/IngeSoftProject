@@ -45,15 +45,7 @@ public class AddCommandSETUP extends AbstractCommand {
 
         String[] a = StringUtils.joinQuotedArguments(args);
 
-        if (!controller.canExecute16thAction) {
-            AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername()
-                            + "| Cannot add a place if it's not the 16th of the month: "
-                            + a[0],
-                    1,
-                    CLASSNAME);
-            return;
-        }
+        // Removed the incorrect isActionDay16 check for SETUP phase
 
         Luogo l;
         try {
