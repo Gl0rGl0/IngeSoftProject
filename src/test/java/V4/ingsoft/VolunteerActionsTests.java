@@ -4,57 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.model.Model;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 // Tests for Use Cases UC16-UC19, UC34 (Volunteer Actions)
-public class VolunteerActionsTests {
-    private Controller controller;
-    private Model model;
-    private String configPath = "data/configuratori.json";
-    private String volontariPath = "data/volontari.json";
-    private String fruitoriPath = "data/fruitori.json";
-    private String luoghiPath = "data/luoghi.json";
-    private String tipiVisitaPath = "data/tipoVisite.json";
-    
-
-    // Helper to reset data files before each test
-    private void resetDataFiles() {
-        // Delete existing files to ensure clean state for setup
-        try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
-        Model.instance = null;
-        // Re-initialize model and controller
-        model = Model.getInstance();
-        controller = new Controller(model);
-    }
-
-    private void setupDone(){
-        controller.interpreter("login ADMIN PASSWORD");
-        controller.interpreter("changepsw newAdminPass");
-
-        // 2. Setup steps using known setup commands
-        controller.interpreter("setmax 5");
-        // Ensure 3 arguments for add -L: title, description, gps
-        controller.interpreter("add -L PlaceUser \"User Place\" 10.0,20.0");
-        controller.interpreter("done");
-
-        controller.interpreter("add -t TVUser Description 1:1 1/1/1 2/2/2 10:00 60 false 1 10 Ma");
-    }
+public class VolunteerActionsTests extends BaseTest{
 
     // Helper method to complete the setup phase and log in as a specific volunteer
     private void setupAndLoginAsVolunteer(String username, String password) {
-        // Ensure all arguments for add -t are provided, using "" for optional description if needed
-        // Format: add -t <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione] ...
-        setupDone();
-        controller.interpreter("login ADMIN PASSWORD");
         controller.interpreter("add -v " + username + " " + password);
 
         // 6. Login as fruitore
@@ -66,10 +22,11 @@ public class VolunteerActionsTests {
     }
 
 
+    @Override
     @BeforeEach
     public void setup() {
         resetDataFiles();
-        setupDone();
+        enterRegimePhase();
         // Specific setup done in each test or helper method
     }
 
@@ -154,14 +111,13 @@ public class VolunteerActionsTests {
         setupAndLoginAsVolunteer("volTestAvailFormat", "passVTAF");
 
         // Act
-        controller.interpreter("time 2025-07-10"); // Invalid format
+        controller.interpreter("setav 2025-07-10"); // Invalid format
 
         // Assert
         V4.Ingsoft.controller.item.persone.Volontario vol = controller.db.dbVolontarioHelper.getPersona("volTestAvailFormat");
         assertNotNull(vol, "Prerequisite: Volunteer must exist.");
         // Assuming day 10 was the target if format was correct
         assertFalse(vol.getAvailability()[10], "Availability should remain false due to invalid format.");
-        // TODO: Check log output for error.
     }
 
     @Test

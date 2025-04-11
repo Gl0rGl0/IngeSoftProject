@@ -2,56 +2,16 @@ package V4.ingsoft;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 // Tests for Use Cases UC10-UC15, UC20-UC27 (+ Regime Phase)
 public class ConfiguratorRegimeTests extends BaseTest{
-    
-    // Helper method to complete the setup phase and log in as a regular configurator
-    private void enterRegimePhase() {
-        // 1. First absolute login and password change for ADMIN
-        controller.interpreter("login ADMIN PASSWORD");
-        controller.interpreter("changepsw newAdminPass");
-
-        // 2. Complete Setup Steps using known setup commands
-        controller.interpreter("setmax 5");
-        controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
-        // Cannot add types/volunteers/assignments during setup via commands
-        controller.interpreter("done"); // Finalize setup
-
-        controller.interpreter("time -s 16/1/2025");
-
-        // 3. Add another configurator using the running phase command (now logged in as ADMIN)
-        // Add initial TipoVisita and Volontario needed for some regime tests
-        // Assuming 'add -t' format: <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione]
-        // Assuming 'assign' format: <VolUsername> <TipoVisitaUID>
-        controller.interpreter("add -t TVRegime Description 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma");
-        controller.interpreter("assign -L PlaceRegime TVRegime");
-        controller.interpreter("add -v VolRegime PassVol");
-        controller.interpreter("assign -V TVRegime VolRegime");
-        controller.interpreter("add -c configRegime passRegime");
-
-        // 4. Logout ADMIN and Login as the new configurator
-        controller.interpreter("logout");
-        controller.interpreter("login configRegime passRegime");
-        controller.interpreter("changepsw passRegime");
-
-        assertEquals(PersonaType.CONFIGURATORE, controller.user.getType(), "User should be of type CONFIGURATORE.");
-    }
 
 
     @Override
@@ -110,11 +70,14 @@ public class ConfiguratorRegimeTests extends BaseTest{
         String futureDate = "15/03/2025";
         controller.interpreter("time -s " + today);
         controller.interpreter("preclude -a " + futureDate); // Assumed command - uncommented
+        AssertionControl.logMessage(controller.db.dbDatesHelper.getPrecludedDates(), 0, futureDate);
 
         assertEquals(1, controller.db.dbDatesHelper.getPrecludedDates().size(), "Precluded date should be one");
 
         // Act
+        AssertionControl.logMessage(controller.db.dbDatesHelper.getPrecludedDates(), 0, futureDate);
         controller.interpreter("preclude -a " + futureDate); // Try precluding again
+        AssertionControl.logMessage(controller.db.dbDatesHelper.getPrecludedDates(), 0, futureDate);
 
         // Assert
         // Command should fail gracefully, date should still be precluded.
@@ -148,11 +111,7 @@ public class ConfiguratorRegimeTests extends BaseTest{
         // We cannot easily check if "31/02/2025" is precluded as Date constructor might throw error.
         // Check size or specific known valid dates.
         assertFalse(controller.db.dbDatesHelper.getPrecludedDates().contains(new Date("01/03/2025")), "A valid date should not be precluded by an invalid one."); // Example check
-        // TODO: Check log output for error.
      }
-
-     // TODO: Add test for precluding outside the allowed time window (requires date simulation/mocking Controller.date)
-
 
     // UC11 - Modifica Numero Massimo Persone per Iscrizione
     @Test
@@ -176,19 +135,16 @@ public class ConfiguratorRegimeTests extends BaseTest{
         controller.interpreter("setmax 0"); // Should fail
 
         // Assert
-        assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set 0.");
-        // TODO: Check log output for error.
+        assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set 0.");
     }
 
      @Test
      public void testRegimeSetPersoneMaxFailNegative() {
-         // Arrange (Value is 5)
-
          // Act
          controller.interpreter("setmax -2"); // Should fail
 
          // Assert
-         assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set negative value.");
+         assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set negative value.");
      }
 
     // UC12 - Elenco Volontari e Tipi Visita Associati
@@ -253,24 +209,6 @@ public class ConfiguratorRegimeTests extends BaseTest{
          assertEquals(size - 1, l.getTipoVisitaUID().size(), "Type in a place should be decreased by 1");
      }
 
-    // UC15 - Elenco Visite per Stato
-    // NOTE: Testing 'list' commands is difficult without capturing stdout.
-    // NOTE: Requires UC20 (Plan Generation) to be implemented and callable.
-    @Test
-    public void testRegimeListVisitePerStatoProposta() {
-        // Arrange:
-        // TODO: Implement and call plan generation (UC20) here.
-        // controller.interpreter("generate plan <month>"); // Hypothetical command
-        // Assume plan generation creates visits in PROPOSED state.
-        // assertFalse(controller.db.dbVisiteHelper.getVisiteProposte().isBlank(), "Prerequisite: Visits in PROPOSED state should exist.");
-
-        // Act
-        controller.interpreter("list visite proposta");
-
-        // Assert
-        assertTrue(true, "List command executed (cannot verify output or prerequisites). Needs UC20.");
-    }
-
      @Test
      public void testRegimeListVisitePerStatoInvalid() {
          // Arrange
@@ -281,7 +219,6 @@ public class ConfiguratorRegimeTests extends BaseTest{
          // Assert
          // Command should fail gracefully. Cannot assert output.
          assertTrue(true, "List command executed with invalid state (cannot verify output).");
-         // TODO: Check log output for error.
      }
 
      @Test
@@ -297,9 +234,6 @@ public class ConfiguratorRegimeTests extends BaseTest{
          // Cannot assert output (e.g., "Nessuna visita trovata..."). Assume command runs.
          assertTrue(true, "List command executed for empty state (cannot verify output).");
       }
-
-
-     // TODO: UC20 - Implement tests for Produzione Piano Visite Mensile
 
      // UC21 - Aggiunta Luogo (Regime)
      @Test
@@ -325,10 +259,8 @@ public class ConfiguratorRegimeTests extends BaseTest{
          // Assert
          assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Original place should still exist.");
          assertEquals("Regime Place", controller.db.dbLuoghiHelper.findLuogo("PlaceRegime").getDescription(), "Original place description should not change.");
-         // TODO: Check log output for error. Check count of places hasn't increased.
      }
 
-     // TODO: Add tests for adding Luogo with associated TipiVisita/Volontari if 'add -L' command supports it directly.
 
      // UC22 - Aggiunta Tipo Visita a Luogo Esistente
      @Test
@@ -369,10 +301,8 @@ public class ConfiguratorRegimeTests extends BaseTest{
 
          // Assert
          assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TV_NoPlace"), "Type should not be created for non-existent place.");
-         // TODO: Check log output for error.
      }
 
-     // TODO: Add test for temporal constraint violation (UC22 Precondition iv) - Requires specific model logic check (e.g., overlapping times).
 
 
      //UC23 - Aggiunta Volontario a Tipo Visita Esistente
@@ -475,9 +405,33 @@ public class ConfiguratorRegimeTests extends BaseTest{
          // Assert
          assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
          assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Associated type should be removed (cascade).");
-         // Volunteer still exists, but assignment is gone because the type is gone.
-         assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should still exist.");
-         assertFalse(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Volunteer assignment should be removed (cascade).");
+         assertNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Associated Volunteer should be removed.");
+     }
+
+     @Test
+     public void testRegimeRemoveLuogoCascadeButVolunteerAsAnotherVisitAssigned() {
+        TipoVisita t = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime");
+        
+        controller.interpreter("add -L PlaceRegime2 \"Regime Place\" 10.0:20.0");
+        controller.interpreter("add -t TVRegime2 Description2 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma"); // Add another type
+        controller.interpreter("assign -L PlaceRegime2 TVRegime2");
+        controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
+        TipoVisita t2 = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime2");
+        
+         // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
+         assertNotNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
+         assertTrue(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
+         assertTrue(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: Volunteer should be assigned.");
+
+         // Act
+         controller.interpreter("remove -L PlaceRegime");
+
+         // Assert
+         assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
+         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime2"), "Place shouldn't be removed.");
+         assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Associated type should be removed (cascade).");
+         assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Associated Volunteer shouldn't be removed.");
      }
 
      @Test
@@ -491,16 +445,16 @@ public class ConfiguratorRegimeTests extends BaseTest{
 
          // Assert
          assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Existing place should not be affected.");
-         // TODO: Check log output for error.
      }
 
      // UC25 - Rimozione Tipo Visita
      @Test
      public void testRegimeRemoveTipoVisitaSuccessAndCascade() {
          // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-         controller.interpreter("add -t TVRegime2 Description2 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma"); // Add another type
-         controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
+         controller.interpreter("add -t TVRegime2 Description2 1:1 20/06/2025 27/08/2025 15:00 60 false 1 10 Ma"); // Add another type
          controller.interpreter("assign -L PlaceRegime TVRegime2");
+         controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
+         AssertionControl.logMessage(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime").getTipoVisitaUID(), 0, null);
 
          TipoVisita t1 = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime");
          TipoVisita t2 = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime2");
@@ -535,9 +489,8 @@ public class ConfiguratorRegimeTests extends BaseTest{
 
           // Assert
           assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
-          assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should NOT be removed.");
-          assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should NOT be removed.");
-          assertFalse(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Volunteer assignment should be removed (cascade).");
+          assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed because the cascade.");
+          assertNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed because the cascade.");
       }
 
      @Test
@@ -551,7 +504,6 @@ public class ConfiguratorRegimeTests extends BaseTest{
 
          // Assert
          assertNotNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Existing type should not be affected.");
-         // TODO: Check log output for error.
      }
 
 
@@ -560,14 +512,14 @@ public class ConfiguratorRegimeTests extends BaseTest{
      public void testRegimeRemoveVolontarioSuccess() {
          // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
          controller.interpreter("add -v VolRegime2 PassV2"); // Add another volunteer
-         controller.interpreter("assign -V VolRegime2 TVRegime"); // Assign it to the same type
+         controller.interpreter("assign -V TVRegime VolRegime2"); // Assign it to the same type
          assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: VolRegime should exist.");
          assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime2"), "Prerequisite: VolRegime2 should exist.");
          assertTrue(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: TVRegime assigned to VolRegime.");
          assertTrue(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime2"), "Prerequisite: TVRegime assigned to VolRegime2.");
 
          // Act
-         controller.interpreter("remove volontario VolRegime"); // Remove the first volunteer
+         controller.interpreter("remove -v VolRegime"); // Remove the first volunteer
 
          // Assert
          assertNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Volunteer VolRegime should be removed.");
@@ -585,13 +537,12 @@ public class ConfiguratorRegimeTests extends BaseTest{
           assertTrue(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: Type should be assigned.");
 
           // Act
-          controller.interpreter("remove volontario VolRegime");
+          controller.interpreter("remove -v VolRegime");
 
           // Assert
           assertNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed.");
-          assertNotNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should NOT be removed.");
-          assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should NOT be removed.");
-          assertFalse(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Type assignment should be removed (cascade).");
+          assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
+          assertNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
       }
 
      @Test
@@ -605,9 +556,7 @@ public class ConfiguratorRegimeTests extends BaseTest{
 
          // Assert
          assertNotNull(controller.db.dbVolontarioHelper.getPersona("VolRegime"), "Existing volunteer should not be affected.");
-         // TODO: Check log output for error.
      }
 
-     // TODO: UC27 - Implement tests for Gestione Ciclo Mensile (Meta UC)
 
 }

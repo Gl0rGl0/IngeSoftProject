@@ -31,15 +31,16 @@ public class AssertionControl {
      * @param msg the message to log
      * @return true if the write is successful
      */
-    public static boolean logMessage(String msg, int level, String path) {
+    public static boolean logMessage(Object o, int level, String path) {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {
             String type = switch (level) {
+                case 0 -> "!DANGER!";
                 case 1 -> "ERROR";
                 case 2 -> "WARNING";
                 case 3 -> "INFO";
                 default -> "DEBUG";
             };
-            String out = String.format("%4s | %8s | %15s | %-29s | %s", VERSION, type, path, LocalDateTime.now(), msg);
+            String out = String.format("%4s | %8s | %20s | %-29s | %s", VERSION, type, path, LocalDateTime.now(), o.toString());
             fw.write(out + System.lineSeparator());
         } catch (IOException e) {
             // In case of error, print the stack trace (commented out)

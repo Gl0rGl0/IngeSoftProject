@@ -45,7 +45,7 @@ public class AvailabilityCommand extends AbstractCommand{
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                v.setAvailability(controller.date, d, false);
+                v.setAvailability(controller.date, d, false); //controllo avviene dentro il volontario direttamente
             } catch (Exception e) {
                 AssertionControl.logMessage("Error in the date inserted", 3, CLASSNAME);
                 continue;

@@ -121,13 +121,29 @@ public class Date {
     }
 
     public static boolean monthsDifference(Date d1, Date d2, int n) {
-        Month currentMonth = d1.getMonth();
-        Month targetMonth = d2.getMonth();
+        Month currentMonth;
+        Month targetMonth;
 
+        if(d1.dayOfTheYear() < d2.dayOfTheYear()){
+            currentMonth = d1.getMonth();
+            targetMonth = d2.getMonth();
+        }else{
+            targetMonth = d1.getMonth();
+            currentMonth = d2.getMonth();
+        }
+        
         if (d1.getDay() < 16) {
             return (currentMonth.plus(n).equals(targetMonth));
         } else {
             return (currentMonth.plus(n+1).equals(targetMonth));
         }
+    }
+
+    @Override
+    public boolean equals(Object d){
+        if(!(d instanceof Date))
+            return false;
+        
+        return this.dayOfTheYear() == ((Date)d).dayOfTheYear();
     }
 }

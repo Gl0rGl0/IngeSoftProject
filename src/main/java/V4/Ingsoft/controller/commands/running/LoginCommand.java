@@ -31,6 +31,7 @@ public class LoginCommand extends AbstractCommand {
         }
 
         Payload toUse = login(args[0], args[1]);
+        AssertionControl.logMessage(toUse, 0, "CLASSNAME");
 
         if(toUse.getStatus() == Status.ERROR){
             loginError(toUse, args);
@@ -43,7 +44,7 @@ public class LoginCommand extends AbstractCommand {
         return controller.db.login(username, psw);
     }
 
-    private void loginError(Payload toUse, String[] args){
+    private void loginError(Payload toUse, String[] args){  
         Persona p = (Persona) toUse.getData();
         if(p.getType() != PersonaType.GUEST){
             ViewSE.println("Wrong password, please try again");
@@ -62,6 +63,7 @@ public class LoginCommand extends AbstractCommand {
                 Fruitore f = new Fruitore(args);
                 f.setAsNotNew();
                 controller.db.dbFruitoreHelper.addFruitore(f);
+                controller.user = f;
             } catch (Exception e) {
                 AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
                 return;
@@ -69,6 +71,7 @@ public class LoginCommand extends AbstractCommand {
         }
 
         ViewSE.println("Login successful (" + controller.user.getType() + ")");
+        AssertionControl.logMessage("Login successful (" + controller.user.getType() + ")", 3, CLASSNAME);
     }
 
     private void loginSuccess(Payload toUse, String[] args){

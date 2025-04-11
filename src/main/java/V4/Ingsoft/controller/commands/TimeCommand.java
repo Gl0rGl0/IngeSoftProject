@@ -2,6 +2,7 @@ package V4.Ingsoft.controller.commands;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.running.CommandList;
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
 
@@ -19,6 +20,7 @@ public class TimeCommand extends AbstractCommand {
             ViewSE.println(controller.date);
             return;
         }
+        
         if (options.length > 0 && args.length > 0) {
             switch (options[0]) {
                 case "s" -> {
@@ -26,8 +28,10 @@ public class TimeCommand extends AbstractCommand {
                     try {
                         toSet = new Date(args[0]);
                     } catch (Exception e) {
+                        AssertionControl.logMessage("Error while parsing date: " + e.getMessage(), 2, CLASSNAME);
                         return;
                     }
+                    AssertionControl.logMessage("Date set: " + toSet, 2, CLASSNAME);
                     controller.date = toSet;
                     controller.dailyAction();
                 }

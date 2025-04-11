@@ -150,4 +150,8 @@ public class Controller {
         ViewSE.println("Program terminated. Goodbye!");
         System.exit(0);
     }
+
+    public Model getDB() {
+        return db;
+    }
 }

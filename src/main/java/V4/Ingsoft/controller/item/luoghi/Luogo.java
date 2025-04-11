@@ -73,6 +73,8 @@ public class Luogo {
     }
 
     public void addTipoVisita(String tvUID) {
+        if(visiteUID.contains(tvUID))
+            return;
         this.visiteUID.add(tvUID);
     }
 

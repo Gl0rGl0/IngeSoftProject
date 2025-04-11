@@ -31,9 +31,10 @@ public class PrecludeCommand extends AbstractCommand {
             return;
         }
 
-        if (!Date.monthsDifference(d, controller.date, 2)) {
+        if (!Date.monthsDifference(controller.date, d, 2)) {
             ViewSE.println(
                     "It is not possible to add a date so far forward/backward in time, stick to the month after the next");
+            AssertionControl.logMessage("It is not possible to add a date so far forward/backward in time, stick to the month after the next", 2, CLASSNAME);
             return;
         }
 

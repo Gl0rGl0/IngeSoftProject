@@ -1,20 +1,12 @@
 package V4.Ingsoft.controller.commands.running;
 
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
-import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Configuratore;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 

@@ -66,7 +66,7 @@ public class VisitCommand extends AbstractCommand {
         }
 
         // Get max bookings from AppSettings via Controller
-        int maxPrenotazioni = Model.appSettings.getMaxPrenotazioniPerPersona();
+        int maxPrenotazioni = controller.getDB().appSettings.getMaxPrenotazioniPerPersona();
 
         if (quantita > maxPrenotazioni) {
             ViewSE.println(
