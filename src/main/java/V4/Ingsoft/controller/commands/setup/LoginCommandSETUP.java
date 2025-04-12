@@ -24,13 +24,13 @@ public class LoginCommandSETUP extends AbstractCommand {
             ViewSE.println("Error in prompt usage");
             return;
         }
-        if (controller.user.getType() != PersonaType.GUEST) {
+        if (controller.getCurrentUser().getType() != PersonaType.GUEST) {
             ViewSE.println("Already logged in, please log out if you want to change accounts");
             return;
         }
 
         Payload toUse = login(args[0], args[1]);
-        controller.user = (Persona) toUse.getData();
+        controller.user = ((Persona) toUse.getData()).getUsername();
 
         if(toUse.getStatus() == Status.ERROR){
             loginError(toUse, args);
@@ -56,8 +56,8 @@ public class LoginCommandSETUP extends AbstractCommand {
     }
 
     private void loginSuccess(Payload toUse, String[] args){
-        ViewSE.println("Login successful (" + controller.user.getType() + ")");
-        if (controller.user.isNew()) {
+        ViewSE.println("[SETUP] Login successful (" + controller.getCurrentUser().getType() + ")");
+        if (controller.getCurrentUser().isNew()) {
             ViewSE.println(
                     "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
         }

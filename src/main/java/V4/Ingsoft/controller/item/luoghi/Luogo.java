@@ -58,6 +58,7 @@ public class Luogo {
                 .append("Name='").append(name).append('\'')
                 .append(", Description='").append(description).append('\'')
                 .append(", Position=").append(position)
+                .append(", UID: ").append(UID)
                 .append(", Visits=[");
 
         if (visiteUID != null && !visiteUID.isEmpty()) {

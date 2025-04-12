@@ -3,7 +3,6 @@ package V4.Ingsoft.view;
 import java.util.Scanner;
 
 import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 
 //Literally input/output management...

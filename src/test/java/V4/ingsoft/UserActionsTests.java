@@ -20,19 +20,31 @@ public class UserActionsTests extends BaseTest{
         controller.interpreter("logout");
         controller.interpreter("login " + username + " " + password + " " + password);
         assertNotNull(controller.user, "Fruitore should be logged in for tests.");
-        assertEquals(PersonaType.FRUITORE, controller.user.getType(), "User should be of type FRUITORE.");   
+        assertEquals(PersonaType.FRUITORE, controller.getCurrentUser().getType(), "User should be of type FRUITORE.");   
     }
 
     private void setupVolunteerRunning(){
+        //skip 2 month to ensure TipoVisita PROPOSTA
+        controller.interpreter("time -s 16/05/2025");
         controller.interpreter("logout");
+
+        //adding availability to volunteer
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("setav ");
-    }
+        controller.interpreter("changepsw PassVol");
+        controller.interpreter("setav -a 16/07/2025 17/07/2025 18/07/2025 19/07/2025 20/07/2025");
+        controller.interpreter("logout");
+
+        //making the visits plan
+        controller.interpreter("login configRegime passRegime");
+        controller.interpreter("make");
+    }   
     // --- Fruitore Action Tests ---
 
     // UC30 - Visualizzazione Visite Disponibili (Fruitore)
     @Test
     public void testUserListViewAvailableVisits() {
+        System.out.println();
+        setupVolunteerRunning();
         // Arrange
         setupAndLoginAsFruitore("userTestView", "passUTV");
         // TODO: Generate visits

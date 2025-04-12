@@ -203,9 +203,10 @@ public class TipoVisita {
         return this.title.equalsIgnoreCase(other);
     }
 
-    public void addVolontario(String uidVolontario) {
+    public boolean addVolontario(String uidVolontario) {
         if (!volontariUID.contains(uidVolontario))
-            this.volontariUID.add(uidVolontario);
+            return this.volontariUID.add(uidVolontario);
+        return false;
     }
 
     public void removeVolontario(String uidVolontario) {

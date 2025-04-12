@@ -139,11 +139,70 @@ public class Date {
         }
     }
 
+    /**
+     * Checks if this date is strictly before another date (ignores time part).
+     * @param other The date to compare against.
+     * @return true if this date is before the other date, false otherwise or if other is null.
+     */
+    public boolean isBefore(Date other) {
+        if (other == null || other.localDate == null) {
+            return false; // Cannot compare with null
+        }
+        // Compare only the date part
+        return this.localDate.toLocalDate().isBefore(other.localDate.toLocalDate());
+    }
+
+    /**
+     * Checks if this date is strictly after another date (ignores time part).
+     * @param other The date to compare against.
+     * @return true if this date is after the other date, false otherwise or if other is null.
+     */
+    public boolean isAfter(Date other) {
+        if (other == null || other.localDate == null) {
+            return false; // Cannot compare with null
+        }
+        // Compare only the date part
+        return this.localDate.toLocalDate().isAfter(other.localDate.toLocalDate());
+    }
+
+    /**
+     * Returns a new Date object representing this date minus the specified number of days.
+     * @param days The number of days to subtract.
+     * @return A new Date object, or null if the operation fails.
+     */
+    public Date minusDays(int days) {
+        try {
+            LocalDateTime newLocalDate = this.localDate.minusDays(days);
+            return new Date(newLocalDate);
+        } catch (Exception e) {
+            // Log error?
+            return null; // Return null or handle error appropriately
+        }
+    }
+
+
     @Override
     public boolean equals(Object d){
-        if(!(d instanceof Date))
-            return false;
-        
-        return this.dayOfTheYear() == ((Date)d).dayOfTheYear();
+        if (this == d) return true; // Same object
+        if (d == null || getClass() != d.getClass()) return false; // Null or different class
+
+        Date otherDate = (Date) d;
+
+        if (this.localDate == null) {
+             return otherDate.localDate == null; // Both null are equal in this context
+        }
+        if (otherDate.localDate == null) {
+             return false; // This one is not null, other is
+        }
+
+        // Compare only the date part for equality, ignoring time
+        return this.localDate.toLocalDate().equals(otherDate.localDate.toLocalDate());
+    }
+
+    // Consider adding hashCode() if overriding equals()
+    @Override
+    public int hashCode() {
+        // Simple hash based on LocalDate part
+        return localDate != null ? localDate.toLocalDate().hashCode() : 0;
     }
 }

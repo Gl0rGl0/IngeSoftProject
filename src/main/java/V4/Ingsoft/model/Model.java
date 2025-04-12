@@ -76,9 +76,15 @@ public class Model {
     // Remove methods with Cascading Logic
     // ================================================================
     public boolean removeFruitore(String username) {
+        if(username == null || username.trim().isEmpty()){
+            AssertionControl.logMessage("Fruitore username cannot be null or empty for removal", 2, getClass().getSimpleName());
+            return false;
+        }
+
         Fruitore fruitore = dbFruitoreHelper.getPersona(username);
         if (fruitore == null) {
-            return false; // Fruitore not found
+            AssertionControl.logMessage("Attempted to remove non-existent Fruitore: " + username, 1, "Model");
+            return false;
         }
 
         // --- Cascade: Remove associated Iscrizioni ---
@@ -105,8 +111,14 @@ public class Model {
     }
 
     public boolean removeVolontario(String username) {
+        if(username == null || username.trim().isEmpty()){
+            AssertionControl.logMessage("Volontario username cannot be null or empty for removal", 2, getClass().getSimpleName());
+            return false;
+        }
+
         Volontario volontario = dbVolontarioHelper.getPersona(username);
         if (volontario == null) {
+             AssertionControl.logMessage("Attempted to remove non-existent Volontario: " + username, 1, "Model");
             return false; // Volontario not found
         }
 
@@ -157,8 +169,15 @@ public class Model {
 
     // New/Refactored method for removal by UID with cascade
     public boolean removeTipoVisitaByUID(String tipoVisitaUID) {
+        if(tipoVisitaUID == null || tipoVisitaUID.trim().isEmpty()){
+            AssertionControl.logMessage("TipoVisita UID cannot be null or empty for removal", 2, getClass().getSimpleName());
+            return false;
+        }
+
         TipoVisita tipoVisita = dbTipoVisiteHelper.getTipiVisitaByUID(tipoVisitaUID);
         if (tipoVisita == null) {
+             // This might happen legitimately during cascade, so maybe just log?
+             AssertionControl.logMessage("Attempted to remove non-existent or already removed TipoVisita UID: " + tipoVisitaUID, 0, "Model");
             return false; // Already removed or never existed
         }
 
@@ -225,19 +244,31 @@ public class Model {
 
     // Keep original remove by name, but delegate to UID version
     public boolean removeLuogo(String name) {
-         Luogo luogo = getLuogoByName(name);
-         if (luogo == null) {
-             return false;
-         }
-         return removeLuogoByUID(luogo.getUID());
+        Luogo luogo = getLuogoByName(name);
+        if (luogo == null) {
+            return false;
+        }
+        return removeLuogoByUID(luogo.getUID());
     }
 
     // New method for removal by UID with cascade
     public boolean removeLuogoByUID(String luogoUID) {
+
+        if(luogoUID == null || luogoUID.trim().isEmpty()){
+            AssertionControl.logMessage("Luogo UID cannot be null or empty for removal", 2, getClass().getSimpleName());
+            return false;
+        }
+
+        System.out.println(luogoUID);
+
         Luogo luogo = dbLuoghiHelper.getLuogoByUID(luogoUID);
         if (luogo == null) {
+            // This might happen legitimately during cascade
+            AssertionControl.logMessage("Attempted to remove non-existent or already removed Luogo UID: " + luogoUID, 0, "Model");
             return false; // Already removed or never existed
         }
+
+        System.out.println(luogo);
 
         // --- Cascade: Remove associated TipoVisite ---
         // Iterate through a copy to avoid concurrent modification issues
@@ -254,13 +285,36 @@ public class Model {
     // ================================================================
     // Update methods (change password)
     // ================================================================
-    public boolean changePassword(String username, String newPsw, PersonaType type) {
-        return switch (type) {
+    public boolean changePassword(String username, String newPsw) {
+        Persona p = findPersona(username);
+
+        return switch (p.getType()) {
             case CONFIGURATORE -> dbConfiguratoreHelper.changePassword(username, newPsw);
             case FRUITORE -> dbFruitoreHelper.changePassword(username, newPsw);
             case VOLONTARIO -> dbVolontarioHelper.changePassword(username, newPsw);
-            default -> false;
+            default -> false; //GUEST
         };
+    }
+
+    public Persona findPersona(String user){
+        if(user == null)
+            return Guest.getInstance();
+
+        Persona out;
+
+        out = dbConfiguratoreHelper.getPersona(user);
+        if (out != null)
+            return out;
+
+        out = dbVolontarioHelper.getPersona(user);
+        if (out != null)
+            return out;
+
+        out = dbFruitoreHelper.getPersona(user);
+        if (out != null)
+            return out;
+
+        return Guest.getInstance();
     }
 
     public void refreshPrecludedDate(Date d) {

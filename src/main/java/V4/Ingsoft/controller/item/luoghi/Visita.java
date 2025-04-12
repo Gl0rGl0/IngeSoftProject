@@ -104,15 +104,26 @@ public class Visita {
         return newIscrizione.getUIDFruitore();
     }
 
-    public void removePartecipant(String user) {
+    /**
+     * Removes the first Iscrizione associated with the given user username.
+     * Updates status to PROPOSED if the visit was previously full.
+     * @param user The username of the fruitore whose booking should be removed.
+     * @return true if a participant was found and removed, false otherwise.
+     */
+    public boolean removePartecipant(String user) {
         int capienzaAttuale = getCurrentNumber();
         for (Iscrizione i : fruitori) {
-            if (i.getUIDFruitore().equals(user)) {
-                if (fruitori.remove(i) && capienzaAttuale == tipo.getNumMaxPartecipants())
-                    setStatus(StatusVisita.PROPOSED); // Updated enum constant
-                return;
+            // Ensure null safety for user comparison
+            if (user != null && user.equals(i.getUIDFruitore())) {
+                boolean removed = fruitori.remove(i);
+                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+                    // If removed and was full, set back to proposed
+                    setStatus(StatusVisita.PROPOSED);
+                }
+                return removed; // Return true if removal was successful
             }
         }
+        return false; // Return false if no matching participant was found
     }
 
     public int getCurrentNumber() {

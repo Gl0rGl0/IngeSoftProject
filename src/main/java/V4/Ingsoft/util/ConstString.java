@@ -10,7 +10,7 @@ public class ConstString {
                 psw       Specifies the password of the person being added
 
             add [-t] [String: title] [String: description] [GPS: meetingPlace] [Date: initDay] [Date: finishDay] [Time: initTime] [int: duration] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants] [StatusLuoghi: stato]
-                -t                  Adds a visit type
+                -T                  Adds a visit type
                 title               The title of the visit type
                 description         A short description of the visit type
                 meetingPlace        The meeting point for the visit type [latitude,longitude]

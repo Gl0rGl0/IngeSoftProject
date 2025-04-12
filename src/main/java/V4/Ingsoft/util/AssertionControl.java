@@ -40,7 +40,7 @@ public class AssertionControl {
                 case 3 -> "INFO";
                 default -> "DEBUG";
             };
-            String out = String.format("%4s | %8s | %20s | %-29s | %s", VERSION, type, path, LocalDateTime.now(), o.toString());
+            String out = String.format("%4s | %8s | %54s | %-29s | %s", VERSION, type, path, LocalDateTime.now(), o.toString());
             fw.write(out + System.lineSeparator());
         } catch (IOException e) {
             // In case of error, print the stack trace (commented out)

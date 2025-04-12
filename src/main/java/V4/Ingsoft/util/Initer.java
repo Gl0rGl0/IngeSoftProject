@@ -61,7 +61,7 @@ public class Initer {
         luoghi.add(new String[]{"Pinacoteca Tosio-Martinengo di Brescia", "Sede museale ospitata nel palazzo Martinengo da Barco che espone opere pittoriche dal Trecento all'Ottocento.", "45.539:10.220"});
         luoghi.add(new String[]{"Luogo Test", "Descrizione luogo test", "12.34:56.78"});
 
-        visite.forEach(v -> c.interpreter("add -t " + StringUtils.arrayToStringClean(v)));
+        visite.forEach(v -> c.interpreter("add -T " + StringUtils.arrayToStringClean(v)));
         luoghi.forEach(v -> c.interpreter("add -L " + StringUtils.arrayToStringClean(v)));
 
         for (int i = 0; i < 13; i++)

@@ -23,9 +23,9 @@ public class AvailabilityCommand extends AbstractCommand{
             return;
 
         if(options.length < 1 || args.length < 1){
-            ViewSE.println("Error using the 'add' command");
+            ViewSE.println("Error using the 'setav' command");
             AssertionControl.logMessage(
-                    controller.getCurrentUser().getUsername() + "| Error using the 'add' command", 2,
+                    controller.getCurrentUser().getUsername() + "| Error using the 'setav' command", 2,
                     CLASSNAME);
             return;
         }
@@ -33,9 +33,9 @@ public class AvailabilityCommand extends AbstractCommand{
         switch (options[0].charAt(0)) {
             case 'a' -> manageDate(args, true);
             case 'r' -> manageDate(args, false);
-            default -> {    ViewSE.println("Error using the 'add' command");
+            default -> {    ViewSE.println("Error using the 'setav' command");
                             AssertionControl.logMessage(
-                                    controller.getCurrentUser().getUsername() + "| Error using the 'add' command", 2,
+                                    controller.getCurrentUser().getUsername() + "| Error using the 'setav' command", 2,
                                     CLASSNAME); }
         }
     }
@@ -45,7 +45,9 @@ public class AvailabilityCommand extends AbstractCommand{
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                v.setAvailability(controller.date, d, false); //controllo avviene dentro il volontario direttamente
+                if(controller.db.dbDatesHelper.getPrecludedDates().contains(d))
+                    continue;
+                v.setAvailability(controller.date, d, false); //controllo avviene dentro il volontario direttamente eccetto per le date precluse (richiesta)
             } catch (Exception e) {
                 AssertionControl.logMessage("Error in the date inserted", 3, CLASSNAME);
                 continue;

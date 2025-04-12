@@ -25,7 +25,7 @@ public class LoginCommand extends AbstractCommand {
             ViewSE.println("Error in prompt usage");
             return;
         }
-        if (controller.user.getType() != PersonaType.GUEST) {
+        if (controller.getCurrentUser().getType() != PersonaType.GUEST) {
             ViewSE.println("Already logged in, please log out if you want to change accounts");
             return;
         }
@@ -63,21 +63,21 @@ public class LoginCommand extends AbstractCommand {
                 Fruitore f = new Fruitore(args);
                 f.setAsNotNew();
                 controller.db.dbFruitoreHelper.addFruitore(f);
-                controller.user = f;
+                controller.user = f.getUsername();
             } catch (Exception e) {
                 AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);
                 return;
             }
         }
 
-        ViewSE.println("Login successful (" + controller.user.getType() + ")");
-        AssertionControl.logMessage("Login successful (" + controller.user.getType() + ")", 3, CLASSNAME);
+        ViewSE.println("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername());
+        AssertionControl.logMessage("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername(), 3, CLASSNAME);
     }
 
     private void loginSuccess(Payload toUse, String[] args){
-        controller.user = (Persona) toUse.getData();
-        ViewSE.println("Login successful (" + controller.user.getType() + ")");
-        if (controller.user.isNew()) {
+        controller.user = ((Persona) toUse.getData()).getUsername();
+        ViewSE.println("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername());
+        if (controller.getCurrentUser().isNew()) {
             ViewSE.println(
                     "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
         }

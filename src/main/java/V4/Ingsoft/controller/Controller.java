@@ -22,7 +22,7 @@ public class Controller {
     public final Model db;
     
     // Initially the user is a Guest (not logged in)
-    public Persona user = Guest.getInstance();
+    public String user;
     public Interpreter interpreter;
     public Date date = new Date(); // simply sets today's date
 
@@ -61,11 +61,11 @@ public class Controller {
     public void interpreter(String prompt) {
         AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
 
-        interpreter.interpret(prompt, user);
+        interpreter.interpret(prompt, getCurrentUser());
     }
 
     public void switchInterpreter(){
-        db.dbConfiguratoreHelper.removePersona("ADMIN");
+        // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter = new RunningInterpreter(this);
     }
 
@@ -87,7 +87,7 @@ public class Controller {
     }
 
     public Persona getCurrentUser() {
-        return this.user;
+        return db.findPersona(user);
     }
 
     // Flag indicating if today is the designated day (16th or first working day after)

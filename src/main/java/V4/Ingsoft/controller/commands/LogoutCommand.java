@@ -20,11 +20,11 @@ public class LogoutCommand extends AbstractCommand {
      * Performs logout by setting the current user to Guest.
      */
     public void execute(String[] options, String[] args) {
-        if (controller.user.getType() == PersonaType.GUEST) {
+        if (controller.getCurrentUser().getType() == PersonaType.GUEST) {
             ViewSE.println("No user logged in, please log in first.");
         } else {
             ViewSE.println("Logout successful.");
-            controller.user = Guest.getInstance();
+            controller.user = Guest.getInstance().getUsername();
         }
     }
 }

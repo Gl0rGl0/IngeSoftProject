@@ -26,13 +26,10 @@ public class Main {
             model = Model.getInstance();
         }
 
-        model.clearAll();
-        Model.instance = null;
-
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 
-        //init(controller);
+        init(controller);
 
         controller.interpreter("login config1 pass1C");
         // controller.interpreter("changepsw pass1C pass1C");

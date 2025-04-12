@@ -6,8 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.util.AssertionControl; // Added import
 import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Volontario;
@@ -22,14 +22,27 @@ public class MakePlanCommand extends AbstractCommand {
         super.commandInfo = CommandList.MAKEPLAN;
     }
 
+    private static final String CLASSNAME = MakePlanCommand.class.getSimpleName(); // Added for logging
+
     @Override
     public void execute(String[] options, String[] args) {
+        if (controller == null) {
+            AssertionControl.logMessage("Controller cannot be null in MakePlanCommand", 1, CLASSNAME);
+            return; // Cannot proceed
+        }
         makeorario();
     }
 
     private void makeorario() {
-        if (!controller.isActionDay16)
-            return;
+        if (controller == null || controller.date == null || controller.db == null) {
+             AssertionControl.logMessage("Controller dependencies (date, db) cannot be null in makeorario", 1, CLASSNAME);
+             return; // Cannot proceed
+        }
+        if (!controller.isActionDay16) {
+             // This might be normal operation, maybe log at a lower level or just return silently?
+             // AssertionControl.logMessage("MakePlanCommand attempted outside action day 16.", 3, CLASSNAME);
+             return;
+        }
 
         ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
@@ -48,7 +61,19 @@ public class MakePlanCommand extends AbstractCommand {
      * Processes visits for a specific date.
      */
     private void processVisitsForDate(Date date, List<TipoVisita> tipi) {
+        if (date == null) {
+            AssertionControl.logMessage("Date cannot be null in processVisitsForDate", 1, CLASSNAME);
+            return; // Cannot process without a date
+        }
+         if (tipi == null) {
+            AssertionControl.logMessage("TipoVisita list cannot be null in processVisitsForDate", 1, CLASSNAME);
+            return; // Cannot process without visit types
+        }
         for (TipoVisita visita : tipi) {
+             if (visita == null) {
+                 AssertionControl.logMessage("Null TipoVisita found in list during plan generation for date: " + date, 1, CLASSNAME);
+                 continue; // Skip this null entry
+             }
             if (!isVisitEligibleOnDate(visita, date))
                 continue;
 
@@ -60,11 +85,15 @@ public class MakePlanCommand extends AbstractCommand {
      * Checks if a visit is eligible for the date:
      * - Status PROPOSTA (Proposed)
      * - The day of the week of the date is present among those of the visit
+     * - The date is not precluded
      */
     private boolean isVisitEligibleOnDate(TipoVisita visita, Date date) {
-        return visita.getStatus() == StatusVisita.PROPOSED
-                && visita.getDays().contains(date.dayOfTheWeek())
+        // A TipoVisita definition doesn't have a PROPOSED status; the generated Visita does.
+        // Eligibility depends on the definition (e.g., active period, etc. - assuming basic checks here)
+        // and the date constraints.
+        return visita.getDays().contains(date.dayOfTheWeek())
                 && !controller.db.dbDatesHelper.getPrecludedDates().contains(date);
+        // TODO: Add check if date falls within visita.getPeriodOfTheYear() if that logic exists
     }
 
     /**

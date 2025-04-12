@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
 
@@ -14,10 +15,11 @@ public class Volontario extends Persona {
 
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
 
-    public void addTipoVisita(String uidTipoVisita) {
+    public boolean addTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
-            UIDvisitePresentabili.add(uidTipoVisita);
+            return UIDvisitePresentabili.add(uidTipoVisita);
         }
+        return false;
     }
 
     public void removeUIDVisita(String uidTipoVisita) {
@@ -72,6 +74,7 @@ public class Volontario extends Persona {
         }
 
         availability[disp.getDay()] = toAdd;
+        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd,3, "Volontario.setAvailability");
     }
 
     public void clearAvailability() {

@@ -39,6 +39,7 @@ public class AssignCommand extends AbstractCommand {
             }
             return;
         }
+
         switch (options[0]) {
             case "V" -> {
                 if (controller.isActionDay16)
@@ -77,8 +78,16 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
 
-        v.addTipoVisita(vToAssign.getUID());
-        vToAssign.addVolontario(v.getUsername());
+        if(!v.addTipoVisita(vToAssign.getUID())){
+            AssertionControl.logMessage("Can't assign volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 2, CLASSNAME);
+            return;
+        }
+
+        if(!vToAssign.addVolontario(v.getUsername())){
+            AssertionControl.logMessage("Can't assign volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 2, CLASSNAME);
+            return;
+        }
+
         ViewSE.println("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle());
         AssertionControl.logMessage("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 3, CLASSNAME);
         

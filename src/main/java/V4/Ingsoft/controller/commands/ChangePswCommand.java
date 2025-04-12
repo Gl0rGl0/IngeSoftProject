@@ -20,8 +20,7 @@ public class ChangePswCommand extends AbstractCommand {
             return;
         }
 
-        if (controller.db.changePassword(controller.user.getUsername(), args[0], controller.user.getType())) {
-            controller.user.setAsNotNew();
+        if (controller.db.changePassword(controller.user, args[0])) {
             ViewSE.println("Password changed successfully!");
             this.hasBeenExecuted = true;
         } else {

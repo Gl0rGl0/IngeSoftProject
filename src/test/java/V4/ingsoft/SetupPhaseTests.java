@@ -15,7 +15,7 @@ public class SetupPhaseTests extends BaseTest{
     private void enterSetupPhase() {
         // First absolute login with default credentials
         controller.interpreter("login ADMIN PASSWORD");
-        assertEquals(PersonaType.CONFIGURATORE.toString(), controller.user.getType().toString());
+        assertEquals(PersonaType.CONFIGURATORE.toString(), controller.getCurrentUser().getType().toString());
     }
 
     // --- Setup Phase Tests ---
@@ -136,70 +136,6 @@ public class SetupPhaseTests extends BaseTest{
         // Assuming empty title is invalid
         assertNull(controller.db.dbLuoghiHelper.findLuogo(""), "Place with empty title should not be added.");
     }
-
-    // Implicit part of UC7/UC4: Aggiunta TipoVisita (Setup) - Command does not exist in setup
-    @Test
-    public void testSetupAddTipoVisitaSuccess() {
-        // Test removed/invalid as 'add -t' is not a setup command
-        assertTrue(true);
-    }
-
-    @Test
-    public void testSetupAddTipoVisitaFailDuplicateUID() {
-        // Test removed/invalid as 'add -t' is not a setup command
-        assertTrue(true);
-    }
-
-     @Test
-     public void testSetupAddTipoVisitaFailLuogoNonExistent() {
-         // Test removed/invalid as 'add -t' is not a setup command
-         assertTrue(true);
-     }
-
-     // Implicit part of UC7/UC4: Aggiunta Volontario (Setup) - Command does not exist in setup
-     @Test
-     public void testSetupAddVolontarioSuccess() {
-         // Test removed/invalid as 'add -v' is not a setup command
-         assertTrue(true);
-     }
-
-     @Test
-     public void testSetupAddVolontarioFailDuplicateUsername() {
-         // Test removed/invalid as 'add -v' is not a setup command
-         assertTrue(true);
-     }
-
-
-    // UC8 - Associazione Volontario-TipoVisita (Setup) - Command does not exist in setup
-    @Test
-    public void testSetupAssignVolontarioTipoVisitaSuccess() {
-        // Test removed/invalid as 'assign' is not a setup command
-        assertTrue(true);
-    }
-
-    @Test
-    public void testSetupAssignVolontarioTipoVisitaFailVolontarioNonExistent() {
-        // Test removed/invalid as 'assign' is not a setup command
-        assertTrue(true);
-    }
-
-    @Test
-    public void testSetupAssignVolontarioTipoVisitaFailTipoVisitaNonExistent() {
-        // Test removed/invalid as 'assign' is not a setup command
-        assertTrue(true);
-    }
-
-    @Test
-    public void testSetupAssignVolontarioTipoVisitaFailDuplicate() {
-        // Test removed/invalid as 'assign' is not a setup command
-        assertTrue(true);
-    }
-
-     @Test
-     public void testSetupAssignVolontarioTipoVisitaFailAfterSetupComplete() {
-          // Test removed/invalid as 'assign' is not a setup command
-          assertTrue(true);
-     }
 
     // UC9 - Associazione TipoVisita-Luogo (Setup) is implicitly tested via 'add tipovisita' tests.
     // Since 'add tipovisita' doesn't exist in setup, this UC might be handled differently.

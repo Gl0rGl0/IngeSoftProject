@@ -3,6 +3,7 @@ package V4.Ingsoft.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import V4.Ingsoft.util.AssertionControl; // Added import
 import V4.Ingsoft.controller.item.luoghi.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
@@ -34,7 +35,18 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
     public void addVisita(Visita toAdd) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".addVisita";
+        if (toAdd == null || toAdd.getUID() == null || toAdd.getUID().trim().isEmpty()) {
+            AssertionControl.logMessage("Attempted to add null Visita or Visita with null/empty UID.", 1, CLASSNAME);
+            return;
+        }
+        if (cachedItems.containsKey(toAdd.getUID())) {
+             AssertionControl.logMessage("Attempted to add Visita with duplicate UID: " + toAdd.getUID(), 2, CLASSNAME);
+             return;
+        }
         cachedItems.put(toAdd.getUID(), toAdd);
+        // Consider saving immediately or batching saves
+        // saveJson();
     }
 
     /**
@@ -45,9 +57,16 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return true se la visita è stata rimossa, false in caso di errori.
      */
     public void removeVisita(String name, String date) {
-        Visita toRemove = findVisita(name, date);
-        if (toRemove == null)
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".removeVisita";
+        if (name == null || name.trim().isEmpty() || date == null || date.trim().isEmpty()) {
+            AssertionControl.logMessage("Attempted to remove Visita with null/empty name or date.", 1, CLASSNAME);
             return;
+        }
+        Visita toRemove = findVisita(name, date);
+        if (toRemove == null) {
+            AssertionControl.logMessage("Attempted to remove non-existent Visita (Name: " + name + ", Date: " + date + ").", 2, CLASSNAME);
+            return;
+        }
         cachedItems.remove(toRemove.getUID());
         saveJson(); // Save after removal
     }
@@ -59,11 +78,22 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return true if the visita was found and removed, false otherwise.
      */
     public boolean removeVisitaByUID(String uid) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".removeVisitaByUID";
+        if (uid == null || uid.trim().isEmpty()) {
+            AssertionControl.logMessage("Attempted to remove Visita with null/empty UID.", 1, CLASSNAME);
+            return false;
+        }
         if (cachedItems.containsKey(uid)) {
             cachedItems.remove(uid);
-            return saveJson(); // Save after removal
+            boolean success = saveJson(); // Save after removal
+            if (!success) {
+                 AssertionControl.logMessage("Failed to save JSON after removing Visita UID: " + uid, 1, CLASSNAME);
+            }
+            return success;
+        } else {
+            AssertionControl.logMessage("Attempted to remove non-existent Visita UID: " + uid, 2, CLASSNAME);
+            return false;
         }
-        return false;
     }
 
     /**
@@ -73,9 +103,17 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return la Visita trovata, oppure null se non esiste.
      */
     public Visita findVisita(String title, String data) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".findVisita";
+        if (title == null || title.trim().isEmpty() || data == null || data.trim().isEmpty()) {
+            AssertionControl.logMessage("Attempted to find Visita with null/empty title or data string.", 1, CLASSNAME);
+            return null;
+        }
+
         for (Visita v : cachedItems.values()) {
-            if (v.getTitle().equalsIgnoreCase(title) && v.getDate().toString().equals(data)) {
-                return v;
+            // Add null checks for safety inside the loop
+            if (v != null && v.getTitle() != null && v.getDate() != null &&
+                v.getTitle().equalsIgnoreCase(title) && v.getDate().toString().equals(data)) {
+            return v;
             }
         }
         return null;
@@ -121,17 +159,109 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         return out;
     }
 
+    /**
+     * Checks and updates the status of visits based on the current date 'd'.
+     * Handles confirmation/cancellation 3 days before the visit date,
+     * and completion/removal after the visit date.
+     * @param d The current simulated date.
+     */
     public void checkVisiteInTerminazione(Date d) {
-        for (Visita v : getVisite()) {
-            v.isThreeDaysFrom(d);
-            if (v.getStatus() == StatusVisita.CANCELLED) {
-                writeVisiteCancellate(v);
-                cachedItems.remove(v.getUID());
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".checkVisiteInTerminazione";
+        if (d == null) {
+            AssertionControl.logMessage("Current date 'd' cannot be null.", 2, CLASSNAME);
+            return;
+        }
+
+        ArrayList<String> uidsToRemove = new ArrayList<>();
+        boolean changed = false;
+
+        // Iterate through a copy of values to avoid concurrent modification if removing
+        ArrayList<Visita> currentVisits = new ArrayList<>(cachedItems.values());
+
+        for (Visita v : currentVisits) {
+            if (v == null) {
+                AssertionControl.logMessage("Null Visita found in cache during daily check.", 1, CLASSNAME);
+                continue;
             }
+
+            Date visitDate = v.getDate();
+            StatusVisita currentStatus = v.getStatus();
+
+            if (visitDate == null) {
+                 AssertionControl.logMessage("Visita with UID " + v.getUID() + " has null date.", 1, CLASSNAME);
+                 continue;
+            }
+
+            // 1. Check for confirmation/cancellation deadline (3 days before)
+            // Assuming Date class has minusDays and equals methods
+            Date deadlineDate = visitDate.minusDays(3); // Calculate deadline date
+
+            if (deadlineDate != null && deadlineDate.equals(d)) {
+                if (currentStatus == StatusVisita.PROPOSED || currentStatus == StatusVisita.COMPLETED) {
+                    TipoVisita tv = v.getTipoVisita(); // Assumes Visita has getTipoVisita()
+                    if (tv == null) {
+                         AssertionControl.logMessage("Visita UID " + v.getUID() + " has null TipoVisita.", 1, CLASSNAME);
+                         continue;
+                    }
+                    // Corrected method name based on TipoVisita.java
+                    int minParticipants = tv.getNumMinPartecipants();
+                    // Corrected method name based on Visita.java
+                    int currentParticipants = v.getCurrentNumber();
+
+                    if (currentParticipants >= minParticipants) {
+                        v.setStatus(StatusVisita.CONFIRMED);
+                        AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, CLASSNAME);
+                        changed = true;
+                    } else {
+                        v.setStatus(StatusVisita.CANCELLED);
+                        AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, CLASSNAME);
+                        changed = true;
+                        // Cancelled visits will be removed below when their date passes
+                    }
+                }
+            }
+
+            // 2. Check for post-visit cleanup (day after visit)
+            // Assuming Date class has isBefore method
+            if (visitDate.isBefore(d)) {
+                if (currentStatus == StatusVisita.CONFIRMED) {
+                    // Visit was confirmed and has now passed -> Mark as completed and archive
+                    // Using COMPLETED based on getCompletate method, adjust if StatusVisita enum differs
+                    v.setStatus(StatusVisita.COMPLETED); // Mark as completed
+                    writeVisitaEffettuata(v); // Archive it
+                    uidsToRemove.add(v.getUID()); // Mark for removal from active cache
+                    AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 4, CLASSNAME);
+                    changed = true; // Indicate a change occurred
+                } else if (currentStatus == StatusVisita.CANCELLED) {
+                    // Visit was cancelled and its date has passed -> Remove without archiving
+                    uidsToRemove.add(v.getUID());
+                    AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 4, CLASSNAME);
+                    changed = true; // Indicate a change occurred
+                }
+                 // Note: Visits still in PROPOSED or COMPLETED state after their date might indicate an issue
+                 // or could be handled differently depending on exact requirements (e.g., implicitly cancel?)
+                 // Current logic leaves them in cache until explicitly removed or handled.
+            }
+        }
+
+        // Perform removals from active cache
+        for (String uid : uidsToRemove) {
+            cachedItems.remove(uid);
+        }
+
+        // Save changes if any occurred
+        if (changed || !uidsToRemove.isEmpty()) {
+            saveJson(); // Save updated statuses and removals from active cache
+            // Note: Archiving saves separately within writeVisitaEffettuata
         }
     }
 
-    private boolean writeVisiteCancellate(Visita toAdd) {
+    /**
+     * Adds a completed visit to the archive and saves the archive.
+     * @param toAdd The visit to archive.
+     * @return true if saving the archive was successful, false otherwise.
+     */
+    private boolean writeVisitaEffettuata(Visita toAdd) {
         archivio.add(toAdd);
         return saveJson(archivio);
     }
@@ -141,39 +271,59 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     }
 
     public Visita getVisitaByUID(String uid) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisitaByUID";
+         if (uid == null || uid.trim().isEmpty()) {
+             AssertionControl.logMessage("Attempted to get Visita with null/empty UID.", 1, CLASSNAME);
+             return null;
+         }
         return cachedItems.get(uid);
     }
 
     public void close() {
+        // Save the archive before closing
         saveJson(archivio);
     }
 
     public List<Visita> getVisiteByVolontarioAndData(String usernameV, Date d) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisiteByVolontarioAndData";
         List<Visita> out = new ArrayList<>();
+         if (usernameV == null || usernameV.trim().isEmpty() || d == null) {
+             AssertionControl.logMessage("Attempted getVisiteByVolontarioAndData with null/empty username or null date.", 1, CLASSNAME);
+             return out; // Return empty list
+         }
 
         for (Visita v : getVisite()) {
-            if (v.getUidVolontario().equals(usernameV) && v.getDate().equals(d))
+             // Add null checks for safety
+             if (v != null && v.getUidVolontario() != null && v.getDate() != null &&
+                 v.getUidVolontario().equals(usernameV) && v.getDate().equals(d))
                 out.add(v);
         }
         return out;
     }
 
     public boolean volontarioHaConflitto(Volontario v, Date data, TipoVisita t) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".volontarioHaConflitto";
+         if (v == null || data == null || t == null || v.getUsername() == null || t.getInitTime() == null) {
+             AssertionControl.logMessage("Null argument provided to volontarioHaConflitto.", 2, CLASSNAME);
+             return true; // Treat null input as a conflict to be safe? Or return false? Returning true seems safer.
+         }
+
         List<Visita> visiteGiornaliere = this.getVisiteByVolontarioAndData(v.getUsername(), data);
         int initTime = t.getInitTime().getMinutes();
         int duration = t.getDuration();
         for (Visita visita : visiteGiornaliere) {
+             // Add null checks for safety
+             if (visita == null || visita.getTipoVisita() == null || visita.getTipoVisita().getInitTime() == null) {
+                 AssertionControl.logMessage("Encountered null Visita or related data during conflict check for Volontario: " + v.getUsername(), 2, CLASSNAME);
+                 continue; // Skip this potentially corrupt visit data
+             }
             int initTimeV = visita.getTipoVisita().getInitTime().getMinutes();
             int durationV = visita.getTipoVisita().getDuration();
-            if (beetwen(initTimeV, initTime, initTimeV + durationV)
-                    || beetwen(initTime, initTimeV, initTime + duration)) {
+            // Check for overlap: (StartA < EndB) and (StartB < EndA)
+            if ((initTimeV < initTime + duration) && (initTime < initTimeV + durationV)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private boolean beetwen(int a, int b, int c) {
-        return a < b && b < c;
     }
 }
