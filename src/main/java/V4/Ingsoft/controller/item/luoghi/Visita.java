@@ -134,16 +134,6 @@ public class Visita {
         return out;
     }
 
-    public void isThreeDaysFrom(Date d) {
-        if (date.dayOfTheYear() - d.dayOfTheYear() <= 3) {
-            if (getCurrentNumber() < this.tipo.numMinPartecipants) {
-                this.status = StatusVisita.CANCELLED; // Updated enum constant
-            } else {
-                this.status = StatusVisita.CONFIRMED; // Updated enum constant
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return "Title: " + tipo.getTitle()

@@ -92,8 +92,8 @@ public class MakePlanCommand extends AbstractCommand {
         // Eligibility depends on the definition (e.g., active period, etc. - assuming basic checks here)
         // and the date constraints.
         return visita.getDays().contains(date.dayOfTheWeek())
-                && !controller.db.dbDatesHelper.getPrecludedDates().contains(date);
-        // TODO: Add check if date falls within visita.getPeriodOfTheYear() if that logic exists
+                && !controller.db.dbDatesHelper.getPrecludedDates().contains(date)
+                && Date.between(visita.getInitDay(), date, visita.getFinishDay());
     }
 
     /**

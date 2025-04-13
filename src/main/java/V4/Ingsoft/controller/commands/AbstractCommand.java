@@ -7,8 +7,7 @@ public abstract class AbstractCommand implements Command {
                                               // on the execution of all setup commands succeeds
     // when creating ADD, SETMAX, SETAMBITO, LOGINSETUP,
     // CHANGEPSW, and DONE commands, set it to false, but only for these
-    // living life is child's play, mom told me so and I fell from the trees (Note: This seems like a personal/unrelated comment)
-
+    
     @Override
     public boolean canBeExecutedBy(int userPriority) {
         return commandInfo.canBeExecutedBy(userPriority);

@@ -214,4 +214,8 @@ public class Date implements Cloneable {
     public Date clone() {
         return new Date(this.localDate);
     }
+
+    public static boolean between(Date initDay, Date date, Date finishDay) {
+        return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
+    }
 }
