@@ -47,7 +47,7 @@ public class AvailabilityCommand extends AbstractCommand{
                 Date d = new Date(s);
                 if(controller.db.dbDatesHelper.getPrecludedDates().contains(d))
                     continue;
-                v.setAvailability(controller.date, d, false); //controllo avviene dentro il volontario direttamente eccetto per le date precluse (richiesta)
+                v.setAvailability(controller.date, d, toAdd); //controllo avviene dentro il volontario direttamente eccetto per le date precluse (richiesta)
             } catch (Exception e) {
                 AssertionControl.logMessage("Error in the date inserted", 3, CLASSNAME);
                 continue;

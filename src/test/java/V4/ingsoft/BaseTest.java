@@ -57,7 +57,7 @@ public class BaseTest{
         // Add initial TipoVisita and Volontario needed for some regime tests
         // Assuming 'add -T' format: <UID> <LuogoTitle> <OraInizio> <Durata> <MinPart> <MaxPart> [Descrizione]
         // Assuming 'assign' format: <VolUsername> <TipoVisitaUID>
-        controller.interpreter("add -T TVRegime Description 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma");
+        controller.interpreter("add -T TVRegime Description 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 MaSa");
         controller.interpreter("assign -L PlaceRegime TVRegime");
         controller.interpreter("add -v VolRegime PassVol");
         controller.interpreter("assign -V TVRegime VolRegime");

@@ -43,7 +43,7 @@ public class Visita {
         this.tipo = tipo;
         this.date = date;
         this.volontarioUID = uidVolontario;
-        this.UID = tipo.getUID() + date.hashCode() + uidVolontario;
+        this.UID = tipo.getUID() + date.toString() + uidVolontario;
     }
 
     public StatusVisita getStatus() {
@@ -101,7 +101,7 @@ public class Visita {
         if (getCurrentNumber() == tipo.numMaxPartecipants) {
             setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
-        return newIscrizione.getUIDFruitore();
+        return newIscrizione.getUIDIscrizione();
     }
 
     /**
@@ -147,12 +147,12 @@ public class Visita {
     @Override
     public String toString() {
         return "Title: " + tipo.getTitle()
-                + "\nVolunteer: " + getUidVolontario()
-                + "\nDescription: " + tipo.getDescription()
-                + "\nMeeting Point: " + tipo.getMeetingPlace()
-                + "\nDate: " + date
-                + "\nTime: " + tipo.getInitTime()
-                + "\nTicket required: " + tipo.isFree() // Assuming 'Biglietto necessario' means 'Ticket required'
+                + "\n\tVolunteer: " + getUidVolontario()
+                + "\n\tDescription: " + tipo.getDescription()
+                + "\n\tMeeting Point: " + tipo.getMeetingPlace()
+                + "\n\tDate: " + date
+                + "\n\tTime: " + tipo.getInitTime()
+                + "\n\tTicket required: " + tipo.isFree() // Assuming 'Biglietto necessario' means 'Ticket required'
                 + "\n";
     }
 

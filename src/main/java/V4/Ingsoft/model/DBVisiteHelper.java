@@ -105,14 +105,25 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public Visita findVisita(String title, String data) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".findVisita";
         if (title == null || title.trim().isEmpty() || data == null || data.trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to find Visita with null/empty title or data string.", 1, CLASSNAME);
+            AssertionControl.logMessage("Attempted to find Visita with null/empty title or data string.", 2, CLASSNAME);
             return null;
         }
 
-        for (Visita v : cachedItems.values()) {
+        Date d;
+        try {
+            d = new Date(data);
+        } catch (Exception e) {
+            AssertionControl.logMessage("Error while parsing the date.", 2, CLASSNAME);
+            return null;
+        }
+
+        for (Visita v : getVisite()) {
             // Add null checks for safety inside the loop
-            if (v != null && v.getTitle() != null && v.getDate() != null &&
-                v.getTitle().equalsIgnoreCase(title) && v.getDate().toString().equals(data)) {
+            if (v != null &&
+                v.getTitle() != null && 
+                v.getDate() != null &&
+                v.getTitle().equalsIgnoreCase(title) && 
+                v.getDate().equals(d)) {
             return v;
             }
         }
@@ -171,90 +182,118 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
             AssertionControl.logMessage("Current date 'd' cannot be null.", 2, CLASSNAME);
             return;
         }
-
+    
         ArrayList<String> uidsToRemove = new ArrayList<>();
         boolean changed = false;
-
-        // Iterate through a copy of values to avoid concurrent modification if removing
+    
+        // Creiamo una copia delle visite correnti per evitare modifiche concurrenti
         ArrayList<Visita> currentVisits = new ArrayList<>(cachedItems.values());
-
+    
         for (Visita v : currentVisits) {
             if (v == null) {
                 AssertionControl.logMessage("Null Visita found in cache during daily check.", 1, CLASSNAME);
                 continue;
             }
-
+            
             Date visitDate = v.getDate();
-            StatusVisita currentStatus = v.getStatus();
-
             if (visitDate == null) {
-                 AssertionControl.logMessage("Visita with UID " + v.getUID() + " has null date.", 1, CLASSNAME);
-                 continue;
+                AssertionControl.logMessage("Visita with UID " + v.getUID() + " has null date.", 1, CLASSNAME);
+                continue;
             }
-
-            // 1. Check for confirmation/cancellation deadline (3 days before)
-            // Assuming Date class has minusDays and equals methods
-            Date deadlineDate = visitDate.minusDays(3); // Calculate deadline date
-
-            if (deadlineDate != null && deadlineDate.equals(d)) {
-                if (currentStatus == StatusVisita.PROPOSED || currentStatus == StatusVisita.COMPLETED) {
-                    TipoVisita tv = v.getTipoVisita(); // Assumes Visita has getTipoVisita()
-                    if (tv == null) {
-                         AssertionControl.logMessage("Visita UID " + v.getUID() + " has null TipoVisita.", 1, CLASSNAME);
-                         continue;
-                    }
-                    // Corrected method name based on TipoVisita.java
-                    int minParticipants = tv.getNumMinPartecipants();
-                    // Corrected method name based on Visita.java
-                    int currentParticipants = v.getCurrentNumber();
-
-                    if (currentParticipants >= minParticipants) {
-                        v.setStatus(StatusVisita.CONFIRMED);
-                        AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, CLASSNAME);
-                        changed = true;
-                    } else {
-                        v.setStatus(StatusVisita.CANCELLED);
-                        AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, CLASSNAME);
-                        changed = true;
-                        // Cancelled visits will be removed below when their date passes
-                    }
-                }
+    
+            // Fase 1: Aggiornamento visit pre-deadline
+            if (processPreDeadlineVisit(v, d, CLASSNAME)) {
+                changed = true;
             }
-
-            // 2. Check for post-visit cleanup (day after visit)
-            // Assuming Date class has isBefore method
-            if (visitDate.isBefore(d)) {
-                if (currentStatus == StatusVisita.CONFIRMED) {
-                    // Visit was confirmed and has now passed -> Mark as completed and archive
-                    // Using COMPLETED based on getCompletate method, adjust if StatusVisita enum differs
-                    v.setStatus(StatusVisita.COMPLETED); // Mark as completed
-                    writeVisitaEffettuata(v); // Archive it
-                    uidsToRemove.add(v.getUID()); // Mark for removal from active cache
-                    AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 4, CLASSNAME);
-                    changed = true; // Indicate a change occurred
-                } else if (currentStatus == StatusVisita.CANCELLED) {
-                    // Visit was cancelled and its date has passed -> Remove without archiving
-                    uidsToRemove.add(v.getUID());
-                    AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 4, CLASSNAME);
-                    changed = true; // Indicate a change occurred
-                }
-                 // Note: Visits still in PROPOSED or COMPLETED state after their date might indicate an issue
-                 // or could be handled differently depending on exact requirements (e.g., implicitly cancel?)
-                 // Current logic leaves them in cache until explicitly removed or handled.
+            
+            // Fase 2: Pulizia post-visita (visite passate)
+            if (processPostVisitCleanup(v, d, uidsToRemove, CLASSNAME)) {
+                changed = true;
             }
         }
-
-        // Perform removals from active cache
+    
+        // Rimuovi le visite dalla cache per cui la data è passata o cancellate
         for (String uid : uidsToRemove) {
             cachedItems.remove(uid);
         }
-
-        // Save changes if any occurred
+    
         if (changed || !uidsToRemove.isEmpty()) {
-            saveJson(); // Save updated statuses and removals from active cache
-            // Note: Archiving saves separately within writeVisitaEffettuata
+            saveJson(); // Salva cambiamenti alla cache
         }
     }
+    
+    /**
+     * Gestisce l'aggiornamento di una visita nella fase pre-deadline (3 giorni prima della visita).
+     * Se la data corrente coincide con il deadline e se il numero di partecipanti raggiunge il minimo,
+     * la visita viene confermata, altrimenti annullata.
+     *
+     * @param v          La visita da processare.
+     * @param currentDay La data corrente.
+     * @param className  Il nome della classe per il logging.
+     * @return true se lo stato della visita è stato aggiornato, false altrimenti.
+     */
+    private boolean processPreDeadlineVisit(Visita v, Date currentDay, String className) {
+        boolean changed = false;
+        
+        Date visitDate = v.getDate();
+        Date deadlineDate = visitDate.minusDays(3);
+        if (deadlineDate != null &&
+            Math.abs(deadlineDate.dayOfTheYear() - currentDay.dayOfTheYear()) <= 3) {
+            StatusVisita currentStatus = v.getStatus();
+            if (currentStatus == StatusVisita.PROPOSED || currentStatus == StatusVisita.COMPLETED) {
+                TipoVisita tv = v.getTipoVisita();
+                if (tv == null) {
+                    AssertionControl.logMessage("Visita UID " + v.getUID() + " has null TipoVisita.", 1, className);
+                    return changed;
+                }
+                int minParticipants = tv.getNumMinPartecipants();
+                int currentParticipants = v.getCurrentNumber();
+    
+                if (currentParticipants >= minParticipants) {
+                    v.setStatus(StatusVisita.CONFIRMED);
+                    AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, className);
+                } else {
+                    v.setStatus(StatusVisita.CANCELLED);
+                    AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, className);
+                }
+                changed = true;
+            }
+        }
+        return changed;
+    }
+    
+    /**
+     * Gestisce la pulizia post-visita. Se la data della visita è precedente alla data corrente,
+     * la visita viene considerata per l'eliminazione. Se la visita era CONFIRMED, viene segnato come COMPLETED
+     * e archiviato; se CANCELLED, viene rimossa.
+     *
+     * @param v             La visita da processare.
+     * @param currentDay    La data corrente.
+     * @param uidsToRemove  Lista degli UID da rimuovere dalla cache.
+     * @param className     Il nome della classe per il logging.
+     * @return true se la visita è stata processata (modifica o marcatura per rimozione), false altrimenti.
+     */
+    private boolean processPostVisitCleanup(Visita v, Date currentDay, ArrayList<String> uidsToRemove, String className) {
+        boolean changed = false;
+        
+        Date visitDate = v.getDate();
+        if (visitDate.isBefore(currentDay)) {
+            StatusVisita currentStatus = v.getStatus();
+            if (currentStatus == StatusVisita.CONFIRMED) {
+                v.setStatus(StatusVisita.COMPLETED);
+                writeVisitaEffettuata(v);
+                uidsToRemove.add(v.getUID());
+                AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 4, className);
+                changed = true;
+            } else if (currentStatus == StatusVisita.CANCELLED) {
+                uidsToRemove.add(v.getUID());
+                AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 4, className);
+                changed = true;
+            }
+        }
+        
+        return changed;
+    }    
 
     /**
      * Adds a completed visit to the archive and saves the archive.

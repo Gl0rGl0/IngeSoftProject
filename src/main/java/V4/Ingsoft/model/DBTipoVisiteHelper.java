@@ -73,7 +73,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         for (TipoVisita tv : getTipiVisita()) {
             if (tv.getStatus() == StatusVisita.PENDING)
                 tv.isMonthExpired(d);
-        }
+            }
     }
 
     public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {

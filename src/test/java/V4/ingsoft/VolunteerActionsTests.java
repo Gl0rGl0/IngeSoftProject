@@ -15,15 +15,6 @@ import java.util.stream.Collectors; // Added import
 // Tests for Use Cases UC16-UC19, UC34 (Volunteer Actions)
 public class VolunteerActionsTests extends BaseTest {
 
-    // Helper to set the controller's current date
-    private void setTestDate(String dateStr) {
-        try {
-            controller.date = new Date(dateStr);
-        } catch (Exception e) {
-            fail("Failed to set test date: " + e.getMessage());
-        }
-    }
-
     @Override
     @BeforeEach
     public void setup() {
@@ -55,23 +46,23 @@ public class VolunteerActionsTests extends BaseTest {
         assertTrue(vol.getTipiVisiteUIDs().contains("TVRegime".hashCode() + "t"), "Volunteer VolRegime should be assigned to TVRegime.");
     }
 
-     @Test
-     public void testVolunteerListViewAssociatedTypesEmpty() {
-         // Arrange: enterRegimePhase runs. Add a new volunteer but don't assign them.
-         controller.interpreter("add -v volTestEmpty passVTE"); // Added by configRegime
-         // Login as the new empty volunteer
-         controller.interpreter("logout"); // Logout configRegime
-         controller.interpreter("login volTestEmpty passVTE");
-         controller.interpreter("changepsw newEmptyVolPass");
+    @Test
+    public void testVolunteerListViewAssociatedTypesEmpty() {
+        // Arrange: enterRegimePhase runs. Add a new volunteer but don't assign them.
+        controller.interpreter("add -v volTestEmpty passVTE"); // Added by configRegime
+        // Login as the new empty volunteer
+        controller.interpreter("logout"); // Logout configRegime
+        controller.interpreter("login volTestEmpty passVTE");
+        controller.interpreter("changepsw newEmptyVolPass");
 
-         // Act
-         controller.interpreter("list -v"); // Run general list command
+        // Act
+        controller.interpreter("list -v"); // Run general list command
 
-         // Assert state for volTestEmpty
-         Volontario vol = controller.db.dbVolontarioHelper.getPersona("volTestEmpty");
-         assertNotNull(vol, "Volunteer volTestEmpty should exist.");
-         assertTrue(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer volTestEmpty should have no assigned types.");
-      }
+        // Assert state for volTestEmpty
+        Volontario vol = controller.db.dbVolontarioHelper.getPersona("volTestEmpty");
+        assertNotNull(vol, "Volunteer volTestEmpty should exist.");
+        assertTrue(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer volTestEmpty should have no assigned types.");
+    }
 
     // UC19 - Dichiarazione Disponibilità Volontario
     @Test
@@ -83,7 +74,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("changepsw newVolPass");
 
         // Set current date to be within the allowed window for July (e.g., May 16th)
-        setTestDate("16/05/2025");
+        controller.interpreter("time -s 16/05/2025");
         String futureDate = "07/07/2025"; // A Monday in July
 
         // Act
@@ -92,9 +83,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert: Check internal state if possible, otherwise assume command worked
         Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
         assertNotNull(vol, "Volunteer should still exist.");
-        // Cannot easily verify future availability state without specific getters/methods in Volontario/Model.
-        // Test confirms command runs without error in the success path.
-        assertTrue(true, "Executed availability command successfully (verification of future state requires specific getters).");
+        assertTrue(vol.getAvailability()[7-1], "Executed availability command successfully (verification of future state requires specific getters).");
     }
 
     @Test
@@ -103,7 +92,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
         controller.interpreter("changepsw newVolPass");
-        setTestDate("16/05/2025"); // Set valid date context
+        controller.interpreter("time -s 16/05/2025"); // Set valid date context
 
         // Act
         controller.interpreter("setav -a 2025-07-10"); // Invalid format (needs dd/mm/yyyy)
@@ -111,7 +100,8 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
-        assertTrue(true, "Executed setav with invalid format (verify logs for parsing error message).");
+        Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
+        assertFalse(vol.getAvailability()[7-1], "Executed setav with invalid format (verify logs for parsing error message).");
     }
 
     @Test
@@ -120,7 +110,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
         controller.interpreter("changepsw newVolPass");
-        setTestDate("16/01/2025"); // Set valid date context
+        controller.interpreter("time -s 16/01/2025"); // Set valid date context
 
         // Act
         controller.interpreter("setav -a 31/02/2025"); // Invalid date
@@ -128,7 +118,8 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
-        assertTrue(true, "Executed setav with invalid date (verify logs for parsing error message).");
+        Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
+        assertFalse(vol.getAvailability()[7-1], "Executed setav with invalid date (verify logs for parsing error message).");
     }
 
     @Test
@@ -138,44 +129,44 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("login VolRegime PassVol");
         controller.interpreter("changepsw newVolPass");
 
-        // Set current date OUTSIDE the allowed window (e.g., July 1st, trying to set for August)
-        setTestDate("01/07/2025");
-        String futureDate = "04/08/2025"; // Target date (Monday)
+        // Set current date OUTSIDE the allowed window (e.g., July 1st, trying to set for September)
+        controller.interpreter("time -s 01/07/2025");
+        String futureDate = "04/09/2025"; // Target date (Monday)
 
         // Act
         controller.interpreter("setav -a " + futureDate);
 
         // Assert
-        // The command should execute, but the internal logic in Volontario.setAvailability
-        // (called by AvailabilityCommand.manageDate) should prevent the update because the date is outside the target month.
-        // Cannot directly verify the internal state wasn't updated without specific getters.
-        assertTrue(true, "Executed setav outside allowed window (verify internal logic prevents update).");
+        // The command should execute, but the internal logic in Volontario.setAvailability but its not assigned because its outside the allowed windows
+        Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
+        assertFalse(vol.getAvailability()[4-1], "Executed setav outside allowed window (verify internal logic prevents update).");
     }
 
-     @Test
-     public void testVolunteerDeclareAvailabilityFailPrecludedDate() {
-         // Arrange: enterRegimePhase runs. Log in as configRegime to preclude a date.
-         String precludedDateStr = "07/07/2025"; // Monday
+    @Test
+    public void testVolunteerDeclareAvailabilityFailPrecludedDate() {
+        // Arrange: enterRegimePhase runs. Log in as configRegime to preclude a date.
+        controller.interpreter("time -s 1/06/2025");
+        String precludedDateStr = "01/08/2025"; // Monday
 
-         // Add precluded date (as configRegime)
-         controller.interpreter("time -n " + precludedDateStr);
+        // Add precluded date (as configRegime)
+        controller.interpreter("preclude -a " + precludedDateStr);
+        
+        //past 1 month
+        controller.interpreter("time -s 01/07/2025");
 
-         // Login as VolRegime
-         controller.interpreter("logout");
-         controller.interpreter("login VolRegime PassVol");
-         controller.interpreter("changepsw newVolPass");
+        // Login as VolRegime
+        controller.interpreter("logout");
+        controller.interpreter("login VolRegime PassVol");
+        controller.interpreter("changepsw newVolPass");
 
-         // Set current date to be within the allowed window
-         setTestDate("16/05/2025");
-
-         // Act
+        // Act
         controller.interpreter("setav -a " + precludedDateStr);
 
         // Assert
         // The AvailabilityCommand.manageDate checks precluded dates and should skip the update.
-        // Cannot directly verify the internal state wasn't updated without specific getters.
-        assertTrue(true, "Executed setav for a precluded date (verify internal logic prevents update).");
-     }
+        Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
+        assertFalse(vol.isAvailabile(1), "Executed setav for a precluded date (verify internal logic prevents update).");
+    }
 
 
     // UC34 - Visualizzazione Visite Assegnate (Volontario)
@@ -184,56 +175,59 @@ public class VolunteerActionsTests extends BaseTest {
         // Arrange: Use entities created by enterRegimePhase (VolRegime, TVRegime, PlaceRegime)
         String username = "VolRegime";
         String visitTypeName = "TVRegime"; // Name used in commands
-        String visitDate = "07/07/2025"; // Monday
+        String visitDate = "05/07/2025"; // Saturday
+
+        Date d;
+        try {
+            d = new Date(visitDate);
+        } catch (Exception e) {
+            return;
+        }
 
         // 1. Volunteer Declares Availability (as Volunteer)
         controller.interpreter("logout"); // Logout configRegime
         controller.interpreter("login VolRegime PassVol");
         controller.interpreter("changepsw newVolPass");
-        setTestDate("16/05/2025"); // Window to declare for July
+        controller.interpreter("time -s 16/05/2025"); // Window to declare for July
         controller.interpreter("setav -a " + visitDate);
         controller.interpreter("logout");
 
         // 2. Generate Plan (as configRegime)
         controller.interpreter("login configRegime passRegime");
-        setTestDate("16/06/2025"); // Day to generate plan for July
+        controller.interpreter("time -s 16/06/2025"); // Day to generate plan for July
         controller.interpreter("makeplan"); // Generate visits for July
+        controller.interpreter("logout");
 
         // 3. Book Visit (Fruitore) - to meet minimum participants
-        controller.interpreter("add -f fruitTestAssign passFTA"); // Add fruitore
-        controller.interpreter("logout");
-        controller.interpreter("login fruitTestAssign passFTA");
-        controller.interpreter("changepsw newFruitPass");
+        controller.interpreter("login fruitTestAssign passFTA passFTA");
         controller.interpreter("visit -a " + visitTypeName + " " + visitDate + " 1"); // Book 1 person
         controller.interpreter("logout");
 
-        // 4. Confirm Visit (Advance time past deadline)
-        controller.interpreter("login configRegime passRegime");
-        // Deadline is 3 days before visitDate (07/07) -> 04/07
-        setTestDate("05/07/2025"); // Day after deadline
-        controller.dailyAction(); // Trigger state update
+        // Deadline is 3 days before visitDate (05/07) -> 02/07
+        controller.interpreter("time -s 04/07/2025"); // Day after deadline
 
         // 5. Login as Volunteer again
-        controller.interpreter("logout");
         controller.interpreter("login VolRegime newVolPass"); // Use the changed password
 
         // Act
         controller.interpreter("myvisit"); // Use correct command
+        Visita v = controller.db.dbVisiteHelper.findVisita(visitTypeName, visitDate);
 
         // Assert: Fetch visits and check if the expected one is assigned and confirmed.
         List<Visita> allVisits = controller.db.dbVisiteHelper.getVisite();
-        String expectedVisitUID = visitTypeName.hashCode() + "t" + visitDate.hashCode() + username; // Reconstruct expected UID based on Visita constructor logic
+        
+        String expectedVisitUID = visitTypeName.hashCode() + "t" + d.toString() + username; // Reconstruct expected UID based on Visita constructor logic
+        assertEquals(expectedVisitUID, v.getUID());
 
         List<Visita> assignedConfirmedVisits = allVisits.stream()
             .filter(visit -> visit != null &&
-                             username.equals(visit.getUidVolontario()) &&
-                             visit.getStatus() == StatusVisita.CONFIRMED &&
-                             visit.getUID().equals(expectedVisitUID)) // Check UID too
+                            username.equals(visit.getUidVolontario()) &&
+                            visit.getStatus() == StatusVisita.CONFIRMED &&
+                            visit.getUID().equals(expectedVisitUID)) // Check UID too
             .collect(Collectors.toList());
 
         assertEquals(1, assignedConfirmedVisits.size(), "Volunteer should have exactly one confirmed visit assigned matching the setup.");
-        // Optionally check details of the found visit
-        // assertEquals(visitTypeName, assignedConfirmedVisits.get(0).getTitle());
+        assertEquals(visitTypeName, assignedConfirmedVisits.get(0).getTitle());
     }
 
     @Test
@@ -251,11 +245,11 @@ public class VolunteerActionsTests extends BaseTest {
         String currentUsername = controller.getCurrentUser().getUsername(); // Should be volTestAssignEmpty
 
         for (Visita visit : controller.db.dbVisiteHelper.getVisite()) {
-             if (visit != null && currentUsername.equals(visit.getUidVolontario())) {
-                 assignedVisits.add(visit);
-             }
+            if (visit != null && currentUsername.equals(visit.getUidVolontario())) {
+                assignedVisits.add(visit);
+            }
         }
         assertTrue(assignedVisits.isEmpty(), "Volunteer should have no assigned visits.");
     }
 
- }
+}

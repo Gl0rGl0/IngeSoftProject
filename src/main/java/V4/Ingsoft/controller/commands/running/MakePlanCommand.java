@@ -40,7 +40,7 @@ public class MakePlanCommand extends AbstractCommand {
         }
         if (!controller.isActionDay16) {
              // This might be normal operation, maybe log at a lower level or just return silently?
-             // AssertionControl.logMessage("MakePlanCommand attempted outside action day 16.", 3, CLASSNAME);
+             AssertionControl.logMessage("MakePlanCommand attempted outside action day 16.", 3, CLASSNAME);
              return;
         }
 
@@ -52,8 +52,8 @@ public class MakePlanCommand extends AbstractCommand {
         int daysInMonth = month.maxLength();
 
         for (int day = 1; day <= daysInMonth; day++) {
-            Date currentDate = new Date(day, month.getValue(), year);
-            processVisitsForDate(currentDate, tipi);
+            Date toCheckDate = new Date(day, month.getValue(), year);
+            processVisitsForDate(toCheckDate, tipi);
         }
     }
 
@@ -107,7 +107,7 @@ public class MakePlanCommand extends AbstractCommand {
                 continue;
 
             // Check volunteer availability for the current day
-            if (!volontario.getAvailability()[date.getDay()])
+            if (!volontario.isAvailabile(date.getDay()))
                 continue;
 
             // Check conflicts for the volunteer and the date

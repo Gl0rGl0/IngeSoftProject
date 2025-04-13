@@ -1,5 +1,6 @@
 package V4.Ingsoft.util;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import V4.Ingsoft.controller.Controller;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Date {
+public class Date implements Cloneable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime localDate;
@@ -42,9 +43,9 @@ public class Date {
     /**
      * Constructs a date from a string in the format "dd/mm/yy-[hh:mm]".
      *
-     * @param in the string containing the date and optionally a time part (comment seems outdated)
+     * @param in the string containing the date and optionally a time part
      */
-    public Date(String in) throws Exception{
+    public Date(String in) throws Exception {
         String[] parts = in.split("-");
 
         setDate(parts[0].split("/"));
@@ -56,7 +57,7 @@ public class Date {
         }
     }
 
-    private void setDate(String[] in) throws NumberFormatException{
+    private void setDate(String[] in) throws NumberFormatException, DateTimeException {
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
         int year = Integer.parseInt(in[2]);
@@ -64,7 +65,7 @@ public class Date {
         this.localDate = LocalDate.of(year, month, day).atStartOfDay();
     }
 
-    private void setTime(String[] in) {
+    private void setTime(String[] in) throws DateTimeException {
         int hh = Integer.parseInt(in[0]);
         int mm = Integer.parseInt(in[1]);
         localDate = this.localDate.plusHours(hh).plusMinutes(mm);
@@ -72,7 +73,7 @@ public class Date {
 
     /**
      * Modifies the date by incrementing it (or decrementing, if g is negative) by
-     * g days. (Note: The comment about year -1 seems irrelevant as LocalDate always has a year).
+     * g days.
      *
      * @param g number of days to add (or subtract if negative)
      */
@@ -127,7 +128,7 @@ public class Date {
         if(d1.dayOfTheYear() < d2.dayOfTheYear()){
             currentMonth = d1.getMonth();
             targetMonth = d2.getMonth();
-        }else{
+        } else {
             targetMonth = d1.getMonth();
             currentMonth = d2.getMonth();
         }
@@ -175,34 +176,42 @@ public class Date {
             LocalDateTime newLocalDate = this.localDate.minusDays(days);
             return new Date(newLocalDate);
         } catch (Exception e) {
-            // Log error?
-            return null; // Return null or handle error appropriately
+            // Log error if needed
+            return null;
         }
     }
 
-
     @Override
-    public boolean equals(Object d){
+    public boolean equals(Object d) {
         if (this == d) return true; // Same object
         if (d == null || getClass() != d.getClass()) return false; // Null or different class
 
         Date otherDate = (Date) d;
 
         if (this.localDate == null) {
-             return otherDate.localDate == null; // Both null are equal in this context
+            return otherDate.localDate == null;
         }
         if (otherDate.localDate == null) {
-             return false; // This one is not null, other is
+            return false;
         }
-
         // Compare only the date part for equality, ignoring time
         return this.localDate.toLocalDate().equals(otherDate.localDate.toLocalDate());
     }
 
-    // Consider adding hashCode() if overriding equals()
     @Override
     public int hashCode() {
         // Simple hash based on LocalDate part
         return localDate != null ? localDate.toLocalDate().hashCode() : 0;
+    }
+
+    /**
+     * Creates a clone of this Date object.
+     * Since LocalDateTime is immutable, this is effectively a deep copy.
+     *
+     * @return a new Date instance with the same localDate value.
+     */
+    @Override
+    public Date clone() {
+        return new Date(this.localDate);
     }
 }

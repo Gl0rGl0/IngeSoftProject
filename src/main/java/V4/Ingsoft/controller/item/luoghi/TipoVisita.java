@@ -138,7 +138,7 @@ public class TipoVisita {
                 this.numMaxPartecipants = Integer.parseInt(args[9]);
                 this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
             
-                this.insertionDay = d;
+                this.insertionDay = (Date) d.clone();
             } catch (Exception e) {
                 throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
             }
@@ -228,17 +228,15 @@ public class TipoVisita {
                 + ", Max Participants=" + numMaxPartecipants // Changed "Numero Max Partecipanti"
                 + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
                 + ", Visit Status=" + sv // Changed "Stato visita"
+                + ", Date added=" + insertionDay
                 + "}\n";
     }
 
     public void isMonthExpired(Date d) {
-        // System.out.println("AAAAAA " + (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= Date
-        //         .monthLength(insertionDay)) + d.dayOfTheYear() + " " + insertionDay.dayOfTheYear() + this.title);
-
         if (this.sv == StatusVisita.PROPOSED) // Updated enum constant
             return;
 
-        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= insertionDay.getMonth().getValue())
+        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= insertionDay.getMonth().maxLength())
             this.sv = StatusVisita.PROPOSED; // Updated enum constant
     }
 

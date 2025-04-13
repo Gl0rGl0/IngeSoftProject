@@ -29,4 +29,11 @@ public class Iscrizione {
     public int getQuantity() {
         return this.quantity;
     }
+
+    @Override
+    public String toString(){
+        return  "ID=" + UIDIscrizione +
+                "\nFruitore=" + fruitoreUID + 
+                "\nQuantity=" + quantity;
+    }
 }

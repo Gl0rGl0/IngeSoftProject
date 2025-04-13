@@ -73,7 +73,7 @@ public class Volontario extends Persona {
             return;
         }
 
-        availability[disp.getDay()] = toAdd;
+        availability[disp.getDay() - 1] = toAdd;
         AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd,3, "Volontario.setAvailability");
     }
 
@@ -90,5 +90,9 @@ public class Volontario extends Persona {
 
     public boolean[] getAvailability() {
         return availability;
+    }
+
+    public boolean isAvailabile(int day) {
+        return availability[day-1];
     }
 }

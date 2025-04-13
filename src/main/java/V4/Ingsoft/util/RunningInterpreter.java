@@ -11,6 +11,7 @@ import V4.Ingsoft.controller.commands.running.MakePlanCommand;
 import V4.Ingsoft.controller.commands.running.MyVisitCommand;
 import V4.Ingsoft.controller.commands.running.PrecludeCommand;
 import V4.Ingsoft.controller.commands.running.RemoveCommand;
+import V4.Ingsoft.controller.commands.running.VisitCommand;
 
 public class RunningInterpreter extends Interpreter {
 
@@ -24,7 +25,8 @@ public class RunningInterpreter extends Interpreter {
         commandRegistry.put("remove", new RemoveCommand(controller));
         commandRegistry.put("myvisit", new MyVisitCommand(controller));
         commandRegistry.put("setav", new AvailabilityCommand(controller));
-        commandRegistry.put("make", new MakePlanCommand(controller));
+        commandRegistry.put("makeplan", new MakePlanCommand(controller));
+        commandRegistry.put("visit", new VisitCommand(controller));
         commandRegistry.put("help", new HelpCommand(controller, CommandList.HELP));
     }
 

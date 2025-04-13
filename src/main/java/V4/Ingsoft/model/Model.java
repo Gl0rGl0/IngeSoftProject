@@ -259,16 +259,12 @@ public class Model {
             return false;
         }
 
-        System.out.println(luogoUID);
-
         Luogo luogo = dbLuoghiHelper.getLuogoByUID(luogoUID);
         if (luogo == null) {
             // This might happen legitimately during cascade
             AssertionControl.logMessage("Attempted to remove non-existent or already removed Luogo UID: " + luogoUID, 0, "Model");
             return false; // Already removed or never existed
         }
-
-        System.out.println(luogo);
 
         // --- Cascade: Remove associated TipoVisite ---
         // Iterate through a copy to avoid concurrent modification issues
@@ -364,10 +360,6 @@ public class Model {
 
     public Luogo getLuogoByName(String name) {
         return dbLuoghiHelper.findLuogo(name);
-    }
-
-    public Visita getVisitaByName(String string, String date) {
-        return dbVisiteHelper.findVisita(string, date);
     }
 
     // ================================================================

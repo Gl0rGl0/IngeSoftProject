@@ -66,6 +66,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
         boolean success = saveJson(getPersonList());
         if (success) {
+            toChange.setAsNotNew();
             AssertionControl.logMessage("Password changed successfully for user: " + username, 4, SUB_CLASSNAME);
             return true;
         } else {
