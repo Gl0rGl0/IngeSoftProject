@@ -1,11 +1,13 @@
 package V4.Ingsoft.controller.commands.running;
 
+import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 // Removed AssertionControl import as it's already used below
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 import V4.Ingsoft.util.AssertionControl; // Ensure import is present
+import V4.Ingsoft.util.Date;
 
 public class RemoveCommand extends AbstractCommand {
 
@@ -81,22 +83,22 @@ public class RemoveCommand extends AbstractCommand {
             case 'c' -> removeConfiguratore(ar); // Assumes ar[0] is username
             case 'f' -> removeFruitore(ar); // Assumes ar[0] is username. No time restriction for Fruitore
             case 'v' -> { // Volontario removal restricted to action day
-                if (controller.isActionDay16)
-                    removeVolontario(ar); // Assumes ar[0] is username
+                if (!controller.isActionDay16 && controller.doneAll())
+                    ViewSE.println(ERROR_16);  // Correctly show error if not action day
                 else
-                    ViewSE.println(ERROR_16); // Correctly show error if not action day
+                    removeVolontario(ar); // Assumes ar[0] is username /
             }
             case 'T' -> { // TipoVisita removal restricted to action day
-                if (controller.isActionDay16)
-                    removeTipoVisita(ar); // Assumes ar[0] is type name
-                else
+                if (!controller.isActionDay16 && controller.doneAll())
                     ViewSE.println(ERROR_16); // Correctly show error if not action day
+                else
+                    removeTipoVisita(ar); // Assumes ar[0] is type name
             }
             case 'L' -> { // Luogo removal restricted to action day
-                if (controller.isActionDay16)
-                    removeLuogo(ar); // Assumes ar[0] is place name
-                else
+                if (!controller.isActionDay16 && controller.doneAll())
                     ViewSE.println(ERROR_16); // Correctly show error if not action day
+                else
+                    removeLuogo(ar); // Assumes ar[0] is place name
             }
             default -> ViewSE.println("Option not recognized for 'remove'.");
         }
@@ -156,14 +158,17 @@ public class RemoveCommand extends AbstractCommand {
         // Precondition checks (args valid, isActionDay16) done in execute()
         final String CLASSNAME = RemoveCommand.class.getSimpleName() + ".removeTipoVisita";
         String typeName = args[0];
+        TipoVisita toOperate = controller.getDB().dbTipoVisiteHelper.findTipoVisita(typeName);
 
         ViewSE.println("Executing: Removing visit type " + typeName);
-        if (!controller.db.removeTipoVisita(typeName)) {
+        if (toOperate == null) {
             AssertionControl.logMessage("Failed to remove visit type: " + typeName, 1, CLASSNAME);
             ViewSE.println("Failed to remove visit type: " + typeName);
         } else {
-            AssertionControl.logMessage("Visit type removed: " + typeName, 4, CLASSNAME);
-            ViewSE.println("Visit type removed: " + typeName);
+            Date toRemove = controller.date.clone().addMonth(2);
+            toOperate.setDeletionDay(toRemove);
+            AssertionControl.logMessage("Added visit type to be removed: " + typeName + " on: " + toRemove, 4, CLASSNAME);
+            ViewSE.println("Added visit type to be removed: " + typeName + " on: " + toRemove);
         }
     }
 

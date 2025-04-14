@@ -2,7 +2,7 @@ package V4.Ingsoft.model;
 
 import java.util.ArrayList;
 
-import V4.Ingsoft.controller.item.luoghi.StatusVisita;
+import V4.Ingsoft.controller.item.luoghi.StatusVL;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.util.Date;
 
@@ -69,18 +69,25 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         return null;
     }
 
-    public void checkTipoVisiteAttese(Date d) {
+    public void checkTipoVisite(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() == StatusVisita.PENDING)
-                tv.isMonthExpired(d);
+            switch(tv.getStatus()){
+                case PENDING_ADD -> tv.isMonthExpired(d);
+                case PENDING_REMOVE -> {
+                    Date deletionDay = tv.getDeletionDay();
+                    if(deletionDay != null && deletionDay.equals(d))
+                        removeTipoVisitaByUID(tv.getUID());
+                }
+                default -> {}
             }
+        }
     }
 
     public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() != StatusVisita.PENDING)
+            if (tv.getStatus() == StatusVL.PROPOSED || tv.getStatus() == StatusVL.PENDING_REMOVE)
                 out.add(tv);
         }
         return out;

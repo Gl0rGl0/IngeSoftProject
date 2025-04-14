@@ -14,6 +14,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public class Volontario extends Persona {
 
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
+    private StatusPersona sp = StatusPersona.PENDING_ADD;
+    private Date insertionDate;
+    private Date deletionDate;
 
     public boolean addTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
@@ -41,11 +44,15 @@ public class Volontario extends Persona {
             @JsonProperty("psw") String psw,
             @JsonProperty("new") boolean isNew,
             @JsonProperty("visite") ArrayList<String> visite,
-            @JsonProperty("disponibilita") boolean[] disponibilita) throws Exception {
+            @JsonProperty("disponibilita") boolean[] disponibilita,
+            @JsonProperty("insertionDate") Date insertionDate,
+            @JsonProperty("deletionDate") Date deletionDate ) throws Exception {
         this(username, psw, isNew, false);
         this.visiteUIDs = visite;
         if (disponibilita != null)
             this.availability = disponibilita;
+        this.insertionDate = insertionDate;
+        this.deletionDate = deletionDate;
     }
 
     public Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
@@ -103,5 +110,32 @@ public class Volontario extends Persona {
 
     public boolean isAvailabile(int day) {
         return availability[day-1];
+    }
+
+    public void checkStatus(Date d){
+        switch(sp){
+            case PENDING_ADD -> {
+                if(insertionDate == null){
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using today", 2, getClass().getSimpleName());
+                    this.insertionDate = d;
+                    return;
+                }
+
+                if(Date.monthsDifference(insertionDate, d, 2))
+                    this.sp = StatusPersona.ACTIVE;
+            }
+            case PENDING_REMOVE -> {
+                if(deletionDate == null){
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", 2, getClass().getSimpleName());
+                    this.deletionDate = d.clone().addMonth(2);
+                    this.deletionDate.setDay(16);
+                    return;
+                }
+
+                if(deletionDate.equals(d))
+                    this.sp = StatusPersona.DISABLED;
+            }
+            default -> {}
+        }
     }
 }

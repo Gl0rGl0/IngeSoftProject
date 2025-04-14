@@ -24,7 +24,7 @@ public class Visita {
 
     @JsonIgnore
     public String volontarioUID;
-    public StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
+    public StatusVL status = StatusVL.PROPOSED; // Updated enum constant
     @JsonIgnore
     public ArrayList<Iscrizione> fruitori = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class Visita {
     public Visita(
             @JsonProperty("data") Date data,
             @JsonProperty("UID") String UID,
-            @JsonProperty("stato") StatusVisita status) {
+            @JsonProperty("stato") StatusVL status) {
 
         this.date = data;
         this.UID = UID;
@@ -46,7 +46,7 @@ public class Visita {
         this.UID = tipo.getUID() + date.toString() + uidVolontario;
     }
 
-    public StatusVisita getStatus() {
+    public StatusVL getStatus() {
         return this.status;
     }
 
@@ -74,7 +74,7 @@ public class Visita {
         return tipo.getTitle();
     }
 
-    public void setStatus(StatusVisita status) {
+    public void setStatus(StatusVL status) {
         this.status = status;
     }
 
@@ -99,7 +99,7 @@ public class Visita {
         fruitori.add(newIscrizione);
 
         if (getCurrentNumber() == tipo.numMaxPartecipants) {
-            setStatus(StatusVisita.COMPLETED); // Updated enum constant
+            setStatus(StatusVL.COMPLETED); // Updated enum constant
         }
         return newIscrizione.getUIDIscrizione();
     }
@@ -116,9 +116,9 @@ public class Visita {
             // Ensure null safety for user comparison
             if (user != null && user.equals(i.getUIDFruitore())) {
                 boolean removed = fruitori.remove(i);
-                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVL.COMPLETED) {
                     // If removed and was full, set back to proposed
-                    setStatus(StatusVisita.PROPOSED);
+                    setStatus(StatusVL.PROPOSED);
                 }
                 return removed; // Return true if removal was successful
             }
@@ -162,8 +162,8 @@ public class Visita {
 
         // If an iscrizione was removed and the visit was previously full (COMPLETED),
         // it should become PROPOSED again.
-        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
-             setStatus(StatusVisita.PROPOSED);
+        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVL.COMPLETED) {
+             setStatus(StatusVL.PROPOSED);
         }
         return removed;
     }

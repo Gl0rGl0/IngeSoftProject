@@ -59,7 +59,7 @@ public class ListCommand extends AbstractCommand {
             out.append(v.getUsername() + ":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
                 // Use the translated enum constant PROPOSED
-                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVisita.PROPOSED ? "proposed" : "pending")
+                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVL.PROPOSED ? "proposed" : "pending")
                         + "\n");
             }
             ViewSE.println(out);

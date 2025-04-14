@@ -215,7 +215,16 @@ public class Date implements Cloneable {
         return new Date(this.localDate);
     }
 
+    public Date addMonth(int n){
+        localDate.plusMonths(n);
+        return this;
+    }
+
     public static boolean between(Date initDay, Date date, Date finishDay) {
         return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
+    }
+
+    public void setDay(int i) {
+        this.localDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), i).atStartOfDay();
     }
 }

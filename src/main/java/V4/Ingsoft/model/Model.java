@@ -326,7 +326,7 @@ public class Model {
         // Check visits nearing confirmation/cancellation deadlines or completion
         dbVisiteHelper.checkVisiteInTerminazione(d);
         // Check pending visit types to see if they should become active
-        dbTipoVisiteHelper.checkTipoVisiteAttese(d);
+        dbTipoVisiteHelper.checkTipoVisite(d);
     }
 
     // ================================================================

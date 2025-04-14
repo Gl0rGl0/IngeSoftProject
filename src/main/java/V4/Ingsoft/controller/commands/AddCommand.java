@@ -142,7 +142,7 @@ public class AddCommand extends AbstractCommand {
          }
 
         // Check time restriction
-        if (!controller.isActionDay16) {
+        if (!controller.isActionDay16 && controller.doneAll()) {
             AssertionControl.logMessage(
                     currentUser
                             + "| Cannot add a visit type if it's not the 16th of the month: " + (a.length > 0 ? a[0] : "N/A"),
@@ -191,7 +191,7 @@ public class AddCommand extends AbstractCommand {
          }
 
         // Check time restriction
-        if (!controller.isActionDay16) {
+        if (!controller.isActionDay16 && controller.doneAll()) {
             AssertionControl.logMessage(
                     currentUser
                             + "| Cannot add a place if it's not the 16th of the month: "

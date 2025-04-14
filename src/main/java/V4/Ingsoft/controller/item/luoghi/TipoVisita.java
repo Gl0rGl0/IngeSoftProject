@@ -29,8 +29,9 @@ public class TipoVisita {
     int numMaxPartecipants;
     ArrayList<DayOfWeek> days;
     Date insertionDay;
+    Date deletionDay;
     String UID;
-    public StatusVisita sv = StatusVisita.PENDING; // Updated enum constant
+    public StatusVL sv = StatusVL.PENDING_ADD;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
@@ -51,7 +52,7 @@ public class TipoVisita {
             @JsonProperty("insertionDay") Date insertionDay,
             @JsonProperty("volontari") ArrayList<String> volontariUID,
             @JsonProperty("luogoUID") String luogoUID,
-            @JsonProperty("status") StatusVisita status,
+            @JsonProperty("status") StatusVL status,
             @JsonProperty("UID") String UID) {
         this.title = title;
         this.description = description;
@@ -199,6 +200,14 @@ public class TipoVisita {
         return this.insertionDay;
     }
 
+    public void setDeletionDay(Date d) {
+        this.deletionDay = d;
+    }
+
+    public Date getDeletionDay() {
+        return this.deletionDay;
+    }
+
     public boolean isName(String other) {
         return this.title.equalsIgnoreCase(other);
     }
@@ -228,19 +237,18 @@ public class TipoVisita {
                 + ", Max Participants=" + numMaxPartecipants // Changed "Numero Max Partecipanti"
                 + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
                 + ", Visit Status=" + sv // Changed "Stato visita"
-                + ", Date added=" + insertionDay
                 + "}\n";
     }
 
     public void isMonthExpired(Date d) {
-        if (this.sv == StatusVisita.PROPOSED) // Updated enum constant
+        if (this.sv == StatusVL.PROPOSED) // Updated enum constant
             return;
 
         if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= insertionDay.getMonth().maxLength())
-            this.sv = StatusVisita.PROPOSED; // Updated enum constant
+            this.sv = StatusVL.PROPOSED; // Updated enum constant
     }
 
-    public StatusVisita getStatus() {
+    public StatusVL getStatus() {
         return this.sv;
     }
 
