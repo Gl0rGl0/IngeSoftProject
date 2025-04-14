@@ -92,6 +92,15 @@ public class Volontario extends Persona {
         return availability;
     }
 
+    public int getNAvailability(){
+        int n = 0;
+        for (boolean b : getAvailability()) {
+            if(b)
+                n++;
+        }
+        return n;
+    }
+
     public boolean isAvailabile(int day) {
         return availability[day-1];
     }

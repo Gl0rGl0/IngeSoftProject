@@ -2,6 +2,7 @@ package V4.Ingsoft.controller.commands;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.setup.CommandListSETUP;
+import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AppSettings; // Import AppSettings
 import V4.Ingsoft.util.JsonStorage; // Import JsonStorage
 import V4.Ingsoft.view.ViewSE;
@@ -32,7 +33,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
             // Set the value in AppSettings
             controller.getDB().appSettings.setMaxPrenotazioniPerPersona(max);
             // Save the updated settings
-            if (JsonStorage.saveObject(AppSettings.PATH, controller.getDB().appSettings)) {
+            if (JsonStorage.saveObject(AppSettings.PATH, Model.appSettings)) {
                  ViewSE.println("Maximum bookings per person set to: " + max);
             } else {
                  ViewSE.println("Error saving settings.");

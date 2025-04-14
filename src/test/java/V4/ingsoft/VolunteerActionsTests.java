@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.Date; // Import Date
 import V4.Ingsoft.controller.item.luoghi.Visita; // Added import

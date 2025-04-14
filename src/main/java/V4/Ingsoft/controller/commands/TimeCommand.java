@@ -86,14 +86,12 @@ public class TimeCommand extends AbstractCommand {
                 default:
                      AssertionControl.logMessage("Unrecognized option for 'time': " + option, 2, CLASSNAME);
                      ViewSE.println("Option '-" + option + "' not recognized for the 'time' command.");
-                     // TODO: Print help/usage for time command
                      break;
             }
         } else {
             // Handle cases like option present but empty, or args present without option
              AssertionControl.logMessage("Invalid combination of options/arguments for 'time'.", 2, CLASSNAME);
              ViewSE.println("Incorrect usage of the 'time' command. Use 'time' to view, or 'time -<option> [args]'.");
-             // TODO: Print help/usage for time command
         }
     }
 

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Iscrizione;
-import V4.Ingsoft.controller.item.persone.PersonaType;
 
 // Tests for Use Cases UC10-UC15, UC20-UC27 (+ Regime Phase)
 public class UserActionsTests extends BaseTest{

@@ -43,7 +43,6 @@ public class BaseTest{
     public void enterRegimePhase() {
         // 1. First absolute login and password change for ADMIN
         controller.interpreter("login ADMIN PASSWORD");
-        controller.interpreter("changepsw newAdminPass");
 
         // 2. Complete Setup Steps using known setup commands
         controller.interpreter("setmax 5");
