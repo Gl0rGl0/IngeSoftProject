@@ -105,7 +105,7 @@ public class TipoVisita {
             throw new Exception("Error in TipoVisita constructor: Initial day is empty");
 
         if(args[4].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Last day name can't be empty");
+            throw new Exception("Error in TipoVisita constructor: Last day can't be empty");
 
         if(args[5].isBlank())
             throw new Exception("Error in TipoVisita constructor: Starting time can't be empty");

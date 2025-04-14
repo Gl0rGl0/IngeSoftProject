@@ -49,7 +49,7 @@ public class BaseTest{
         controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
         // Cannot add types/volunteers/assignments during setup via commands
         controller.interpreter("done"); // Finalize setup
-
+        
         controller.interpreter("time -s 16/1/2025");
 
         // 3. Add another configurator using the running phase command (now logged in as ADMIN)
@@ -61,6 +61,7 @@ public class BaseTest{
         controller.interpreter("add -v VolRegime PassVol");
         controller.interpreter("assign -V TVRegime VolRegime");
         controller.interpreter("add -c configRegime passRegime");
+        controller.interpreter("collection -o");
 
         // 4. Logout ADMIN and Login as the new configurator
         controller.interpreter("logout");

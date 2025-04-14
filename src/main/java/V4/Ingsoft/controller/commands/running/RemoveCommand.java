@@ -86,7 +86,7 @@ public class RemoveCommand extends AbstractCommand {
                 else
                     ViewSE.println(ERROR_16); // Correctly show error if not action day
             }
-            case 't' -> { // TipoVisita removal restricted to action day
+            case 'T' -> { // TipoVisita removal restricted to action day
                 if (controller.isActionDay16)
                     removeTipoVisita(ar); // Assumes ar[0] is type name
                 else

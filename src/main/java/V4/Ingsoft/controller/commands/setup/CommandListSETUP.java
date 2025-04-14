@@ -5,9 +5,9 @@ import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.ConstString;
 
 public enum CommandListSETUP implements ListInterface {
-        ADD(ConstString.SETUP_ADD_INFO, ConstString.SETUP_ADD_LINE_INFO,
-                        PersonaType.CONFIGURATORE.getPriority(),
-                        PersonaType.CONFIGURATORE.getPriority()),
+        // ADD(ConstString.SETUP_ADD_INFO, ConstString.SETUP_ADD_LINE_INFO,
+        //                 PersonaType.CONFIGURATORE.getPriority(),
+        //                 PersonaType.CONFIGURATORE.getPriority()),
 
         LOGIN(ConstString.LOGIN_INFO, ConstString.LOGIN_LINE_INFO,
                         PersonaType.GUEST.getPriority(),
@@ -29,9 +29,9 @@ public enum CommandListSETUP implements ListInterface {
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.CONFIGURATORE.getPriority()),
 
-        SETAMBITO(ConstString.SETAMBITO_INFO, ConstString.SETAMBITO_LINE_INFO,
-                        PersonaType.CONFIGURATORE.getPriority(),
-                        PersonaType.CONFIGURATORE.getPriority()),
+        // SETAMBITO(ConstString.SETAMBITO_INFO, ConstString.SETAMBITO_LINE_INFO,
+        //                 PersonaType.CONFIGURATORE.getPriority(),
+        //                 PersonaType.CONFIGURATORE.getPriority()),
 
         ASSIGN(ConstString.ASSIGN_INFO, ConstString.ASSIGN_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),

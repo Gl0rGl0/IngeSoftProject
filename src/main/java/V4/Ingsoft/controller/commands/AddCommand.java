@@ -1,7 +1,7 @@
-package V4.Ingsoft.controller.commands.running;
+package V4.Ingsoft.controller.commands;
 
 import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.commands.running.CommandList;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.persone.Configuratore;
@@ -17,6 +17,7 @@ public class AddCommand extends AbstractCommand {
     public AddCommand(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandList.ADD;
+        this.hasBeenExecuted = false;
     }
 
     @Override
@@ -59,6 +60,8 @@ public class AddCommand extends AbstractCommand {
                  AssertionControl.logMessage("Unrecognized option for 'add': " + option, 2, CLASSNAME);
             }
         }
+
+        this.hasBeenExecuted = true;
     }
 
     private void addConfiguratore(String[] args) {
@@ -206,6 +209,10 @@ public class AddCommand extends AbstractCommand {
              return;
         }
         String name = a[0]; // For logging
+
+        if(controller.db.dbLuoghiHelper.findLuogo(name) != null){
+            AssertionControl.logMessage("Already exist a Place with the same name", 2, CLASSNAME);
+        }
 
         Luogo l;
         try {

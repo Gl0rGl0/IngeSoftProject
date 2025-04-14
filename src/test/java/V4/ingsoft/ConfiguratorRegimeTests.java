@@ -199,7 +199,7 @@ public class ConfiguratorRegimeTests extends BaseTest{
         assertNotNull(l, "Prerequisite: Place should exist.");
         int size = l.getTipoVisitaUID().size();
 
-        controller.interpreter("remove -t TVRegime");
+        controller.interpreter("remove -T TVRegime");
         TipoVisita t = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime");
         assertNull(t, "Prerequisite: Type should not exist.");
 
@@ -434,7 +434,7 @@ public class ConfiguratorRegimeTests extends BaseTest{
         assertTrue(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: Vol assigned to TVRegime2.");
 
         // Act
-        controller.interpreter("remove -t TVRegime"); // Remove the first type
+        controller.interpreter("remove -T TVRegime"); // Remove the first type
 
         // Assert
         assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type TVRegime should be removed.");
@@ -454,7 +454,7 @@ public class ConfiguratorRegimeTests extends BaseTest{
         assertTrue(controller.db.dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
 
         // Act
-        controller.interpreter("remove -t TVRegime");
+        controller.interpreter("remove -T TVRegime");
 
         // Assert
         assertNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");

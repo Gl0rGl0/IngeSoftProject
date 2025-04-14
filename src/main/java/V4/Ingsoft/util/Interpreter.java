@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.controller.commands.AddCommand;
 import V4.Ingsoft.controller.commands.AssignCommand;
 import V4.Ingsoft.controller.commands.ChangePswCommand;
 import V4.Ingsoft.controller.commands.Command;
@@ -22,6 +23,7 @@ public abstract class Interpreter {
 
     // Constructor that receives the command map
     public Interpreter(Controller controller) {
+        commandRegistry.put("add", new AddCommand(controller));
         commandRegistry.put("time", new TimeCommand(controller));
         commandRegistry.put("logout", new LogoutCommand(controller));
         commandRegistry.put("changepsw", new ChangePswCommand(controller));
@@ -97,6 +99,7 @@ public abstract class Interpreter {
             if(c instanceof DoneCommandSETUP){
                 continue;
             }
+            System.out.println(c.getClass().getSimpleName() + "" + c.hasBeenExecuted());
             out &= c.hasBeenExecuted();
             if (!out)
                 return out;

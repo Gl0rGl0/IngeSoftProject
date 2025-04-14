@@ -6,7 +6,7 @@ import V4.Ingsoft.util.ConstString;
 
 public enum CommandList implements ListInterface {
         //adder (luoghi,tipivisite,configuratori,volontari)
-        ADD(ConstString.RUN_ADD_INFO, ConstString.RUN_ADD_LINE_INFO,
+        ADD(ConstString.ADD_INFO, ConstString.ADD_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
                         PersonaType.CONFIGURATORE.getPriority()),
 
