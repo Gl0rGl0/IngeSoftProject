@@ -33,11 +33,11 @@ public class AddCommand extends AbstractCommand {
             System.err.println("FATAL: Controller is null in AddCommand");
             return;
         }
-         if (options == null || args == null) {
-             AssertionControl.logMessage("Options or args array is null in AddCommand.execute", 1, CLASSNAME);
-             ViewSE.println("Internal error: Invalid command structure.");
-             return;
-         }
+        if (options == null || args == null) {
+            AssertionControl.logMessage("Options or args array is null in AddCommand.execute", 1, CLASSNAME);
+            ViewSE.println("Internal error: Invalid command structure.");
+            return;
+        }
 
         // Check for minimum required option
         if (options.length < 1 || options[0] == null || options[0].isEmpty()) {

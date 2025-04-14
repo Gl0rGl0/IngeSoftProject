@@ -185,4 +185,11 @@ public class ConstString {
             makeplan
             """;
     public static final String MAKEPLAN_LINE_INFO = "Start the generation of the plan visits by the System";
+
+    public static final String COLLECTIONMANAGER_INFO = """
+            collection [-o | -c ]
+                -o              Open the collection
+                -c              Close the collection
+            """;
+    public static final String COLLECTIONMANAGER_LINE_INFO = "Manage the collection status of Volunteer Availability";
 }

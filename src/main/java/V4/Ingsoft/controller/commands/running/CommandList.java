@@ -53,7 +53,11 @@ public enum CommandList implements ListInterface {
 
         MAKEPLAN(ConstString.MAKEPLAN_INFO, ConstString.MAKEPLAN_LINE_INFO,
                         PersonaType.CONFIGURATORE.getPriority(),
-                        PersonaType.CONFIGURATORE.getPriority()),        
+                        PersonaType.CONFIGURATORE.getPriority()),
+        
+        COLLECTIONMANAGER(ConstString.COLLECTIONMANAGER_INFO, ConstString.COLLECTIONMANAGER_LINE_INFO,
+                        PersonaType.CONFIGURATORE.getPriority(),
+                        PersonaType.CONFIGURATORE.getPriority()),       
         
         VISIT(ConstString.VISIT_INFO, ConstString.VISIT_LINE_INFO,
                         PersonaType.FRUITORE.getPriority(),

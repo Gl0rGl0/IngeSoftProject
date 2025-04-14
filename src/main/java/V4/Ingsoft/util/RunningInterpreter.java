@@ -4,6 +4,7 @@ import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.HelpCommand;
 import V4.Ingsoft.controller.commands.running.AddCommand;
 import V4.Ingsoft.controller.commands.running.AvailabilityCommand;
+import V4.Ingsoft.controller.commands.running.CollectionManagerCommand;
 import V4.Ingsoft.controller.commands.running.CommandList;
 import V4.Ingsoft.controller.commands.running.ListCommand;
 import V4.Ingsoft.controller.commands.running.LoginCommand;
@@ -27,6 +28,7 @@ public class RunningInterpreter extends Interpreter {
         commandRegistry.put("setav", new AvailabilityCommand(controller));
         commandRegistry.put("makeplan", new MakePlanCommand(controller));
         commandRegistry.put("visit", new VisitCommand(controller));
+        commandRegistry.put("collection", new CollectionManagerCommand(controller));
         commandRegistry.put("help", new HelpCommand(controller, CommandList.HELP));
     }
 

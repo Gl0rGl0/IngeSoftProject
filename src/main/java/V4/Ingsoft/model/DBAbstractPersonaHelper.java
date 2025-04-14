@@ -1,6 +1,5 @@
 package V4.Ingsoft.model;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import V4.Ingsoft.controller.item.persone.Persona;

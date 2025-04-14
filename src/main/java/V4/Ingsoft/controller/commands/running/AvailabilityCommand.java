@@ -41,6 +41,12 @@ public class AvailabilityCommand extends AbstractCommand{
     }
 
     private void manageDate(String[] args, boolean toAdd){
+        if(!controller.isVolunteerCollectionOpen()){
+            ViewSE.println("Can't edit your availability if the collection it's closed.");
+            AssertionControl.logMessage("Attempt to edit availability while collection is closed", 3, CLASSNAME);
+            return;
+        }
+        
         Volontario v = (Volontario) controller.getCurrentUser();
         for (String s : args) {
             try {

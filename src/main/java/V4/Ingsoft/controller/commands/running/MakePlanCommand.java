@@ -22,8 +22,6 @@ public class MakePlanCommand extends AbstractCommand {
         super.commandInfo = CommandList.MAKEPLAN;
     }
 
-    private static final String CLASSNAME = MakePlanCommand.class.getSimpleName(); // Added for logging
-
     @Override
     public void execute(String[] options, String[] args) {
         if (controller == null) {

@@ -4,7 +4,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import V4.Ingsoft.controller.item.persone.Guest;
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
@@ -106,7 +105,6 @@ public class Controller {
         if (currentDay == 15) {
             // Day before the 16th, reset the flag.
             isActionDay16 = false;
-            // TODO: Consider adding logic here to "close" volunteer availability collection for the next month, as per spec.
         } else if (currentDay == 16) {
             // It's the 16th.
             if (!isHolidayToday) {
@@ -127,7 +125,6 @@ public class Controller {
              // The action day (16th or later) has already passed. Reset the flag for subsequent days in the month.
              // This ensures the special commands are only allowed on that single designated day.
              isActionDay16 = false;
-             // TODO: Consider adding logic here to "reopen" volunteer availability collection for month+2, as per spec.
         }
         // If currentDay < 15, the flag remains false.
     }
@@ -153,5 +150,19 @@ public class Controller {
 
     public Model getDB() {
         return db;
+    }
+
+    private boolean collectionStatus;
+    
+    public void openCollection(){
+        collectionStatus = true;
+    }
+
+    public void closeCollection(){
+        collectionStatus = false;
+    }
+
+    public boolean isVolunteerCollectionOpen() {
+        return collectionStatus;
     }
 }
