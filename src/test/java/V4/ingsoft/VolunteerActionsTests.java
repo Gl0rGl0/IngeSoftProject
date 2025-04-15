@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.Date; // Import Date
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita; // Added import
-import V4.Ingsoft.controller.item.luoghi.StatusVL; // Added import
+
 import java.util.List; // Added import
 import java.util.stream.Collectors; // Added import
 
@@ -221,7 +222,7 @@ public class VolunteerActionsTests extends BaseTest {
         List<Visita> assignedConfirmedVisits = allVisits.stream()
             .filter(visit -> visit != null &&
                             username.equals(visit.getUidVolontario()) &&
-                            visit.getStatus() == StatusVL.CONFIRMED &&
+                            visit.getStatus() == StatusVisita.CONFIRMED &&
                             visit.getUID().equals(expectedVisitUID)) // Check UID too
             .collect(Collectors.toList());
 

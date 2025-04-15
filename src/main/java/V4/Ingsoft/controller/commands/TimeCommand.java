@@ -7,7 +7,7 @@ import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
 
 public class TimeCommand extends AbstractCommand {
-    private final Controller controller; // Made final
+     // Made final
     private static final String CLASSNAME = TimeCommand.class.getSimpleName(); // Added for logging
 
     public TimeCommand(Controller controller) {

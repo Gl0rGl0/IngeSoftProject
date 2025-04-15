@@ -8,7 +8,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class PrecludeCommand extends AbstractCommand {
 
-    private final Controller controller;
+    
 
     public PrecludeCommand(Controller controller) {
         this.controller = controller;

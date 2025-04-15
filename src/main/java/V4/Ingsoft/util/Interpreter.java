@@ -20,6 +20,8 @@ import V4.Ingsoft.view.ViewSE;
 public abstract class Interpreter {
     // Map of commands passed during setup
     protected HashMap<String, Command> commandRegistry = new HashMap<>();
+    private static String ERROR_NO_COMMAND = "ERROR NO COMMAND";
+    private static String ERROR_NO_COMMAND_LINE = "Error: no command provided.";
 
     // Constructor that receives the command map
     public Interpreter(Controller controller) {
@@ -41,16 +43,16 @@ public abstract class Interpreter {
      */
     public void interpret(String prompt, Persona currentUser) {
         if(prompt == null || prompt.isBlank()) { // Use isBlank() for clarity
-            AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
-            ViewSE.println("Error: no command provided.");
+            AssertionControl.logMessage(ERROR_NO_COMMAND, 2, this.getClass().getSimpleName());
+            ViewSE.println(ERROR_NO_COMMAND_LINE);
             return;
         }
 
         String[] tokens = prompt.trim().split("\\s+");
 
         if (tokens.length == 0 || tokens[0].isBlank()) {
-            AssertionControl.logMessage("ERROR NO COMMAND", 2, this.getClass().getSimpleName());
-            ViewSE.println("Error: no command provided.");
+            AssertionControl.logMessage(ERROR_NO_COMMAND, 2, this.getClass().getSimpleName());
+            ViewSE.println(ERROR_NO_COMMAND_LINE);
             return;
         }
 

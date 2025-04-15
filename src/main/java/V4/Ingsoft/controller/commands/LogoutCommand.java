@@ -8,7 +8,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
 
-    private final Controller controller;
+    
 
     public LogoutCommand(Controller controller) {
         this.controller = controller;

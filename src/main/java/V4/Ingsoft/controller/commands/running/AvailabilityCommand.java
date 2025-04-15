@@ -10,7 +10,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class AvailabilityCommand extends AbstractCommand{
 
-    private final Controller controller;
+    
 
     public AvailabilityCommand(Controller controller) {
         this.controller = controller;

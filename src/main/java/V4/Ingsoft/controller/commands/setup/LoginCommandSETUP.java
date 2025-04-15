@@ -11,7 +11,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommandSETUP extends AbstractCommand {
 
-    private final Controller controller;
+    
 
     public LoginCommandSETUP(Controller controller) {
         this.controller = controller;

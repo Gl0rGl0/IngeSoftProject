@@ -1,8 +1,6 @@
-package V4.Ingsoft.controller.item.luoghi;
+package V4.Ingsoft.controller.item;
 
-public enum StatusVL {
-    PENDING_ADD,
-    PENDING_REMOVE,
+public enum StatusVisita {
     PROPOSED,   // PROPOSTA
     CONFIRMED,  // CONFERMATA
     COMPLETED,  // COMPLETA

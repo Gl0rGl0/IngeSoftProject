@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Iscrizione;
 import V4.Ingsoft.util.Date;
@@ -24,7 +25,7 @@ public class Visita {
 
     @JsonIgnore
     public String volontarioUID;
-    public StatusVL status = StatusVL.PROPOSED; // Updated enum constant
+    public StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
     @JsonIgnore
     public ArrayList<Iscrizione> fruitori = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class Visita {
     public Visita(
             @JsonProperty("data") Date data,
             @JsonProperty("UID") String UID,
-            @JsonProperty("stato") StatusVL status) {
+            @JsonProperty("stato") StatusVisita status) {
 
         this.date = data;
         this.UID = UID;
@@ -46,7 +47,7 @@ public class Visita {
         this.UID = tipo.getUID() + date.toString() + uidVolontario;
     }
 
-    public StatusVL getStatus() {
+    public StatusVisita getStatus() {
         return this.status;
     }
 
@@ -74,7 +75,7 @@ public class Visita {
         return tipo.getTitle();
     }
 
-    public void setStatus(StatusVL status) {
+    public void setStatus(StatusVisita status) {
         this.status = status;
     }
 
@@ -87,7 +88,7 @@ public class Visita {
     }
 
     public String addPartecipants(Fruitore f, int n) {
-        if (tipo.numMaxPartecipants - getCurrentNumber() < n) {
+        if (tipo.getNumMaxPartecipants() - getCurrentNumber() < n) {
             return "capacity"; // Indicates full capacity
         }
 
@@ -98,8 +99,8 @@ public class Visita {
         Iscrizione newIscrizione = new Iscrizione(f.getUsername(), n);
         fruitori.add(newIscrizione);
 
-        if (getCurrentNumber() == tipo.numMaxPartecipants) {
-            setStatus(StatusVL.COMPLETED); // Updated enum constant
+        if (getCurrentNumber() == tipo.getNumMaxPartecipants()) {
+            setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
         return newIscrizione.getUIDIscrizione();
     }
@@ -116,9 +117,9 @@ public class Visita {
             // Ensure null safety for user comparison
             if (user != null && user.equals(i.getUIDFruitore())) {
                 boolean removed = fruitori.remove(i);
-                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVL.COMPLETED) {
+                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed
-                    setStatus(StatusVL.PROPOSED);
+                    setStatus(StatusVisita.PROPOSED);
                 }
                 return removed; // Return true if removal was successful
             }
@@ -162,8 +163,8 @@ public class Visita {
 
         // If an iscrizione was removed and the visit was previously full (COMPLETED),
         // it should become PROPOSED again.
-        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVL.COMPLETED) {
-             setStatus(StatusVL.PROPOSED);
+        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+             setStatus(StatusVisita.PROPOSED);
         }
         return removed;
     }

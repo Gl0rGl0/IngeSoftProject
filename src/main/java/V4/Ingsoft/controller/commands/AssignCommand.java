@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.setup.CommandListSETUP;
+import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.persone.Volontario;
@@ -12,9 +13,6 @@ import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 public class AssignCommand extends AbstractCommand {
-
-    private final Controller controller;
-
     public AssignCommand(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandListSETUP.ASSIGN; // CommandList.ASSIGN when I feel like writing it
@@ -79,23 +77,35 @@ public class AssignCommand extends AbstractCommand {
         }
 
         if(!v.addTipoVisita(vToAssign.getUID())){
-            AssertionControl.logMessage("Can't assign volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 2, CLASSNAME);
+            AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type, 2, CLASSNAME);
             return;
         }
 
-        if(!vToAssign.addVolontario(v.getUsername())){
-            AssertionControl.logMessage("Can't assign volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 2, CLASSNAME);
+        StatusItem sp = v.getStatus();
+        if(sp == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED){
+            AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because volunteer it's in status: " + sp, 2, CLASSNAME);
             return;
         }
 
-        ViewSE.println("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle());
-        AssertionControl.logMessage("Assigned volunteer " + v.getUsername() + " to visit " + vToAssign.getTitle(), 3, CLASSNAME);
+        StatusItem st = vToAssign.getStatus();
+        if(st == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED){
+            AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because visit it's in status: " + st, 2, CLASSNAME);
+            return;
+        }
+
+        if(!vToAssign.addVolontario(userNameVolontario)){
+            AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type, 2, CLASSNAME);
+            return;
+        }
+
+        ViewSE.println("Assigned volunteer " + userNameVolontario + " to visit " + type);
+        AssertionControl.logMessage("Assigned volunteer " + userNameVolontario + " to visit " + type, 3, CLASSNAME);
         
     }
 
-    private void assignVisita(String name, String type) {
-        Luogo luogo = controller.db.getLuogoByName(name);
-        TipoVisita visitaDaAssegnare = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
+    private void assignVisita(String luogoName, String typeTitle) {
+        Luogo luogo = controller.db.getLuogoByName(luogoName);
+        TipoVisita visitaDaAssegnare = controller.db.dbTipoVisiteHelper.findTipoVisita(typeTitle);
 
         if (luogo == null) {
             ViewSE.println("No place found with that name.");
@@ -103,6 +113,18 @@ public class AssignCommand extends AbstractCommand {
         }
         if (visitaDaAssegnare == null) {
             ViewSE.println("No visit found with that title.");
+            return;
+        }
+
+        StatusItem sl = luogo.getStatus();
+        if(sl == StatusItem.PENDING_ADD || sl == StatusItem.DISABLED){
+            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because visit it's in status: " + sl, 2, CLASSNAME);
+            return;
+        }
+
+        StatusItem st = visitaDaAssegnare.getStatus();
+        if(st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED){
+            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because place it's in status: " + st, 2, CLASSNAME);
             return;
         }
 

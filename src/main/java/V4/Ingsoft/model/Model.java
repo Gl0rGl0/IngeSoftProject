@@ -327,6 +327,10 @@ public class Model {
         dbVisiteHelper.checkVisiteInTerminazione(d);
         // Check pending visit types to see if they should become active
         dbTipoVisiteHelper.checkTipoVisite(d);
+        // Check statuses of Volunteer
+        dbVolontarioHelper.checkVolunteers(d);
+        //Check luoghi
+        dbLuoghiHelper.checkLuoghi(d);
     }
 
     // ================================================================

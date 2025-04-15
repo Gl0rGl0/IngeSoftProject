@@ -9,7 +9,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class SetPersoneMaxCommand extends AbstractCommand {
 
-    private final Controller controller;    //Se uso il singleton per il Model non mi serve
+        //Se uso il singleton per il Model non mi serve
 
     public SetPersoneMaxCommand(Controller controller, boolean hasBeenExecuted) {
         this.controller = controller;

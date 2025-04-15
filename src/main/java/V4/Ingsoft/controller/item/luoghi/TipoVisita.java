@@ -9,29 +9,28 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
+import V4.Ingsoft.controller.item.StatusItem;
+import V4.Ingsoft.model.Deletable;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.DayOfWeekConverter;
 import V4.Ingsoft.util.Time;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class TipoVisita {
+public class TipoVisita extends Deletable{
     public static final String PATH = "tipoVisite";
 
-    String title;
-    String description;
-    String meetingPlace;
-    Date initDay;
-    Date finishDay;
-    Time initTime;
-    int duration;
-    boolean free;
-    int numMinPartecipants;
-    int numMaxPartecipants;
-    ArrayList<DayOfWeek> days;
-    Date insertionDay;
-    Date deletionDay;
-    String UID;
-    public StatusVL sv = StatusVL.PENDING_ADD;
+    private String title;
+    private String description;
+    private String meetingPlace;
+    private Date initDay;
+    private Date finishDay;
+    private Time initTime;
+    private int duration;
+    private boolean free;
+    private int numMinPartecipants;
+    private int numMaxPartecipants;
+    private ArrayList<DayOfWeek> days;
+    private String UID;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
@@ -49,10 +48,11 @@ public class TipoVisita {
             @JsonProperty("numMinPartecipants") int numMinPartecipants,
             @JsonProperty("numMaxPartecipants") int numMaxPartecipants,
             @JsonProperty("days") ArrayList<DayOfWeek> days,
-            @JsonProperty("insertionDay") Date insertionDay,
             @JsonProperty("volontari") ArrayList<String> volontariUID,
             @JsonProperty("luogoUID") String luogoUID,
-            @JsonProperty("status") StatusVL status,
+            @JsonProperty("status") StatusItem status,
+            @JsonProperty("insertionDate") Date insertionDate,
+            @JsonProperty("deletionDate") Date deletionDate,
             @JsonProperty("UID") String UID) {
         this.title = title;
         this.description = description;
@@ -65,10 +65,11 @@ public class TipoVisita {
         this.numMinPartecipants = numMinPartecipants;
         this.numMaxPartecipants = numMaxPartecipants;
         this.days = days;
-        this.insertionDay = insertionDay;
         this.volontariUID = volontariUID;
         this.luogoUID = luogoUID;
-        this.sv = status;
+        this.si = status;
+        this.insertionDate = insertionDate;
+        this.deletionDate = deletionDate;
         this.UID = UID;
     }
 
@@ -139,7 +140,7 @@ public class TipoVisita {
                 this.numMaxPartecipants = Integer.parseInt(args[9]);
                 this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
             
-                this.insertionDay = (Date) d.clone();
+                this.insertionDate = (Date) d.clone();
             } catch (Exception e) {
                 throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
             }
@@ -196,16 +197,8 @@ public class TipoVisita {
         return this.numMaxPartecipants;
     }
 
-    public Date getInsertionDay() {
-        return this.insertionDay;
-    }
-
-    public void setDeletionDay(Date d) {
-        this.deletionDay = d;
-    }
-
-    public Date getDeletionDay() {
-        return this.deletionDay;
+    public Date getinsertionDate() {
+        return this.insertionDate;
     }
 
     public boolean isName(String other) {
@@ -236,21 +229,10 @@ public class TipoVisita {
                 + ", Min Participants=" + numMinPartecipants // Changed "Numero Min Partecipanti"
                 + ", Max Participants=" + numMaxPartecipants // Changed "Numero Max Partecipanti"
                 + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
-                + ", Visit Status=" + sv // Changed "Stato visita"
+                + ", Visit Status=" + si // Changed "Stato visita"
                 + "}\n";
     }
 
-    public void isMonthExpired(Date d) {
-        if (this.sv == StatusVL.PROPOSED) // Updated enum constant
-            return;
-
-        if (Math.abs(d.dayOfTheYear() - insertionDay.dayOfTheYear()) >= insertionDay.getMonth().maxLength())
-            this.sv = StatusVL.PROPOSED; // Updated enum constant
-    }
-
-    public StatusVL getStatus() {
-        return this.sv;
-    }
 
     public boolean assignedTo(String userNameVolontario) {
         for (String v : getVolontariUIDs()) {

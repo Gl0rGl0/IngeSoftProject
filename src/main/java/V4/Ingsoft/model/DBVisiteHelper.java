@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import V4.Ingsoft.util.AssertionControl; // Added import
-import V4.Ingsoft.controller.item.luoghi.StatusVL;
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Volontario;
@@ -133,7 +133,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getCompletate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVL.COMPLETED)
+            if (v.getStatus() == StatusVisita.COMPLETED)
                 out.add(v);
         }
 
@@ -143,7 +143,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getConfermate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVL.CONFIRMED)
+            if (v.getStatus() == StatusVisita.CONFIRMED)
                 out.add(v);
         }
 
@@ -153,7 +153,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getVisiteCancellate() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVL.CANCELLED)
+            if (v.getStatus() == StatusVisita.CANCELLED)
                 out.add(v);
         }
 
@@ -163,7 +163,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public ArrayList<Visita> getVisiteProposte() {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVL.PROPOSED)
+            if (v.getStatus() == StatusVisita.PROPOSED)
                 out.add(v);
         }
 
@@ -239,8 +239,8 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         Date deadlineDate = visitDate.minusDays(3);
         if (deadlineDate != null &&
             Math.abs(deadlineDate.dayOfTheYear() - currentDay.dayOfTheYear()) <= 3) {
-            StatusVL currentStatus = v.getStatus();
-            if (currentStatus == StatusVL.PROPOSED || currentStatus == StatusVL.COMPLETED) {
+            StatusVisita currentStatus = v.getStatus();
+            if (currentStatus == StatusVisita.PROPOSED || currentStatus == StatusVisita.COMPLETED) {
                 TipoVisita tv = v.getTipoVisita();
                 if (tv == null) {
                     AssertionControl.logMessage("Visita UID " + v.getUID() + " has null TipoVisita.", 1, className);
@@ -250,10 +250,10 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
                 int currentParticipants = v.getCurrentNumber();
     
                 if (currentParticipants >= minParticipants) {
-                    v.setStatus(StatusVL.CONFIRMED);
+                    v.setStatus(StatusVisita.CONFIRMED);
                     AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, className);
                 } else {
-                    v.setStatus(StatusVL.CANCELLED);
+                    v.setStatus(StatusVisita.CANCELLED);
                     AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, className);
                 }
                 changed = true;
@@ -278,14 +278,14 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         
         Date visitDate = v.getDate();
         if (visitDate.isBefore(currentDay)) {
-            StatusVL currentStatus = v.getStatus();
-            if (currentStatus == StatusVL.CONFIRMED) {
-                v.setStatus(StatusVL.COMPLETED);
+            StatusVisita currentStatus = v.getStatus();
+            if (currentStatus == StatusVisita.CONFIRMED) {
+                v.setStatus(StatusVisita.COMPLETED);
                 writeVisitaEffettuata(v);
                 uidsToRemove.add(v.getUID());
                 AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 4, className);
                 changed = true;
-            } else if (currentStatus == StatusVL.CANCELLED) {
+            } else if (currentStatus == StatusVisita.CANCELLED) {
                 uidsToRemove.add(v.getUID());
                 AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 4, className);
                 changed = true;

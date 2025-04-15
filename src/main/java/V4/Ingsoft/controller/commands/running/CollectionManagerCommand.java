@@ -7,7 +7,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class CollectionManagerCommand extends AbstractCommand {
 
-    private final Controller controller;
+    
 
     public CollectionManagerCommand(Controller controller) {
         this.controller = controller;

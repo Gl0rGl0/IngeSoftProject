@@ -4,6 +4,8 @@ import java.time.Month;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.StatusItem;
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.*;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
@@ -11,7 +13,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class ListCommand extends AbstractCommand {
 
-    private final Controller controller;
+    
     private static final String ERROR_NOT_RECOGNIZED = "Option not recognized for 'list'.";
 
     public ListCommand(Controller controller) {
@@ -58,9 +60,7 @@ public class ListCommand extends AbstractCommand {
             out = new StringBuilder();
             out.append(v.getUsername() + ":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
-                // Use the translated enum constant PROPOSED
-                out.append(tv.getTitle() + ": " + (tv.getStatus() == StatusVL.PROPOSED ? "proposed" : "pending")
-                        + "\n");
+                out.append(tv.getTitle() + ": " + v.getStatus() + "\n");
             }
             ViewSE.println(out);
         }

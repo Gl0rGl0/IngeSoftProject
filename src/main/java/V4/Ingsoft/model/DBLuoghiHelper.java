@@ -3,6 +3,7 @@ package V4.Ingsoft.model;
 import java.util.ArrayList;
 
 import V4.Ingsoft.controller.item.luoghi.Luogo;
+import V4.Ingsoft.util.Date;
 
 public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 
@@ -98,5 +99,11 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 
     public void close() {
         saveJson(getLuoghi());
+    }
+
+    public void checkLuoghi(Date d) {
+        for (Luogo l : getLuoghi()) {
+            l.checkStatus(d);
+        }
     }
 }

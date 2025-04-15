@@ -5,31 +5,42 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import V4.Ingsoft.controller.item.StatusItem;
+import V4.Ingsoft.model.Deletable;
+import V4.Ingsoft.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Luogo {
+public class Luogo extends Deletable{
     @JsonIgnore
     public static final String PATH = "luoghi";
 
-    String name;
-    String description;
-    String position;
-    String UID;
-    ArrayList<String> visiteUID = new ArrayList<>();
+    private String name;
+    private String description;
+    private String position;
+    private String UID;
+    private ArrayList<String> visiteUID = new ArrayList<>();
 
     @JsonCreator
     public Luogo(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
             @JsonProperty("position") String position,
-            @JsonProperty("UID") String UID) {
+            @JsonProperty("UID") String UID,
+            @JsonProperty("status") StatusItem status,
+            @JsonProperty("insertionDate") Date insertionDate,
+            @JsonProperty("deletionDate") Date deletionDate ) {
         this.name = name;
         this.description = description;
         this.position = position;
         this.UID = UID;
+        this.si = status;
+        this.insertionDate = insertionDate;
+        this.deletionDate = deletionDate;
     }
 
     public Luogo(String[] a) throws Exception{

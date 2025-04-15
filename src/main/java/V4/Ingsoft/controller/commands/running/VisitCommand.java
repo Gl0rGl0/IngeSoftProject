@@ -2,8 +2,8 @@ package V4.Ingsoft.controller.commands.running;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
-import V4.Ingsoft.controller.item.luoghi.StatusVL;
 import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.AssertionControl;
@@ -11,7 +11,7 @@ import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 public class VisitCommand extends AbstractCommand {
-    private final Controller controller;
+    
     private static final String CLASSNAME = VisitCommand.class.getSimpleName();
 
     public VisitCommand(Controller controller) {
@@ -94,8 +94,8 @@ public class VisitCommand extends AbstractCommand {
 
     // Controlla se lo stato della visita permette di fare booking
     private boolean validateVisitState(Visita v, String subClassName) {
-        StatusVL currentStatus = v.getStatus();
-        if (currentStatus != StatusVL.PROPOSED && currentStatus != StatusVL.COMPLETED) {
+        StatusVisita currentStatus = v.getStatus();
+        if (currentStatus != StatusVisita.PROPOSED && currentStatus != StatusVisita.COMPLETED) {
             ViewSE.println("Error: Cannot register for this visit. It is currently " + currentStatus + ".");
             AssertionControl.logMessage("Attempted to book visit with status " + currentStatus + " (UID: " + v.getUID() + ")", 2, subClassName);
             return false;
@@ -105,7 +105,7 @@ public class VisitCommand extends AbstractCommand {
 
     // Controlla se il booking è aperto, qui semplificato: se lo stato è PROPOSED si assume aperto.
     private boolean isBookingOpen(Visita v, String subClassName) {
-        if (v.status == StatusVL.PROPOSED) {
+        if (v.status == StatusVisita.PROPOSED) {
             return true;
         }
         ViewSE.println("Error: Bookings for this visit are closed (deadline passed).");
@@ -208,8 +208,8 @@ public class VisitCommand extends AbstractCommand {
         if (v == null) return;
 
         // Controlla lo stato della visita: deve essere PROPOSED o COMPLETED per poter rimuovere la prenotazione
-        StatusVL currentStatus = v.getStatus();
-        if (currentStatus != StatusVL.PROPOSED && currentStatus != StatusVL.COMPLETED) {
+        StatusVisita currentStatus = v.getStatus();
+        if (currentStatus != StatusVisita.PROPOSED && currentStatus != StatusVisita.COMPLETED) {
             ViewSE.println("Error: Cannot remove booking for this visit. It is currently " + currentStatus + ".");
             AssertionControl.logMessage("Attempted to remove booking from visit with status " + currentStatus + " (UID: " + v.getUID() + ")", 2, SUB_CLASSNAME);
             return;

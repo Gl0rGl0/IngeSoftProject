@@ -14,7 +14,7 @@ public class SetAmbitoCommandSETUP extends AbstractCommand {
 
     // Used during setup to set the territorial scope once.
 
-    private final Controller controller;
+    
 
     public SetAmbitoCommandSETUP(Controller controller) {
         this.controller = controller;

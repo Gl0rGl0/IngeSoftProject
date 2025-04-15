@@ -15,8 +15,6 @@ import V4.Ingsoft.util.Date;
 
 public class MakePlanCommand extends AbstractCommand {
 
-    private final Controller controller;
-
     public MakePlanCommand(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandList.MAKEPLAN;
@@ -36,11 +34,9 @@ public class MakePlanCommand extends AbstractCommand {
              AssertionControl.logMessage("Controller dependencies (date, db) cannot be null in makeorario", 1, CLASSNAME);
              return; // Cannot proceed
         }
-        if (!controller.isActionDay16) {
-             // This might be normal operation, maybe log at a lower level or just return silently?
-             AssertionControl.logMessage("MakePlanCommand attempted outside action day 16.", 3, CLASSNAME);
-             return;
-        }
+        
+        if(!isExecutable())
+            return;
 
         ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));

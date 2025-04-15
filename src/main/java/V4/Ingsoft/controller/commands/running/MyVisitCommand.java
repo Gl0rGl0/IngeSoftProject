@@ -7,7 +7,7 @@ import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.view.ViewSE;
 
 public class MyVisitCommand extends AbstractCommand {
-    private final Controller controller;
+    
 
     public MyVisitCommand(Controller controller) {
         this.controller = controller;

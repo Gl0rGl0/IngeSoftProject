@@ -11,7 +11,6 @@ import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 public class AddCommand extends AbstractCommand {
-    private final Controller controller;
     private static final String CLASSNAME = AddCommand.class.getSimpleName(); // Added for logging
 
     public AddCommand(Controller controller) {
@@ -56,8 +55,8 @@ public class AddCommand extends AbstractCommand {
             case 'L' -> addLuogo(args); // Expects name, description, location
             case 'T' -> addTipoVisita(args); // Expects many args
             default -> {
-                 ViewSE.println("Option '-" + option + "' not recognized for 'add'.");
-                 AssertionControl.logMessage("Unrecognized option for 'add': " + option, 2, CLASSNAME);
+                ViewSE.println("Option '-" + option + "' not recognized for 'add'.");
+                AssertionControl.logMessage("Unrecognized option for 'add': " + option, 2, CLASSNAME);
             }
         }
 
@@ -68,9 +67,9 @@ public class AddCommand extends AbstractCommand {
         final String SUB_CLASSNAME = CLASSNAME + ".addConfiguratore";
         // Expects username and password
         if (args == null || args.length < 2 || args[0] == null || args[0].trim().isEmpty() || args[1] == null || args[1].isEmpty()) {
-             AssertionControl.logMessage("Insufficient or invalid arguments for adding configurator.", 2, SUB_CLASSNAME);
-             ViewSE.println("Usage: add -c <username> <initial_password>");
-             return;
+            AssertionControl.logMessage("Insufficient or invalid arguments for adding configurator.", 2, SUB_CLASSNAME);
+            ViewSE.println("Usage: add -c <username> <initial_password>");
+            return;
         }
         String username = args[0];
 
@@ -87,13 +86,13 @@ public class AddCommand extends AbstractCommand {
 
         // adds a new configurator who will need to change password on first login
         if (controller.db.dbConfiguratoreHelper.addConfiguratore(c)) {
-             String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
+            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
             AssertionControl.logMessage(currentUser + "| Added configurator: " + username, 4, SUB_CLASSNAME); // Level 4 for success info
-             ViewSE.println("Configuratore " + username + " added successfully.");
+            ViewSE.println("Configuratore " + username + " added successfully.");
         } else {
-             String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
+            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
             AssertionControl.logMessage(currentUser + "| Failed to add configurator: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
-             ViewSE.println("Failed to add configurator '" + username + "'. It might already exist.");
+            ViewSE.println("Failed to add configurator '" + username + "'. It might already exist.");
         }
     }
 
@@ -101,31 +100,31 @@ public class AddCommand extends AbstractCommand {
         final String SUB_CLASSNAME = CLASSNAME + ".addVolontario";
         // Expects username and password
         if (args == null || args.length < 2 || args[0] == null || args[0].trim().isEmpty() || args[1] == null || args[1].isEmpty()) {
-             AssertionControl.logMessage("Insufficient or invalid arguments for adding volunteer.", 2, SUB_CLASSNAME);
-             ViewSE.println("Usage: add -v <username> <initial_password>");
-             return;
+            AssertionControl.logMessage("Insufficient or invalid arguments for adding volunteer.", 2, SUB_CLASSNAME);
+            ViewSE.println("Usage: add -v <username> <initial_password>");
+            return;
         }
         String username = args[0];
 
         Volontario v;
         try {
             // Assuming constructor takes username and password
-             v = new Volontario(new String[]{username, args[1]});
+            v = new Volontario(new String[]{username, args[1]}, controller.date.clone());
         } catch (Exception e) {
-             AssertionControl.logMessage("Error creating Volontario object: " + e.getMessage(), 1, SUB_CLASSNAME);
-             ViewSE.println("Error creating volunteer: " + e.getMessage());
+            AssertionControl.logMessage("Error creating Volontario object: " + e.getMessage(), 1, SUB_CLASSNAME);
+            ViewSE.println("Error creating volunteer: " + e.getMessage());
             return;
         }
 
         // adds a new volunteer who will need to change password on first login
         if (controller.db.dbVolontarioHelper.addVolontario(v)) {
-             String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
+            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
             AssertionControl.logMessage(currentUser + "| Added volunteer: " + username, 4, SUB_CLASSNAME);
-             ViewSE.println("Volunteer " + username + " added successfully.");
+            ViewSE.println("Volunteer " + username + " added successfully.");
         } else {
-             String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
+            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
             AssertionControl.logMessage(currentUser + "| Failed to add volunteer: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
-             ViewSE.println("Failed to add volunteer '" + username + "'. It might already exist.");
+            ViewSE.println("Failed to add volunteer '" + username + "'. It might already exist.");
         }
     }
 
@@ -135,11 +134,11 @@ public class AddCommand extends AbstractCommand {
 
         // Join arguments first to handle quotes
         String[] a = StringUtils.joinQuotedArguments(args);
-         if (a == null) {
-             AssertionControl.logMessage("StringUtils.joinQuotedArguments returned null", 1, SUB_CLASSNAME);
-             ViewSE.println("Internal error processing arguments for adding visit type.");
-             return;
-         }
+        if (a == null) {
+            AssertionControl.logMessage("StringUtils.joinQuotedArguments returned null", 1, SUB_CLASSNAME);
+            ViewSE.println("Internal error processing arguments for adding visit type.");
+            return;
+        }
 
         // Check time restriction
         if (!controller.isActionDay16 && controller.doneAll()) {
@@ -148,15 +147,15 @@ public class AddCommand extends AbstractCommand {
                             + "| Cannot add a visit type if it's not the 16th of the month: " + (a.length > 0 ? a[0] : "N/A"),
                     1, // High severity for violating time constraint
                     SUB_CLASSNAME);
-             ViewSE.println("Error: Adding visit types is only allowed on the designated action day (e.g., 16th).");
+            ViewSE.println("Error: Adding visit types is only allowed on the designated action day (e.g., 16th).");
             return;
         }
 
         // Check argument count (TipoVisita constructor expects 11 specific args)
         if (a.length < 11) {
-             AssertionControl.logMessage("Insufficient arguments for adding TipoVisita. Expected 11, got " + a.length, 2, SUB_CLASSNAME);
-             ViewSE.println("Error: Insufficient arguments provided for adding visit type. Please provide all required details.");
-             return;
+            AssertionControl.logMessage("Insufficient arguments for adding TipoVisita. Expected 11, got " + a.length, 2, SUB_CLASSNAME);
+            ViewSE.println("Error: Insufficient arguments provided for adding visit type. Please provide all required details.");
+            return;
         }
         String title = a[0]; // For logging
 
@@ -165,16 +164,16 @@ public class AddCommand extends AbstractCommand {
             t = new TipoVisita(a, controller.date);
         } catch (Exception e) {
             AssertionControl.logMessage("Error creating TipoVisita object: " + e.getMessage(), 1, SUB_CLASSNAME);
-             ViewSE.println("Error creating visit type: " + e.getMessage());
+            ViewSE.println("Error creating visit type: " + e.getMessage());
             return;
         }
 
         if (controller.db.dbTipoVisiteHelper.addTipoVisita(t)) {
             AssertionControl.logMessage(currentUser + "| Added TipoVisita: " + title, 4, SUB_CLASSNAME);
-             ViewSE.println("Visit type '" + title + "' added successfully.");
+            ViewSE.println("Visit type '" + title + "' added successfully.");
         } else {
             AssertionControl.logMessage(currentUser + "| Failed to add TipoVisita: " + title + " (likely already exists)", 2, SUB_CLASSNAME);
-             ViewSE.println("Failed to add visit type '" + title + "'. It might already exist.");
+            ViewSE.println("Failed to add visit type '" + title + "'. It might already exist.");
         }
     }
 
@@ -184,29 +183,21 @@ public class AddCommand extends AbstractCommand {
 
         // Join arguments first
         String[] a = StringUtils.joinQuotedArguments(args);
-         if (a == null) {
-             AssertionControl.logMessage("StringUtils.joinQuotedArguments returned null", 1, SUB_CLASSNAME);
-             ViewSE.println("Internal error processing arguments for adding place.");
-             return;
-         }
-
-        // Check time restriction
-        if (!controller.isActionDay16 && controller.doneAll()) {
-            AssertionControl.logMessage(
-                    currentUser
-                            + "| Cannot add a place if it's not the 16th of the month: "
-                            + (a.length > 0 ? a[0] : "N/A"),
-                    1, // High severity
-                    SUB_CLASSNAME);
-             ViewSE.println("Error: Adding places is only allowed on the designated action day (e.g., 16th).");
+        if (a == null) {
+            AssertionControl.logMessage("StringUtils.joinQuotedArguments returned null", 1, SUB_CLASSNAME);
+            ViewSE.println("Internal error processing arguments for adding place.");
             return;
         }
 
+        // Check time restriction
+        if(!isExecutable())
+            return;
+
         // Check argument count (Luogo constructor expects name, description, location)
         if (a.length < 3 || a[0] == null || a[0].trim().isEmpty() || a[2] == null || a[2].trim().isEmpty()) {
-             AssertionControl.logMessage("Insufficient or invalid arguments for adding Luogo. Expected name, description, location.", 2, SUB_CLASSNAME);
-             ViewSE.println("Usage: add -L <name> \"<description>\" <location>");
-             return;
+            AssertionControl.logMessage("Insufficient or invalid arguments for adding Luogo. Expected name, description, location.", 2, SUB_CLASSNAME);
+            ViewSE.println("Usage: add -L <name> \"<description>\" <location>");
+            return;
         }
         String name = a[0]; // For logging
 
@@ -219,19 +210,16 @@ public class AddCommand extends AbstractCommand {
             l = new Luogo(a); // Assumes constructor takes String[] {name, desc, loc}
         } catch (Exception e) {
             AssertionControl.logMessage("Error creating Luogo object: " + e.getMessage(), 1, SUB_CLASSNAME);
-             ViewSE.println("Error creating place: " + e.getMessage());
+            ViewSE.println("Error creating place: " + e.getMessage());
             return;
         }
 
         if (controller.db.dbLuoghiHelper.addLuogo(l)) {
             AssertionControl.logMessage(currentUser + "| Added place: " + name, 4, SUB_CLASSNAME);
-             ViewSE.println("Place '" + name + "' added successfully.");
+            ViewSE.println("Place '" + name + "' added successfully.");
         } else {
             AssertionControl.logMessage(currentUser + "| Failed to add place: " + name + " (likely already exists)", 2, SUB_CLASSNAME);
-             ViewSE.println("Failed to add place '" + name + "'. It might already exist.");
+            ViewSE.println("Failed to add place '" + name + "'. It might already exist.");
         }
     }
-
-    
-
 }

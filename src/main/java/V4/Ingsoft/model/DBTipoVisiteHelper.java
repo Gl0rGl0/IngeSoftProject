@@ -2,7 +2,8 @@ package V4.Ingsoft.model;
 
 import java.util.ArrayList;
 
-import V4.Ingsoft.controller.item.luoghi.StatusVL;
+import V4.Ingsoft.controller.item.StatusItem;
+import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.util.Date;
 
@@ -72,13 +73,14 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     public void checkTipoVisite(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
             switch(tv.getStatus()){
-                case PENDING_ADD -> tv.isMonthExpired(d);
+                case PENDING_ADD -> tv.checkStatus(d);
                 case PENDING_REMOVE -> {
-                    Date deletionDay = tv.getDeletionDay();
-                    if(deletionDay != null && deletionDay.equals(d))
+                    Date deletionDate = tv.getdeletionDate();
+                    if(deletionDate != null && deletionDate.equals(d))
                         removeTipoVisitaByUID(tv.getUID());
                 }
-                default -> {}
+                case DISABLED -> removeTipoVisitaByUID(tv.getUID());
+                case ACTIVE -> {}
             }
         }
     }
@@ -87,7 +89,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() == StatusVL.PROPOSED || tv.getStatus() == StatusVL.PENDING_REMOVE)
+            if (tv.getStatus() != StatusItem.ACTIVE || tv.getStatus() == StatusItem.PENDING_REMOVE) //or != PENDING_ADD and != DISABLED
                 out.add(tv);
         }
         return out;

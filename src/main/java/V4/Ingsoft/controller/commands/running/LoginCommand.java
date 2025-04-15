@@ -12,7 +12,7 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommand extends AbstractCommand {
 
-    private final Controller controller;
+    
 
     public LoginCommand(Controller controller) {
         this.controller = controller;

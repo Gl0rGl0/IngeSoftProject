@@ -7,9 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 import V4.Ingsoft.model.DBAbstractPersonaHelper;
+import V4.Ingsoft.model.Deletable;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public abstract class Persona {
+public abstract class Persona extends Deletable{
     private String psw;
     private final String username;
     private boolean isNew;
