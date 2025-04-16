@@ -6,12 +6,13 @@ import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 
 public class VisitCommand extends AbstractCommand {
-    
+
     private static final String CLASSNAME = VisitCommand.class.getSimpleName();
 
     public VisitCommand(Controller controller) {
@@ -61,7 +62,7 @@ public class VisitCommand extends AbstractCommand {
     private boolean validateArgsForAdd(String[] args, String subClassName) {
         String[] parsed = StringUtils.joinQuotedArguments(args);
         if (parsed == null || parsed.length < 3 ||
-            parsed[0] == null || parsed[1] == null || parsed[2] == null) {
+                parsed[0] == null || parsed[1] == null || parsed[2] == null) {
             AssertionControl.logMessage("Error processing arguments after joining.", 1, subClassName);
             ViewSE.println("Internal error processing visit details.");
             return false;
@@ -71,8 +72,8 @@ public class VisitCommand extends AbstractCommand {
 
     // Restituisce il fruitore corrente se valido, altrimenti segnala l'errore.
     private Fruitore getCurrentFruitore(String subClassName) {
-        if (controller.getCurrentUser() == null || 
-            controller.getCurrentUser().getType() != PersonaType.FRUITORE) {
+        if (controller.getCurrentUser() == null ||
+                controller.getCurrentUser().getType() != PersonaType.FRUITORE) {
             ViewSE.println("Error: Only registered visitors (fruitori) can book visits.");
             String currentUser = (controller.getCurrentUser() != null)
                     ? controller.getCurrentUser().getUsername() : "UNKNOWN";
@@ -105,7 +106,7 @@ public class VisitCommand extends AbstractCommand {
 
     // Controlla se il booking è aperto, qui semplificato: se lo stato è PROPOSED si assume aperto.
     private boolean isBookingOpen(Visita v, String subClassName) {
-        if (v.status == StatusVisita.PROPOSED) {
+        if (v.getStatus() == StatusVisita.PROPOSED) {
             return true;
         }
         ViewSE.println("Error: Bookings for this visit are closed (deadline passed).");
@@ -132,13 +133,13 @@ public class VisitCommand extends AbstractCommand {
 
     // Elabora il booking, invocando il metodo di Visita e gestendo il risultato
     private void processBooking(Visita v, Fruitore f, int quantita, String subClassName) {
-        int maxPrenotazioni = controller.getDB().appSettings.getMaxPrenotazioniPerPersona();
+        int maxPrenotazioni = Model.appSettings.getMaxPrenotazioniPerPersona();
         if (quantita > maxPrenotazioni) {
             ViewSE.println("Error: You cannot register more than " + maxPrenotazioni + " people in a single booking.");
             AssertionControl.logMessage("Maximum bookings per person exceeded (" + quantita + " > " + maxPrenotazioni + ")", 3, subClassName);
             return;
         }
-        
+
         String bookingResult = v.addPartecipants(f, quantita);
         switch (bookingResult) {
             case "capacity":
@@ -150,9 +151,8 @@ public class VisitCommand extends AbstractCommand {
                 AssertionControl.logMessage("Booking failed, user already registered (UID: " + v.getUID() + ")", 3, subClassName);
                 break;
             default: // Successo: bookingResult è il codice di prenotazione
-                String bookingCode = bookingResult;
-                ViewSE.println("Registration completed successfully! Your booking code is: " + bookingCode);
-                AssertionControl.logMessage("Booking successful for user " + f.getUsername() + " (Code: " + bookingCode + ", Qty: " + quantita + ", Visit UID: " + v.getUID() + ")", 4, subClassName);
+                ViewSE.println("Registration completed successfully! Your booking code is: " + bookingResult);
+                AssertionControl.logMessage("Booking successful for user " + f.getUsername() + " (Code: " + bookingResult + ", Qty: " + quantita + ", Visit UID: " + v.getUID() + ")", 4, subClassName);
                 f.subscribeToVisit(v.getUID());
                 controller.db.dbVisiteHelper.saveJson();
                 controller.db.dbFruitoreHelper.saveJson();
@@ -193,7 +193,7 @@ public class VisitCommand extends AbstractCommand {
         final String SUB_CLASSNAME = CLASSNAME + ".removeFromVisita";
         String[] parsedArgs = StringUtils.joinQuotedArguments(args);
         if (parsedArgs == null || parsedArgs.length < 2 ||
-            parsedArgs[0] == null || parsedArgs[1] == null) {
+                parsedArgs[0] == null || parsedArgs[1] == null) {
             AssertionControl.logMessage("Error processing arguments after joining.", 1, SUB_CLASSNAME);
             ViewSE.println("Internal error processing visit details for removal.");
             return;
@@ -214,7 +214,7 @@ public class VisitCommand extends AbstractCommand {
             AssertionControl.logMessage("Attempted to remove booking from visit with status " + currentStatus + " (UID: " + v.getUID() + ")", 2, SUB_CLASSNAME);
             return;
         }
-        
+
         if (!isBookingOpen(v, SUB_CLASSNAME))
             return;
 

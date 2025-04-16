@@ -2,16 +2,7 @@ package V4.Ingsoft.util;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.HelpCommand;
-import V4.Ingsoft.controller.commands.running.AvailabilityCommand;
-import V4.Ingsoft.controller.commands.running.CollectionManagerCommand;
-import V4.Ingsoft.controller.commands.running.CommandList;
-import V4.Ingsoft.controller.commands.running.ListCommand;
-import V4.Ingsoft.controller.commands.running.LoginCommand;
-import V4.Ingsoft.controller.commands.running.MakePlanCommand;
-import V4.Ingsoft.controller.commands.running.MyVisitCommand;
-import V4.Ingsoft.controller.commands.running.PrecludeCommand;
-import V4.Ingsoft.controller.commands.running.RemoveCommand;
-import V4.Ingsoft.controller.commands.running.VisitCommand;
+import V4.Ingsoft.controller.commands.running.*;
 
 public class RunningInterpreter extends Interpreter {
 

@@ -1,16 +1,15 @@
 package V4.ingsoft;
 
+import V4.Ingsoft.controller.item.StatusVisita;
+import V4.Ingsoft.controller.item.luoghi.Visita;
+import V4.Ingsoft.controller.item.persone.Volontario;
+import V4.Ingsoft.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
-
-import V4.Ingsoft.controller.item.persone.Volontario;
-import V4.Ingsoft.util.Date; // Import Date
-import V4.Ingsoft.controller.item.StatusVisita;
-import V4.Ingsoft.controller.item.luoghi.Visita; // Added import
-
-import java.util.List; // Added import
-import java.util.stream.Collectors; // Added import
 
 // Tests for Use Cases UC16-UC19, UC34 (Volunteer Actions)
 public class VolunteerActionsTests extends BaseTest {
@@ -83,7 +82,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert: Check internal state if possible, otherwise assume command worked
         Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
         assertNotNull(vol, "Volunteer should still exist.");
-        assertTrue(vol.getAvailability()[7-1], "Executed availability command successfully (verification of future state requires specific getters).");
+        assertTrue(vol.getAvailability()[7 - 1], "Executed availability command successfully (verification of future state requires specific getters).");
     }
 
     @Test
@@ -101,7 +100,7 @@ public class VolunteerActionsTests extends BaseTest {
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
         Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
-        assertFalse(vol.getAvailability()[7-1], "Executed setav with invalid format (verify logs for parsing error message).");
+        assertFalse(vol.getAvailability()[7 - 1], "Executed setav with invalid format (verify logs for parsing error message).");
     }
 
     @Test
@@ -119,7 +118,7 @@ public class VolunteerActionsTests extends BaseTest {
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
         Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
-        assertFalse(vol.getAvailability()[7-1], "Executed setav with invalid date (verify logs for parsing error message).");
+        assertFalse(vol.getAvailability()[7 - 1], "Executed setav with invalid date (verify logs for parsing error message).");
     }
 
     @Test
@@ -139,7 +138,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // The command should execute, but the internal logic in Volontario.setAvailability but its not assigned because its outside the allowed windows
         Volontario vol = controller.db.dbVolontarioHelper.getPersona("VolRegime");
-        assertFalse(vol.getAvailability()[4-1], "Executed setav outside allowed window (verify internal logic prevents update).");
+        assertFalse(vol.getAvailability()[4 - 1], "Executed setav outside allowed window (verify internal logic prevents update).");
     }
 
     @Test
@@ -150,7 +149,7 @@ public class VolunteerActionsTests extends BaseTest {
 
         // Add precluded date (as configRegime)
         controller.interpreter("preclude -a " + precludedDateStr);
-        
+
         //past 1 month
         controller.interpreter("time -s 01/07/2025");
 
@@ -215,19 +214,19 @@ public class VolunteerActionsTests extends BaseTest {
 
         // Assert: Fetch visits and check if the expected one is assigned and confirmed.
         List<Visita> allVisits = controller.db.dbVisiteHelper.getVisite();
-        
-        String expectedVisitUID = visitTypeName.hashCode() + "t" + d.toString() + username; // Reconstruct expected UID based on Visita constructor logic
+
+        String expectedVisitUID = visitTypeName.hashCode() + "t" + d + username; // Reconstruct expected UID based on Visita constructor logic
         assertEquals(expectedVisitUID, v.getUID());
 
         List<Visita> assignedConfirmedVisits = allVisits.stream()
-            .filter(visit -> visit != null &&
-                            username.equals(visit.getUidVolontario()) &&
-                            visit.getStatus() == StatusVisita.CONFIRMED &&
-                            visit.getUID().equals(expectedVisitUID)) // Check UID too
-            .collect(Collectors.toList());
+                .filter(visit -> visit != null &&
+                        username.equals(visit.getUidVolontario()) &&
+                        visit.getStatus() == StatusVisita.CONFIRMED &&
+                        visit.getUID().equals(expectedVisitUID)) // Check UID too
+                .toList();
 
         assertEquals(1, assignedConfirmedVisits.size(), "Volunteer should have exactly one confirmed visit assigned matching the setup.");
-        assertEquals(visitTypeName, assignedConfirmedVisits.get(0).getTitle());
+        assertEquals(visitTypeName, assignedConfirmedVisits.getFirst().getTitle());
     }
 
     @Test

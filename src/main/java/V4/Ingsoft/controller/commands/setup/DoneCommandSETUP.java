@@ -6,21 +6,20 @@ import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.view.ViewSE;
 
 public class DoneCommandSETUP extends AbstractCommand {
-    private Controller c;
 
     public DoneCommandSETUP(Controller c) {
         super.commandInfo = CommandListSETUP.DONE;
-        this.c = c;
+        this.controller = c;
         this.hasBeenExecuted = false;
     }
 
     @Override
     public void execute(String[] options, String[] args) {
-        if(c.haveAllBeenExecuted()){
+        if (controller.haveAllBeenExecuted()) {
             ViewSE.println("Done executed correctly, switching to running mode");
             this.hasBeenExecuted = true;
-            c.switchInterpreter();
-        }else{
+            controller.switchInterpreter();
+        } else {
             AssertionControl.logMessage("Non puoi eseguire il done se non hai eseguito tutti i comandi precedenti", 3, CLASSNAME);
         }
     }

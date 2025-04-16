@@ -1,26 +1,20 @@
 package V4.Ingsoft.util;
 
+import V4.Ingsoft.view.ViewSE;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-import V4.Ingsoft.view.ViewSE;
-
 public class AssertionControl {
 
     public final static String VERSION = "V4";
-    private static final Scanner scanner = new Scanner(System.in);
     // Specifica il name del file di log
-    private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log"; 
+    private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log";
 
     public static void print(Object out) {
         ViewSE.println(out);
-    }
-
-    public static String read(String out) {
-        ViewSE.println(out);
-        return scanner.nextLine();
     }
 
     /**
@@ -28,8 +22,8 @@ public class AssertionControl {
      * If the file does not exist, it is created.
      * level [1-4] ERROR/WARNING/INFO/DEBUG
      *
-     * @param msg the message to log
-     * @return true if the write is successful
+     * @param o the object to log
+     * @return true if the writing is successful
      */
     public static boolean logMessage(Object o, int level, String path) {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {

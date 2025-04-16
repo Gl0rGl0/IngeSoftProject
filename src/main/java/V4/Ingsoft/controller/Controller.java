@@ -1,51 +1,49 @@
 package V4.Ingsoft.controller;
 
-import java.util.concurrent.Executors;
+import V4.Ingsoft.controller.item.persone.Persona;
+import V4.Ingsoft.model.Model;
+import V4.Ingsoft.util.*;
+import V4.Ingsoft.view.ViewSE;
+
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import V4.Ingsoft.controller.item.persone.Persona;
-import V4.Ingsoft.model.Model;
-import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date;
-import V4.Ingsoft.util.Interpreter;
-import V4.Ingsoft.util.RunningInterpreter;
-import V4.Ingsoft.util.SetupInterpreter;
-import V4.Ingsoft.util.TimeHelper;
-import V4.Ingsoft.view.ViewSE;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
 
     public final Model db;
-    
+
     // Initially the user is a Guest (not logged in)
     public String user;
     public Interpreter interpreter;
     public Date date = new Date(); // simply sets today's date
-
-    private ScheduledExecutorService dailyTask;
-    private ScheduledExecutorService virtualTimer;
+    // Flag indicating if today is the designated day (16th or first working day after)
+    // for special monthly actions (add/remove/assign/generate plan).
+    // Initialize to false, assuming it's not the 16th initially.
+    public boolean isActionDay16 = false;
+    private boolean collectionStatus;
 
     public Controller(Model db) {
         this.db = db;
-        
+
         initVirtualTime();
         initDailyScheduler();
-        
+
         interpreter = new SetupInterpreter(this);
         interpreter("time -s 16/1/1");
     }
 
     private void initDailyScheduler() {
-        dailyTask = Executors.newSingleThreadScheduledExecutor();
-        dailyTask.scheduleAtFixedRate(() -> dailyAction(), 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);
+        ScheduledExecutorService dailyTask = newSingleThreadScheduledExecutor();
+        dailyTask.scheduleAtFixedRate(this::dailyAction, 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);
         // EVERY VIRTUAL DAY (every 12min)
     }
 
     private void initVirtualTime() {
-        virtualTimer = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService virtualTimer = newSingleThreadScheduledExecutor();
         TimeHelper timeHelper = new TimeHelper(this); // (runnable)
         // Assume that each real second represents an update interval
         virtualTimer.scheduleAtFixedRate(timeHelper, 0, 1, TimeUnit.SECONDS);
@@ -64,7 +62,7 @@ public class Controller {
         interpreter.interpret(prompt, getCurrentUser());
     }
 
-    public void switchInterpreter(){
+    public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter = new RunningInterpreter(this);
         this.date = new Date();
@@ -79,22 +77,17 @@ public class Controller {
         return out;
     }
 
-    public boolean haveAllBeenExecuted(){
+    public boolean haveAllBeenExecuted() {
         return interpreter.haveAllBeenExecuted();
     }
 
-    public boolean doneAll(){
-        return interpreter.doneAll() || db.isInitialized();
+    public boolean doneAll() {
+        return interpreter.doneAll() && db.isInitialized();
     }
 
     public Persona getCurrentUser() {
         return db.findPersona(user);
     }
-
-    // Flag indicating if today is the designated day (16th or first working day after)
-    // for special monthly actions (add/remove/assign/generate plan).
-    // Initialize to false, assuming it's not the 16th initially.
-    public boolean isActionDay16 = false;
 
     public void dailyAction() {
         // Perform daily status updates first
@@ -124,9 +117,9 @@ public class Controller {
             }
             // If it's still a holiday, isActionDay16 remains false.
         } else if (isActionDay16 && currentDay > 16) {
-             // The action day (16th or later) has already passed. Reset the flag for subsequent days in the month.
-             // This ensures the special commands are only allowed on that single designated day.
-             isActionDay16 = false;
+            // The action day (16th or later) has already passed. Reset the flag for subsequent days in the month.
+            // This ensures the special commands are only allowed on that single designated day.
+            isActionDay16 = false;
         }
         // If currentDay < 15, the flag remains false.
     }
@@ -154,13 +147,12 @@ public class Controller {
         return db;
     }
 
-    private boolean collectionStatus;
-    
-    public void openCollection(){
+    public void openCollection() {
         collectionStatus = true;
+        getDB().dbVolontarioHelper.resetAllAvailability();
     }
 
-    public void closeCollection(){
+    public void closeCollection() {
         collectionStatus = false;
     }
 

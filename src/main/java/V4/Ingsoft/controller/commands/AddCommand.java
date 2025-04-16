@@ -20,12 +20,6 @@ public class AddCommand extends AbstractCommand {
     }
 
     @Override
-    /**
-     * Implementation of the "add" command.
-     *
-     * @param options the options (e.g., -c for configurator)
-     * @param args    any additional arguments
-     */
     public void execute(String[] options, String[] args) {
         // Basic null checks
         if (controller == null) {
@@ -141,7 +135,7 @@ public class AddCommand extends AbstractCommand {
         }
 
         // Check time restriction
-        if(!isExecutable())
+        if (!isExecutable())
             return;
 
         // Check argument count (TipoVisita constructor expects 11 specific args)
@@ -183,7 +177,7 @@ public class AddCommand extends AbstractCommand {
         }
 
         // Check time restriction
-        if(!isExecutable())
+        if (!isExecutable())
             return;
 
         // Check argument count (Luogo constructor expects name, description, location)
@@ -194,7 +188,7 @@ public class AddCommand extends AbstractCommand {
         }
         String name = a[0]; // For logging
 
-        if(controller.db.dbLuoghiHelper.findLuogo(name) != null){
+        if (controller.db.dbLuoghiHelper.findLuogo(name) != null) {
             AssertionControl.logMessage("Already exist a Place with the same name", 2, CLASSNAME);
         }
 

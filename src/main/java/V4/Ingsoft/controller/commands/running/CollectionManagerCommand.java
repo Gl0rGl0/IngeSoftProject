@@ -1,13 +1,12 @@
 package V4.Ingsoft.controller.commands.running;
 
 import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.util.AssertionControl; // Added import
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.view.ViewSE;
 
 public class CollectionManagerCommand extends AbstractCommand {
 
-    
 
     public CollectionManagerCommand(Controller controller) {
         this.controller = controller;
@@ -20,7 +19,7 @@ public class CollectionManagerCommand extends AbstractCommand {
             AssertionControl.logMessage("Controller cannot be null in MakePlanCommand", 1, CLASSNAME);
             return; // Cannot proceed
         }
-        
+
         if (options == null || args == null) {
             AssertionControl.logMessage("Options or args array is null in CollectionManagerCommand.execute", 1, CLASSNAME);
             ViewSE.println("Internal error: Invalid command structure.");
@@ -38,12 +37,12 @@ public class CollectionManagerCommand extends AbstractCommand {
 
         switch (option) {
             case 'o' -> controller.openCollection();
-            case 'c' -> controller.closeCollection();     
+            case 'c' -> controller.closeCollection();
             default -> {
                 ViewSE.println("Option '-" + option + "' not recognized for 'collection'.");
                 AssertionControl.logMessage("Unrecognized option for 'collection': " + option, 2, CLASSNAME);
                 return;
-           }
+            }
         }
 
         ViewSE.println("Executed.");

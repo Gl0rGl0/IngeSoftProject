@@ -3,11 +3,12 @@ package V4.Ingsoft.controller.commands.running;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.luoghi.Visita;
+import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.view.ViewSE;
 
 public class MyVisitCommand extends AbstractCommand {
-    
+
 
     public MyVisitCommand(Controller controller) {
         this.controller = controller;
@@ -28,15 +29,16 @@ public class MyVisitCommand extends AbstractCommand {
 
     private void listVolontari() {
         String uidCV = controller.getCurrentUser().getUsername();
+
+        if(uidCV == null)
+            return;
+
         StringBuilder out = new StringBuilder();
 
         out.append("List of visits you are assigned to: \n");
-        // controller.db.dbVisiteHelper.getConfermate() cannot be done because a
-        // visit can
-        // have multiple available volunteers
-        for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
+        for (Visita v : controller.db.dbVisiteHelper.getConfermate()) {
             if (v.getUidVolontario().equals(uidCV))
-                out.append(v + "\n");
+                out.append(v).append("\n");
         }
 
         ViewSE.println(out);
@@ -44,12 +46,23 @@ public class MyVisitCommand extends AbstractCommand {
 
     private void listFruitore() {
         String userF = controller.getCurrentUser().getUsername();
+
+        if(userF == null)
+            return;
+
+        Fruitore f = controller.getDB().dbFruitoreHelper.getPersona(userF);
+        if(f == null)
+            return;
+
         StringBuilder out = new StringBuilder();
 
         out.append("List of visits you are registered for: ");
-        for (Visita v : controller.db.dbVisiteHelper.getVisite()) {
-            if (v.hasFruitore(userF))
-                out.append(v + "\n");
+        Visita v;
+        for(String vUid : f.getVisiteUIDs()){
+            v = controller.db.dbVisiteHelper.getVisitaByUID(vUid);
+            if(v == null)
+                continue;
+            out.append(v).append("\n");
         }
 
         ViewSE.println(out);

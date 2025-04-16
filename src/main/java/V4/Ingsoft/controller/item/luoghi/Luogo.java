@@ -1,29 +1,26 @@
 package V4.Ingsoft.controller.item.luoghi;
 
-import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.model.Deletable;
 import V4.Ingsoft.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Luogo extends Deletable{
+public class Luogo extends Deletable {
     @JsonIgnore
     public static final String PATH = "luoghi";
 
-    private String name;
-    private String description;
-    private String position;
-    private String UID;
-    private ArrayList<String> visiteUID = new ArrayList<>();
+    private final String name;
+    private final String description;
+    private final String position;
+    private final String UID;
+    private final ArrayList<String> visiteUID = new ArrayList<>();
 
     @JsonCreator
     public Luogo(
@@ -33,7 +30,7 @@ public class Luogo extends Deletable{
             @JsonProperty("UID") String UID,
             @JsonProperty("status") StatusItem status,
             @JsonProperty("insertionDate") Date insertionDate,
-            @JsonProperty("deletionDate") Date deletionDate ) {
+            @JsonProperty("deletionDate") Date deletionDate) {
         this.name = name;
         this.description = description;
         this.position = position;
@@ -43,19 +40,19 @@ public class Luogo extends Deletable{
         this.deletionDate = deletionDate;
     }
 
-    public Luogo(String[] a) throws Exception{
-        if(a.length < 3)
+    public Luogo(String[] a) throws Exception {
+        if (a.length < 3)
             throw new Exception("Error in Luogo constructor: Insufficient number of arguments");
 
-        if(a[0].isBlank())
+        if (a[0].isBlank())
             throw new Exception("Error in Luogo constructor: Title name can't be empty");
 
-        if(a[1].isBlank())
+        if (a[1].isBlank())
             throw new Exception("Error in Luogo constructor: Description can't be empty");
 
-        if(a[2].isBlank())
+        if (a[2].isBlank())
             throw new Exception("Error in Luogo constructor: Position can't be empty");
-        
+
         this.name = a[0];
         this.description = a[1];
         this.position = a[2];
@@ -72,10 +69,8 @@ public class Luogo extends Deletable{
                 .append(", UID: ").append(UID)
                 .append(", Visits=[");
 
-        if (visiteUID != null && !visiteUID.isEmpty()) {
-            visiteUID.forEach(visita -> {
-                sb.append("\n    ").append(visita).append(",");
-            });
+        if (!visiteUID.isEmpty()) {
+            visiteUID.forEach(visita -> sb.append("\n    ").append(visita).append(","));
             sb.setLength(sb.length() - 1); // Removes the last comma
             sb.append("\n");
         }
@@ -85,7 +80,7 @@ public class Luogo extends Deletable{
     }
 
     public void addTipoVisita(String tvUID) {
-        if(visiteUID.contains(tvUID))
+        if (visiteUID.contains(tvUID))
             return;
         this.visiteUID.add(tvUID);
     }

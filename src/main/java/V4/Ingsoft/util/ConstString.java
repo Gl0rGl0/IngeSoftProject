@@ -8,13 +8,13 @@ public class ConstString {
                 -v        Adds a Volunteer
                 username  Specifies the username of the person being added
                 psw       Specifies the password of the person being added
-
+            
             add [-L] [String: name] [String: description] [String: meetingPlace]
                 -T                  Adds a Place
                 name                A symbolic name of the Place
                 description         A short description of the Place
                 meetingPlace        The position of the Place
-
+            
             add [-T] [String: title] [String: description] [String: meetingPlace] [Date: initDay] [Date: finishDay] [Time: initTime] [int: duration] [boolean: free] [int: numMinPartecipants] [int: numMaxPartecipants]
                 -T                  Adds a visit type
                 title               The title of the visit type
@@ -27,7 +27,7 @@ public class ConstString {
                 free                Indicates if the visit type is free [true/false]
                 numMinPartecipants  Minimum number of participants (fruitori)
                 numMaxPartecipants  Maximum number of participants (fruitori)
-
+            
             To leave an empty field, at your discretion and consequence, type "/"
             """;
 
@@ -39,7 +39,7 @@ public class ConstString {
                 -f        Removes a fruitore (visitor/user)
                 -v        Removes a volunteer
                 username  Specifies the username of the person to remove
-
+            
             remove [-L | -T] [String: title]
                 -L        Removes a place
                 -T        Removes a visit type
@@ -52,7 +52,7 @@ public class ConstString {
             login [String: username] [String: password]
                 username  Specifies the username to log in with
                 password  Specifies the password to log in with
-
+            
             login [String: username] [String: password] [String: password]
                 username  Specifies the username to subscribe the fruitore with
                 password  Specifies the password to subscribe in with, must be inserted 2 times

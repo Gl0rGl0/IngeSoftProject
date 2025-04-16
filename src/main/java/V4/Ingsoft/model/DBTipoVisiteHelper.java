@@ -1,11 +1,10 @@
 package V4.Ingsoft.model;
 
-import java.util.ArrayList;
-
 import V4.Ingsoft.controller.item.StatusItem;
-import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.util.Date;
+
+import java.util.ArrayList;
 
 public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
 
@@ -26,33 +25,16 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     public boolean addTipoVisita(TipoVisita toAdd) {
         if (cachedItems.get(toAdd.getUID()) != null)
             return false;
-            cachedItems.put(toAdd.getUID(), toAdd);
+        cachedItems.put(toAdd.getUID(), toAdd);
         return saveJson(getTipiVisita());
     }
 
-    /**
-     * Rimuove un TipoVisita dal file delle proprietà, basandosi sul nome.
-     * Simile a removePersona(), ma adattato per TipoVisita.
-     *
-     * @param name il name del tipovisita da rimuovere
-     * @return true se il tipovisita è stato rimosso, false in caso di errori.
-     */
-    public boolean removeTipoVisita(String toRemove) {
-        TipoVisita toFind = findTipoVisita(toRemove);
-
-        if (toFind == null)
-            return false;
-
-            cachedItems.remove(toFind.getUID());
-        return saveJson(getTipiVisita());
-    }
-
-    public boolean removeTipoVisitaByUID(String toRemoveUID) {
+    public void removeTipoVisitaByUID(String toRemoveUID) {
         if (cachedItems.get(toRemoveUID) == null)
-            return false;
+            return;
 
-            cachedItems.remove(toRemoveUID);
-        return saveJson(getTipiVisita());
+        cachedItems.remove(toRemoveUID);
+        saveJson(getTipiVisita());
     }
 
     /**
@@ -72,15 +54,16 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
 
     public void checkTipoVisite(Date d) {
         for (TipoVisita tv : getTipiVisita()) {
-            switch(tv.getStatus()){
+            switch (tv.getStatus()) {
                 case PENDING_ADD -> tv.checkStatus(d);
                 case PENDING_REMOVE -> {
                     Date deletionDate = tv.getdeletionDate();
-                    if(deletionDate != null && deletionDate.equals(d))
+                    if (deletionDate != null && deletionDate.equals(d))
                         removeTipoVisitaByUID(tv.getUID());
                 }
                 case DISABLED -> removeTipoVisitaByUID(tv.getUID());
-                case ACTIVE -> {}
+                case ACTIVE -> {
+                }
             }
         }
     }
@@ -96,7 +79,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
     }
 
     public boolean isNew() {
-        return cachedItems.size() == 0;
+        return cachedItems.isEmpty();
     }
 
     public void close() {

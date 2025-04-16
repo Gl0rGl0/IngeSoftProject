@@ -1,9 +1,9 @@
 package V4.Ingsoft.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Time {
@@ -26,20 +26,10 @@ public class Time {
     public String toString() {
         return String.format("%d:%d", hh, mm);
     }
-
-    public boolean isEqual(Time other) {
-        return other.hh == this.hh && other.mm == this.mm;
-    }
+    
 
     public int getMinutes() {
         return this.hh * 60 + this.mm;
     }
 
-    public boolean greaterThen(Time other) {
-        if (this.hh == other.hh) {
-            return this.mm > other.mm;
-        }
-
-        return this.hh > other.hh;
-    }
 }

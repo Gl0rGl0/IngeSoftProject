@@ -3,13 +3,13 @@ package V4.Ingsoft.controller.commands;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.setup.CommandListSETUP;
 import V4.Ingsoft.model.Model;
-import V4.Ingsoft.util.AppSettings; // Import AppSettings
-import V4.Ingsoft.util.JsonStorage; // Import JsonStorage
+import V4.Ingsoft.util.AppSettings;
+import V4.Ingsoft.util.JsonStorage;
 import V4.Ingsoft.view.ViewSE;
 
 public class SetPersoneMaxCommand extends AbstractCommand {
 
-        //Se uso il singleton per il Model non mi serve
+    //Se uso il singleton per il Model non mi serve
 
     public SetPersoneMaxCommand(Controller controller, boolean hasBeenExecuted) {
         this.controller = controller;
@@ -31,12 +31,12 @@ public class SetPersoneMaxCommand extends AbstractCommand {
                 return;
             }
             // Set the value in AppSettings
-            controller.getDB().appSettings.setMaxPrenotazioniPerPersona(max);
+            Model.appSettings.setMaxPrenotazioniPerPersona(max);
             // Save the updated settings
             if (JsonStorage.saveObject(AppSettings.PATH, Model.appSettings)) {
-                 ViewSE.println("Maximum bookings per person set to: " + max);
+                ViewSE.println("Maximum bookings per person set to: " + max);
             } else {
-                 ViewSE.println("Error saving settings.");
+                ViewSE.println("Error saving settings.");
             }
         } catch (NumberFormatException e) {
             ViewSE.println("Invalid value. Please enter a number.");

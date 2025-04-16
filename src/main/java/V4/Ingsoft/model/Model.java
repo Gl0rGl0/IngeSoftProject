@@ -1,19 +1,17 @@
 package V4.Ingsoft.model;
 
-import java.util.ArrayList;
-
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.*;
-import V4.Ingsoft.util.AppSettings;
-import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date;
-import V4.Ingsoft.util.JsonStorage;
-import V4.Ingsoft.util.Payload;
+import V4.Ingsoft.util.*;
 import V4.Ingsoft.util.Payload.Status;
 
+import java.util.ArrayList;
+
 public class Model {
+    public static AppSettings appSettings;
+    public static volatile Model instance = null;
     public final DBConfiguratoreHelper dbConfiguratoreHelper;
     public final DBFruitoreHelper dbFruitoreHelper;
     public final DBVolontarioHelper dbVolontarioHelper;
@@ -23,13 +21,21 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
-    public static AppSettings appSettings;
-
-    public static volatile Model instance = null;
+    // Constructor and helper initialization
+    private Model() {
+        dbConfiguratoreHelper = new DBConfiguratoreHelper();
+        dbFruitoreHelper = new DBFruitoreHelper();
+        dbVolontarioHelper = new DBVolontarioHelper();
+        dbTipoVisiteHelper = new DBTipoVisiteHelper();
+        dbVisiteHelper = new DBVisiteHelper();
+        dbLuoghiHelper = new DBLuoghiHelper();
+        dbDatesHelper = new DBDatesHelper();
+        dbIscrizionisHelper = new DBIscrizioniHelper();
+    }
 
     public static Model getInstance() {
         if (instance == null) {
-            synchronized(Model.class) {
+            synchronized (Model.class) {
                 if (instance == null) {
                     instance = new Model();
                 }
@@ -47,7 +53,7 @@ public class Model {
         return instance;
     }
 
-    public static Model getInstance(String ambito){
+    public static Model getInstance(String ambito) {
         setAmbito(ambito);
         return getInstance();
     }
@@ -57,18 +63,6 @@ public class Model {
         appSettings.setAmbitoTerritoriale(ambito);
     }
 
-    // Constructor and helper initialization
-    private Model() {
-        dbConfiguratoreHelper = new DBConfiguratoreHelper();
-        dbFruitoreHelper = new DBFruitoreHelper();
-        dbVolontarioHelper = new DBVolontarioHelper();
-        dbTipoVisiteHelper = new DBTipoVisiteHelper();
-        dbVisiteHelper = new DBVisiteHelper();
-        dbLuoghiHelper = new DBLuoghiHelper();
-        dbDatesHelper = new DBDatesHelper();
-        dbIscrizionisHelper = new DBIscrizioniHelper();
-    }
-
     // Removed setAmbito, getAmbito, getMaxPrenotazioni, setMaxPrenotazioni methods.
     // These are now handled via AppSettings in the Controller.
 
@@ -76,7 +70,7 @@ public class Model {
     // Remove methods with Cascading Logic
     // ================================================================
     public boolean removeFruitore(String username) {
-        if(username == null || username.trim().isEmpty()){
+        if (username == null || username.trim().isEmpty()) {
             AssertionControl.logMessage("Fruitore username cannot be null or empty for removal", 2, getClass().getSimpleName());
             return false;
         }
@@ -111,14 +105,14 @@ public class Model {
     }
 
     public boolean removeVolontario(String username) {
-        if(username == null || username.trim().isEmpty()){
+        if (username == null || username.trim().isEmpty()) {
             AssertionControl.logMessage("Volontario username cannot be null or empty for removal", 2, getClass().getSimpleName());
             return false;
         }
 
         Volontario volontario = dbVolontarioHelper.getPersona(username);
         if (volontario == null) {
-             AssertionControl.logMessage("Attempted to remove non-existent Volontario: " + username, 1, "Model");
+            AssertionControl.logMessage("Attempted to remove non-existent Volontario: " + username, 1, "Model");
             return false; // Volontario not found
         }
 
@@ -158,27 +152,18 @@ public class Model {
         return dbVolontarioHelper.removePersona(username);
     }
 
-    // Keep original remove by name, but delegate to UID version
-    public boolean removeTipoVisita(String typeName) {
-        TipoVisita tipoVisita = dbTipoVisiteHelper.findTipoVisita(typeName);
-        if (tipoVisita == null) {
-            return false;
-        }
-        return removeTipoVisitaByUID(tipoVisita.getUID());
-    }
-
     // New/Refactored method for removal by UID with cascade
-    public boolean removeTipoVisitaByUID(String tipoVisitaUID) {
-        if(tipoVisitaUID == null || tipoVisitaUID.trim().isEmpty()){
+    public void removeTipoVisitaByUID(String tipoVisitaUID) {
+        if (tipoVisitaUID == null || tipoVisitaUID.trim().isEmpty()) {
             AssertionControl.logMessage("TipoVisita UID cannot be null or empty for removal", 2, getClass().getSimpleName());
-            return false;
+            return;
         }
 
         TipoVisita tipoVisita = dbTipoVisiteHelper.getTipiVisitaByUID(tipoVisitaUID);
         if (tipoVisita == null) {
-             // This might happen legitimately during cascade, so maybe just log?
-             AssertionControl.logMessage("Attempted to remove non-existent or already removed TipoVisita UID: " + tipoVisitaUID, 0, "Model");
-            return false; // Already removed or never existed
+            // This might happen legitimately during cascade, so maybe just log?
+            AssertionControl.logMessage("Attempted to remove non-existent or already removed TipoVisita UID: " + tipoVisitaUID, 0, "Model");
+            return; // Already removed or never existed
         }
 
         // --- Cascade: Remove from associated Luogo ---
@@ -217,7 +202,7 @@ public class Model {
                 visiteToRemove.add(visita);
             }
         }
-         for (Visita visita : visiteToRemove) {
+        for (Visita visita : visiteToRemove) {
             // Removing a Visita also requires removing its Iscrizioni
             for (Iscrizione iscrizione : visita.getIscrizioni()) {
                 dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
@@ -227,19 +212,7 @@ public class Model {
 
         // Finally, remove the TipoVisita itself
         // Ensure the helper method exists and works by UID
-        return dbTipoVisiteHelper.removeTipoVisitaByUID(tipoVisitaUID); // Assumes this method exists
-    }
-
-
-    public void removeVisita(String type, String date) {
-        Visita visita = dbVisiteHelper.findVisita(type, date);
-        if (visita != null) {
-             // Removing a Visita also requires removing its Iscrizioni
-            for (Iscrizione iscrizione : visita.getIscrizioni()) {
-                dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
-            }
-            dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
-        }
+        dbTipoVisiteHelper.removeTipoVisitaByUID(tipoVisitaUID);
     }
 
     // Keep original remove by name, but delegate to UID version
@@ -254,7 +227,7 @@ public class Model {
     // New method for removal by UID with cascade
     public boolean removeLuogoByUID(String luogoUID) {
 
-        if(luogoUID == null || luogoUID.trim().isEmpty()){
+        if (luogoUID == null || luogoUID.trim().isEmpty()) {
             AssertionControl.logMessage("Luogo UID cannot be null or empty for removal", 2, getClass().getSimpleName());
             return false;
         }
@@ -292,8 +265,8 @@ public class Model {
         };
     }
 
-    public Persona findPersona(String user){
-        if(user == null)
+    public Persona findPersona(String user) {
+        if (user == null)
             return Guest.getInstance();
 
         Persona out;
@@ -320,6 +293,7 @@ public class Model {
     /**
      * Performs daily updates on the status of visits and visit types based on the current date.
      * Checks for visits nearing confirmation/cancellation deadlines and activates pending visit types.
+     *
      * @param d The current simulated date.
      */
     public void updateDailyStatuses(Date d) {
@@ -369,16 +343,6 @@ public class Model {
     // ================================================================
     // Getters via UID
     // ================================================================
-
-    public ArrayList<Visita> trovaVisiteByVolontario(Volontario v) {
-        ArrayList<Visita> out = new ArrayList<>();
-
-        for (String visitaUID : v.getTipiVisiteUIDs()) {
-            out.add(dbVisiteHelper.getVisitaByUID(visitaUID));
-        }
-
-        return out;
-    }
 
     public ArrayList<Visita> trovaVisiteByLuogo(Luogo l) {
         ArrayList<Visita> out = new ArrayList<>();

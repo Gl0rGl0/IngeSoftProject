@@ -8,11 +8,11 @@ public class DBFruitoreHelper extends DBAbstractPersonaHelper<Fruitore> {
         super(PersonaType.FRUITORE);
     }
 
-    public boolean addFruitore(Fruitore f){
+    public void addFruitore(Fruitore f) {
         if (cachedItems.get(f.getUsername()) != null)
-            return false;
+            return;
 
         cachedItems.put(f.getUsername(), f);
-        return saveJson(getPersonList());
+        saveJson(getPersonList());
     }
 }

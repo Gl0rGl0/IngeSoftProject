@@ -6,7 +6,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class ChangePswCommand extends AbstractCommand {
 
-    
 
     public ChangePswCommand(Controller controller) {
         this.controller = controller;

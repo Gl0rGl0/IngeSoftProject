@@ -12,7 +12,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommand extends AbstractCommand {
 
-    
 
     public LoginCommand(Controller controller) {
         this.controller = controller;
@@ -33,10 +32,10 @@ public class LoginCommand extends AbstractCommand {
         Payload toUse = login(args[0], args[1]);
         AssertionControl.logMessage(toUse, 0, "CLASSNAME");
 
-        if(toUse.getStatus() == Status.ERROR){
+        if (toUse.getStatus() == Status.ERROR) {
             loginError(toUse, args);
-        }else{
-            loginSuccess(toUse, args);
+        } else {
+            loginSuccess(toUse);
         }
     }
 
@@ -44,21 +43,21 @@ public class LoginCommand extends AbstractCommand {
         return controller.db.login(username, psw);
     }
 
-    private void loginError(Payload toUse, String[] args){  
+    private void loginError(Payload toUse, String[] args) {
         Persona p = (Persona) toUse.getData();
-        if(p.getType() != PersonaType.GUEST){
+        if (p.getType() != PersonaType.GUEST) {
             ViewSE.println("Wrong password, please try again");
             AssertionControl.logMessage("Error password " + p.getUsername(), 3, CLASSNAME);
             return;
         }
 
-        if(args.length < 3){
+        if (args.length < 3) {
             ViewSE.println("This user doesn't exist, if you want to create an account please put the password 2 times");
             AssertionControl.logMessage("Wrong registration setup " + p.getUsername(), 3, CLASSNAME);
             return;
         }
 
-        if(args[2].equals(args[1])){
+        if (args[2].equals(args[1])) {
             try {
                 Fruitore f = new Fruitore(args);
                 f.setAsNotNew();
@@ -74,7 +73,7 @@ public class LoginCommand extends AbstractCommand {
         AssertionControl.logMessage("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername(), 3, CLASSNAME);
     }
 
-    private void loginSuccess(Payload toUse, String[] args){
+    private void loginSuccess(Payload toUse) {
         controller.user = ((Persona) toUse.getData()).getUsername();
         ViewSE.println("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername());
         if (controller.getCurrentUser().isNew()) {

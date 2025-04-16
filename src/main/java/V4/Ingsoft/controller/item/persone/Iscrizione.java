@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Iscrizione {
     public String fruitoreUID;
-    public int quantity = 0;
+    public int quantity;
     public String UIDIscrizione;
 
     public Iscrizione(String fruitoreUID, int quantity) {
@@ -22,18 +22,14 @@ public class Iscrizione {
         return this.fruitoreUID;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public int getQuantity() {
         return this.quantity;
     }
 
     @Override
-    public String toString(){
-        return  "ID=" + UIDIscrizione +
-                "\nFruitore=" + fruitoreUID + 
+    public String toString() {
+        return "ID=" + UIDIscrizione +
+                "\nFruitore=" + fruitoreUID +
                 "\nQuantity=" + quantity;
     }
 }

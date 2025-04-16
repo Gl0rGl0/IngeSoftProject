@@ -5,15 +5,15 @@ import V4.Ingsoft.util.AssertionControl;
 
 public class Guest extends Persona {
 
+    public static volatile Guest instance = null;
+
     private Guest() throws Exception {
         super("Guest", "GuestPassword", PersonaType.GUEST, false, false);
     }
 
-    public static volatile Guest instance = null;
-
     public static Guest getInstance() {
         if (instance == null) {
-            synchronized(Model.class) {
+            synchronized (Model.class) {
                 if (instance == null) {
                     try {
                         instance = new Guest();

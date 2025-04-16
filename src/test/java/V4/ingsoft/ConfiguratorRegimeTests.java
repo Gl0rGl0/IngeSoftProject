@@ -1,17 +1,17 @@
 package V4.ingsoft;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.model.Model;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 // Tests for Use Cases UC10-UC15, UC20-UC27 (+ Regime Phase)
-public class ConfiguratorRegimeTests extends BaseTest{
+public class ConfiguratorRegimeTests extends BaseTest {
 
     @Override
     @BeforeEach
@@ -379,13 +379,13 @@ public class ConfiguratorRegimeTests extends BaseTest{
     @Test
     public void testRegimeRemoveLuogoCascadeButVolunteerAsAnotherVisitAssigned() {
         TipoVisita t = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime");
-        
+
         controller.interpreter("add -L PlaceRegime2 \"Regime Place\" 10.0:20.0");
         controller.interpreter("add -T TVRegime2 Description2 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma"); // Add another type
         controller.interpreter("assign -L PlaceRegime2 TVRegime2");
         controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
         TipoVisita t2 = controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime2");
-        
+
         // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
         assertNotNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");

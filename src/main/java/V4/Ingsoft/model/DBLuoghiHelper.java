@@ -1,27 +1,16 @@
 package V4.Ingsoft.model;
 
-import java.util.ArrayList;
-
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.util.Date;
 
-public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
+import java.util.ArrayList;
 
-    private ArrayList<String> tipoVisitaUIDs;
+public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
 
     public DBLuoghiHelper() {
         super(Luogo.PATH, Luogo.class);
 
         getJson().forEach(l -> cachedItems.put(l.getUID(), l));
-    }
-
-    public void addTipoVisita(String tipoVisitaUID) {
-        if (!tipoVisitaUIDs.contains(tipoVisitaUID))
-            tipoVisitaUIDs.add(tipoVisitaUID);
-    }
-
-    public ArrayList<String> getTipoVisitaUIDs() {
-        return this.tipoVisitaUIDs;
     }
 
     public Luogo getLuogoByUID(String uid) {
@@ -36,7 +25,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
      * Aggiunge un nuovo Luogo nel file delle proprietà.
      * Simile a addPersona(), ma adattato per Luogo.
      *
-     * @param luogo il luogo da aggiungere
+     * @param toAdd il luogo da aggiungere
      * @return true se l'aggiunta è andata a buon fine, false altrimenti.
      */
     public boolean addLuogo(Luogo toAdd) {
@@ -44,23 +33,6 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
             return false;
 
         cachedItems.put(toAdd.getUID(), toAdd);
-        return saveJson(getLuoghi());
-    }
-
-    /**
-     * Rimuove un Luogo dal file delle proprietà, basandosi sul name.
-     * Simile a removePersona(), ma adattato per Luogo.
-     *
-     * @param name il name del luogo da rimuovere
-     * @return true se il luogo è stato rimosso, false in caso di errori.
-     */
-    public boolean removeLuogo(String toRemove) {
-        Luogo toFind = findLuogo(toRemove);
-
-        if (toFind == null)
-            return false;
-
-        cachedItems.remove(toFind.getUID());
         return saveJson(getLuoghi());
     }
 
@@ -88,13 +60,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
     }
 
     public boolean isNew() {
-        return cachedItems.size() == 0;
-    }
-
-    public boolean containsLuogoUID(String uidLuogo) {
-        if (uidLuogo == null || uidLuogo.strip().length() == 0) // PRECONDIZIONE
-            return false;
-        return cachedItems.containsKey(uidLuogo);
+        return cachedItems.isEmpty();
     }
 
     public void close() {

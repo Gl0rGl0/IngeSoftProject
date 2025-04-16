@@ -1,19 +1,19 @@
 package V4.Ingsoft.controller.commands.running;
 
-import java.time.Month;
-
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.controller.item.StatusItem;
-import V4.Ingsoft.controller.item.StatusVisita;
-import V4.Ingsoft.controller.item.luoghi.*;
+import V4.Ingsoft.controller.item.luoghi.Luogo;
+import V4.Ingsoft.controller.item.luoghi.TipoVisita;
+import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.view.ViewSE;
 
+import java.time.Month;
+
 public class ListCommand extends AbstractCommand {
 
-    
+
     private static final String ERROR_NOT_RECOGNIZED = "Option not recognized for 'list'.";
 
     public ListCommand(Controller controller) {
@@ -22,12 +22,6 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    /**
-     * Implementation of the "list" command. // Corrected command name
-     *
-     * @param options the options (e.g., -c for configurator)
-     * @param args    any additional arguments
-     */
     public void execute(String[] options, String[] args) {
         if (options.length < 1) {
             ViewSE.println("Error using the 'list' command");
@@ -58,24 +52,23 @@ public class ListCommand extends AbstractCommand {
         StringBuilder out;
         for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
             out = new StringBuilder();
-            out.append(v.getUsername() + ":\n");
+            out.append(v.getUsername()).append(":\n");
             for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
-                out.append(tv.getTitle() + ": " + v.getStatus() + "\n");
+                out.append(tv.getTitle()).append(": ").append(v.getStatus()).append("\n");
             }
             ViewSE.println(out);
         }
     }
 
     private void printVisite(String[] s) {
-        char option = 'a';
-        option = s[1].charAt(0);
+        char option = s[1].charAt(0);
 
         switch (option) {
             case 'a' -> printAllTipi();
             case 'p' -> printProposte();
             case 'c' -> printComplete();
             case 'C' -> printCancellate();
-            case 'e' -> printEffettuate(); 
+            case 'e' -> printEffettuate();
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
     }
@@ -88,11 +81,11 @@ public class ListCommand extends AbstractCommand {
 
         Month targetMonth = controller.date.getMonth().plus(2);
         if (controller.date.getDay() > 16)
-        targetMonth.plus(1);
+            targetMonth = targetMonth.plus(1);
 
         StringBuilder out = new StringBuilder();
         for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
-            out.append(v.getUsername() + ":\n");
+            out.append(v.getUsername()).append(":\n");
             int i = 1;
             for (boolean b : v.getAvailability()) {
                 out.append(String.format("%d:%d [%b]", i++, targetMonth.getValue(), b));
@@ -115,12 +108,11 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printAllTipi() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Proposed visits:\n").append(getVisiteProposte());
-        sb.append("Completed visits:\n").append(getVisiteComplete());
-        sb.append("Cancelled visits:\n").append(getVisiteCancellate());
-        sb.append("Performed visits:\n").append(getVisiteEffettuate());
-        ViewSE.println(sb.toString());
+        String sb = "Proposed visits:\n" + getVisiteProposte() +
+                    "Completed visits:\n" + getVisiteComplete() +
+                    "Cancelled visits:\n" + getVisiteCancellate() +
+                    "Performed visits:\n" + getVisiteEffettuate();
+        ViewSE.println(sb);
     }
 
     private void printProposte() {

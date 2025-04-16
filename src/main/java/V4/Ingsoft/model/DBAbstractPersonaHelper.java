@@ -1,12 +1,12 @@
 package V4.Ingsoft.model;
 
-import java.util.ArrayList;
-
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Payload;
 import V4.Ingsoft.util.Payload.Status;
+
+import java.util.ArrayList;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
     private static final String CLASSNAME = DBAbstractPersonaHelper.class.getSimpleName(); // Added for logging
@@ -16,6 +16,18 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass());
         // INIT DATABASE
         getJson().forEach(p -> cachedItems.put(p.getUsername(), p));
+    }
+
+    public static String securePsw(String user, String psw) {
+        // Add null checks for robustness at the beginning
+        if (user == null || psw == null) {
+            // Log this? Should not happen if called from login which checks args.
+            AssertionControl.logMessage("Attempted to secure password with null user or psw.", 1, CLASSNAME + ".securePsw");
+            // Returning a default or throwing might be better depending on usage context
+            return "invalid_input_hash"; // Return a default non-null string
+        }
+        // Original logic if inputs are valid
+        return Integer.toHexString(user.hashCode() + psw.hashCode());
     }
 
     public ArrayList<T> getPersonList() {
@@ -48,12 +60,12 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     public boolean changePassword(String username, String newPsw) {
         final String SUB_CLASSNAME = CLASSNAME + ".changePassword<" + clazz.getSimpleName() + ">";
         if (username == null || username.trim().isEmpty() || newPsw == null || newPsw.isEmpty()) {
-             AssertionControl.logMessage("Attempted to change password with null/empty username or new password.", 1, SUB_CLASSNAME);
-             return false;
+            AssertionControl.logMessage("Attempted to change password with null/empty username or new password.", 1, SUB_CLASSNAME);
+            return false;
         }
 
         T toChange = cachedItems.get(username);
-        
+
         if (toChange == null) {
             AssertionControl.logMessage("Attempted to change password for non-existent user: " + username, 2, SUB_CLASSNAME);
             return false;
@@ -91,9 +103,9 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             AssertionControl.logMessage("Attempted login with null/empty username or password.", 2, SUB_CLASSNAME);
             return new Payload(Status.ERROR, null); // Return error payload
         }
-    
+
         String securedPsw = DBAbstractPersonaHelper.securePsw(user, psw);
-    
+
         // Iterate over cached items
         for (T p : cachedItems.values()) {
             if (p == null) {
@@ -117,19 +129,6 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         // If no matching user is found:
         AssertionControl.logMessage("Login attempt for non-existent user: " + user, 3, SUB_CLASSNAME);
         return new Payload(Status.ERROR, null);
-    }
-    
-
-    public static String securePsw(String user, String psw) {
-        // Add null checks for robustness at the beginning
-        if (user == null || psw == null) {
-             // Log this? Should not happen if called from login which checks args.
-             AssertionControl.logMessage("Attempted to secure password with null user or psw.", 1, CLASSNAME + ".securePsw");
-             // Returning a default or throwing might be better depending on usage context
-             return "invalid_input_hash"; // Return a default non-null string
-        }
-        // Original logic if inputs are valid
-        return Integer.toHexString(user.hashCode() + psw.hashCode());
     }
 
     public boolean isNew() {

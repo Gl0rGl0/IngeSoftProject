@@ -1,12 +1,12 @@
 package V4.Ingsoft.model;
 
+import V4.Ingsoft.controller.item.persone.Iscrizione;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import V4.Ingsoft.controller.item.persone.Iscrizione;
-
 public class DBIscrizioniHelper {
-    private HashMap<String, Iscrizione> iscrizioniRepo = new HashMap<>();
+    private final HashMap<String, Iscrizione> iscrizioniRepo = new HashMap<>();
 
     public void addIscrizione(Iscrizione i) {
         iscrizioniRepo.put(i.getUIDIscrizione(), i);
@@ -21,6 +21,6 @@ public class DBIscrizioniHelper {
     }
 
     public ArrayList<Iscrizione> getIscrizioni() {
-        return new ArrayList<Iscrizione>(iscrizioniRepo.values());
+        return new ArrayList<>(iscrizioniRepo.values());
     }
 }

@@ -1,9 +1,9 @@
 package V4.Ingsoft.controller.item.persone;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 
 public class Fruitore extends Persona {
 
@@ -19,25 +19,22 @@ public class Fruitore extends Persona {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
     }
 
-    public Fruitore(String[] a) throws Exception{    //added with command
+    public Fruitore(String[] a) throws Exception {    //added with command
         this(a[0], a[1], true, true);
     }
 
-    @Override
     public ArrayList<String> getVisiteUIDs() {
         return this.visiteUIDs;
     }
 
-    @Override
-    public boolean subscribeToVisit(String uid) {
+    public void subscribeToVisit(String uid) {
         if (visiteUIDs.contains(uid))
-            return false;
+            return;
 
-        return visiteUIDs.add(uid);
+        visiteUIDs.add(uid);
     }
 
-    @Override
-    public boolean removeFromVisita(String uid) {
-        return visiteUIDs.remove(uid);
+    public void removeFromVisita(String uid) {
+        visiteUIDs.remove(uid);
     }
 }

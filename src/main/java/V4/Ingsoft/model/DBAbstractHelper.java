@@ -1,16 +1,15 @@
 package V4.Ingsoft.model;
 
+import V4.Ingsoft.util.JsonStorage;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import V4.Ingsoft.util.JsonStorage;
-
 public abstract class DBAbstractHelper<T> {
-    private final String fileJson;
     protected final Class<T> clazz;
-
     protected final HashMap<String, T> cachedItems = new HashMap<>();
+    private final String fileJson;
 
     public DBAbstractHelper(String path, Class<T> claz) {
         this.fileJson = path;
@@ -35,7 +34,7 @@ public abstract class DBAbstractHelper<T> {
 
     public abstract void close();
 
-    public boolean clear() {
-        return JsonStorage.clearList(fileJson);
+    public void clear() {
+        JsonStorage.clearList(fileJson);
     }
 }

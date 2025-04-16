@@ -1,17 +1,18 @@
 package V4.Ingsoft.controller.commands.running;
 
+import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.StatusItem;
+import V4.Ingsoft.controller.item.luoghi.TipoVisita;
+import V4.Ingsoft.controller.item.luoghi.Visita;
+import V4.Ingsoft.controller.item.persone.Volontario;
+import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.Date;
+
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.util.AssertionControl; // Added import
-import V4.Ingsoft.controller.commands.AbstractCommand;
-import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.controller.item.luoghi.Visita;
-import V4.Ingsoft.controller.item.persone.Volontario;
-import V4.Ingsoft.util.Date;
 
 public class MakePlanCommand extends AbstractCommand {
 
@@ -30,12 +31,12 @@ public class MakePlanCommand extends AbstractCommand {
     }
 
     private void makeorario() {
-        if (controller == null || controller.date == null || controller.db == null) {
-             AssertionControl.logMessage("Controller dependencies (date, db) cannot be null in makeorario", 1, CLASSNAME);
-             return; // Cannot proceed
+        if (controller == null || controller.date == null || controller.getDB() == null) {
+            AssertionControl.logMessage("Controller dependencies (date, db) cannot be null in makeorario", 1, CLASSNAME);
+            return; // Cannot proceed
         }
-        
-        if(!isExecutable())
+
+        if (!isExecutable())
             return;
 
         ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
@@ -59,33 +60,35 @@ public class MakePlanCommand extends AbstractCommand {
             AssertionControl.logMessage("Date cannot be null in processVisitsForDate", 1, CLASSNAME);
             return; // Cannot process without a date
         }
-         if (tipi == null) {
+        if (tipi == null) {
             AssertionControl.logMessage("TipoVisita list cannot be null in processVisitsForDate", 1, CLASSNAME);
             return; // Cannot process without visit types
         }
-        for (TipoVisita visita : tipi) {
-             if (visita == null) {
-                 AssertionControl.logMessage("Null TipoVisita found in list during plan generation for date: " + date, 1, CLASSNAME);
-                 continue; // Skip this null entry
-             }
-            if (!isVisitEligibleOnDate(visita, date))
+        for (TipoVisita tv : tipi) {
+            if (tv == null) {
+                AssertionControl.logMessage("Null TipoVisita found in list during plan generation for date: " + date, 1, CLASSNAME);
+                continue; // Skip this null entry
+            }
+            if (!isVisitEligibleOnDate(tv, date))
                 continue;
 
-            assignVisitForEligibleVolunteers(visita, date);
+            assignVisitForEligibleVolunteers(tv, date);
         }
     }
 
     /**
      * Checks if a visit is eligible for the date:
-     * - Status PROPOSTA (Proposed)
+     * - Status ACTIVE (Proposed)
      * - The day of the week of the date is present among those of the visit
      * - The date is not precluded
+     * - The date is in the temporal arc of the type
      */
     private boolean isVisitEligibleOnDate(TipoVisita visita, Date date) {
         // A TipoVisita definition doesn't have a PROPOSED status; the generated Visita does.
         // Eligibility depends on the definition (e.g., active period, etc. - assuming basic checks here)
         // and the date constraints.
-        return visita.getDays().contains(date.dayOfTheWeek())
+        return visita.getStatus() == StatusItem.ACTIVE
+                && visita.getDays().contains(date.dayOfTheWeek())
                 && !controller.db.dbDatesHelper.getPrecludedDates().contains(date)
                 && Date.between(visita.getInitDay(), date, visita.getFinishDay());
     }

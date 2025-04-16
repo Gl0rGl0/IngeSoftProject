@@ -7,7 +7,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class HelpCommand extends AbstractCommand {
 
-    
 
     public HelpCommand(Controller controller, ListInterface commandInfo) {
         this.controller = controller;

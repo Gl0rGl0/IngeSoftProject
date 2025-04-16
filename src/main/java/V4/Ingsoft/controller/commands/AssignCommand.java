@@ -1,7 +1,5 @@
 package V4.Ingsoft.controller.commands;
 
-import java.time.DayOfWeek;
-
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.setup.CommandListSETUP;
 import V4.Ingsoft.controller.item.StatusItem;
@@ -11,6 +9,8 @@ import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
+
+import java.time.DayOfWeek;
 
 public class AssignCommand extends AbstractCommand {
     public AssignCommand(Controller controller) {
@@ -61,34 +61,34 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
 
-        if(!isExecutable())
+        if (!isExecutable())
             return;
 
-        if(!v.addTipoVisita(vToAssign.getUID())){
+        if (!v.addTipoVisita(vToAssign.getUID())) {
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type, 2, CLASSNAME);
             return;
         }
 
         StatusItem sp = v.getStatus();
-        if(sp == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED){
+        if (sp == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED) {
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because volunteer it's in status: " + sp, 2, CLASSNAME);
             return;
         }
 
         StatusItem st = vToAssign.getStatus();
-        if(st == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED){
+        if (st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED) {
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because visit it's in status: " + st, 2, CLASSNAME);
             return;
         }
 
-        if(!vToAssign.addVolontario(userNameVolontario)){
+        if (!vToAssign.addVolontario(userNameVolontario)) {
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type, 2, CLASSNAME);
             return;
         }
 
         ViewSE.println("Assigned volunteer " + userNameVolontario + " to visit " + type);
         AssertionControl.logMessage("Assigned volunteer " + userNameVolontario + " to visit " + type, 3, CLASSNAME);
-        
+
     }
 
     private void assignVisita(String luogoName, String typeTitle) {
@@ -104,31 +104,31 @@ public class AssignCommand extends AbstractCommand {
             return;
         }
 
-        if(!isExecutable())
+        if (!isExecutable())
             return;
 
         StatusItem sl = luogo.getStatus();
-        if(sl == StatusItem.PENDING_ADD || sl == StatusItem.DISABLED){
+        if (sl == StatusItem.PENDING_ADD || sl == StatusItem.DISABLED) {
             AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because visit it's in status: " + sl, 2, CLASSNAME);
             return;
         }
 
         StatusItem st = visitaDaAssegnare.getStatus();
-        if(st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED){
+        if (st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED) {
             AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because place it's in status: " + st, 2, CLASSNAME);
             return;
         }
 
         // Check, for each day the visit can take place, that there are no conflicts
-        boolean giorniPlausibili = true; // Plausible days
+        boolean plausible = true; // Plausible days
         for (DayOfWeek day : visitaDaAssegnare.getDays()) {
             if (!isAssignmentPlausibleOnDay(visitaDaAssegnare, luogo, day)) {
-                giorniPlausibili = false;
+                plausible = false;
                 break;
             }
         }
 
-        if (giorniPlausibili) {
+        if (plausible) {
             luogo.addTipoVisita(visitaDaAssegnare.getUID());
             visitaDaAssegnare.setLuogo(luogo.getUID());
             ViewSE.println("Assigned visit " + visitaDaAssegnare.getTitle() + " to place " + luogo.getName());
@@ -144,28 +144,21 @@ public class AssignCommand extends AbstractCommand {
      */
     private boolean isAssignmentPlausibleOnDay(TipoVisita visitaDaAssegnare, Luogo luogo, DayOfWeek day) {
         for (String uidTipoVisita : luogo.getTipoVisitaUID()) {
-            // If it's the same visit, skip it
+            // Se è la stessa visita, la saltiamo
             if (uidTipoVisita.equals(visitaDaAssegnare.getUID()))
                 continue;
 
-            TipoVisita altraVisita = controller.db.dbTipoVisiteHelper.getTipiVisitaByUID(uidTipoVisita); // otherVisit
-            // If the other visit is not scheduled for this day, continue
+            TipoVisita altraVisita = controller.db.dbTipoVisiteHelper.getTipiVisitaByUID(uidTipoVisita);
+            // Se l'altra visita non è programmata per questo giorno, continuiamo
             if (!altraVisita.getDays().contains(day))
                 continue;
 
-            int startAltra = altraVisita.getInitTime().getMinutes(); // startOther
-            int startDaAssegnare = visitaDaAssegnare.getInitTime().getMinutes(); // startToAssign
-
-            // Check that the times do not overlap.
-            // If they are not in conflict, one starts after the end of the other.
-            if (!(startAltra > (startDaAssegnare + visitaDaAssegnare.getDuration())
-                    || startDaAssegnare > (startAltra + altraVisita.getDuration()))) {
-                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), // "I overlap with"
-                        3, CLASSNAME);
+            // Sfrutta il metodo overlaps definito in TipoVisita
+            if (visitaDaAssegnare.overlaps(altraVisita)) {
+                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), 3, CLASSNAME);
                 return false;
             }
         }
         return true;
     }
-
 }

@@ -1,12 +1,12 @@
 package V4.Ingsoft.util;
 
+import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.controller.item.persone.Volontario;
+
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.controller.item.persone.Volontario;
 
 public class Initer {
     private static final int NCON = 3;
@@ -14,7 +14,7 @@ public class Initer {
 
     public static Random r = new Random();
 
-    public static void initPersone(Controller c){
+    public static void initPersone(Controller c) {
         for (int i = 1; i <= NCON; i++)
             c.interpreter(String.format("add -c config%d pass%dC", i, i));
 
@@ -22,7 +22,7 @@ public class Initer {
             c.interpreter(String.format("add -v volont%d pass%dV", i, i));
     }
 
-    public static void initVisiteLuoghi(Controller c){
+    public static void initVisiteLuoghi(Controller c) {
         List<String[]> visite = new ArrayList<>();
         List<String[]> luoghi = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class Initer {
         visite.add(new String[]{"Alla scoperta del Moretto", "Una visita guidata alla scoperta delle opere del grande maestro rinascimentale.", "45.539:10.220", "15/01/25", "28/09/25", "14:00", "120", "true", "8", "30", "LuDo"});
         visite.add(new String[]{"Visita Test", "Descrizione Test", "12.1:33.3", "27/02/25", "14/09/25", "14:00", "90", "true", "10", "30", "LuMaMe"});
 
-    
+
         luoghi.add(new String[]{"Parco delle Meraviglie", "Un parco straordinario con natura rigogliosa e sentieri pittoreschi.", "45.12:10.34"});
         luoghi.add(new String[]{"Riserva Naturale Aurora", "Un'area protetta dove la natura si risveglia con colori unici.", "46.23:11.45"});
         luoghi.add(new String[]{"Lago di Serenita", "Un lago tranquillo che incanta per la sua bellezza e calma.", "44.56:9.87"});
@@ -81,16 +81,15 @@ public class Initer {
         Month meseNum = c.date.getMonth().plus(2);
 
         if (c.date.getDay() > 16)
-            meseNum.plus(1);
+            meseNum = meseNum.plus(1);
 
         for (Volontario v : c.db.dbVolontarioHelper.getPersonList()) {
             for (int i = 0; i < 15; i++)
                 try {
-                    v.setAvailability(c.date, new Date(String.format("%d/%d/2025", 
-                                                r.nextInt(1, meseNum.maxLength()), 
-                                                meseNum.getValue())), true);
-                } catch (Exception e) {
-                   continue;
+                    v.setAvailability(c.date, new Date(String.format("%d/%d/2025",
+                            r.nextInt(1, meseNum.maxLength()),
+                            meseNum.getValue())), true);
+                } catch (Exception ignored) {
                 }
         }
     }

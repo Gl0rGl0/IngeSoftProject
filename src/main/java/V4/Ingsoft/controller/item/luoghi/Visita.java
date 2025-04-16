@@ -1,33 +1,30 @@
 package V4.Ingsoft.controller.item.luoghi;
 
-import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Iscrizione;
 import V4.Ingsoft.util.Date;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Visita {
     @JsonIgnore
     public static final String PATH = "archivio-visite";
-
     @JsonIgnore
-    public TipoVisita tipo;
-    public Date date;
-    public String UID;
-
+    private final ArrayList<Iscrizione> fruitori = new ArrayList<>();
     @JsonIgnore
-    public String volontarioUID;
-    public StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
+    private TipoVisita tipo;
+    private final Date date;
+    private final String UID;
     @JsonIgnore
-    public ArrayList<Iscrizione> fruitori = new ArrayList<>();
+    private String volontarioUID;
+    private StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
 
     @JsonCreator
     public Visita(
@@ -49,6 +46,10 @@ public class Visita {
 
     public StatusVisita getStatus() {
         return this.status;
+    }
+
+    public void setStatus(StatusVisita status) {
+        this.status = status;
     }
 
     public String getUidVolontario() {
@@ -73,10 +74,6 @@ public class Visita {
 
     public String getTitle() {
         return tipo.getTitle();
-    }
-
-    public void setStatus(StatusVisita status) {
-        this.status = status;
     }
 
     public boolean hasFruitore(String userF) {
@@ -108,6 +105,7 @@ public class Visita {
     /**
      * Removes the first Iscrizione associated with the given user username.
      * Updates status to PROPOSED if the visit was previously full.
+     *
      * @param user The username of the fruitore whose booking should be removed.
      * @return true if a participant was found and removed, false otherwise.
      */
@@ -143,7 +141,7 @@ public class Visita {
                 + "\n\tMeeting Point: " + tipo.getMeetingPlace()
                 + "\n\tDate: " + date
                 + "\n\tTime: " + tipo.getInitTime()
-                + "\n\tTicket required: " + tipo.isFree() // Assuming 'Biglietto necessario' means 'Ticket required'
+                + "\n\tTicket required: " + tipo.isFree()
                 + "\n";
     }
 
@@ -154,18 +152,17 @@ public class Visita {
     /**
      * Removes an Iscrizione from this Visita based on the Iscrizione's UID.
      * Also handles potential status change if the visit was full.
+     *
      * @param uidIscrizione The UID of the Iscrizione to remove.
-     * @return true if an Iscrizione was removed, false otherwise.
      */
-    public boolean removeIscrizioneByUID(String uidIscrizione) {
+    public void removeIscrizioneByUID(String uidIscrizione) {
         int capienzaAttuale = getCurrentNumber();
         boolean removed = fruitori.removeIf(iscrizione -> iscrizione.getUIDIscrizione().equals(uidIscrizione));
 
         // If an iscrizione was removed and the visit was previously full (COMPLETED),
         // it should become PROPOSED again.
         if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
-             setStatus(StatusVisita.PROPOSED);
+            setStatus(StatusVisita.PROPOSED);
         }
-        return removed;
     }
 }

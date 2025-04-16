@@ -8,7 +8,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LogoutCommand extends AbstractCommand {
 
-    
 
     public LogoutCommand(Controller controller) {
         this.controller = controller;
@@ -16,9 +15,6 @@ public class LogoutCommand extends AbstractCommand {
     }
 
     @Override
-    /**
-     * Performs logout by setting the current user to Guest.
-     */
     public void execute(String[] options, String[] args) {
         if (controller.getCurrentUser().getType() == PersonaType.GUEST) {
             ViewSE.println("No user logged in, please log in first.");

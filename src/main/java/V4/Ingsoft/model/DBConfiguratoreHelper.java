@@ -2,7 +2,7 @@ package V4.Ingsoft.model;
 
 import V4.Ingsoft.controller.item.persone.Configuratore;
 import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.util.AssertionControl; // Added import
+import V4.Ingsoft.util.AssertionControl;
 
 public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
     private static final String CLASSNAME = DBConfiguratoreHelper.class.getSimpleName(); // Added for logging
@@ -30,18 +30,18 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
         String username = c.getUsername();
 
         if (cachedItems.containsKey(username)) { // Use containsKey for clarity
-             AssertionControl.logMessage("Attempted to add duplicate Configuratore: " + username, 2, SUB_CLASSNAME);
+            AssertionControl.logMessage("Attempted to add duplicate Configuratore: " + username, 2, SUB_CLASSNAME);
             return false; // Do not overwrite existing configurator
         }
 
         cachedItems.put(username, c);
         boolean success = saveJson(getPersonList());
         if (success) {
-             AssertionControl.logMessage("Added Configuratore: " + username, 4, SUB_CLASSNAME);
+            AssertionControl.logMessage("Added Configuratore: " + username, 4, SUB_CLASSNAME);
         } else {
-             AssertionControl.logMessage("Failed to save JSON after adding Configuratore: " + username, 1, SUB_CLASSNAME);
-             // Consider removing from cache if save failed?
-             // cachedItems.remove(username);
+            AssertionControl.logMessage("Failed to save JSON after adding Configuratore: " + username, 1, SUB_CLASSNAME);
+            // Consider removing from cache if save failed?
+            // cachedItems.remove(username);
         }
         return success;
     }

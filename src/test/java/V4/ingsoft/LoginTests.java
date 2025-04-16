@@ -1,14 +1,15 @@
 package V4.ingsoft;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.*;
-
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class LoginTests extends BaseTest{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class LoginTests extends BaseTest {
 
     @BeforeEach
     public void setup() {
@@ -16,12 +17,12 @@ public class LoginTests extends BaseTest{
         enterRegimePhase();
     }
 
-     @AfterEach
-     public void cleanup() {
-         controller.interpreter("logout"); // Ensure logout after each test
-         // Optional: Clean up files again after test if needed
-         // resetDataFiles();
-     }
+    @AfterEach
+    public void cleanup() {
+        controller.interpreter("logout"); // Ensure logout after each test
+        // Optional: Clean up files again after test if needed
+        // resetDataFiles();
+    }
 
     // --- Configuratore Tests (UC1, UC2) ---
 
@@ -53,13 +54,13 @@ public class LoginTests extends BaseTest{
     }
 
     @Test
-     public void testConfiguratoreLoginFailWrongUsername() {
-         // Arrange: Use the correct 'add -c' command
-         controller.interpreter("add -c config1 pass1C"); // Corrected command
-         controller.interpreter("logout"); // Logout admin
+    public void testConfiguratoreLoginFailWrongUsername() {
+        // Arrange: Use the correct 'add -c' command
+        controller.interpreter("add -c config1 pass1C"); // Corrected command
+        controller.interpreter("logout"); // Logout admin
 
-         // Act
-         controller.interpreter("login wrongUser pass1C");
+        // Act
+        controller.interpreter("login wrongUser pass1C");
 
         // Assert
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after failed login.");
@@ -89,14 +90,14 @@ public class LoginTests extends BaseTest{
         controller.interpreter("changepsw newSecurePassword");
         controller.interpreter("add -c dont add");
 
-        assertEquals(nConfig+1, controller.db.dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
-        
-         // Verify login with new password
-         controller.interpreter("logout");
-         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after logout.");
-         controller.interpreter("login config_first newSecurePassword");
-         assertNotNull(controller.getCurrentUser(), "Login with new password should succeed.");
-         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be CONFIGURATORE after password change and re-login.");
+        assertEquals(nConfig + 1, controller.db.dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
+
+        // Verify login with new password
+        controller.interpreter("logout");
+        assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after logout.");
+        controller.interpreter("login config_first newSecurePassword");
+        assertNotNull(controller.getCurrentUser(), "Login with new password should succeed.");
+        assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be CONFIGURATORE after password change and re-login.");
     }
 
     // UC2 - Standard Password Change
@@ -127,8 +128,8 @@ public class LoginTests extends BaseTest{
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after failed login with old password.");
     }
 
-     @Test
-     public void testConfiguratoreChangePasswordFailNotLoggedIn() {
+    @Test
+    public void testConfiguratoreChangePasswordFailNotLoggedIn() {
         // Arrange
         controller.interpreter("logout"); // Ensure logout if someone was logged in
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
@@ -170,13 +171,13 @@ public class LoginTests extends BaseTest{
     }
 
     @Test
-     public void testVolontarioLoginFailWrongUsername() {
-         // Arrange: Use the correct 'add -v' command
-         controller.interpreter("add -v volont1 pass1V"); // Corrected command
-         controller.interpreter("logout"); // Logout admin
+    public void testVolontarioLoginFailWrongUsername() {
+        // Arrange: Use the correct 'add -v' command
+        controller.interpreter("add -v volont1 pass1V"); // Corrected command
+        controller.interpreter("logout"); // Logout admin
 
-         // Act
-         controller.interpreter("login wrongUser pass1V");
+        // Act
+        controller.interpreter("login wrongUser pass1V");
 
         // Assert
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after failed login.");
@@ -213,14 +214,14 @@ public class LoginTests extends BaseTest{
         controller.interpreter("setav -a 5/6/2025");
 
         // Assert: Verify success
-        assertEquals(nVol+1, v.getNAvailability());
+        assertEquals(nVol + 1, v.getNAvailability());
 
-         // Verify
-         controller.interpreter("logout");
-         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after logout.");
-         controller.interpreter("login volont_first newSecurePassword");
-         assertNotNull(controller.getCurrentUser(), "Login with new password should succeed.");
-         assertEquals(PersonaType.VOLONTARIO, controller.getCurrentUser().getType(), "User should be VOLONTARIO after password change and re-login.");
+        // Verify
+        controller.interpreter("logout");
+        assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after logout.");
+        controller.interpreter("login volont_first newSecurePassword");
+        assertNotNull(controller.getCurrentUser(), "Login with new password should succeed.");
+        assertEquals(PersonaType.VOLONTARIO, controller.getCurrentUser().getType(), "User should be VOLONTARIO after password change and re-login.");
     }
 
     // UC17 - Standard Password Change
@@ -251,8 +252,8 @@ public class LoginTests extends BaseTest{
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST after failed login with old password.");
     }
 
-     @Test
-     public void testVolontarioChangePasswordFailNotLoggedIn() {
+    @Test
+    public void testVolontarioChangePasswordFailNotLoggedIn() {
         // Arrange
         controller.interpreter("logout"); // Ensure logout if someone was logged in
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
@@ -363,18 +364,18 @@ public class LoginTests extends BaseTest{
     }
 
     // UC29 - Standard Password Change Fail Not Logged In
-     @Test
-     public void testFruitoreChangePasswordFailNotLoggedIn() {
-         // Arrange: Use the correct 'add -f' command
-         controller.interpreter("logout"); // Logout admin
-         controller.interpreter("add -f fruit_change pass_old"); // Corrected command
-         controller.interpreter("logout");
-         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
+    @Test
+    public void testFruitoreChangePasswordFailNotLoggedIn() {
+        // Arrange: Use the correct 'add -f' command
+        controller.interpreter("logout"); // Logout admin
+        controller.interpreter("add -f fruit_change pass_old"); // Corrected command
+        controller.interpreter("logout");
+        assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
 
-         // Act
-         controller.interpreter("changepsw new_pass");
+        // Act
+        controller.interpreter("changepsw new_pass");
 
         // Assert: Check that user is still GUEST
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should remain GUEST after failed password change attempt.");
-  }
+    }
 }

@@ -1,9 +1,9 @@
 package V4.Ingsoft.model;
 
+import V4.Ingsoft.util.Date;
+
 import java.time.Month;
 import java.util.ArrayList;
-
-import V4.Ingsoft.util.Date;
 
 public class DBDatesHelper {
     private final ArrayList<Date> precludedDates = new ArrayList<>();
@@ -32,16 +32,13 @@ public class DBDatesHelper {
         }
     }
 
-    public boolean removePrecludedDate(Date date) {
-        return precludedDates.remove(date);
+    public void removePrecludedDate(Date date) {
+        precludedDates.remove(date);
     }
 
     public void refreshPrecludedDate(Date date) {
         Month monthCorrente = date.getMonth();
 
-        for (Date d : precludedDates) {
-            if (d.getMonth() == monthCorrente)
-                precludedDates.remove(d);
-        }
+        precludedDates.removeIf(d -> d.getMonth() == monthCorrente);
     }
 }

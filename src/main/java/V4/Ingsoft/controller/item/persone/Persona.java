@@ -1,34 +1,28 @@
 package V4.Ingsoft.controller.item.persone;
 
-import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import V4.Ingsoft.model.DBAbstractPersonaHelper;
 import V4.Ingsoft.model.Deletable;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public abstract class Persona extends Deletable{
-    private String psw;
-    private final String username;
-    private boolean isNew;
-
+public abstract class Persona extends Deletable {
     @JsonIgnore
-    public final PersonaType personaType;
+    private final PersonaType personaType;
+    private final String username;
     @JsonIgnore
     protected ArrayList<String> visiteUIDs = new ArrayList<>();
+    private String psw;
+    private boolean isNew;
 
-    public Persona(String username, String psw, PersonaType personaType, boolean isNew) throws Exception {
-        this(username, psw, PersonaType.VOLONTARIO, isNew, true);
-    }
-
-    public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception{
-        if(username == null || username.isBlank())
+    public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception {
+        if (username == null || username.isBlank())
             throw new Exception("Error in " + personaType + " constructor: Username can't be empty");
 
-        if(psw == null || psw.isEmpty())
+        if (psw == null || psw.isEmpty())
             throw new Exception("Error in " + personaType + " constructor: Password can't be empty");
 
         this.username = username;
@@ -69,17 +63,5 @@ public abstract class Persona extends Deletable{
 
     public int getPriority() {
         return this.personaType.getPriority();
-    }
-
-    public ArrayList<String> getVisiteUIDs() {
-        return null;
-    }
-
-    public boolean subscribeToVisit(String uid) {
-        return false;
-    }
-
-    public boolean removeFromVisita(String uid) {
-        return false;
     }
 }

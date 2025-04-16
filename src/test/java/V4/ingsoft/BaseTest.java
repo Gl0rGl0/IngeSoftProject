@@ -1,42 +1,50 @@
 package V4.ingsoft;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import V4.Ingsoft.controller.Controller;
+import V4.Ingsoft.controller.item.persone.PersonaType;
+import V4.Ingsoft.model.Model;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.model.Model;
-
-public class BaseTest{
+public class BaseTest {
     protected Controller controller;
-    private Model model;
-    private String configPath = "data/configuratori.json";
-    private String volontariPath = "data/volontari.json";
-    private String fruitoriPath = "data/fruitori.json";
-    private String luoghiPath = "data/luoghi.json";
-    private String tipiVisitaPath = "data/tipoVisite.json";
+    private final String configPath = "data/configuratori.json";
+    private final String volontariPath = "data/volontari.json";
+    private final String fruitoriPath = "data/fruitori.json";
+    private final String luoghiPath = "data/luoghi.json";
+    private final String tipiVisitaPath = "data/tipoVisite.json";
 
     // Helper to reset data files before each test
     protected void resetDataFiles() {
         // Delete existing files to ensure clean state for setup
-        try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
+        try {
+            Files.deleteIfExists(Paths.get(configPath));
+        } catch (IOException e) { /* Ignore */ }
+        try {
+            Files.deleteIfExists(Paths.get(volontariPath));
+        } catch (IOException e) { /* Ignore */ }
+        try {
+            Files.deleteIfExists(Paths.get(fruitoriPath));
+        } catch (IOException e) { /* Ignore */ }
+        try {
+            Files.deleteIfExists(Paths.get(luoghiPath));
+        } catch (IOException e) { /* Ignore */ }
+        try {
+            Files.deleteIfExists(Paths.get(tipiVisitaPath));
+        } catch (IOException e) { /* Ignore */ }
         Model.getInstance().clearAll();
         Model.appSettings = null;
         Model.instance = null;
 
         // Re-initialize model and controller for a fresh start
         // Implicitly create default ADMIN/PASSWORD if configPath is empty
-        model = Model.getInstance(); 
+        Model model = Model.getInstance();
         controller = new Controller(model);
     }
 
@@ -49,7 +57,7 @@ public class BaseTest{
         controller.interpreter("add -L PlaceRegime \"Regime Place\" 10.0:20.0");
         // Cannot add types/volunteers/assignments during setup via commands
         controller.interpreter("done"); // Finalize setup
-        
+
         controller.interpreter("time -s 16/1/2025");
 
         // 3. Add another configurator using the running phase command (now logged in as ADMIN)

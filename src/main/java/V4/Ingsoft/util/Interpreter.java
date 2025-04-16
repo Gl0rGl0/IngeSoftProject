@@ -1,27 +1,20 @@
 package V4.Ingsoft.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.controller.commands.AddCommand;
-import V4.Ingsoft.controller.commands.AssignCommand;
-import V4.Ingsoft.controller.commands.ChangePswCommand;
-import V4.Ingsoft.controller.commands.Command;
-import V4.Ingsoft.controller.commands.ExitCommand;
-import V4.Ingsoft.controller.commands.LogoutCommand;
-import V4.Ingsoft.controller.commands.SetPersoneMaxCommand;
-import V4.Ingsoft.controller.commands.TimeCommand;
+import V4.Ingsoft.controller.commands.*;
 import V4.Ingsoft.controller.commands.setup.DoneCommandSETUP;
 import V4.Ingsoft.controller.item.persone.Persona;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.view.ViewSE;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public abstract class Interpreter {
+    private final static String ERROR_NO_COMMAND = "ERROR NO COMMAND";
+    private final static String ERROR_NO_COMMAND_LINE = "Error: no command provided.";
     // Map of commands passed during setup
     protected HashMap<String, Command> commandRegistry = new HashMap<>();
-    private static String ERROR_NO_COMMAND = "ERROR NO COMMAND";
-    private static String ERROR_NO_COMMAND_LINE = "Error: no command provided.";
 
     // Constructor that receives the command map
     public Interpreter(Controller controller) {
@@ -42,7 +35,7 @@ public abstract class Interpreter {
      * @param currentUser the current user (necessary for permission checks)
      */
     public void interpret(String prompt, Persona currentUser) {
-        if(prompt == null || prompt.isBlank()) { // Use isBlank() for clarity
+        if (prompt == null || prompt.isBlank()) { // Use isBlank() for clarity
             AssertionControl.logMessage(ERROR_NO_COMMAND, 2, this.getClass().getSimpleName());
             ViewSE.println(ERROR_NO_COMMAND_LINE);
             return;
@@ -96,27 +89,21 @@ public abstract class Interpreter {
     }
 
     public boolean haveAllBeenExecuted() {
-        boolean out = true;
+        // si potrebbero mettere solo quelli di setup
+        // TODO
         for (Command c : commandRegistry.values()) {
-            if(c instanceof DoneCommandSETUP){
+            if (c instanceof DoneCommandSETUP) {
                 continue;
             }
-            out &= c.hasBeenExecuted();
-            if (!out)
-                return out;
+
+            if (!c.hasBeenExecuted())
+                return false;
         }
-        return out; // Just one false is enough to return false as the result
+        return true; // Just one false is enough to return false as the result
     }
 
-    //not used
-    public void printHaveAllBeenExecuted() {
-        for (Command c : commandRegistry.values()) {
-            System.out.println(c.toString() + " " + c.hasBeenExecuted());
-        }
-    }
-
-    public boolean doneAll(){
-        if(!(this instanceof SetupInterpreter))
+    public boolean doneAll() {
+        if (!(this instanceof SetupInterpreter))
             return true;
         return haveAllBeenExecuted() && commandRegistry.get("done").hasBeenExecuted();
     }

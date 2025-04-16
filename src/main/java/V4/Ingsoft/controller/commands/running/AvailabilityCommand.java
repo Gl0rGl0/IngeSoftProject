@@ -8,9 +8,8 @@ import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
 
-public class AvailabilityCommand extends AbstractCommand{
+public class AvailabilityCommand extends AbstractCommand {
 
-    
 
     public AvailabilityCommand(Controller controller) {
         this.controller = controller;
@@ -19,10 +18,10 @@ public class AvailabilityCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] options, String[] args) {
-        if(controller.getCurrentUser().getType() != PersonaType.VOLONTARIO)
+        if (controller.getCurrentUser().getType() != PersonaType.VOLONTARIO)
             return;
 
-        if(options.length < 1 || args.length < 1){
+        if (options.length < 1 || args.length < 1) {
             ViewSE.println("Error using the 'setav' command");
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Error using the 'setav' command", 2,
@@ -33,32 +32,33 @@ public class AvailabilityCommand extends AbstractCommand{
         switch (options[0].charAt(0)) {
             case 'a' -> manageDate(args, true);
             case 'r' -> manageDate(args, false);
-            default -> {    ViewSE.println("Error using the 'setav' command");
-                            AssertionControl.logMessage(
-                                    controller.getCurrentUser().getUsername() + "| Error using the 'setav' command", 2,
-                                    CLASSNAME); }
+            default -> {
+                ViewSE.println("Error using the 'setav' command");
+                AssertionControl.logMessage(
+                        controller.getCurrentUser().getUsername() + "| Error using the 'setav' command", 2,
+                        CLASSNAME);
+            }
         }
     }
 
-    private void manageDate(String[] args, boolean toAdd){
-        if(!controller.isVolunteerCollectionOpen()){
+    private void manageDate(String[] args, boolean toAdd) {
+        if (!controller.isVolunteerCollectionOpen()) {
             ViewSE.println("Can't edit your availability if the collection it's closed.");
             AssertionControl.logMessage("Attempt to edit availability while collection is closed", 3, CLASSNAME);
             return;
         }
-        
+
         Volontario v = (Volontario) controller.getCurrentUser();
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                if(controller.db.dbDatesHelper.getPrecludedDates().contains(d))
+                if (controller.db.dbDatesHelper.getPrecludedDates().contains(d))
                     continue;
                 v.setAvailability(controller.date, d, toAdd); //controllo avviene dentro il volontario direttamente eccetto per le date precluse (richiesta)
             } catch (Exception e) {
                 AssertionControl.logMessage("Error in the date inserted", 3, CLASSNAME);
-                continue;
             }
         }
     }
-    
+
 }

@@ -1,18 +1,16 @@
 package V4.Ingsoft.controller.commands.running;
 
-import V4.Ingsoft.controller.item.luoghi.Luogo;
-import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
-// Removed AssertionControl import as it's already used below
+import V4.Ingsoft.controller.item.luoghi.Luogo;
+import V4.Ingsoft.controller.item.luoghi.TipoVisita;
+import V4.Ingsoft.util.AssertionControl;
+import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
-import V4.Ingsoft.util.AssertionControl; // Ensure import is present
-import V4.Ingsoft.util.Date;
 
 public class RemoveCommand extends AbstractCommand {
 
-    
 
     public RemoveCommand(Controller controller) {
         this.controller = controller;
@@ -20,12 +18,6 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     @Override
-    /**
-     * Implementation of the "remove" command.
-     *
-     * @param options the options (e.g., -c for configurator)
-     * @param args    any additional arguments
-     */
     public void execute(String[] options, String[] args) {
         // Define CLASSNAME for logging context
         final String CLASSNAME = RemoveCommand.class.getSimpleName();
@@ -119,7 +111,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeVolontario(String[] args) {
-        if(!isExecutable())
+        if (!isExecutable())
             return;
 
         // Precondition checks (args valid, isActionDay16) done in execute()
@@ -137,9 +129,9 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeTipoVisita(String[] args) {
-        if(!isExecutable())
+        if (!isExecutable())
             return;
-        
+
         // Precondition checks (args valid, isActionDay16) done in execute()
         final String CLASSNAME = RemoveCommand.class.getSimpleName() + ".removeTipoVisita";
         String typeName = args[0];
@@ -158,9 +150,9 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     private void removeLuogo(String[] args) {
-        if(!isExecutable())
+        if (!isExecutable())
             return;
-        
+
         // Precondition checks (args valid, isActionDay16) done in execute()
         final String CLASSNAME = RemoveCommand.class.getSimpleName() + ".removeLuogo";
         String placeName = args[0];

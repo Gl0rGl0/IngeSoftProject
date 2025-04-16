@@ -7,15 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Simple class to hold application settings that need to be persisted.
  */
-public class AppSettings{
+public class AppSettings {
 
     public static final String PATH = "settings.json"; // Define the settings file path
 
-    private String ambitoTerritoriale = null;
-    private int maxPrenotazioniPerPersona = 1; // Default value if not loaded
-
-    // Default constructor for Jackson deserialization or initial creation
-    public AppSettings() {}
+    private String ambitoTerritoriale;
+    private int maxPrenotazioniPerPersona; // Default value if not loaded
 
     @JsonCreator
     public AppSettings(
@@ -25,6 +22,8 @@ public class AppSettings{
         // Ensure maxPrenotazioni is at least 1
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
     }
+
+    public AppSettings() {}
 
     // --- Getters ---
 
@@ -36,33 +35,9 @@ public class AppSettings{
         return maxPrenotazioniPerPersona;
     }
 
-    @JsonIgnore
-    public boolean isAmbitoSet() {
-        return (ambitoTerritoriale != null) && !ambitoTerritoriale.isBlank();
-    }
-
-    // --- Setters ---
-
-    /**
-     * Sets the ambito territoriale. Can only be set once.
-     * @param ambito The territorial scope string.
-     * @return true if the ambito was set successfully, false if it was already set.
-     */
-    public boolean setAmbitoTerritoriale(String ambito) {
-        if (isAmbitoSet() || ambito == null || ambito.isBlank()) {
-            return false; // Cannot set if already set or invalid input
-        }
-
-        this.ambitoTerritoriale = ambito.trim();
-
-        if(isAmbitoSet())
-            JsonStorage.saveObject(PATH, this);
-
-        return true;
-    }
-
     /**
      * Sets the maximum number of people per booking. Must be at least 1.
+     *
      * @param max The maximum number.
      */
     public void setMaxPrenotazioniPerPersona(int max) {
@@ -70,7 +45,31 @@ public class AppSettings{
         JsonStorage.saveObject(PATH, this);
     }
 
-    public void clear(){
+    // --- Setters ---
+
+    @JsonIgnore
+    public boolean isAmbitoSet() {
+        return (ambitoTerritoriale != null) && !ambitoTerritoriale.isBlank();
+    }
+
+    /**
+     * Sets the ambito territoriale. Can only be set once.
+     *
+     * @param ambito The territorial scope string.
+     */
+    public void setAmbitoTerritoriale(String ambito) {
+        if (isAmbitoSet() || ambito == null || ambito.isBlank()) {
+            return; // Cannot set if already set or invalid input
+        }
+
+        this.ambitoTerritoriale = ambito.trim();
+
+        if (isAmbitoSet())
+            JsonStorage.saveObject(PATH, this);
+
+    }
+
+    public void clear() {
         setAmbitoTerritoriale(null);
         setMaxPrenotazioniPerPersona(1);
     }

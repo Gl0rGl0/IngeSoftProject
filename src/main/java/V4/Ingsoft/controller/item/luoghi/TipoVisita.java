@@ -1,36 +1,35 @@
 package V4.Ingsoft.controller.item.luoghi;
 
-import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-
 import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.model.Deletable;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.DayOfWeekConverter;
 import V4.Ingsoft.util.Time;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class TipoVisita extends Deletable{
+public class TipoVisita extends Deletable {
     public static final String PATH = "tipoVisite";
 
-    private String title;
-    private String description;
-    private String meetingPlace;
-    private Date initDay;
-    private Date finishDay;
-    private Time initTime;
-    private int duration;
-    private boolean free;
-    private int numMinPartecipants;
-    private int numMaxPartecipants;
-    private ArrayList<DayOfWeek> days;
-    private String UID;
+    private final String title;
+    private final String description;
+    private final String meetingPlace;
+    private final Date initDay;
+    private final Date finishDay;
+    private final Time initTime;
+    private final int duration;
+    private final boolean free;
+    private final int numMinPartecipants;
+    private final int numMaxPartecipants;
+    private final ArrayList<DayOfWeek> days;
+    private final String UID;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
@@ -73,6 +72,66 @@ public class TipoVisita extends Deletable{
         this.UID = UID;
     }
 
+    // Should this be split into some function? (?)
+    public TipoVisita(String[] args, Date d) throws Exception {
+        if (args.length < 11)
+            throw new Exception("Error in TipoVisita constructor: Insufficient number of arguments");
+
+        if (args[0].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Title name can't be empty");
+
+        if (args[1].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Description can't be empty");
+
+        if (args[2].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Position can't be empty");
+
+        if (args[3].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Initial day is empty");
+
+        if (args[4].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Last day can't be empty");
+
+        if (args[5].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Starting time can't be empty");
+
+        if (args[6].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Duration can't be empty");
+
+        if (args[7].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Cost is empty");
+
+        if (args[8].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Minumum number of partecipants can't be empty");
+
+        if (args[9].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Maximum number of partecipants day is empty");
+
+        if (args[10].isBlank())
+            throw new Exception("Error in TipoVisita constructor: Day of visit is empty");
+
+        try {
+            this.title = args[0];
+            this.description = args[1];
+            this.meetingPlace = args[2];
+            this.initDay = new Date(args[3]);
+            this.finishDay = new Date(args[4]);
+            this.initTime = new Time(args[5]);
+            this.duration = Integer.parseInt(args[6]);
+            this.free = Boolean.parseBoolean(args[7]);
+            this.numMinPartecipants = Integer.parseInt(args[8]);
+            this.numMaxPartecipants = Integer.parseInt(args[9]);
+            this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
+
+            this.insertionDate = d.clone();
+        } catch (Exception e) {
+            throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
+        }
+
+
+        this.UID = title.hashCode() + "t";
+    }
+
     public String getDaysString() {
         return DayOfWeekConverter.daysToString(days.toArray(new DayOfWeek[0]));
     }
@@ -87,66 +146,6 @@ public class TipoVisita extends Deletable{
 
     public ArrayList<String> getVolontariUIDs() {
         return this.volontariUID;
-    }
-
-    // Should this be split into some function? (?)
-    public TipoVisita(String[] args, Date d) throws Exception {
-        if(args.length < 11)
-        throw new Exception("Error in TipoVisita constructor: Insufficient number of arguments");
-
-        if(args[0].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Title name can't be empty");
-
-        if(args[1].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Description can't be empty");
-
-        if(args[2].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Position can't be empty");
-
-        if(args[3].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Initial day is empty");
-
-        if(args[4].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Last day can't be empty");
-
-        if(args[5].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Starting time can't be empty");
-
-        if(args[6].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Duration can't be empty");
-
-        if(args[7].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Cost is empty");
-
-        if(args[8].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Minumum number of partecipants can't be empty");
-
-        if(args[9].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Maximum number of partecipants day is empty");
-        
-        if(args[10].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Day of visit is empty");
-        
-            try {
-                this.title = args[0];
-                this.description = args[1];
-                this.meetingPlace = args[2];
-                this.initDay = new Date(args[3]);
-                this.finishDay = new Date(args[4]);
-                this.initTime = new Time(args[5]);
-                this.duration = Integer.parseInt(args[6]);
-                this.free = Boolean.parseBoolean(args[7]);
-                this.numMinPartecipants = Integer.parseInt(args[8]);
-                this.numMaxPartecipants = Integer.parseInt(args[9]);
-                this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
-            
-                this.insertionDate = (Date) d.clone();
-            } catch (Exception e) {
-                throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
-            }
-            
-
-        this.UID = title.hashCode() + "t";
     }
 
     public boolean overlaps(TipoVisita other) {
@@ -197,14 +196,6 @@ public class TipoVisita extends Deletable{
         return this.numMaxPartecipants;
     }
 
-    public Date getinsertionDate() {
-        return this.insertionDate;
-    }
-
-    public boolean isName(String other) {
-        return this.title.equalsIgnoreCase(other);
-    }
-
     public boolean addVolontario(String uidVolontario) {
         if (!volontariUID.contains(uidVolontario))
             return this.volontariUID.add(uidVolontario);
@@ -242,11 +233,11 @@ public class TipoVisita extends Deletable{
         return false;
     }
 
-    public void setLuogo(String luogoUID) {
-        this.luogoUID = luogoUID;
-    }
-
     public String getLuogo() {
         return this.luogoUID;
+    }
+
+    public void setLuogo(String luogoUID) {
+        this.luogoUID = luogoUID;
     }
 }

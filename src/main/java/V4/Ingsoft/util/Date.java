@@ -1,18 +1,13 @@
 package V4.Ingsoft.util;
 
-import java.time.DateTimeException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-
+import V4.Ingsoft.controller.Controller;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-import V4.Ingsoft.controller.Controller;
+import java.time.*;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Date implements Cloneable {
@@ -53,8 +48,31 @@ public class Date implements Cloneable {
         if (parts.length > 1) {
             setTime(parts[1].split(":"));
         } else {
-            setTime(new String[] { "00", "00", "00" });
+            setTime(new String[]{"00", "00", "00"});
         }
+    }
+
+    public static boolean monthsDifference(Date d1, Date d2, int n) {
+        Month currentMonth;
+        Month targetMonth;
+
+        if (d1.dayOfTheYear() < d2.dayOfTheYear()) {
+            currentMonth = d1.getMonth();
+            targetMonth = d2.getMonth();
+        } else {
+            targetMonth = d1.getMonth();
+            currentMonth = d2.getMonth();
+        }
+
+        if (d1.getDay() < 16) {
+            return (currentMonth.plus(n).equals(targetMonth));
+        } else {
+            return (currentMonth.plus(n + 1).equals(targetMonth));
+        }
+    }
+
+    public static boolean between(Date initDay, Date date, Date finishDay) {
+        return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
     }
 
     private void setDate(String[] in) throws NumberFormatException, DateTimeException {
@@ -63,12 +81,6 @@ public class Date implements Cloneable {
         int year = Integer.parseInt(in[2]);
 
         this.localDate = LocalDate.of(year, month, day).atStartOfDay();
-    }
-
-    private void setTime(String[] in) throws DateTimeException {
-        int hh = Integer.parseInt(in[0]);
-        int mm = Integer.parseInt(in[1]);
-        localDate = this.localDate.plusHours(hh).plusMinutes(mm);
     }
 
     /**
@@ -97,6 +109,10 @@ public class Date implements Cloneable {
         return this.localDate.getDayOfMonth();
     }
 
+    public void setDay(int i) {
+        this.localDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), i).atStartOfDay();
+    }
+
     public Month getMonth() {
         return this.localDate.getMonth();
     }
@@ -117,31 +133,19 @@ public class Date implements Cloneable {
         return this.localDate.getHour() + ":" + this.localDate.getMinute();
     }
 
+    private void setTime(String[] in) throws DateTimeException {
+        int hh = Integer.parseInt(in[0]);
+        int mm = Integer.parseInt(in[1]);
+        localDate = this.localDate.plusHours(hh).plusMinutes(mm);
+    }
+
     public int getYear() {
         return this.localDate.getYear();
     }
 
-    public static boolean monthsDifference(Date d1, Date d2, int n) {
-        Month currentMonth;
-        Month targetMonth;
-
-        if(d1.dayOfTheYear() < d2.dayOfTheYear()){
-            currentMonth = d1.getMonth();
-            targetMonth = d2.getMonth();
-        } else {
-            targetMonth = d1.getMonth();
-            currentMonth = d2.getMonth();
-        }
-        
-        if (d1.getDay() < 16) {
-            return (currentMonth.plus(n).equals(targetMonth));
-        } else {
-            return (currentMonth.plus(n+1).equals(targetMonth));
-        }
-    }
-
     /**
      * Checks if this date is strictly before another date (ignores time part).
+     *
      * @param other The date to compare against.
      * @return true if this date is before the other date, false otherwise or if other is null.
      */
@@ -154,20 +158,8 @@ public class Date implements Cloneable {
     }
 
     /**
-     * Checks if this date is strictly after another date (ignores time part).
-     * @param other The date to compare against.
-     * @return true if this date is after the other date, false otherwise or if other is null.
-     */
-    public boolean isAfter(Date other) {
-        if (other == null || other.localDate == null) {
-            return false; // Cannot compare with null
-        }
-        // Compare only the date part
-        return this.localDate.toLocalDate().isAfter(other.localDate.toLocalDate());
-    }
-
-    /**
      * Returns a new Date object representing this date minus the specified number of days.
+     *
      * @param days The number of days to subtract.
      * @return A new Date object, or null if the operation fails.
      */
@@ -210,21 +202,17 @@ public class Date implements Cloneable {
      *
      * @return a new Date instance with the same localDate value.
      */
-    @Override
     public Date clone() {
         return new Date(this.localDate);
     }
 
-    public Date addMonth(int n){
+    public Date addMonth(int n) {
         localDate.plusMonths(n);
         return this;
     }
 
-    public static boolean between(Date initDay, Date date, Date finishDay) {
-        return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
-    }
-
-    public void setDay(int i) {
-        this.localDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), i).atStartOfDay();
+    public Date addDay(int n) {
+        localDate.plusDays(n);
+        return this;
     }
 }

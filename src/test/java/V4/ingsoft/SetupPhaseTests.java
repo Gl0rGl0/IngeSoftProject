@@ -1,14 +1,14 @@
 package V4.ingsoft;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 // Tests for Use Cases UC4-UC9 (Setup Phase)
-public class SetupPhaseTests extends BaseTest{
-    
+public class SetupPhaseTests extends BaseTest {
+
 
     // Helper method to perform the initial login and mandatory password change
     // to enter the setup phase for most tests.
@@ -67,19 +67,19 @@ public class SetupPhaseTests extends BaseTest{
         assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set negative value.");
     }
 
-     @Test
-     public void testSetupSetPersoneMaxFailNotANumber() {
-         // Arrange
-         enterSetupPhase();
+    @Test
+    public void testSetupSetPersoneMaxFailNotANumber() {
+        // Arrange
+        enterSetupPhase();
 
-         // Act
-         controller.interpreter("setmax five"); // Correct setup command
+        // Act
+        controller.interpreter("setmax five"); // Correct setup command
 
-         // Assert
-         // Assuming non-number is invalid, should remain default (1) or previous value (5).
-         // Let's assume default 1 for this test.
-         assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set non-number.");
-     }
+        // Assert
+        // Assuming non-number is invalid, should remain default (1) or previous value (5).
+        // Let's assume default 1 for this test.
+        assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set non-number.");
+    }
 
     // UC7 - Aggiunta Luogo (Setup)
     @Test
@@ -96,19 +96,19 @@ public class SetupPhaseTests extends BaseTest{
         // Could also check coordinates if GPS class has getters/equals
     }
 
-     @Test
-     public void testSetupAddLuogoSuccessAddress() {
-         // Arrange
-         enterSetupPhase();
+    @Test
+    public void testSetupAddLuogoSuccessAddress() {
+        // Arrange
+        enterSetupPhase();
 
-         // Act
-         controller.interpreter("add -L Place2 \"Address based location\" \"123 Main St, City\""); // Correct setup command (assuming GPS string can be address)
+        // Act
+        controller.interpreter("add -L Place2 \"Address based location\" \"123 Main St, City\""); // Correct setup command (assuming GPS string can be address)
 
-         // Assert
-         assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place2"), "Place2 should exist after adding with address.");
-         assertEquals("Address based location", controller.db.dbLuoghiHelper.findLuogo("Place2").getDescription());
-         // Could check GPS object if it stores the address string
-     }
+        // Assert
+        assertNotNull(controller.db.dbLuoghiHelper.findLuogo("Place2"), "Place2 should exist after adding with address.");
+        assertEquals("Address based location", controller.db.dbLuoghiHelper.findLuogo("Place2").getDescription());
+        // Could check GPS object if it stores the address string
+    }
 
     @Test
     public void testSetupAddLuogoFailDuplicateTitle() {
@@ -147,10 +147,10 @@ public class SetupPhaseTests extends BaseTest{
         enterSetupPhase();
         controller.interpreter("setmax 5");
         controller.interpreter("add -L Place1 \"Desc\" 10.0,20.0");
-        
+
         // Act
         controller.interpreter("done"); // Correct setup command
-        
+
         // Assert
         assertTrue(controller.setupCompleted(), "Setup should be marked as complete after 'done'.");
     }

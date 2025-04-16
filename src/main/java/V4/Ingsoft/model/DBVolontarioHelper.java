@@ -18,9 +18,10 @@ public class DBVolontarioHelper extends DBAbstractPersonaHelper<Volontario> {
     }
 
     public void checkVolunteers(Date d) {
-        for (Volontario v : getPersonList()) {
-            v.checkStatus(d);
-        }
+        getPersonList().forEach(v -> v.checkStatus(d));
     }
 
+    public void resetAllAvailability() {
+        getPersonList().forEach(Volontario::clearAvailability);
+    }
 }

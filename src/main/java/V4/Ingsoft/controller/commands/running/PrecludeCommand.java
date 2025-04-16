@@ -8,7 +8,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class PrecludeCommand extends AbstractCommand {
 
-    
 
     public PrecludeCommand(Controller controller) {
         this.controller = controller;
@@ -40,20 +39,17 @@ public class PrecludeCommand extends AbstractCommand {
 
         char option = options[0].charAt(0);
         switch (option) {
-            case 'a' ->
-                addPrecludedDate(d);
-            case 'r' ->
-                removePrecludedDate(d);
-            default ->
-                ViewSE.println("Option not recognized for 'preclude'.");
+            case 'a' -> addPrecludedDate(d);
+            case 'r' -> removePrecludedDate(d);
+            default -> ViewSE.println("Option not recognized for 'preclude'.");
         }
     }
 
     private void addPrecludedDate(Date d) {
         ViewSE.println("Executing: Adding precluded date");
-        if(controller.db.dbDatesHelper.addPrecludedDate(d)){
+        if (controller.db.dbDatesHelper.addPrecludedDate(d)) {
             AssertionControl.logMessage("Added correctly precluded date: " + d, 3, CLASSNAME);
-        }else{
+        } else {
             AssertionControl.logMessage("Error while adding precluded date", 3, CLASSNAME);
         }
     }

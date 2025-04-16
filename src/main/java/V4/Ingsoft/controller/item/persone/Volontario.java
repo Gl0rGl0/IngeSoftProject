@@ -1,23 +1,47 @@
 package V4.Ingsoft.controller.item.persone;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import V4.Ingsoft.controller.item.StatusItem;
-import V4.Ingsoft.model.Deletable;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Volontario extends Persona{
+import java.util.ArrayList;
+
+public class Volontario extends Persona {
+    public static final String PATH = "volontari";
 
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
-    private StatusItem sp = StatusItem.PENDING_ADD;
-    
+    private boolean[] availability = new boolean[31];
+
+    @JsonCreator
+    public Volontario(
+            @JsonProperty("username") String username,
+            @JsonProperty("psw") String psw,
+            @JsonProperty("new") boolean isNew,
+            @JsonProperty("visite") ArrayList<String> visite,
+            @JsonProperty("disponibilita") boolean[] disponibilita,
+            @JsonProperty("status") StatusItem status,
+            @JsonProperty("insertionDate") Date insertionDate,
+            @JsonProperty("deletionDate") Date deletionDate) throws Exception {
+        this(username, psw, isNew, false);
+        this.visiteUIDs = visite;
+        if (disponibilita != null)
+            this.availability = disponibilita;
+        this.si = status;
+        this.insertionDate = insertionDate;
+        this.deletionDate = deletionDate;
+    }
+
+    private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
+        super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
+    }
+
+    public Volontario(String[] a, Date d) throws Exception {
+        this(a[0], a[1], true, true);
+        this.insertionDate = d;
+    }
 
     public boolean addTipoVisita(String uidTipoVisita) {
         if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
@@ -32,39 +56,6 @@ public class Volontario extends Persona{
 
     public ArrayList<String> getTipiVisiteUIDs() {
         return this.UIDvisitePresentabili;
-    }
-
-
-    public static final String PATH = "volontari";
-
-    public boolean[] availability = new boolean[31];
-
-    @JsonCreator
-    public Volontario(
-            @JsonProperty("username") String username,
-            @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean isNew,
-            @JsonProperty("visite") ArrayList<String> visite,
-            @JsonProperty("disponibilita") boolean[] disponibilita,
-            @JsonProperty("status") StatusItem status,
-            @JsonProperty("insertionDate") Date insertionDate,
-            @JsonProperty("deletionDate") Date deletionDate ) throws Exception {
-        this(username, psw, isNew, false);
-        this.visiteUIDs = visite;
-        if (disponibilita != null)
-            this.availability = disponibilita;
-        this.si = status;
-        this.insertionDate = insertionDate;
-        this.deletionDate = deletionDate;
-    }
-
-    private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
-        super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
-    }
-
-    public Volontario(String[] a, Date d) throws Exception{
-        this(a[0], a[1], true, true);
-        this.insertionDate = d;
     }
 
     /**
@@ -85,34 +76,27 @@ public class Volontario extends Persona{
         }
 
         availability[disp.getDay() - 1] = toAdd;
-        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd,3, "Volontario.setAvailability");
+        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd, 3, "Volontario.setAvailability");
     }
 
     public void clearAvailability() {
         availability = new boolean[31];
     }
 
-    /**
-     * Metodo per stampare le disponibilità per il debug.
-     */
-    public String getAvailabilityString() {
-        return (Arrays.toString(availability));
-    }
-
     public boolean[] getAvailability() {
         return availability;
     }
 
-    public int getNAvailability(){
+    public int getNAvailability() {
         int n = 0;
         for (boolean b : getAvailability()) {
-            if(b)
+            if (b)
                 n++;
         }
         return n;
     }
 
     public boolean isAvailabile(int day) {
-        return availability[day-1];
+        return availability[day - 1];
     }
 }

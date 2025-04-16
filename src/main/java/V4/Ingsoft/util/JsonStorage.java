@@ -1,10 +1,9 @@
 package V4.Ingsoft.util;
 
+import V4.Ingsoft.view.ViewSE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import V4.Ingsoft.view.ViewSE;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,15 +58,13 @@ public class JsonStorage {
         }
     }
 
-    synchronized public static <T> boolean clearList(String fileName) {
+    synchronized public static <T> void clearList(String fileName) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(BASE_PATH + fileName + ".json"), new ArrayList<T>());
-            return true;
         } catch (IOException e) {
             AssertionControl.logMessage("Error clearing JSON file", 1, "JsonStorage");
             ViewSE.println("Error clearing JSON file: " + e.getMessage());
-            return false;
         }
     }
 

@@ -7,7 +7,7 @@ import V4.Ingsoft.util.Date;
 import V4.Ingsoft.view.ViewSE;
 
 public class TimeCommand extends AbstractCommand {
-     // Made final
+    // Made final
     private static final String CLASSNAME = TimeCommand.class.getSimpleName(); // Added for logging
 
     public TimeCommand(Controller controller) {
@@ -22,19 +22,19 @@ public class TimeCommand extends AbstractCommand {
             System.err.println("FATAL: Controller is null in TimeCommand");
             return;
         }
-         if (options == null || args == null) {
-             AssertionControl.logMessage("Options or args array is null in TimeCommand.execute", 1, CLASSNAME);
-             ViewSE.println("Internal error: Invalid command structure.");
-             return;
-         }
+        if (options == null || args == null) {
+            AssertionControl.logMessage("Options or args array is null in TimeCommand.execute", 1, CLASSNAME);
+            ViewSE.println("Internal error: Invalid command structure.");
+            return;
+        }
 
         // Case 1: No options, no args -> Print current date
         if (options.length == 0 && args.length == 0) {
             if (controller.date != null) {
                 ViewSE.println("Current date: " + controller.date);
             } else {
-                 AssertionControl.logMessage("Controller date is null when trying to display time.", 1, CLASSNAME);
-                 ViewSE.println("Error: Current date not available.");
+                AssertionControl.logMessage("Controller date is null when trying to display time.", 1, CLASSNAME);
+                ViewSE.println("Error: Current date not available.");
             }
             return;
         }
@@ -45,9 +45,9 @@ public class TimeCommand extends AbstractCommand {
             switch (option) {
                 case "s": // Set date - requires 1 arg
                     if (args.length < 1 || args[0] == null || args[0].trim().isEmpty()) {
-                         AssertionControl.logMessage("Missing date argument for 'time -s'.", 2, CLASSNAME);
-                         ViewSE.println("Usage: time -s <dd/mm/yyyy>");
-                         return;
+                        AssertionControl.logMessage("Missing date argument for 'time -s'.", 2, CLASSNAME);
+                        ViewSE.println("Usage: time -s <dd/mm/yyyy>");
+                        return;
                     }
                     setDate(args[0]);
                     break;
@@ -55,9 +55,9 @@ public class TimeCommand extends AbstractCommand {
                 case "m": // Jump months - requires 1 arg
                 case "a": // Jump years - requires 1 arg
                     if (args.length < 1 || args[0] == null || args[0].trim().isEmpty()) {
-                         AssertionControl.logMessage("Missing number argument for 'time -" + option + "'.", 2, CLASSNAME);
-                         ViewSE.println("Usage: time -" + option + " <number>");
-                         return;
+                        AssertionControl.logMessage("Missing number argument for 'time -" + option + "'.", 2, CLASSNAME);
+                        ViewSE.println("Usage: time -" + option + " <number>");
+                        return;
                     }
                     int multiplier = switch (option) {
                         case "d" -> 1;
@@ -68,30 +68,30 @@ public class TimeCommand extends AbstractCommand {
                     jumpDays(args[0], multiplier);
                     break;
                 case "n": // Add precluded date - requires 1 arg
-                     if (args.length < 1 || args[0] == null || args[0].trim().isEmpty()) {
-                         AssertionControl.logMessage("Missing date argument for 'time -n'.", 2, CLASSNAME);
-                         ViewSE.println("Usage: time -n <dd/mm/yyyy>");
-                         return;
-                     }
+                    if (args.length < 1 || args[0] == null || args[0].trim().isEmpty()) {
+                        AssertionControl.logMessage("Missing date argument for 'time -n'.", 2, CLASSNAME);
+                        ViewSE.println("Usage: time -n <dd/mm/yyyy>");
+                        return;
+                    }
                     addPrecluded(args[0]); // Pass only the date string
                     break;
                 case "l": // List precluded dates - requires 0 args
                     if (args.length > 0) {
-                         AssertionControl.logMessage("Unexpected arguments provided for 'time -l'.", 2, CLASSNAME);
-                         ViewSE.println("Usage: time -l (no arguments needed)");
-                         // Proceed to list anyway
+                        AssertionControl.logMessage("Unexpected arguments provided for 'time -l'.", 2, CLASSNAME);
+                        ViewSE.println("Usage: time -l (no arguments needed)");
+                        // Proceed to list anyway
                     }
                     listPrecluded();
                     break;
                 default:
-                     AssertionControl.logMessage("Unrecognized option for 'time': " + option, 2, CLASSNAME);
-                     ViewSE.println("Option '-" + option + "' not recognized for the 'time' command.");
-                     break;
+                    AssertionControl.logMessage("Unrecognized option for 'time': " + option, 2, CLASSNAME);
+                    ViewSE.println("Option '-" + option + "' not recognized for the 'time' command.");
+                    break;
             }
         } else {
             // Handle cases like option present but empty, or args present without option
-             AssertionControl.logMessage("Invalid combination of options/arguments for 'time'.", 2, CLASSNAME);
-             ViewSE.println("Incorrect usage of the 'time' command. Use 'time' to view, or 'time -<option> [args]'.");
+            AssertionControl.logMessage("Invalid combination of options/arguments for 'time'.", 2, CLASSNAME);
+            ViewSE.println("Incorrect usage of the 'time' command. Use 'time' to view, or 'time -<option> [args]'.");
         }
     }
 
@@ -103,11 +103,11 @@ public class TimeCommand extends AbstractCommand {
         try {
             toSet = new Date(dateStr); // Constructor handles parsing
             if (controller.date == null) { // Initialize if null
-                 controller.date = toSet;
-                 AssertionControl.logMessage("Controller date initialized to: " + toSet, 4, SUB_CLASSNAME);
+                controller.date = toSet;
+                AssertionControl.logMessage("Controller date initialized to: " + toSet, 4, SUB_CLASSNAME);
             } else {
-                 controller.date.localDate = toSet.localDate; // Update existing date object
-                 AssertionControl.logMessage("Date set to: " + toSet, 4, SUB_CLASSNAME);
+                controller.date.localDate = toSet.localDate; // Update existing date object
+                AssertionControl.logMessage("Date set to: " + toSet, 4, SUB_CLASSNAME);
             }
             ViewSE.println("Date set to: " + controller.date);
             controller.dailyAction(); // Trigger daily updates after setting date
@@ -124,7 +124,7 @@ public class TimeCommand extends AbstractCommand {
         try {
             daysToJump = Integer.parseInt(daysStr);
         } catch (NumberFormatException e) {
-             AssertionControl.logMessage("Invalid number format for jumping days: " + daysStr, 2, SUB_CLASSNAME);
+            AssertionControl.logMessage("Invalid number format for jumping days: " + daysStr, 2, SUB_CLASSNAME);
             ViewSE.println("Error: Invalid number '" + daysStr + "'. Please enter an integer.");
             return;
         }
@@ -132,75 +132,73 @@ public class TimeCommand extends AbstractCommand {
         int g = daysToJump * mult;
 
         if (controller.date == null) {
-             AssertionControl.logMessage("Cannot jump days, current date is null.", 1, SUB_CLASSNAME);
-             ViewSE.println("Error: Current date not set.");
-             return;
+            AssertionControl.logMessage("Cannot jump days, current date is null.", 1, SUB_CLASSNAME);
+            ViewSE.println("Error: Current date not set.");
+            return;
         }
 
         // Perform the update
         controller.date.update(g); // Assuming update handles the logic correctly
 
         // Trigger daily actions for each day skipped if moving forward
+        Date today = controller.date;
         if (g > 0) {
-            for (int i = 0; i < g; ++i) {
-                // Need a way to get the date for each intermediate day if dailyAction depends on it
-                // For now, just call dailyAction 'g' times with the final date? Or call it once?
-                // Calling once seems safer based on current structure.
-            }
-             controller.dailyAction(); // Call once after the jump
-             ViewSE.println("Successfully skipped forward " + g + " days. Current date: " + controller.date);
-             AssertionControl.logMessage("Jumped forward " + g + " days. New date: " + controller.date, 4, SUB_CLASSNAME);
+            int i = 0;
+            while (i < g)
+                setDate(today.addDay(i++).toString());
+            ViewSE.println("Successfully skipped forward " + g + " days. Current date: " + controller.date);
+            AssertionControl.logMessage("Jumped forward " + g + " days. New date: " + controller.date, 4, SUB_CLASSNAME);
         } else if (g < 0) {
-             // Don't trigger daily actions when going back in time
-             ViewSE.println("Successfully went back " + (-g) + " days. Current date: " + controller.date);
-             AssertionControl.logMessage("Jumped backward " + (-g) + " days. New date: " + controller.date, 4, SUB_CLASSNAME);
+            // Don't trigger daily actions when going back in time
+            ViewSE.println("Successfully went back " + (-g) + " days. Current date: " + controller.date);
+            AssertionControl.logMessage("Jumped backward " + (-g) + " days. New date: " + controller.date, 4, SUB_CLASSNAME);
         } else {
-             ViewSE.println("No days skipped. Current date: " + controller.date);
-             AssertionControl.logMessage("Attempted to jump 0 days.", 4, SUB_CLASSNAME);
+            ViewSE.println("No days skipped. Current date: " + controller.date);
+            AssertionControl.logMessage("Attempted to jump 0 days.", 4, SUB_CLASSNAME);
         }
     }
 
-    private void addPrecluded(String dateStr){
+    private void addPrecluded(String dateStr) {
         final String SUB_CLASSNAME = CLASSNAME + ".addPrecluded";
         Date d;
         try {
             d = new Date(dateStr);
-            if (controller.db != null && controller.db.dbDatesHelper != null) {
-                 boolean added = controller.db.dbDatesHelper.addPrecludedDate(d); // Assuming returns boolean
-                 if (added) {
-                     ViewSE.println("Date " + d + " added to precluded dates.");
-                     AssertionControl.logMessage("Added precluded date: " + d, 4, SUB_CLASSNAME);
-                 } else {
-                     ViewSE.println("Date " + d + " was already precluded or could not be added.");
-                     AssertionControl.logMessage("Failed to add precluded date (already exists?): " + d, 3, SUB_CLASSNAME);
-                 }
+            if (controller.db != null) {
+                boolean added = controller.db.dbDatesHelper.addPrecludedDate(d); // Assuming returns boolean
+                if (added) {
+                    ViewSE.println("Date " + d + " added to precluded dates.");
+                    AssertionControl.logMessage("Added precluded date: " + d, 4, SUB_CLASSNAME);
+                } else {
+                    ViewSE.println("Date " + d + " was already precluded or could not be added.");
+                    AssertionControl.logMessage("Failed to add precluded date (already exists?): " + d, 3, SUB_CLASSNAME);
+                }
             } else {
-                 AssertionControl.logMessage("DB or DBDatesHelper is null when adding precluded date.", 1, SUB_CLASSNAME);
-                 ViewSE.println("Internal error: Cannot access date storage.");
+                AssertionControl.logMessage("DB or DBDatesHelper is null when adding precluded date.", 1, SUB_CLASSNAME);
+                ViewSE.println("Internal error: Cannot access date storage.");
             }
         } catch (Exception e) {
-             AssertionControl.logMessage("Error parsing date string '" + dateStr + "' for preclusion: " + e.getMessage(), 2, SUB_CLASSNAME);
-             ViewSE.println("Error: Invalid date format. Please use dd/mm/yyyy.");
+            AssertionControl.logMessage("Error parsing date string '" + dateStr + "' for preclusion: " + e.getMessage(), 2, SUB_CLASSNAME);
+            ViewSE.println("Error: Invalid date format. Please use dd/mm/yyyy.");
         }
     }
 
     private void listPrecluded() {
         final String SUB_CLASSNAME = CLASSNAME + ".listPrecluded";
-        if (controller.db != null && controller.db.dbDatesHelper != null) {
-             ViewSE.println("Precluded Dates:");
-             // Assuming getPrecludedDates returns a List or similar collection
-             var precludedDates = controller.db.dbDatesHelper.getPrecludedDates();
-             if (precludedDates == null || precludedDates.isEmpty()) {
-                 ViewSE.println("  (None)");
-             } else {
-                 for (Date pd : precludedDates) {
-                     ViewSE.println("  " + pd);
-                 }
-             }
-             AssertionControl.logMessage("Listed precluded dates.", 4, SUB_CLASSNAME);
+        if (controller.db != null) {
+            ViewSE.println("Precluded Dates:");
+            // Assuming getPrecludedDates returns a List or similar collection
+            var precludedDates = controller.db.dbDatesHelper.getPrecludedDates();
+            if (precludedDates == null || precludedDates.isEmpty()) {
+                ViewSE.println("  (None)");
+            } else {
+                for (Date pd : precludedDates) {
+                    ViewSE.println("  " + pd);
+                }
+            }
+            AssertionControl.logMessage("Listed precluded dates.", 4, SUB_CLASSNAME);
         } else {
-             AssertionControl.logMessage("DB or DBDatesHelper is null when listing precluded dates.", 1, SUB_CLASSNAME);
-             ViewSE.println("Internal error: Cannot access date storage.");
+            AssertionControl.logMessage("DB or DBDatesHelper is null when listing precluded dates.", 1, SUB_CLASSNAME);
+            ViewSE.println("Internal error: Cannot access date storage.");
         }
     }
 }

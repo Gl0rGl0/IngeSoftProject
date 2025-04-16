@@ -16,7 +16,7 @@ public class Configuratore extends Persona {
         super(username, psw, PersonaType.CONFIGURATORE, isNew, hash);
     }
 
-    public Configuratore(String[] a) throws Exception{
+    public Configuratore(String[] a) throws Exception {
         this(a[0], a[1], true, true);
     }
 }

@@ -11,7 +11,6 @@ import V4.Ingsoft.view.ViewSE;
 
 public class LoginCommandSETUP extends AbstractCommand {
 
-    
 
     public LoginCommandSETUP(Controller controller) {
         this.controller = controller;
@@ -32,10 +31,10 @@ public class LoginCommandSETUP extends AbstractCommand {
         Payload toUse = login(args[0], args[1]);
         controller.user = ((Persona) toUse.getData()).getUsername();
 
-        if(toUse.getStatus() == Status.ERROR){
-            loginError(toUse, args);
-        }else{
-            loginSuccess(toUse, args);
+        if (toUse.getStatus() == Status.ERROR) {
+            loginError(toUse);
+        } else {
+            loginSuccess();
         }
 
     }
@@ -44,22 +43,21 @@ public class LoginCommandSETUP extends AbstractCommand {
         return controller.db.login(username, psw);
     }
 
-    private void loginError(Payload toUse, String[] args){
+    private void loginError(Payload toUse) {
         Persona p = (Persona) toUse.getData();
-        if(p.getType() != PersonaType.GUEST){
+        if (p.getType() != PersonaType.GUEST) {
             ViewSE.println("Wrong password, please try again");
             AssertionControl.logMessage("Error password " + p.getUsername(), 3, CLASSNAME);
-        }else{
+        } else {
             ViewSE.println("This Configuratore doesn't exist, please try again");
             AssertionControl.logMessage("No configuratore exist " + p.getUsername(), 3, CLASSNAME);
         }
     }
 
-    private void loginSuccess(Payload toUse, String[] args){
+    private void loginSuccess() {
         ViewSE.println("[SETUP] Login successful (" + controller.getCurrentUser().getType() + ")");
         if (controller.getCurrentUser().isNew()) {
-            ViewSE.println(
-                    "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
+            ViewSE.println("First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
         }
     }
 }
