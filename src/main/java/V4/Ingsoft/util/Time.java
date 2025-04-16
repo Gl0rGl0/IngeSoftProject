@@ -26,7 +26,7 @@ public class Time {
     public String toString() {
         return String.format("%d:%d", hh, mm);
     }
-    
+
 
     public int getMinutes() {
         return this.hh * 60 + this.mm;

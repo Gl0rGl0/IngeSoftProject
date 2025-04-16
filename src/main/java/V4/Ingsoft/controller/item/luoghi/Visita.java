@@ -18,10 +18,10 @@ public class Visita {
     public static final String PATH = "archivio-visite";
     @JsonIgnore
     private final ArrayList<Iscrizione> fruitori = new ArrayList<>();
-    @JsonIgnore
-    private TipoVisita tipo;
     private final Date date;
     private final String UID;
+    @JsonIgnore
+    private TipoVisita tipo;
     @JsonIgnore
     private String volontarioUID;
     private StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant

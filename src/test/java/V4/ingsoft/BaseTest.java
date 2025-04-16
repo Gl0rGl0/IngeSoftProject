@@ -13,12 +13,12 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseTest {
-    protected Controller controller;
     private final String configPath = "data/configuratori.json";
     private final String volontariPath = "data/volontari.json";
     private final String fruitoriPath = "data/fruitori.json";
     private final String luoghiPath = "data/luoghi.json";
     private final String tipiVisitaPath = "data/tipoVisite.json";
+    protected Controller controller;
 
     // Helper to reset data files before each test
     protected void resetDataFiles() {

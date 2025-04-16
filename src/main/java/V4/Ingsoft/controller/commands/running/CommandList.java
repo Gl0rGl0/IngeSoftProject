@@ -75,6 +75,7 @@ public enum CommandList implements ListInterface {
     private final String lineInfo;
     private final int minRequiredPermission; // minimum required level
     private final int maxRequiredPermission; // maximum required level
+
     CommandList(String message, String lineInfo, int minRequiredPermission, int maxRequiredPermission) {
         this.message = message;
         this.lineInfo = lineInfo;

@@ -30,7 +30,7 @@ public class MyVisitCommand extends AbstractCommand {
     private void listVolontari() {
         String uidCV = controller.getCurrentUser().getUsername();
 
-        if(uidCV == null)
+        if (uidCV == null)
             return;
 
         StringBuilder out = new StringBuilder();
@@ -47,20 +47,20 @@ public class MyVisitCommand extends AbstractCommand {
     private void listFruitore() {
         String userF = controller.getCurrentUser().getUsername();
 
-        if(userF == null)
+        if (userF == null)
             return;
 
         Fruitore f = controller.getDB().dbFruitoreHelper.getPersona(userF);
-        if(f == null)
+        if (f == null)
             return;
 
         StringBuilder out = new StringBuilder();
 
         out.append("List of visits you are registered for: ");
         Visita v;
-        for(String vUid : f.getVisiteUIDs()){
+        for (String vUid : f.getVisiteUIDs()) {
             v = controller.db.dbVisiteHelper.getVisitaByUID(vUid);
-            if(v == null)
+            if (v == null)
                 continue;
             out.append(v).append("\n");
         }

@@ -23,33 +23,13 @@ public class AppSettings {
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
     }
 
-    public AppSettings() {}
+    public AppSettings() {
+    }
 
     // --- Getters ---
 
     public String getAmbitoTerritoriale() {
         return ambitoTerritoriale;
-    }
-
-    public int getMaxPrenotazioniPerPersona() {
-        return maxPrenotazioniPerPersona;
-    }
-
-    /**
-     * Sets the maximum number of people per booking. Must be at least 1.
-     *
-     * @param max The maximum number.
-     */
-    public void setMaxPrenotazioniPerPersona(int max) {
-        this.maxPrenotazioniPerPersona = Math.max(1, max);
-        JsonStorage.saveObject(PATH, this);
-    }
-
-    // --- Setters ---
-
-    @JsonIgnore
-    public boolean isAmbitoSet() {
-        return (ambitoTerritoriale != null) && !ambitoTerritoriale.isBlank();
     }
 
     /**
@@ -67,6 +47,27 @@ public class AppSettings {
         if (isAmbitoSet())
             JsonStorage.saveObject(PATH, this);
 
+    }
+
+    public int getMaxPrenotazioniPerPersona() {
+        return maxPrenotazioniPerPersona;
+    }
+
+    // --- Setters ---
+
+    /**
+     * Sets the maximum number of people per booking. Must be at least 1.
+     *
+     * @param max The maximum number.
+     */
+    public void setMaxPrenotazioniPerPersona(int max) {
+        this.maxPrenotazioniPerPersona = Math.max(1, max);
+        JsonStorage.saveObject(PATH, this);
+    }
+
+    @JsonIgnore
+    public boolean isAmbitoSet() {
+        return (ambitoTerritoriale != null) && !ambitoTerritoriale.isBlank();
     }
 
     public void clear() {

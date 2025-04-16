@@ -5,7 +5,6 @@ import V4.Ingsoft.view.ViewSE;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Scanner;
 
 public class AssertionControl {
 

@@ -5,6 +5,7 @@ public class Payload {
 
     private Status status;
     private Object data;
+
     public Payload(Status status, Object data) {
         this.status = status;
         this.data = data;

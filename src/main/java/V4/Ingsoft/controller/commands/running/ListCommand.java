@@ -109,9 +109,9 @@ public class ListCommand extends AbstractCommand {
 
     private void printAllTipi() {
         String sb = "Proposed visits:\n" + getVisiteProposte() +
-                    "Completed visits:\n" + getVisiteComplete() +
-                    "Cancelled visits:\n" + getVisiteCancellate() +
-                    "Performed visits:\n" + getVisiteEffettuate();
+                "Completed visits:\n" + getVisiteComplete() +
+                "Cancelled visits:\n" + getVisiteCancellate() +
+                "Performed visits:\n" + getVisiteEffettuate();
         ViewSE.println(sb);
     }
 
