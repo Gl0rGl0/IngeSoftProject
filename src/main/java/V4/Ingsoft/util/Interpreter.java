@@ -101,7 +101,6 @@ public abstract class Interpreter {
             if(c instanceof DoneCommandSETUP){
                 continue;
             }
-            System.out.println(c.getClass().getSimpleName() + "" + c.hasBeenExecuted());
             out &= c.hasBeenExecuted();
             if (!out)
                 return out;
@@ -109,6 +108,7 @@ public abstract class Interpreter {
         return out; // Just one false is enough to return false as the result
     }
 
+    //not used
     public void printHaveAllBeenExecuted() {
         for (Command c : commandRegistry.values()) {
             System.out.println(c.toString() + " " + c.hasBeenExecuted());

@@ -324,7 +324,7 @@ public class Model {
      */
     public void updateDailyStatuses(Date d) {
         // Check visits nearing confirmation/cancellation deadlines or completion
-        dbVisiteHelper.checkVisiteInTerminazione(d);
+        dbVisiteHelper.checkVisite(d);
         // Check pending visit types to see if they should become active
         dbTipoVisiteHelper.checkTipoVisite(d);
         // Check statuses of Volunteer

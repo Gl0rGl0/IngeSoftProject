@@ -27,7 +27,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     protected boolean isExecutable(){
-        if(!controller.isActionDay16 && controller.doneAll()){
+        if(controller.isActionDay16 || !controller.doneAll()){
             return true;
         }else{
             AssertionControl.logMessage(ERROR_16, 3, CLASSNAME);

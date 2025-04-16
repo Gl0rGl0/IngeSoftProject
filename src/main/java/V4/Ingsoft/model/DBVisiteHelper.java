@@ -176,8 +176,8 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * and completion/removal after the visit date.
      * @param d The current simulated date.
      */
-    public void checkVisiteInTerminazione(Date d) {
-        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".checkVisiteInTerminazione";
+    public void checkVisite(Date d) {
+        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".checkVisite";
         if (d == null) {
             AssertionControl.logMessage("Current date 'd' cannot be null.", 2, CLASSNAME);
             return;

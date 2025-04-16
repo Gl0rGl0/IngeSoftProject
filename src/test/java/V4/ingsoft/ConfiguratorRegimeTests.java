@@ -244,7 +244,6 @@ public class ConfiguratorRegimeTests extends BaseTest{
         // Act
         // NOTE: Assuming this 'add -T' format is correct for the running phase command.
         controller.interpreter("add -T TVRegime2 Description2 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma");
-        System.out.println("\n\n\n\n");
 
         // Assert
         assertNotNull(controller.db.dbTipoVisiteHelper.findTipoVisita("TVRegime2"), "New type should exist in DB.");

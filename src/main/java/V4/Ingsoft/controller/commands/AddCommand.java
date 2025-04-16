@@ -141,15 +141,8 @@ public class AddCommand extends AbstractCommand {
         }
 
         // Check time restriction
-        if (!controller.isActionDay16 && controller.doneAll()) {
-            AssertionControl.logMessage(
-                    currentUser
-                            + "| Cannot add a visit type if it's not the 16th of the month: " + (a.length > 0 ? a[0] : "N/A"),
-                    1, // High severity for violating time constraint
-                    SUB_CLASSNAME);
-            ViewSE.println("Error: Adding visit types is only allowed on the designated action day (e.g., 16th).");
+        if(!isExecutable())
             return;
-        }
 
         // Check argument count (TipoVisita constructor expects 11 specific args)
         if (a.length < 11) {

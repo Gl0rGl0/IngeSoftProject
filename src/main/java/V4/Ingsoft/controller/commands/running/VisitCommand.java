@@ -214,6 +214,7 @@ public class VisitCommand extends AbstractCommand {
             AssertionControl.logMessage("Attempted to remove booking from visit with status " + currentStatus + " (UID: " + v.getUID() + ")", 2, SUB_CLASSNAME);
             return;
         }
+        
         if (!isBookingOpen(v, SUB_CLASSNAME))
             return;
 

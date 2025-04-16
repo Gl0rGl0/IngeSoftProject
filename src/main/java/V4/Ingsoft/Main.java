@@ -40,9 +40,10 @@ public class Main {
     public static void init(Controller controller) {
         controller.interpreter("login ADMIN PASSWORD");
 
-        Initer.setupPhase(controller);
+        //Initer.setupPhase(controller);
         Initer.initPersone(controller);
         Initer.initVisiteLuoghi(controller);
+        controller.interpreter("done");
         Initer.initAvailability(controller);
 
         controller.interpreter("logout");

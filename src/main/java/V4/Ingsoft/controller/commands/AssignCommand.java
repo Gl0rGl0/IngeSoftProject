@@ -39,24 +39,9 @@ public class AssignCommand extends AbstractCommand {
         }
 
         switch (options[0]) {
-            case "V" -> {
-                if (controller.isActionDay16)
-                    assignVolontario(arg[0], arg[1]);
-                else {
-                    ViewSE.error("Action only possible on the 16th of the month!");
-                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASSNAME);
-                }
-            }
-            case "L" -> {
-                if (controller.isActionDay16)
-                    assignVisita(arg[0], arg[1]);
-                else{
-                    ViewSE.error("Action only possible on the 16th of the month!");
-                    AssertionControl.logMessage("Action only possible on the 16th of the month!", 3, CLASSNAME);
-                }
-            }
-            default ->
-                ViewSE.error("Error using the 'assign' command"); // Cannot reach here
+            case "V" -> assignVolontario(arg[0], arg[1]);
+            case "L" -> assignVisita(arg[0], arg[1]);
+            default -> ViewSE.error("Error using the 'assign' command"); // Cannot reach here
         }
     }
 
@@ -75,6 +60,9 @@ public class AssignCommand extends AbstractCommand {
             AssertionControl.logMessage("No type found with that title.", 3, CLASSNAME);
             return;
         }
+
+        if(!isExecutable())
+            return;
 
         if(!v.addTipoVisita(vToAssign.getUID())){
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type, 2, CLASSNAME);
@@ -115,6 +103,9 @@ public class AssignCommand extends AbstractCommand {
             ViewSE.println("No visit found with that title.");
             return;
         }
+
+        if(!isExecutable())
+            return;
 
         StatusItem sl = luogo.getStatus();
         if(sl == StatusItem.PENDING_ADD || sl == StatusItem.DISABLED){

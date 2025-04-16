@@ -78,7 +78,7 @@ public class Initer {
     }
 
     public static void initAvailability(Controller c) {
-        Month meseNum = c.date.getMonth().plus(1);
+        Month meseNum = c.date.getMonth().plus(2);
 
         if (c.date.getDay() > 16)
             meseNum.plus(1);

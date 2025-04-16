@@ -19,9 +19,14 @@ public class JsonStorage {
     static {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // if (!new File(BASE_PATH).exists()) {
+        //     BASE_PATH = System.getProperty("java.io.tmpdir") + "/ingesoft/";
+        //     ViewSE.println("'data/' folder not available. Using " + BASE_PATH + " for saving.");
+        //     new File(BASE_PATH).mkdirs();
+        // }
+        // bello ma non balla
+
         if (!new File(BASE_PATH).exists()) {
-            BASE_PATH = "/tmp/ingesoft/";
-            ViewSE.println("'data/' folder not available. Using /tmp/ for saving.");
             new File(BASE_PATH).mkdirs();
         }
     }
