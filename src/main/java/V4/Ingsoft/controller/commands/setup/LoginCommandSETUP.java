@@ -40,7 +40,7 @@ public class LoginCommandSETUP extends AbstractCommand {
     }
 
     private Payload login(String username, String psw) {
-        return controller.db.login(username, psw);
+        return controller.getDB().login(username, psw);
     }
 
     private void loginError(Payload toUse) {

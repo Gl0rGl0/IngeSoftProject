@@ -1,7 +1,7 @@
 package V4.Ingsoft.controller.item.luoghi;
 
 import V4.Ingsoft.controller.item.StatusItem;
-import V4.Ingsoft.model.Deletable;
+import V4.Ingsoft.controller.item.Deletable;
 import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.DayOfWeekConverter;
 import V4.Ingsoft.util.Time;

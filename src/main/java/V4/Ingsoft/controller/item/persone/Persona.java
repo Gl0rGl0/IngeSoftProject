@@ -1,7 +1,7 @@
 package V4.Ingsoft.controller.item.persone;
 
 import V4.Ingsoft.model.DBAbstractPersonaHelper;
-import V4.Ingsoft.model.Deletable;
+import V4.Ingsoft.controller.item.Deletable;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;

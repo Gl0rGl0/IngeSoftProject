@@ -47,7 +47,7 @@ public class PrecludeCommand extends AbstractCommand {
 
     private void addPrecludedDate(Date d) {
         ViewSE.println("Executing: Adding precluded date");
-        if (controller.db.dbDatesHelper.addPrecludedDate(d)) {
+        if (controller.getDB().dbDatesHelper.addPrecludedDate(d)) {
             AssertionControl.logMessage("Added correctly precluded date: " + d, 3, CLASSNAME);
         } else {
             AssertionControl.logMessage("Error while adding precluded date", 3, CLASSNAME);
@@ -56,6 +56,6 @@ public class PrecludeCommand extends AbstractCommand {
 
     private void removePrecludedDate(Date d) {
         ViewSE.println("Executing: Removing precluded date");
-        controller.db.dbDatesHelper.removePrecludedDate(d);
+        controller.getDB().dbDatesHelper.removePrecludedDate(d);
     }
 }

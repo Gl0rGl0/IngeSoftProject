@@ -10,6 +10,7 @@ import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.view.ViewSE;
 
 import java.time.Month;
+import java.util.ArrayList;
 
 public class ListCommand extends AbstractCommand {
 
@@ -31,33 +32,54 @@ public class ListCommand extends AbstractCommand {
         char option = options[0].charAt(0);
         switch (option) {
             case 'v' -> listVolontari();
-            case 'd' -> printAvailabilityVolontari();
-            case 'L', 'l' -> listLuoghi();
+            //case 'd' -> printAvailabilityVolontari();
             case 't' -> printTipiVisita();
+            case 'L' -> listLuoghi();
             case 'V' -> printVisite(options);
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
     }
 
     private void listLuoghi() {
-        for (Luogo l : controller.db.dbLuoghiHelper.getLuoghi()) {
-            ViewSE.println(l.getName());
-            for (Visita visita : controller.db.trovaVisiteByLuogo(l)) {
-                ViewSE.println(visita);
+        StringBuilder out = new StringBuilder();
+        for (Luogo l : controller.getDB().dbLuoghiHelper.getLuoghi()) {
+            out.append(l.getName()).append(":\n");
+            ArrayList<Visita> vL = controller.getDB().trovaVisiteByLuogo(l);
+            
+            if(vL.isEmpty()){
+                out.append("No visit type associated with this place, please assign at least one");
+            }else{
+                for (Visita visita : vL)
+                    out.append(visita).append("\n");  
             }
+            out.append("\n");
         }
+
+        if(out.isEmpty())
+            out.append("No place exists.");
+
+        ViewSE.println(out);
     }
 
     private void listVolontari() {
-        StringBuilder out;
-        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
-            out = new StringBuilder();
+        StringBuilder out = new StringBuilder();
+        for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
             out.append(v.getUsername()).append(":\n");
-            for (TipoVisita tv : controller.db.trovaTipoVisiteByVolontario(v)) {
-                out.append(tv.getTitle()).append(": ").append(v.getStatus()).append("\n");
+            ArrayList<TipoVisita> vV = controller.getDB().trovaTipoVisiteByVolontario(v);
+
+            if(vV.isEmpty()){
+                out.append("No visit type associated with this volunteer, please assign at least one");
+            }else{
+                for (TipoVisita tv : vV)
+                    out.append(tv);
             }
-            ViewSE.println(out);
+            out.append("\n");
         }
+
+        if(out.isEmpty())
+            out.append("No volunteer exists.");
+
+        ViewSE.println(out);
     }
 
     private void printVisite(String[] s) {
@@ -73,6 +95,7 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
+    //TESTING
     private void printAvailabilityVolontari() {
         if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println(ERROR_NOT_RECOGNIZED);
@@ -84,7 +107,7 @@ public class ListCommand extends AbstractCommand {
             targetMonth = targetMonth.plus(1);
 
         StringBuilder out = new StringBuilder();
-        for (Volontario v : controller.db.dbVolontarioHelper.getPersonList()) {
+        for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
             out.append(v.getUsername()).append(":\n");
             int i = 1;
             for (boolean b : v.getAvailability()) {
@@ -101,18 +124,18 @@ public class ListCommand extends AbstractCommand {
         }
 
         StringBuilder out = new StringBuilder();
-        for (TipoVisita t : controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
+        for (TipoVisita t : controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
             out.append(t);
         }
         ViewSE.println(out);
     }
 
     private void printAllTipi() {
-        String sb = "Proposed visits:\n" + getVisiteProposte() +
-                "Completed visits:\n" + getVisiteComplete() +
-                "Cancelled visits:\n" + getVisiteCancellate() +
-                "Performed visits:\n" + getVisiteEffettuate();
-        ViewSE.println(sb);
+        String out =  "Proposed visits:\n" + getVisiteProposte() +
+                      "Completed visits:\n" + getVisiteComplete() +
+                      "Cancelled visits:\n" + getVisiteCancellate() +
+                      "Performed visits:\n" + getVisiteEffettuate();
+        ViewSE.println(out);
     }
 
     private void printProposte() {
@@ -132,26 +155,42 @@ public class ListCommand extends AbstractCommand {
     }
 
     private String getVisiteProposte() {
-        StringBuilder sb = new StringBuilder();
-        controller.db.dbVisiteHelper.getVisiteProposte().forEach(v -> sb.append(v).append("\n"));
-        return sb.toString();
+        StringBuilder out = new StringBuilder();
+        controller.getDB().dbVisiteHelper.getVisiteProposte().forEach(v -> out.append(v).append("\n"));
+        
+        if(out.isEmpty())
+            out.append("There are no proposed visits");
+
+        return out.toString();
     }
 
     private String getVisiteComplete() {
-        StringBuilder sb = new StringBuilder();
-        controller.db.dbVisiteHelper.getCompletate().forEach(v -> sb.append(v).append("\n"));
-        return sb.toString();
+        StringBuilder out = new StringBuilder();
+        controller.getDB().dbVisiteHelper.getCompletate().forEach(v -> out.append(v).append("\n"));
+
+        if(out.isEmpty())
+            out.append("There are no completed visits");
+
+        return out.toString();
     }
 
     private String getVisiteCancellate() {
-        StringBuilder sb = new StringBuilder();
-        controller.db.dbVisiteHelper.getVisiteCancellate().forEach(v -> sb.append(v).append("\n"));
-        return sb.toString();
+        StringBuilder out = new StringBuilder();
+        controller.getDB().dbVisiteHelper.getVisiteCancellate().forEach(v -> out.append(v).append("\n"));
+
+        if(out.isEmpty())
+            out.append("There are no cancelled visits");
+
+        return out.toString();
     }
 
     private String getVisiteEffettuate() {
-        StringBuilder sb = new StringBuilder();
-        controller.db.dbVisiteHelper.getVisiteEffettuate().forEach(v -> sb.append(v).append("\n"));
-        return sb.toString();
+        StringBuilder out = new StringBuilder();
+        controller.getDB().dbVisiteHelper.getVisiteEffettuate().forEach(v -> out.append(v).append("\n"));
+
+        if(out.isEmpty())
+            out.append("There are no performed visits");
+
+        return out.toString();
     }
 }

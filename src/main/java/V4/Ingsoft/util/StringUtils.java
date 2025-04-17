@@ -53,7 +53,6 @@ public class StringUtils {
         // Altrimenti, accumula token fino a trovare uno che termini con la virgoletta
         StringBuilder sb = new StringBuilder(token.substring(1)); // rimuove solo la prima virgoletta
         int currentIndex = startIndex;
-        boolean foundClosingQuote = false;
 
         while (currentIndex < tokens.length - 1) {
             currentIndex++;
@@ -61,7 +60,6 @@ public class StringUtils {
             if (token.endsWith("\"")) {
                 // Rimuove solo l'ultima virgoletta
                 sb.append(" ").append(token, 0, token.length() - 1);
-                foundClosingQuote = true;
                 break;
             } else {
                 sb.append(" ").append(token);

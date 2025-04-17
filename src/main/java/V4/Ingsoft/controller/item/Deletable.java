@@ -1,6 +1,5 @@
-package V4.Ingsoft.model;
+package V4.Ingsoft.controller.item;
 
-import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
 

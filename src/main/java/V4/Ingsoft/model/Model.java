@@ -139,14 +139,8 @@ public class Model {
                 visiteToRemove.add(visita);
             }
         }
-        for (Visita visita : visiteToRemove) {
-            // Removing a Visita also requires removing its Iscrizioni
-            for (Iscrizione iscrizione : visita.getIscrizioni()) {
-                dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
-            }
-            dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
-        }
 
+        removeVisits(visiteToRemove);
 
         // Finally, remove the Volontario
         return dbVolontarioHelper.removePersona(username);
@@ -202,17 +196,22 @@ public class Model {
                 visiteToRemove.add(visita);
             }
         }
-        for (Visita visita : visiteToRemove) {
+
+        removeVisits(visiteToRemove);
+
+        // Finally, remove the TipoVisita itself
+        // Ensure the helper method exists and works by UID
+        dbTipoVisiteHelper.removeTipoVisitaByUID(tipoVisitaUID);
+    }
+
+    private void removeVisits(ArrayList<Visita> toRemove){
+        for (Visita visita : toRemove) {
             // Removing a Visita also requires removing its Iscrizioni
             for (Iscrizione iscrizione : visita.getIscrizioni()) {
                 dbIscrizionisHelper.removeIscrizione(iscrizione.getUIDIscrizione());
             }
             dbVisiteHelper.removeVisitaByUID(visita.getUID()); // Assumes DBVisiteHelper has this method
         }
-
-        // Finally, remove the TipoVisita itself
-        // Ensure the helper method exists and works by UID
-        dbTipoVisiteHelper.removeTipoVisitaByUID(tipoVisitaUID);
     }
 
     // Keep original remove by name, but delegate to UID version

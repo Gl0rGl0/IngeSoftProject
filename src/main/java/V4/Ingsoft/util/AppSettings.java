@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import V4.Ingsoft.view.ViewSE;
+
 /**
  * Simple class to hold application settings that need to be persisted.
  */
@@ -21,6 +23,9 @@ public class AppSettings {
         this.ambitoTerritoriale = ambitoTerritoriale;
         // Ensure maxPrenotazioni is at least 1
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
+
+        if(ambitoTerritoriale != null)
+            ViewSE.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona="+maxPrenotazioniPerPersona);
     }
 
     public AppSettings() {

@@ -208,34 +208,48 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      * @return true se lo stato della visita è stato aggiornato, false altrimenti.
      */
     private boolean processPreDeadlineVisit(Visita v, Date currentDay, String className) {
-        boolean changed = false;
-
-        Date visitDate = v.getDate();
+        Date visitDate    = v.getDate();
         Date deadlineDate = visitDate.minusDays(3);
-        if (deadlineDate != null &&
-                Math.abs(deadlineDate.dayOfTheYear() - currentDay.dayOfTheYear()) <= 3) {
-            StatusVisita currentStatus = v.getStatus();
-            if (currentStatus == StatusVisita.PROPOSED || currentStatus == StatusVisita.COMPLETED) {
-                TipoVisita tv = v.getTipoVisita();
-                if (tv == null) {
-                    AssertionControl.logMessage("Visita UID " + v.getUID() + " has null TipoVisita.", 1, className);
-                    return changed;
-                }
-                int minParticipants = tv.getNumMinPartecipants();
-                int currentParticipants = v.getCurrentNumber();
 
-                if (currentParticipants >= minParticipants) {
-                    v.setStatus(StatusVisita.CONFIRMED);
-                    AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, className);
-                } else {
-                    v.setStatus(StatusVisita.CANCELLED);
-                    AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, className);
-                }
-                changed = true;
-            }
+        // Se non siamo ancora arrivati al termine delle iscrizioni, esci subito
+        if (currentDay.isBefore(deadlineDate)) {
+            return false;
         }
-        return changed;
+
+        // Considera solo visite in stato PROPOSED (o COMPLETED se serve davvero)
+        StatusVisita currentStatus = v.getStatus();
+        if (currentStatus != StatusVisita.PROPOSED) {
+            return false;
+        }
+
+        // Controlla la presenza del tipo di visita
+        TipoVisita tv = v.getTipoVisita();
+        if (tv == null) {
+            AssertionControl.logMessage(
+                    "Visita UID " + v.getUID() + " has null TipoVisita.",
+                    1, className
+            );
+            return false;
+        }
+
+        // Conferma o cancella in base ai partecipanti
+        boolean hasEnough = v.getCurrentNumber() >= tv.getNumMinPartecipants();
+        finalizeVisit(v, hasEnough, className);
+
+        return true;
     }
+
+    private void finalizeVisit(Visita v, boolean hasEnoughParticipants, String className) {
+        if (hasEnoughParticipants) {
+            v.setStatus(StatusVisita.CONFIRMED);
+            AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", 4, className);
+        } else {
+            v.setStatus(StatusVisita.CANCELLED);
+            AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", 3, className);
+        }
+    }
+
+
 
     /**
      * Gestisce la pulizia post-visita. Se la data della visita è precedente alla data corrente,
@@ -251,20 +265,22 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     private boolean processPostVisitCleanup(Visita v, Date currentDay, ArrayList<String> uidsToRemove, String className) {
         boolean changed = false;
 
-        Date visitDate = v.getDate();
-        if (visitDate.isBefore(currentDay)) {
+        Date visitDate = v.getDate().addDay(1); //the day next the visit
+        if (visitDate.equals(currentDay)) {
             StatusVisita currentStatus = v.getStatus();
+
             if (currentStatus == StatusVisita.CONFIRMED) {
                 v.setStatus(StatusVisita.COMPLETED);
-                writeVisitaEffettuata(v);
                 uidsToRemove.add(v.getUID());
-                AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 4, className);
+                AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", 3, className);
                 changed = true;
             } else if (currentStatus == StatusVisita.CANCELLED) {
                 uidsToRemove.add(v.getUID());
-                AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 4, className);
+                AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", 3, className);
                 changed = true;
             }
+
+            writeVisitaEffettuata(v);
         }
 
         return changed;

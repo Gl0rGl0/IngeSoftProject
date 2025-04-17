@@ -86,7 +86,7 @@ public class RemoveCommand extends AbstractCommand {
 
         ViewSE.println("Executing: Removing configurator " + username);
         // Assuming removePersona returns boolean for success/failure
-        if (!controller.db.dbConfiguratoreHelper.removePersona(username)) {
+        if (!controller.getDB().dbConfiguratoreHelper.removePersona(username)) {
             AssertionControl.logMessage("Failed to remove configurator: " + username, 1, CLASSNAME);
             ViewSE.println("Failed to remove configurator: " + username);
         } else {
@@ -101,7 +101,7 @@ public class RemoveCommand extends AbstractCommand {
         String username = args[0]; // Already validated in execute()
 
         ViewSE.println("Executing: Removing fruitore (user/visitor) " + username);
-        if (!controller.db.removeFruitore(username)) {
+        if (!controller.getDB().removeFruitore(username)) {
             AssertionControl.logMessage("Failed to remove fruitore: " + username, 1, CLASSNAME);
             ViewSE.println("Failed to remove fruitore: " + username);
         } else {
@@ -119,7 +119,7 @@ public class RemoveCommand extends AbstractCommand {
         String username = args[0];
 
         ViewSE.println("Executing: Removing volunteer " + username);
-        if (!controller.db.removeVolontario(username)) {
+        if (!controller.getDB().removeVolontario(username)) {
             AssertionControl.logMessage("Failed to remove volunteer: " + username, 1, CLASSNAME);
             ViewSE.println("Failed to remove volunteer: " + username);
         } else {
@@ -156,10 +156,10 @@ public class RemoveCommand extends AbstractCommand {
         // Precondition checks (args valid, isActionDay16) done in execute()
         final String CLASSNAME = RemoveCommand.class.getSimpleName() + ".removeLuogo";
         String placeName = args[0];
-        Luogo toOperate = controller.db.dbLuoghiHelper.findLuogo(placeName);
+        Luogo toOperate = controller.getDB().dbLuoghiHelper.findLuogo(placeName);
 
         ViewSE.println("Executing: Removing place " + placeName);
-        if (!controller.db.removeLuogo(placeName)) {
+        if (!controller.getDB().removeLuogo(placeName)) {
             AssertionControl.logMessage("Failed to remove place: " + placeName, 2, CLASSNAME);
             ViewSE.println("Failed to remove place: " + placeName);
         } else {

@@ -82,15 +82,15 @@ public class LoginTests extends BaseTest {
         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be of type CONFIGURATORE.");
 
         //Verify that config_first can't do anything
-        int nConfig = controller.db.dbConfiguratoreHelper.getPersonList().size();
+        int nConfig = controller.getDB().dbConfiguratoreHelper.getPersonList().size();
         controller.interpreter("add -c dont add");
 
-        assertEquals(nConfig, controller.db.dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
+        assertEquals(nConfig, controller.getDB().dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
         // Act: Change password
         controller.interpreter("changepsw newSecurePassword");
         controller.interpreter("add -c dont add");
 
-        assertEquals(nConfig + 1, controller.db.dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
+        assertEquals(nConfig + 1, controller.getDB().dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
 
         // Verify login with new password
         controller.interpreter("logout");

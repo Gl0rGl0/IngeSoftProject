@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.*;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Date implements Cloneable {
+public class Date {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime localDate;
@@ -202,6 +202,7 @@ public class Date implements Cloneable {
      *
      * @return a new Date instance with the same localDate value.
      */
+    @Override
     public Date clone() {
         return new Date(this.localDate);
     }

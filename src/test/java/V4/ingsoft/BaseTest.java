@@ -88,6 +88,6 @@ public class BaseTest {
     @AfterEach
     public void cleanup() {
         controller.interpreter("logout");
-        controller.db.closeAll();
+        controller.getDB().closeAll();
     }
 }

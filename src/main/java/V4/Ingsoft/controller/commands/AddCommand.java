@@ -79,13 +79,11 @@ public class AddCommand extends AbstractCommand {
         }
 
         // adds a new configurator who will need to change password on first login
-        if (controller.db.dbConfiguratoreHelper.addConfiguratore(c)) {
-            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
-            AssertionControl.logMessage(currentUser + "| Added configurator: " + username, 4, SUB_CLASSNAME); // Level 4 for success info
+        if (controller.getDB().dbConfiguratoreHelper.addConfiguratore(c)) {
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Added configurator: " + username, 4, SUB_CLASSNAME); // Level 4 for success info
             ViewSE.println("Configuratore " + username + " added successfully.");
         } else {
-            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
-            AssertionControl.logMessage(currentUser + "| Failed to add configurator: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Failed to add configurator: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
             ViewSE.println("Failed to add configurator '" + username + "'. It might already exist.");
         }
     }
@@ -111,26 +109,24 @@ public class AddCommand extends AbstractCommand {
         }
 
         // adds a new volunteer who will need to change password on first login
-        if (controller.db.dbVolontarioHelper.addVolontario(v)) {
-            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
-            AssertionControl.logMessage(currentUser + "| Added volunteer: " + username, 4, SUB_CLASSNAME);
+        if (controller.getDB().dbVolontarioHelper.addVolontario(v)) {
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Added volunteer: " + username, 4, SUB_CLASSNAME);
             ViewSE.println("Volunteer " + username + " added successfully.");
+            ViewSE.println("Please assign this place to a visit type!");
         } else {
-            String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
-            AssertionControl.logMessage(currentUser + "| Failed to add volunteer: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Failed to add volunteer: " + username + " (likely already exists)", 2, SUB_CLASSNAME);
             ViewSE.println("Failed to add volunteer '" + username + "'. It might already exist.");
         }
     }
 
     private void addTipoVisita(String[] args) {
         final String SUB_CLASSNAME = CLASSNAME + ".addTipoVisita";
-        String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
 
         // Join arguments first to handle quotes
         String[] a = StringUtils.joinQuotedArguments(args);
         if (a == null) {
             AssertionControl.logMessage("StringUtils.joinQuotedArguments returned null", 1, SUB_CLASSNAME);
-            ViewSE.println("Internal error processing arguments for adding visit type.");
+            ViewSE.println("Internal error processing arguments for adding visit type");
             return;
         }
 
@@ -141,7 +137,7 @@ public class AddCommand extends AbstractCommand {
         // Check argument count (TipoVisita constructor expects 11 specific args)
         if (a.length < 11) {
             AssertionControl.logMessage("Insufficient arguments for adding TipoVisita. Expected 11, got " + a.length, 2, SUB_CLASSNAME);
-            ViewSE.println("Error: Insufficient arguments provided for adding visit type. Please provide all required details.");
+            ViewSE.println("Error: Insufficient arguments provided for adding visit type. Please provide all required details and use \" \" if there's more then a word.");
             return;
         }
         String title = a[0]; // For logging
@@ -155,18 +151,19 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (controller.db.dbTipoVisiteHelper.addTipoVisita(t)) {
-            AssertionControl.logMessage(currentUser + "| Added TipoVisita: " + title, 4, SUB_CLASSNAME);
+        if (controller.getDB().dbTipoVisiteHelper.addTipoVisita(t)) {
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Added TipoVisita: " + title, 4, SUB_CLASSNAME);
             ViewSE.println("Visit type '" + title + "' added successfully.");
+            ViewSE.println("Please assign this visit type to a place and at least a volunteer to this visit type!");
         } else {
-            AssertionControl.logMessage(currentUser + "| Failed to add TipoVisita: " + title + " (likely already exists)", 2, SUB_CLASSNAME);
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Failed to add TipoVisita: " + title + " (likely already exists)", 2, SUB_CLASSNAME);
             ViewSE.println("Failed to add visit type '" + title + "'. It might already exist.");
         }
     }
 
     private void addLuogo(String[] args) {
         final String SUB_CLASSNAME = CLASSNAME + ".addLuogo";
-        String currentUser = controller.getCurrentUser() != null ? controller.getCurrentUser().getUsername() : "SYSTEM";
+        
 
         // Join arguments first
         String[] a = StringUtils.joinQuotedArguments(args);
@@ -183,12 +180,12 @@ public class AddCommand extends AbstractCommand {
         // Check argument count (Luogo constructor expects name, description, location)
         if (a.length < 3 || a[0] == null || a[0].trim().isEmpty() || a[2] == null || a[2].trim().isEmpty()) {
             AssertionControl.logMessage("Insufficient or invalid arguments for adding Luogo. Expected name, description, location.", 2, SUB_CLASSNAME);
-            ViewSE.println("Usage: add -L <name> \"<description>\" <location>");
+            ViewSE.println("Usage: add -L \"<name>\" \"<description>\" <location>");
             return;
         }
         String name = a[0]; // For logging
 
-        if (controller.db.dbLuoghiHelper.findLuogo(name) != null) {
+        if (controller.getDB().dbLuoghiHelper.findLuogo(name) != null) {
             AssertionControl.logMessage("Already exist a Place with the same name", 2, CLASSNAME);
         }
 
@@ -201,11 +198,12 @@ public class AddCommand extends AbstractCommand {
             return;
         }
 
-        if (controller.db.dbLuoghiHelper.addLuogo(l)) {
-            AssertionControl.logMessage(currentUser + "| Added place: " + name, 4, SUB_CLASSNAME);
+        if (controller.getDB().dbLuoghiHelper.addLuogo(l)) {
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Added place: " + name, 4, SUB_CLASSNAME);
             ViewSE.println("Place '" + name + "' added successfully.");
+            ViewSE.println("Please assign a visit type to this place!");
         } else {
-            AssertionControl.logMessage(currentUser + "| Failed to add place: " + name + " (likely already exists)", 2, SUB_CLASSNAME);
+            AssertionControl.logMessage(controller.getCurrentUser().getUsername() + "| Failed to add place: " + name + " (likely already exists)", 2, SUB_CLASSNAME);
             ViewSE.println("Failed to add place '" + name + "'. It might already exist.");
         }
     }

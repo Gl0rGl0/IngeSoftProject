@@ -83,7 +83,7 @@ public class Initer {
         if (c.date.getDay() > 16)
             meseNum = meseNum.plus(1);
 
-        for (Volontario v : c.db.dbVolontarioHelper.getPersonList()) {
+        for (Volontario v : c.getDB().dbVolontarioHelper.getPersonList()) {
             for (int i = 0; i < 15; i++)
                 try {
                     v.setAvailability(c.date, new Date(String.format("%d/%d/2025",

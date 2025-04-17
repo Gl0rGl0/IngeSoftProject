@@ -85,7 +85,7 @@ public class VisitCommand extends AbstractCommand {
 
     // Cerca la visita e la restituisce, oppure segnala l'errore.
     private Visita findVisit(String visitName, String visitDateStr, String subClassName) {
-        Visita v = controller.db.dbVisiteHelper.findVisita(visitName, visitDateStr);
+        Visita v = controller.getDB().dbVisiteHelper.findVisita(visitName, visitDateStr);
         if (v == null) {
             ViewSE.println("Error: Visit '" + visitName + "' on date '" + visitDateStr + "' not found.");
             AssertionControl.logMessage("Visit not found: Name=" + visitName + ", Date=" + visitDateStr, 3, subClassName);
@@ -154,8 +154,8 @@ public class VisitCommand extends AbstractCommand {
                 ViewSE.println("Registration completed successfully! Your booking code is: " + bookingResult);
                 AssertionControl.logMessage("Booking successful for user " + f.getUsername() + " (Code: " + bookingResult + ", Qty: " + quantita + ", Visit UID: " + v.getUID() + ")", 4, subClassName);
                 f.subscribeToVisit(v.getUID());
-                controller.db.dbVisiteHelper.saveJson();
-                controller.db.dbFruitoreHelper.saveJson();
+                controller.getDB().dbVisiteHelper.saveJson();
+                controller.getDB().dbFruitoreHelper.saveJson();
                 break;
         }
     }
@@ -223,8 +223,8 @@ public class VisitCommand extends AbstractCommand {
             ViewSE.println("Booking for visit '" + visitName + "' on " + visitDateStr + " removed successfully.");
             AssertionControl.logMessage("Booking removed for user " + f.getUsername() + " (Visit UID: " + v.getUID() + ")", 4, SUB_CLASSNAME);
             f.removeFromVisita(v.getUID());
-            controller.db.dbVisiteHelper.saveJson();
-            controller.db.dbFruitoreHelper.saveJson();
+            controller.getDB().dbVisiteHelper.saveJson();
+            controller.getDB().dbFruitoreHelper.saveJson();
         } else {
             ViewSE.println("Error: Could not remove booking. Were you registered for this visit?");
             AssertionControl.logMessage("Failed to remove booking for user " + f.getUsername() + " (Visit UID: " + v.getUID() + ")", 3, SUB_CLASSNAME);

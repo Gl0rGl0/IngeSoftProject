@@ -52,8 +52,10 @@ public class AvailabilityCommand extends AbstractCommand {
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                if (controller.db.dbDatesHelper.getPrecludedDates().contains(d))
+                if (controller.getDB().dbDatesHelper.getPrecludedDates().contains(d)){
+                    ViewSE.println("The date " + d + " it's precluded by the admins, it won't be used.");
                     continue;
+                }
                 v.setAvailability(controller.date, d, toAdd); //controllo avviene dentro il volontario direttamente eccetto per le date precluse (richiesta)
             } catch (Exception e) {
                 AssertionControl.logMessage("Error in the date inserted", 3, CLASSNAME);

@@ -37,8 +37,8 @@ public class DBDatesHelper {
     }
 
     public void refreshPrecludedDate(Date date) {
-        Month monthCorrente = date.getMonth();
+        Month monthPassato = date.getMonth().minus(1);
 
-        precludedDates.removeIf(d -> d.getMonth() == monthCorrente);
+        precludedDates.removeIf(d -> d.getMonth() == monthPassato);
     }
 }

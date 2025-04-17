@@ -46,8 +46,8 @@ public class AssignCommand extends AbstractCommand {
     }
 
     private void assignVolontario(String type, String userNameVolontario) {
-        Volontario v = controller.db.dbVolontarioHelper.getPersona(userNameVolontario);
-        TipoVisita vToAssign = controller.db.dbTipoVisiteHelper.findTipoVisita(type);
+        Volontario v = controller.getDB().dbVolontarioHelper.getPersona(userNameVolontario);
+        TipoVisita vToAssign = controller.getDB().dbTipoVisiteHelper.findTipoVisita(type);
 
         if (v == null) {
             ViewSE.error("No volunteer found with that username.");
@@ -92,8 +92,8 @@ public class AssignCommand extends AbstractCommand {
     }
 
     private void assignVisita(String luogoName, String typeTitle) {
-        Luogo luogo = controller.db.getLuogoByName(luogoName);
-        TipoVisita visitaDaAssegnare = controller.db.dbTipoVisiteHelper.findTipoVisita(typeTitle);
+        Luogo luogo = controller.getDB().getLuogoByName(luogoName);
+        TipoVisita visitaDaAssegnare = controller.getDB().dbTipoVisiteHelper.findTipoVisita(typeTitle);
 
         if (luogo == null) {
             ViewSE.println("No place found with that name.");
@@ -148,7 +148,7 @@ public class AssignCommand extends AbstractCommand {
             if (uidTipoVisita.equals(visitaDaAssegnare.getUID()))
                 continue;
 
-            TipoVisita altraVisita = controller.db.dbTipoVisiteHelper.getTipiVisitaByUID(uidTipoVisita);
+            TipoVisita altraVisita = controller.getDB().dbTipoVisiteHelper.getTipiVisitaByUID(uidTipoVisita);
             // Se l'altra visita non è programmata per questo giorno, continuiamo
             if (!altraVisita.getDays().contains(day))
                 continue;

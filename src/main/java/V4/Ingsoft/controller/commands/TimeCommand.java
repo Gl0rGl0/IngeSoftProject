@@ -163,8 +163,8 @@ public class TimeCommand extends AbstractCommand {
         Date d;
         try {
             d = new Date(dateStr);
-            if (controller.db != null) {
-                boolean added = controller.db.dbDatesHelper.addPrecludedDate(d); // Assuming returns boolean
+            if (controller.getDB() != null) {
+                boolean added = controller.getDB().dbDatesHelper.addPrecludedDate(d); // Assuming returns boolean
                 if (added) {
                     ViewSE.println("Date " + d + " added to precluded dates.");
                     AssertionControl.logMessage("Added precluded date: " + d, 4, SUB_CLASSNAME);
@@ -184,10 +184,10 @@ public class TimeCommand extends AbstractCommand {
 
     private void listPrecluded() {
         final String SUB_CLASSNAME = CLASSNAME + ".listPrecluded";
-        if (controller.db != null) {
+        if (controller.getDB() != null) {
             ViewSE.println("Precluded Dates:");
             // Assuming getPrecludedDates returns a List or similar collection
-            var precludedDates = controller.db.dbDatesHelper.getPrecludedDates();
+            var precludedDates = controller.getDB().dbDatesHelper.getPrecludedDates();
             if (precludedDates == null || precludedDates.isEmpty()) {
                 ViewSE.println("  (None)");
             } else {

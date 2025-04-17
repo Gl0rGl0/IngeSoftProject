@@ -14,7 +14,7 @@ public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
 
-    public final Model db;
+    private final Model db;
 
     // Initially the user is a Guest (not logged in)
     public String user;
@@ -33,7 +33,7 @@ public class Controller {
         initDailyScheduler();
 
         interpreter = new SetupInterpreter(this);
-        interpreter("time -s 16/1/1");
+        interpreter("time -s 16/01/2025");
     }
 
     private void initDailyScheduler() {

@@ -136,13 +136,13 @@ public class Visita {
     @Override
     public String toString() {
         return "Title: " + tipo.getTitle()
-                + "\n\tVolunteer: " + getUidVolontario()
-                + "\n\tDescription: " + tipo.getDescription()
-                + "\n\tMeeting Point: " + tipo.getMeetingPlace()
-                + "\n\tDate: " + date
-                + "\n\tTime: " + tipo.getInitTime()
-                + "\n\tTicket required: " + tipo.isFree()
-                + "\n";
+            + "\n\tDescription: " + tipo.getDescription()
+            + "\n\tMeeting Point: " + tipo.getMeetingPlace()
+            + "\n\tDate: " + date
+            + "\n\tTime: " + tipo.getInitTime()
+            + "\n\tTicket required: " + tipo.isFree()
+            + "\n\tVolunteer: " + getUidVolontario()
+            + "\n";
     }
 
     public ArrayList<Iscrizione> getIscrizioni() {

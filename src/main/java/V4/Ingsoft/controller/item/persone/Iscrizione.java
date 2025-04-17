@@ -11,7 +11,7 @@ public class Iscrizione {
         this.fruitoreUID = fruitoreUID;
         this.quantity = quantity;
 
-        this.UIDIscrizione = UUID.randomUUID().toString();
+        this.UIDIscrizione = UUID.randomUUID().toString().split("-")[0];;
     }
 
     public String getUIDIscrizione() {

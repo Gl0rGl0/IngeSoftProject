@@ -40,7 +40,7 @@ public class LoginCommand extends AbstractCommand {
     }
 
     private Payload login(String username, String psw) {
-        return controller.db.login(username, psw);
+        return controller.getDB().login(username, psw);
     }
 
     private void loginError(Payload toUse, String[] args) {
@@ -61,7 +61,7 @@ public class LoginCommand extends AbstractCommand {
             try {
                 Fruitore f = new Fruitore(args);
                 f.setAsNotNew();
-                controller.db.dbFruitoreHelper.addFruitore(f);
+                controller.getDB().dbFruitoreHelper.addFruitore(f);
                 controller.user = f.getUsername();
             } catch (Exception e) {
                 AssertionControl.logMessage(e.getMessage(), 2, CLASSNAME);

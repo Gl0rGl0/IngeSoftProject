@@ -55,7 +55,7 @@ public class AddCommandSETUP extends AbstractCommand {
             return;
         }
 
-        if (a.length > 2 && controller.db.dbLuoghiHelper.addLuogo(l)) {
+        if (a.length > 2 && controller.getDB().dbLuoghiHelper.addLuogo(l)) {
             AssertionControl.logMessage(
                     controller.getCurrentUser().getUsername() + "| Added place: " + a[0], 3, CLASSNAME);
         } else {

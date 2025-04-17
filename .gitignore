@@ -15,3 +15,8 @@ target/
 *.zip
 *.tar.gz
 *.rar
+
+#useless
+qodana.yaml
+*.drawio
+*.png

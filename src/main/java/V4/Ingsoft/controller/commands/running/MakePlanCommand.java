@@ -8,6 +8,7 @@ import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.util.AssertionControl;
 import V4.Ingsoft.util.Date;
+import V4.Ingsoft.view.ViewSE;
 
 import java.time.Month;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class MakePlanCommand extends AbstractCommand {
     }
 
     private void makeorario() {
-        if (controller == null || controller.date == null || controller.getDB() == null) {
+        if (controller.date == null || controller.getDB() == null) {
             AssertionControl.logMessage("Controller dependencies (date, db) cannot be null in makeorario", 1, CLASSNAME);
             return; // Cannot proceed
         }
@@ -39,7 +40,13 @@ public class MakePlanCommand extends AbstractCommand {
         if (!isExecutable())
             return;
 
-        ArrayList<TipoVisita> tipi = controller.db.dbTipoVisiteHelper.getTipoVisiteIstanziabili();
+        if(!controller.isVolunteerCollectionOpen()){
+            ViewSE.println("Can't make the visits plan if the collection it's not closed");
+            AssertionControl.logMessage("Can't make the visits plan if the collection it's not closed", 2, CLASSNAME);
+            return;
+        }
+
+        ArrayList<TipoVisita> tipi = controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
         Month month = controller.date.getMonth().plus(1);
@@ -89,7 +96,7 @@ public class MakePlanCommand extends AbstractCommand {
         // and the date constraints.
         return visita.getStatus() == StatusItem.ACTIVE
                 && visita.getDays().contains(date.dayOfTheWeek())
-                && !controller.db.dbDatesHelper.getPrecludedDates().contains(date)
+                && !controller.getDB().dbDatesHelper.getPrecludedDates().contains(date)
                 && Date.between(visita.getInitDay(), date, visita.getFinishDay());
     }
 
@@ -99,7 +106,7 @@ public class MakePlanCommand extends AbstractCommand {
      */
     private void assignVisitForEligibleVolunteers(TipoVisita visita, Date date) {
         for (String volontarioUID : visita.getVolontariUIDs()) {
-            Volontario volontario = controller.db.dbVolontarioHelper.getPersona(volontarioUID);
+            Volontario volontario = controller.getDB().dbVolontarioHelper.getPersona(volontarioUID);
             if (volontario == null)
                 continue;
 
@@ -108,11 +115,11 @@ public class MakePlanCommand extends AbstractCommand {
                 continue;
 
             // Check conflicts for the volunteer and the date
-            if (controller.db.dbVisiteHelper.volontarioHaConflitto(volontario, date, visita)) // volunteerHasConflict
+            if (controller.getDB().dbVisiteHelper.volontarioHaConflitto(volontario, date, visita)) // volunteerHasConflict
                 continue;
 
             // If all checks pass, assign the visit
-            controller.db.dbVisiteHelper.addVisita(new Visita(visita, date, volontarioUID));
+            controller.getDB().dbVisiteHelper.addVisita(new Visita(visita, date, volontarioUID));
         }
     }
 }
