@@ -40,7 +40,7 @@ public class Luogo extends Deletable {
         this.deletionDate = deletionDate;
     }
 
-    public Luogo(String[] a) throws Exception {
+    public Luogo(String[] a, Date d) throws Exception {
         if (a.length < 3)
             throw new Exception("Error in Luogo constructor: Insufficient number of arguments");
 
@@ -57,6 +57,8 @@ public class Luogo extends Deletable {
         this.description = a[1];
         this.position = a[2];
         this.UID = name.hashCode() + "l";
+
+        this.insertionDate = d.clone();
     }
 
     @Override

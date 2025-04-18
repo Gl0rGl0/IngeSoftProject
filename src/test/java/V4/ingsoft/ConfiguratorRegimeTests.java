@@ -182,6 +182,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
         assertNotNull(t, "Prerequisite: Type should exist.");
 
+        System.out.println();
         // Assert
         // Cannot directly assert console output (e.g., "Nessun tipo di visita trovato per..."). Assume command runs.
         assertTrue(l.getTipoVisitaUID().contains(t.getUID()), "List command executed for place with no types (cannot verify output).");

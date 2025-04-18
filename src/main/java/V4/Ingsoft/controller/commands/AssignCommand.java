@@ -108,14 +108,14 @@ public class AssignCommand extends AbstractCommand {
             return;
 
         StatusItem sl = luogo.getStatus();
-        if (sl == StatusItem.PENDING_ADD || sl == StatusItem.DISABLED) {
-            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because visit it's in status: " + sl, 2, CLASSNAME);
+        if (sl == StatusItem.DISABLED) { // || sl == StatusItem.PENDING_ADD
+            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because place it's in status: " + sl, 2, CLASSNAME);
             return;
         }
 
         StatusItem st = visitaDaAssegnare.getStatus();
-        if (st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED) {
-            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because place it's in status: " + st, 2, CLASSNAME);
+        if (st == StatusItem.DISABLED) { // || st == StatusItem.PENDING_ADD
+            AssertionControl.logMessage("Can't assign visit " + typeTitle + " to place " + luogoName + " because visit it's in status: " + st, 2, CLASSNAME);
             return;
         }
 

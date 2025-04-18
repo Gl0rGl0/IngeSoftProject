@@ -50,6 +50,7 @@ public class BaseTest {
 
     public void enterRegimePhase() {
         // 1. First absolute login and password change for ADMIN
+        controller.interpreter("time -s 16/1/2025");
         controller.interpreter("login ADMIN PASSWORD");
 
         // 2. Complete Setup Steps using known setup commands
@@ -58,7 +59,6 @@ public class BaseTest {
         // Cannot add types/volunteers/assignments during setup via commands
         controller.interpreter("done"); // Finalize setup
 
-        controller.interpreter("time -s 16/1/2025");
 
         // 3. Add another configurator using the running phase command (now logged in as ADMIN)
         // Add initial TipoVisita and Volontario needed for some regime tests
@@ -77,6 +77,8 @@ public class BaseTest {
         controller.interpreter("changepsw passRegime");
 
         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be of type CONFIGURATORE.");
+        controller.interpreter("time -s 17/1/2025");
+        controller.interpreter("time -s 16/4/2025");
     }
 
     @BeforeEach

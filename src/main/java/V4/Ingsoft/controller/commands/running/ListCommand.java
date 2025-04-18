@@ -2,6 +2,7 @@ package V4.Ingsoft.controller.commands.running;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
+import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
@@ -43,7 +44,11 @@ public class ListCommand extends AbstractCommand {
     private void listLuoghi() {
         StringBuilder out = new StringBuilder();
         for (Luogo l : controller.getDB().dbLuoghiHelper.getLuoghi()) {
-            out.append(l.getName()).append(":\n");
+            out.append(l.getName() + " ( " + l.getStatus() + " )").append(":\n");
+            
+            if(l.getStatus() == StatusItem.DISABLED)
+                break;
+
             ArrayList<Visita> vL = controller.getDB().trovaVisiteByLuogo(l);
             
             if(vL.isEmpty()){
@@ -64,7 +69,11 @@ public class ListCommand extends AbstractCommand {
     private void listVolontari() {
         StringBuilder out = new StringBuilder();
         for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
-            out.append(v.getUsername()).append(":\n");
+            out.append(v.getUsername() + " ( " + v.getStatus() + " )").append(":\n");
+
+            if(v.getStatus() == StatusItem.DISABLED)
+                break;
+
             ArrayList<TipoVisita> vV = controller.getDB().trovaTipoVisiteByVolontario(v);
 
             if(vV.isEmpty()){

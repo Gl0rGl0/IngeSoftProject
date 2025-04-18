@@ -33,7 +33,6 @@ public class Controller {
         initDailyScheduler();
 
         interpreter = new SetupInterpreter(this);
-        interpreter("time -s 16/01/2025");
     }
 
     private void initDailyScheduler() {
@@ -65,7 +64,6 @@ public class Controller {
     public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter = new RunningInterpreter(this);
-        this.date = new Date();
     }
 
     public boolean setupCompleted() {

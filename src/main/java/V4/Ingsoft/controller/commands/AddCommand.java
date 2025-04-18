@@ -191,7 +191,7 @@ public class AddCommand extends AbstractCommand {
 
         Luogo l;
         try {
-            l = new Luogo(a); // Assumes constructor takes String[] {name, desc, loc}
+            l = new Luogo(a, controller.date); // Assumes constructor takes String[] {name, desc, loc}
         } catch (Exception e) {
             AssertionControl.logMessage("Error creating Luogo object: " + e.getMessage(), 1, SUB_CLASSNAME);
             ViewSE.println("Error creating place: " + e.getMessage());
