@@ -382,4 +382,11 @@ public class Model {
     public boolean isInitialized() {
         return !this.dbConfiguratoreHelper.isNew() && appSettings.isAmbitoSet();
     }
+
+    public void unsubscribeUserToVisit(Visita v, Iscrizione i){
+        v.removeIscrizioneByUID(i.getUIDIscrizione());
+        Fruitore f = dbFruitoreHelper.getPersona(i.getUIDFruitore());
+        f.removeFromVisita(v.getUID());
+        dbIscrizionisHelper.removeIscrizione(i.getUIDIscrizione());
+    }
 }

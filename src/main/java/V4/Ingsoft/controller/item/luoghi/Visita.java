@@ -84,22 +84,21 @@ public class Visita {
         return false;
     }
 
-    public String addPartecipants(Fruitore f, int n) {
-        if (tipo.getNumMaxPartecipants() - getCurrentNumber() < n) {
+    public String addPartecipants(Iscrizione i) {
+        if (tipo.getNumMaxPartecipants() - getCurrentNumber() < i.getQuantity()) {
             return "capacity"; // Indicates full capacity
         }
 
-        if (hasFruitore(f.getUsername())) {
+        if (hasFruitore(i.getUIDFruitore())) {
             return "present"; // Indicates user already registered
         }
 
-        Iscrizione newIscrizione = new Iscrizione(f.getUsername(), n);
-        fruitori.add(newIscrizione);
+        fruitori.add(i);
 
         if (getCurrentNumber() == tipo.getNumMaxPartecipants()) {
             setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
-        return newIscrizione.getUIDIscrizione();
+        return i.getUIDIscrizione();
     }
 
     /**
@@ -114,6 +113,22 @@ public class Visita {
         for (Iscrizione i : fruitori) {
             // Ensure null safety for user comparison
             if (user != null && user.equals(i.getUIDFruitore())) {
+                boolean removed = fruitori.remove(i);
+                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+                    // If removed and was full, set back to proposed
+                    setStatus(StatusVisita.PROPOSED);
+                }
+                return removed; // Return true if removal was successful
+            }
+        }
+        return false; // Return false if no matching participant was found
+    }
+
+    public boolean removePartecipantBySubscription(String userSubUID) {
+        int capienzaAttuale = getCurrentNumber();
+        for (Iscrizione i : fruitori) {
+            // Ensure null safety for user comparison
+            if (userSubUID != null && userSubUID.equals(i.getUIDIscrizione())) {
                 boolean removed = fruitori.remove(i);
                 if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed

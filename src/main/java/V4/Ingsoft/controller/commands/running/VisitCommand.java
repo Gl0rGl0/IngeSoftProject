@@ -1,5 +1,6 @@
 package V4.Ingsoft.controller.commands.running;
 
+import V4.Ingsoft.controller.item.persone.Iscrizione;
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.StatusVisita;
@@ -46,15 +47,62 @@ public class VisitCommand extends AbstractCommand {
             ViewSE.println("Usage: visit -r <visit_name> <visit_date>");
             AssertionControl.logMessage("Insufficient arguments for 'visit -r'", 2, CLASSNAME);
             return;
+        } else if (option == 'i' && args.length < 1) {
+            ViewSE.println("Usage: visit -i <subscription_id>");
+            AssertionControl.logMessage("Insufficient arguments for 'visit -i'", 2, CLASSNAME);
+            return;
         }
 
         switch (option) {
             case 'a' -> addFruitoreToVisita(args);
             case 'r' -> removeFromVisita(args);
+            case 'i' -> removeFromVisitaWithUID(args);
             default -> {
                 ViewSE.println("Option '-" + option + "' not recognized for 'visit'. Use -a or -r.");
                 AssertionControl.logMessage("Unrecognized option for 'visit': " + option, 2, CLASSNAME);
             }
+        }
+    }
+
+    private void removeFromVisitaWithUID(String[] args) {
+        if(args[0].isEmpty()){
+            AssertionControl.logMessage("Error processing arguments.", 1, CLASSNAME);
+            ViewSE.println("Can't unsubscribe from visit if the ID of the booking is empty.");
+            return;
+        }
+
+        final String SUB_CLASSNAME = CLASSNAME + ".removeFromVisitaWithUID";
+        String uidVisit = args[0];
+        if (uidVisit == null){
+            AssertionControl.logMessage("Error processing arguments.", 1, SUB_CLASSNAME);
+            ViewSE.println("Can't unsubscribe from visit if the ID of the booking is empty.");
+            return;
+        }    
+
+        Fruitore f = getCurrentFruitore(SUB_CLASSNAME);
+        if (f == null) return;
+
+        Iscrizione i = controller.getDB().dbIscrizionisHelper.getIscrizione(uidVisit);
+        if(i == null){
+            AssertionControl.logMessage("Error retriving iscrizione.", 1, SUB_CLASSNAME);
+            ViewSE.println("No subscription found with that ID");
+            return;
+        }
+
+        for(Visita v : controller.getDB().dbVisiteHelper.getVisite()){
+            if(v.getStatus() == StatusVisita.COMPLETED || v.getStatus() == StatusVisita.PROPOSED)
+                for(Iscrizione is : v.getIscrizioni()){
+                    if(uidVisit.equals(is.getUIDIscrizione())){
+                        ViewSE.println("Removed booking from the visit: " + v.getTitle());
+                        AssertionControl.logMessage("Removed booking from the visit: " + v.getTitle(), 3, SUB_CLASSNAME);
+                        
+                        controller.getDB().unsubscribeUserToVisit(v, i);
+
+                        controller.getDB().dbVisiteHelper.saveJson();
+                        controller.getDB().dbFruitoreHelper.saveJson();
+                        return;
+                    }
+                }
         }
     }
 
@@ -140,7 +188,8 @@ public class VisitCommand extends AbstractCommand {
             return;
         }
 
-        String bookingResult = v.addPartecipants(f, quantita);
+        Iscrizione i = new Iscrizione(f.getUsername(), quantita);
+        String bookingResult = v.addPartecipants(i);
         switch (bookingResult) {
             case "capacity":
                 ViewSE.println("Error: Cannot register " + quantita + " people. Not enough capacity remaining for this visit.");
@@ -154,6 +203,7 @@ public class VisitCommand extends AbstractCommand {
                 ViewSE.println("Registration completed successfully! Your booking code is: " + bookingResult);
                 AssertionControl.logMessage("Booking successful for user " + f.getUsername() + " (Code: " + bookingResult + ", Qty: " + quantita + ", Visit UID: " + v.getUID() + ")", 4, subClassName);
                 f.subscribeToVisit(v.getUID());
+                controller.getDB().dbIscrizionisHelper.addIscrizione(i);
                 controller.getDB().dbVisiteHelper.saveJson();
                 controller.getDB().dbFruitoreHelper.saveJson();
                 break;

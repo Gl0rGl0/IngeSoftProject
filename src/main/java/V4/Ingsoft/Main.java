@@ -38,7 +38,7 @@ public class Main {
         //initDimostrazione(controller);
         //System.out.println();
 
-        initSetup(controller);
+        initDimostrazione(controller);
         System.out.println();
         view.run();
     }

@@ -90,7 +90,12 @@ public class ListCommand extends AbstractCommand {
     }
 
     private void printVisite(String[] s) {
-        char option = s[1].charAt(0);
+        char option;
+        if(s.length < 2 || s[1] == null || s[1].isEmpty()){
+            option = 'a';
+        }else{
+            option = s[1].charAt(0);
+        }
 
         switch (option) {
             case 'a' -> printAllTipi();
