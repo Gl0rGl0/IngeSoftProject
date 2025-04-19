@@ -53,9 +53,9 @@ public class Model {
         return instance;
     }
 
-    public static Model getInstance(String ambito) {
-        setAmbito(ambito);
-        return getInstance();
+    public static void deleteInstance() {
+        instance = null;
+        appSettings = null;
     }
 
     public static void setAmbito(String ambito) {
@@ -285,10 +285,6 @@ public class Model {
         return Guest.getInstance();
     }
 
-    public void refreshPrecludedDate(Date d) {
-        dbDatesHelper.refreshPrecludedDate(d);
-    }
-
     /**
      * Performs daily updates on the status of visits and visit types based on the current date.
      * Checks for visits nearing confirmation/cancellation deadlines and activates pending visit types.
@@ -343,11 +339,11 @@ public class Model {
     // Getters via UID
     // ================================================================
 
-    public ArrayList<Visita> trovaVisiteByLuogo(Luogo l) {
-        ArrayList<Visita> out = new ArrayList<>();
+    public ArrayList<TipoVisita> trovaTipoVisiteByLuogo(Luogo l) {
+        ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (String visitaUID : l.getTipoVisitaUID()) {
-            out.add(dbVisiteHelper.getVisitaByUID(visitaUID));
+            out.add(dbTipoVisiteHelper.getTipiVisitaByUID(visitaUID));
         }
 
         return out;

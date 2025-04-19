@@ -52,7 +52,6 @@ public class ViewSE implements Runnable {
             controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> "));
 
         AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
-        //ViewSE.println("SETUP COMPLETED");
 
         while (true)
             controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));

@@ -28,7 +28,7 @@ public abstract class AbstractCommand implements Command {
         if (controller.isActionDay16 || !controller.doneAll()) {
             return true;
         } else {
-            String ERROR_16 = "Action only possible on the 16th of the month!";
+            String ERROR_16 = "Action possible only on the 16th of the month and not on holidays!";
             AssertionControl.logMessage(ERROR_16, 3, CLASSNAME);
             ViewSE.println(ERROR_16);
             return false;

@@ -8,7 +8,6 @@ import V4.Ingsoft.controller.item.persone.Fruitore;
 import V4.Ingsoft.controller.item.persone.Iscrizione;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date;
 import V4.Ingsoft.util.StringUtils;
 import V4.Ingsoft.view.ViewSE;
 

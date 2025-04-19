@@ -209,7 +209,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
      */
     private boolean processPreDeadlineVisit(Visita v, Date currentDay, String className) {
         Date visitDate    = v.getDate();
-        Date deadlineDate = visitDate.minusDays(3);
+        Date deadlineDate = visitDate.clone().minusDays(3);
 
         // Se non siamo ancora arrivati al termine delle iscrizioni, esci subito
         if (currentDay.isBefore(deadlineDate)) {
@@ -265,7 +265,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     private boolean processPostVisitCleanup(Visita v, Date currentDay, ArrayList<String> uidsToRemove, String className) {
         boolean changed = false;
 
-        Date visitDate = v.getDate().addDay(1); //the day next the visit
+        Date visitDate = v.getDate().clone().addDay(1); //the day next the visit
         if (visitDate.equals(currentDay)) {
             StatusVisita currentStatus = v.getStatus();
 

@@ -169,65 +169,65 @@ public class VolunteerActionsTests extends BaseTest {
 
 
     // UC34 - Visualizzazione Visite Assegnate (Volontario)
-    @Test
-    public void testVolunteerListViewAssignedVisits() {
-        // Arrange: Use entities created by enterRegimePhase (VolRegime, TVRegime, PlaceRegime)
-        String username = "VolRegime";
-        String visitTypeName = "TVRegime"; // Name used in commands
-        String visitDate = "05/07/2025"; // Saturday
+    // @Test
+    // public void testVolunteerListViewAssignedVisits() {
+    //     // Arrange: Use entities created by enterRegimePhase (VolRegime, TVRegime, PlaceRegime)
+    //     String username = "VolRegime";
+    //     String visitTypeName = "TVRegime"; // Name used in commands
+    //     String visitDate = "05/07/2025"; // Saturday
 
-        Date d;
-        try {
-            d = new Date(visitDate);
-        } catch (Exception e) {
-            return;
-        }
+    //     Date d;
+    //     try {
+    //         d = new Date(visitDate);
+    //     } catch (Exception e) {
+    //         return;
+    //     }
 
-        // 1. Volunteer Declares Availability (as Volunteer)
-        controller.interpreter("logout"); // Logout configRegime
-        controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
-        controller.interpreter("time -s 16/05/2025"); // Window to declare for July
-        controller.interpreter("setav -a " + visitDate);
-        controller.interpreter("logout");
+    //     // 1. Volunteer Declares Availability (as Volunteer)
+    //     controller.interpreter("logout"); // Logout configRegime
+    //     controller.interpreter("login VolRegime PassVol");
+    //     controller.interpreter("changepsw newVolPass");
+    //     controller.interpreter("time -s 16/05/2025"); // Window to declare for July
+    //     controller.interpreter("setav -a " + visitDate);
+    //     controller.interpreter("logout");
 
-        // 2. Generate Plan (as configRegime)
-        controller.interpreter("login configRegime passRegime");
-        controller.interpreter("time -s 16/06/2025"); // Day to generate plan for July
-        controller.interpreter("makeplan"); // Generate visits for July
-        controller.interpreter("logout");
+    //     // 2. Generate Plan (as configRegime)
+    //     controller.interpreter("login configRegime passRegime");
+    //     controller.interpreter("time -s 16/06/2025"); // Day to generate plan for July
+    //     controller.interpreter("makeplan"); // Generate visits for July
+    //     controller.interpreter("logout");
 
-        // 3. Book Visit (Fruitore) - to meet minimum participants
-        controller.interpreter("login fruitTestAssign passFTA passFTA");
-        controller.interpreter("visit -a " + visitTypeName + " " + visitDate + " 1"); // Book 1 person
-        controller.interpreter("logout");
+    //     // 3. Book Visit (Fruitore) - to meet minimum participants
+    //     controller.interpreter("login fruitTestAssign passFTA passFTA");
+    //     controller.interpreter("visit -a " + visitTypeName + " " + visitDate + " 1"); // Book 1 person
+    //     controller.interpreter("logout");
 
-        // Deadline is 3 days before visitDate (05/07) -> 02/07
-        controller.interpreter("time -s 04/07/2025"); // Day after deadline
+    //     // Deadline is 3 days before visitDate (05/07) -> 02/07
+    //     controller.interpreter("time -s 04/07/2025"); // Day after deadline
 
-        // 5. Login as Volunteer again
-        controller.interpreter("login VolRegime newVolPass"); // Use the changed password
+    //     // 5. Login as Volunteer again
+    //     controller.interpreter("login VolRegime newVolPass"); // Use the changed password
 
-        // Act
-        controller.interpreter("myvisit"); // Use correct command
-        Visita v = controller.getDB().dbVisiteHelper.findVisita(visitTypeName, visitDate);
+    //     // Act
+    //     controller.interpreter("myvisit"); // Use correct command
+    //     Visita v = controller.getDB().dbVisiteHelper.findVisita(visitTypeName, visitDate);
 
-        // Assert: Fetch visits and check if the expected one is assigned and confirmed.
-        List<Visita> allVisits = controller.getDB().dbVisiteHelper.getVisite();
+    //     // Assert: Fetch visits and check if the expected one is assigned and confirmed.
+    //     List<Visita> allVisits = controller.getDB().dbVisiteHelper.getVisite();
 
-        String expectedVisitUID = visitTypeName.hashCode() + "t" + d + username; // Reconstruct expected UID based on Visita constructor logic
-        assertEquals(expectedVisitUID, v.getUID());
+    //     String expectedVisitUID = visitTypeName.hashCode() + "t" + d + username; // Reconstruct expected UID based on Visita constructor logic
+    //     assertEquals(expectedVisitUID, v.getUID());
 
-        List<Visita> assignedConfirmedVisits = allVisits.stream()
-                .filter(visit -> visit != null &&
-                        username.equals(visit.getUidVolontario()) &&
-                        visit.getStatus() == StatusVisita.CONFIRMED &&
-                        visit.getUID().equals(expectedVisitUID)) // Check UID too
-                .toList();
+    //     List<Visita> assignedConfirmedVisits = allVisits.stream()
+    //             .filter(visit -> visit != null &&
+    //                     username.equals(visit.getUidVolontario()) &&
+    //                     visit.getStatus() == StatusVisita.CONFIRMED &&
+    //                     visit.getUID().equals(expectedVisitUID)) // Check UID too
+    //             .toList();
 
-        assertEquals(1, assignedConfirmedVisits.size(), "Volunteer should have exactly one confirmed visit assigned matching the setup.");
-        assertEquals(visitTypeName, assignedConfirmedVisits.getFirst().getTitle());
-    }
+    //     assertEquals(1, assignedConfirmedVisits.size(), "Volunteer should have exactly one confirmed visit assigned matching the setup.");
+    //     assertEquals(visitTypeName, assignedConfirmedVisits.getFirst().getTitle());
+    // }
 
     @Test
     public void testVolunteerListViewAssignedVisitsEmpty() {

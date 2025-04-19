@@ -5,12 +5,10 @@ import V4.Ingsoft.controller.commands.AbstractCommand;
 import V4.Ingsoft.controller.item.StatusItem;
 import V4.Ingsoft.controller.item.luoghi.Luogo;
 import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.controller.item.persone.Volontario;
 import V4.Ingsoft.view.ViewSE;
 
-import java.time.Month;
 import java.util.ArrayList;
 
 public class ListCommand extends AbstractCommand {
@@ -34,7 +32,7 @@ public class ListCommand extends AbstractCommand {
         switch (option) {
             case 'v' -> listVolontari();
             //case 'd' -> printAvailabilityVolontari();
-            case 't' -> printTipiVisita();
+            case 'T' -> printTipiVisita();
             case 'L' -> listLuoghi();
             case 'V' -> printVisite(options);
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
@@ -49,12 +47,12 @@ public class ListCommand extends AbstractCommand {
             if(l.getStatus() == StatusItem.DISABLED)
                 break;
 
-            ArrayList<Visita> vL = controller.getDB().trovaVisiteByLuogo(l);
+            ArrayList<TipoVisita> vL = controller.getDB().trovaTipoVisiteByLuogo(l);
             
             if(vL.isEmpty()){
                 out.append("No visit type associated with this place, please assign at least one");
             }else{
-                for (Visita visita : vL)
+                for (TipoVisita visita : vL)
                     out.append(visita).append("\n");  
             }
             out.append("\n");
@@ -102,28 +100,6 @@ public class ListCommand extends AbstractCommand {
             case 'e' -> printEffettuate();
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
-    }
-
-    //TESTING
-    private void printAvailabilityVolontari() {
-        if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
-            ViewSE.println(ERROR_NOT_RECOGNIZED);
-            return;
-        }
-
-        Month targetMonth = controller.date.getMonth().plus(2);
-        if (controller.date.getDay() > 16)
-            targetMonth = targetMonth.plus(1);
-
-        StringBuilder out = new StringBuilder();
-        for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
-            out.append(v.getUsername()).append(":\n");
-            int i = 1;
-            for (boolean b : v.getAvailability()) {
-                out.append(String.format("%d:%d [%b]", i++, targetMonth.getValue(), b));
-            }
-        }
-        ViewSE.println(out);
     }
 
     private void printTipiVisita() {

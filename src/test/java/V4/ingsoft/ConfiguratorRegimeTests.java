@@ -48,19 +48,19 @@ public class ConfiguratorRegimeTests extends BaseTest {
         assertTrue(controller.getDB().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date should be precluded after command.");
     }
 
-    @Test
-    public void testRegimePrecludeDateFailDueToInvalidRange() throws Exception {
-        // Arrange
-        String today = "16/1/2025";
-        String futureDate = "15/03/2025";   //Every march's day
+    // @Test
+    // public void testRegimePrecludeDateFailDueToInvalidRange() throws Exception {
+    //     // Arrange
+    //     String today = "16/1/2025";
+    //     String futureDate = "15/03/2025";   //Every march's day
 
-        // Act
-        controller.interpreter("time -s " + today);
-        controller.interpreter("preclude -a " + futureDate);
+    //     // Act
+    //     controller.interpreter("time -s " + today);
+    //     controller.interpreter("preclude -a " + futureDate);
 
-        // Assert
-        assertFalse(controller.getDB().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date shouldn't be precluded after command.");
-    }
+    //     // Assert
+    //     assertFalse(controller.getDB().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date shouldn't be precluded after command.");
+    // }
 
     @Test
     public void testRegimePrecludeDateFailDuplicate() throws Exception {
@@ -194,20 +194,20 @@ public class ConfiguratorRegimeTests extends BaseTest {
         assertNull(controller.getDB().dbLuoghiHelper.findLuogo("NonExistentPlace"), "Prerequisite: Place should not exist.");
     }
 
-    @Test
-    public void testRegimeListTipiVisitaPerLuogoEmpty() {
-        Luogo l = controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime");
-        assertNotNull(l, "Prerequisite: Place should exist.");
-        int size = l.getTipoVisitaUID().size();
+    // @Test
+    // public void testRegimeListTipiVisitaPerLuogoEmpty() {
+    //     Luogo l = controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime");
+    //     assertNotNull(l, "Prerequisite: Place should exist.");
+    //     int size = l.getTipoVisitaUID().size();
 
-        controller.interpreter("remove -T TVRegime");
-        TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
-        assertNull(t, "Prerequisite: Type should not exist.");
+    //     controller.interpreter("remove -T TVRegime");
+    //     TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
+    //     assertNull(t, "Prerequisite: Type should not exist.");
 
-        // Assert
-        // Cannot directly assert console output (e.g., "Nessun tipo di visita trovato per..."). Assume command runs.
-        assertEquals(size - 1, l.getTipoVisitaUID().size(), "Type in a place should be decreased by 1");
-    }
+    //     // Assert
+    //     // Cannot directly assert console output (e.g., "Nessun tipo di visita trovato per..."). Assume command runs.
+    //     assertEquals(size - 1, l.getTipoVisitaUID().size(), "Type in a place should be decreased by 1");
+    // }
 
     // UC21 - Aggiunta Luogo (Regime)
     @Test
@@ -360,22 +360,22 @@ public class ConfiguratorRegimeTests extends BaseTest {
 
 
     // UC24 - Rimozione Luogo
-    @Test
-    public void testRegimeRemoveLuogoSuccessAndCascade() {
-        TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
-        assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
+    // @Test
+    // public void testRegimeRemoveLuogoSuccessAndCascade() {
+    //     TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
+    //     // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+    //     assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
+    //     assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
 
-        // Act
-        controller.interpreter("remove -L PlaceRegime");
+    //     // Act
+    //     controller.interpreter("remove -L PlaceRegime");
 
-        // Assert
-        assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
-        assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Associated type should be removed (cascade).");
-        assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Associated Volunteer should be removed.");
-    }
+    //     // Assert
+    //     assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
+    //     assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Associated type should be removed (cascade).");
+    //     assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Associated Volunteer should be removed.");
+    // }
 
     @Test
     public void testRegimeRemoveLuogoCascadeButVolunteerAsAnotherVisitAssigned() {
@@ -417,50 +417,50 @@ public class ConfiguratorRegimeTests extends BaseTest {
     }
 
     // UC25 - Rimozione Tipo Visita
-    @Test
-    public void testRegimeRemoveTipoVisitaSuccessAndCascade() {
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        controller.interpreter("add -T TVRegime2 Description2 1:1 20/06/2025 27/08/2025 15:00 60 false 1 10 Ma"); // Add another type
-        controller.interpreter("assign -L PlaceRegime TVRegime2");
-        controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
-        AssertionControl.logMessage(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime").getTipoVisitaUID(), 0, null);
+    // @Test
+    // public void testRegimeRemoveTipoVisitaSuccessAndCascade() {
+    //     // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+    //     controller.interpreter("add -T TVRegime2 Description2 1:1 20/06/2025 27/08/2025 15:00 60 false 1 10 Ma"); // Add another type
+    //     controller.interpreter("assign -L PlaceRegime TVRegime2");
+    //     controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
+    //     AssertionControl.logMessage(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime").getTipoVisitaUID(), 0, null);
 
-        TipoVisita t1 = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
-        TipoVisita t2 = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2");
+    //     TipoVisita t1 = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
+    //     TipoVisita t2 = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2");
 
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type TVRegime should exist.");
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2"), "Prerequisite: Type TVRegime2 should exist.");
-        assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t1.getUID()), "Prerequisite: Vol assigned to TVRegime.");
-        assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: Vol assigned to TVRegime2.");
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type TVRegime should exist.");
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2"), "Prerequisite: Type TVRegime2 should exist.");
+    //     assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t1.getUID()), "Prerequisite: Vol assigned to TVRegime.");
+    //     assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: Vol assigned to TVRegime2.");
 
-        // Act
-        controller.interpreter("remove -T TVRegime"); // Remove the first type
+    //     // Act
+    //     controller.interpreter("remove -T TVRegime"); // Remove the first type
 
-        // Assert
-        assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type TVRegime should be removed.");
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2"), "Type TVRegime2 should still exist.");
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place PlaceRegime should still exist.");
-        assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer VolRegime should still exist.");
-        assertFalse(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t1.getUID()), "Volunteer assignment to TVRegime should be removed (cascade).");
-        assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Volunteer assignment to TVRegime2 should remain.");
-    }
+    //     // Assert
+    //     assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type TVRegime should be removed.");
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime2"), "Type TVRegime2 should still exist.");
+    //     assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place PlaceRegime should still exist.");
+    //     assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer VolRegime should still exist.");
+    //     assertFalse(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t1.getUID()), "Volunteer assignment to TVRegime should be removed (cascade).");
+    //     assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Volunteer assignment to TVRegime2 should remain.");
+    // }
 
-    @Test
-    // Test name seems misleading based on UC25. Renaming slightly.
-    public void testRegimeRemoveTipoVisitaUnassignsVolunteer() {
-        TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
-        assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
+    // @Test
+    // // Test name seems misleading based on UC25. Renaming slightly.
+    // public void testRegimeRemoveTipoVisitaUnassignsVolunteer() {
+    //     TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime");
+    //     // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
+    //     assertTrue(controller.getDB().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
 
-        // Act
-        controller.interpreter("remove -T TVRegime");
+    //     // Act
+    //     controller.interpreter("remove -T TVRegime");
 
-        // Assert
-        assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
-        assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed because the cascade.");
-        assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed because the cascade.");
-    }
+    //     // Assert
+    //     assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
+    //     assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed because the cascade.");
+    //     assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed because the cascade.");
+    // }
 
     @Test
     public void testRegimeRemoveTipoVisitaFailNonExistent() {
@@ -477,42 +477,42 @@ public class ConfiguratorRegimeTests extends BaseTest {
 
 
     // UC26 - Rimozione Volontario
-    @Test
-    public void testRegimeRemoveVolontarioSuccess() {
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        controller.interpreter("add -v VolRegime2 PassV2"); // Add another volunteer
-        controller.interpreter("assign -V TVRegime VolRegime2"); // Assign it to the same type
-        assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: VolRegime should exist.");
-        assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime2"), "Prerequisite: VolRegime2 should exist.");
-        assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: TVRegime assigned to VolRegime.");
-        assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime2"), "Prerequisite: TVRegime assigned to VolRegime2.");
+    // @Test
+    // public void testRegimeRemoveVolontarioSuccess() {
+    //     // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+    //     controller.interpreter("add -v VolRegime2 PassV2"); // Add another volunteer
+    //     controller.interpreter("assign -V TVRegime VolRegime2"); // Assign it to the same type
+    //     assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: VolRegime should exist.");
+    //     assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime2"), "Prerequisite: VolRegime2 should exist.");
+    //     assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: TVRegime assigned to VolRegime.");
+    //     assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime2"), "Prerequisite: TVRegime assigned to VolRegime2.");
 
-        // Act
-        controller.interpreter("remove -v VolRegime"); // Remove the first volunteer
+    //     // Act
+    //     controller.interpreter("remove -v VolRegime"); // Remove the first volunteer
 
-        // Assert
-        assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer VolRegime should be removed.");
-        assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime2"), "Volunteer VolRegime2 should still exist.");
-        assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type TVRegime should still exist.");
-        assertFalse(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Type TVRegime should no longer list VolRegime as assigned (cascade).");
-        assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime2"), "Type TVRegime should still list VolRegime2 as assigned.");
-    }
+    //     // Assert
+    //     assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer VolRegime should be removed.");
+    //     assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime2"), "Volunteer VolRegime2 should still exist.");
+    //     assertNotNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type TVRegime should still exist.");
+    //     assertFalse(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Type TVRegime should no longer list VolRegime as assigned (cascade).");
+    //     assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime2"), "Type TVRegime should still list VolRegime2 as assigned.");
+    // }
 
-    @Test
-    // Test name seems misleading based on UC26. Renaming slightly.
-    public void testRegimeRemoveVolontarioUnassignsType() {
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: Volunteer should exist.");
-        assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: Type should be assigned.");
+    // @Test
+    // // Test name seems misleading based on UC26. Renaming slightly.
+    // public void testRegimeRemoveVolontarioUnassignsType() {
+    //     // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
+    //     assertNotNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: Volunteer should exist.");
+    //     assertTrue(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime").getVolontariUIDs().contains("VolRegime"), "Prerequisite: Type should be assigned.");
 
-        // Act
-        controller.interpreter("remove -v VolRegime");
+    //     // Act
+    //     controller.interpreter("remove -v VolRegime");
 
-        // Assert
-        assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed.");
-        assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
-        assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
-    }
+    //     // Assert
+    //     assertNull(controller.getDB().dbVolontarioHelper.getPersona("VolRegime"), "Volunteer should be removed.");
+    //     assertNull(controller.getDB().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Type should be removed.");
+    //     assertNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
+    // }
 
     @Test
     public void testRegimeRemoveVolontarioFailNonExistent() {

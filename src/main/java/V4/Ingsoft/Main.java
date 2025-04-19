@@ -18,34 +18,57 @@ import V4.Ingsoft.view.ViewSE;
 // going through the keyboard
 public class Main {
     public static void main(String[] args) {
-        Model model;
-
-        if (args.length > 0)
-            model = Model.getInstance(args[0]);
-        else {
-            model = Model.getInstance();
-        }
-
+        Model model = Model.getInstance();
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 
-        init(controller);
+        controller.interpreter("time -s 20/4/2025");
 
-        controller.interpreter("login config1 pass1C");
-        // controller.interpreter("changepsw pass1C pass1C");
+        if (args.length > 0 && args[0] != null && args[0].startsWith("-"))
+            switch (args[0].charAt(1)) {
+                case 'S' -> initSetup(controller);
+                case 'I' -> initPeoplePlaces(controller);
+                case 'A' -> initAvailability(controller);
+                case 'D' -> initDimostrazione(controller);
+                case 'R' -> resetAll(controller);
+            
+                default -> {} // -B o vuoto
+            }
+        
+        //initDimostrazione(controller);
+        //System.out.println();
 
+        initSetup(controller);
+        System.out.println();
         view.run();
     }
 
-    public static void init(Controller controller) {
-        controller.interpreter("login ADMIN PASSWORD");
+    private static void resetAll(Controller controller) {
+        controller.getDB().clearAll();
+        Model.deleteInstance();
+        controller.setDB(Model.getInstance());
+    }
 
-        //Initer.setupPhase(controller);
+    private static void initDimostrazione(Controller controller) {
+        resetAll(controller);
+        Initer.dimostrazione(controller);
+    }
+
+    private static void initAvailability(Controller controller) {
+        initPeoplePlaces(controller);
+
+        Initer.initAvailability(controller);
+    }
+
+    private static void initPeoplePlaces(Controller controller) {
+        initSetup(controller);
+
         Initer.initPersone(controller);
         Initer.initVisiteLuoghi(controller);
-        controller.interpreter("done");
-        Initer.initAvailability(controller);
+    }
 
-        controller.interpreter("logout");
+    private static void initSetup(Controller controller) {
+        resetAll(controller);
+        Initer.setupPhase(controller);
     }
 }

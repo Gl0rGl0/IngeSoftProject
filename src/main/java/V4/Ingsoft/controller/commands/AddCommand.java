@@ -144,7 +144,7 @@ public class AddCommand extends AbstractCommand {
 
         TipoVisita t;
         try {
-            t = new TipoVisita(a, controller.date);
+            t = new TipoVisita(a, controller.date.clone());
         } catch (Exception e) {
             AssertionControl.logMessage("Error creating TipoVisita object: " + e.getMessage(), 1, SUB_CLASSNAME);
             ViewSE.println("Error creating visit type: " + e.getMessage());
@@ -191,7 +191,7 @@ public class AddCommand extends AbstractCommand {
 
         Luogo l;
         try {
-            l = new Luogo(a, controller.date); // Assumes constructor takes String[] {name, desc, loc}
+            l = new Luogo(a, controller.date.clone()); // Assumes constructor takes String[] {name, desc, loc}
         } catch (Exception e) {
             AssertionControl.logMessage("Error creating Luogo object: " + e.getMessage(), 1, SUB_CLASSNAME);
             ViewSE.println("Error creating place: " + e.getMessage());

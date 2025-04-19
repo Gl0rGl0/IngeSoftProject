@@ -17,7 +17,7 @@ public abstract class Deletable {
                     return;
                 }
 
-                if (Date.monthsDifference(insertionDate, d, 2))
+                if (Date.monthsDifference(insertionDate, d) > 2)
                     this.si = StatusItem.ACTIVE;
             }
             case PENDING_REMOVE -> {

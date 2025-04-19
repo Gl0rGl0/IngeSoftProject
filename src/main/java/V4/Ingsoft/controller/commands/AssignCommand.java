@@ -70,13 +70,13 @@ public class AssignCommand extends AbstractCommand {
         }
 
         StatusItem sp = v.getStatus();
-        if (sp == StatusItem.PENDING_ADD || sp == StatusItem.DISABLED) {
+        if (sp == StatusItem.DISABLED) { // || sp == StatusItem.PENDING_ADD 
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because volunteer it's in status: " + sp, 2, CLASSNAME);
             return;
         }
 
         StatusItem st = vToAssign.getStatus();
-        if (st == StatusItem.PENDING_ADD || st == StatusItem.DISABLED) {
+        if (st == StatusItem.DISABLED) { // || st == StatusItem.PENDING_ADD
             AssertionControl.logMessage("Can't assign volunteer " + userNameVolontario + " to visit " + type + " because visit it's in status: " + st, 2, CLASSNAME);
             return;
         }
@@ -132,6 +132,7 @@ public class AssignCommand extends AbstractCommand {
             luogo.addTipoVisita(visitaDaAssegnare.getUID());
             visitaDaAssegnare.setLuogo(luogo.getUID());
             ViewSE.println("Assigned visit " + visitaDaAssegnare.getTitle() + " to place " + luogo.getName());
+            AssertionControl.logMessage("Assigned visit " + visitaDaAssegnare.getTitle() + " to place " + luogo.getName(), 3, CLASSNAME);
         } else {
             AssertionControl.logMessage("Cannot assign this visit because it overlaps with another one",
                     2, CLASSNAME);

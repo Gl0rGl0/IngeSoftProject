@@ -45,7 +45,7 @@ public class CollectionManagerCommand extends AbstractCommand {
             }
         }
 
-        ViewSE.println("Executed.");
+        ViewSE.println("Executed: " + option + " on collection");
         AssertionControl.logMessage("Executed " + option, 3, CLASSNAME);
     }
 }

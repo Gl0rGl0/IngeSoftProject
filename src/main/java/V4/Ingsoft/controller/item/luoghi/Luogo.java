@@ -58,7 +58,7 @@ public class Luogo extends Deletable {
         this.position = a[2];
         this.UID = name.hashCode() + "l";
 
-        this.insertionDate = d.clone();
+        this.insertionDate = d;
     }
 
     @Override

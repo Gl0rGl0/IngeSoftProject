@@ -2,6 +2,7 @@ package V4.Ingsoft.util;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.Volontario;
+import V4.Ingsoft.model.Model;
 
 import java.time.Month;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Random;
 public class Initer {
     private static final int NCON = 3;
     private static final int NVOL = 5;
+    private static final int GGDISP = 15;
 
     public static Random r = new Random();
 
@@ -78,25 +80,93 @@ public class Initer {
     }
 
     public static void initAvailability(Controller c) {
-        Month meseNum = c.date.getMonth().plus(2);
+        Month meseNum = c.date.getMonth().plus(1);
 
-        if (c.date.getDay() > 16)
+        if (c.date.getDay() >= 16)
             meseNum = meseNum.plus(1);
 
         for (Volontario v : c.getDB().dbVolontarioHelper.getPersonList()) {
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < GGDISP; i++)
                 try {
                     v.setAvailability(c.date, new Date(String.format("%d/%d/2025",
                             r.nextInt(1, meseNum.maxLength()),
                             meseNum.getValue())), true);
                 } catch (Exception ignored) {
-                }
+            }
         }
     }
 
     public static void setupPhase(Controller controller) {
-        controller.interpreter("setmax 5"); // Correct setup command
-        controller.interpreter("add -L Universita \"Descrizione universitaria\" \"Via Branze 38\""); // Correct setup command
-        controller.interpreter("done"); // Correct setup command
+        controller.getDB();
+        Model.setAmbito("Brescia");
+        controller.interpreter("time -s 1/2/2025");
+
+        controller.interpreter("login ADMIN PASSWORD");
+
+        controller.interpreter("setmax 5");
+        controller.interpreter("add -L Universita \"Descrizione universitaria\" \"Via Branze 38, 25133 Brescia BS\"");
+        controller.interpreter("add -T \"Visita al modulo\" \"Esplorazione dei laboratori sotterranei\" \"Via Senatore Diogene Valotti, 9\" 1/1/2025 23/12/2025 10:30 65 false 5 20 LuMeVe");
+        controller.interpreter("add -v visitaUniverstaria passVUNI");
+
+        controller.interpreter("assign -V \"Visita al modulo\" visitaUniverstaria");
+        controller.interpreter("assign -L Universita \"Visita al modulo\"");
+
+        controller.interpreter("add -c configUNI passCUNI");
+        controller.interpreter("done");
+
+        controller.interpreter("logout");
+
+        controller.interpreter("time -s 1/3/2025");
+        controller.interpreter("time -s 1/4/2025");
+
+        controller.interpreter("time -s 16/5/2025");
+    }
+
+    public static void dimostrazione(Controller controller) {
+        setupPhase(controller);
+        //è il 16 aprile
+
+        controller.interpreter("login ADMIN PASSWORD");
+
+        controller.interpreter("add -c confTest2 c2Test");
+
+        controller.interpreter("add -v volTest2 v2Test");
+
+        List<String[]> visite = new ArrayList<>();
+        visite.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/25", "15/12/25", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
+        visite.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/25", "20/12/25", "18:00", "90", "false", "6", "18", "MeGi"});
+        visite.forEach(v -> controller.interpreter("add -T " + StringUtils.arrayToStringClean(v)));
+    
+        controller.interpreter("add -L \"Foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
+    
+        controller.interpreter("assign -L \"Foresta Incantata\" \"Tour della Foresta\"");
+        controller.interpreter("assign -L \"Foresta Incantata\" \"Avventura sul Fiume\"");
+
+        controller.interpreter("assign -V \"Tour della Foresta\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul Fiume\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul Fiume\" volTest2");
+        
+        controller.interpreter("time -m 2");
+        initAvailability(controller);
+
+        Month meseNum = controller.date.clone().getMonth().plus(1);
+
+        if (controller.date.getDay() >= 16)
+            meseNum = meseNum.plus(1);
+
+        Date toSet = new Date(16, meseNum.getValue(), controller.date.getYear());
+        controller.interpreter("time -s " + toSet.toString());
+
+        controller.interpreter("collection -c");
+        controller.interpreter("makeplan");
+
+        controller.interpreter("logout");
+
+        controller.interpreter("login fruit1 pass1F pass1F");
+        controller.interpreter("logout");
+        controller.interpreter("login fruit2 pass2F pass2F");
+        controller.interpreter("logout");
+        controller.interpreter("login fruit3 pass3F pass3F");
+        controller.interpreter("logout");
     }
 }

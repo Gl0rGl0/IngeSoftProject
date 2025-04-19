@@ -1,0 +1,68 @@
+package V3.Ingsoft.controller.commands.setup;
+
+import V3.Ingsoft.controller.Controller;
+import V3.Ingsoft.controller.commands.AbstractCommand;
+import V3.Ingsoft.model.Model;
+import V3.Ingsoft.util.AppSettings; // Import AppSettings
+import V3.Ingsoft.util.AssertionControl;
+import V3.Ingsoft.util.JsonStorage; // Import JsonStorage
+import V3.Ingsoft.util.StringUtils;
+import V3.Ingsoft.view.ViewSE;
+
+//COMANDO INUTILIZZATO
+public class SetAmbitoCommandSETUP extends AbstractCommand {
+
+    // Used during setup to set the territorial scope once.
+
+    
+
+    public SetAmbitoCommandSETUP(Controller controller) {
+        this.controller = controller;
+        super.commandInfo = CommandListSETUP.SETAMBITO;
+        this.hasBeenExecuted = false;
+    }
+
+    @Override
+    /**
+     * Implementation of the "setambito" command. // Corrected command name
+     *
+     * @param options the options (e.g., -c for configurator) - Note: Options seem unused here.
+     * @param args    any additional arguments (the territorial scope name)
+     */
+    public void execute(String[] options, String[] args) {
+        if (args.length < 1) {
+            // Updated the error message to reflect the actual command usage
+            ViewSE.println("Error using the command, at least one name is required. Usage: setambito \"Scope Name\"");
+            return;
+        }
+        String[] a = StringUtils.joinQuotedArguments(args);
+
+        if(a[0].isBlank()) {
+            AssertionControl.logMessage("Ambito non può essere stringa vuota", 2, CLASSNAME);
+            ViewSE.println("La stringa setambito non può essere vuota");
+            return;
+        }
+
+        // Attempt to set the ambito in AppSettings
+        boolean successfullySet = Model.appSettings.setAmbitoTerritoriale(a[0]);
+
+        if (successfullySet) {
+            // If successfully set (was not set before), save the settings
+            if (JsonStorage.saveObject(AppSettings.PATH, Model.appSettings)) {
+                ViewSE.println("Territorial scope set to: " + a[0]);
+                this.hasBeenExecuted = true; // Mark as executed only if set successfully
+            } else {
+                ViewSE.println("Error saving settings after setting ambito.");
+                // Consider if hasBeenExecuted should remain false if saving fails
+            }
+        } else {
+            // Ambito was already set or input was invalid
+            if (Model.appSettings.isAmbitoSet()) {
+                 ViewSE.println("Territorial scope has already been set to '" + Model.appSettings.getAmbitoTerritoriale() + "' and cannot be changed.");
+            } else {
+                 ViewSE.println("Invalid input for territorial scope."); // Should not happen due to isBlank check, but good practice
+            }
+            // Do not set hasBeenExecuted = true if it wasn't successfully set now
+        }
+    }
+}

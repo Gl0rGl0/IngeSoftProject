@@ -14,7 +14,7 @@ public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
 
-    private final Model db;
+    private Model db;
 
     // Initially the user is a Guest (not logged in)
     public String user;
@@ -64,6 +64,7 @@ public class Controller {
     public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter = new RunningInterpreter(this);
+        ViewSE.println("SETUP COMPLETED");
     }
 
     public boolean setupCompleted() {
@@ -95,31 +96,27 @@ public class Controller {
         int currentDay = date.getDay();
         boolean isHolidayToday = this.date.holiday(); // Assumes Date.holiday() checks the current date
 
-        if (currentDay == 15) {
-            // Day before the 16th, reset the flag.
+        if(currentDay > 18 || currentDay <= 15){
             isActionDay16 = false;
-        } else if (currentDay == 16) {
-            // It's the 16th.
-            if (!isHolidayToday) {
-                // If not a holiday, today is the action day.
-                performDay16Actions();
-            } else {
-                // If it's a holiday, keep the flag false, actions deferred.
-                isActionDay16 = false;
-            }
-        } else if (!isActionDay16 && currentDay > 16) {
-            // It's after the 16th, and the action day hasn't occurred yet (due to holidays).
-            if (!isHolidayToday) {
-                // If today is not a holiday, it becomes the action day.
-                performDay16Actions();
-            }
-            // If it's still a holiday, isActionDay16 remains false.
-        } else if (isActionDay16 && currentDay > 16) {
-            // The action day (16th or later) has already passed. Reset the flag for subsequent days in the month.
-            // This ensures the special commands are only allowed on that single designated day.
+            return;
+        }
+
+        if(isHolidayToday){
+            isActionDay16 = false;
+            return;
+        }
+
+        if(currentDay == 16){
+            performDay16Actions();
+            return;
+        }
+
+        Date yesterday = date.clone().minusDays(1);
+        if(yesterday.holiday()){
+            performDay16Actions();
+        }else{
             isActionDay16 = false;
         }
-        // If currentDay < 15, the flag remains false.
     }
 
     /**
@@ -128,10 +125,8 @@ public class Controller {
      */
     private void performDay16Actions() {
         AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, 3, getClass().getSimpleName());
-        // Perform automatic tasks for the 16th
-        db.refreshPrecludedDate(this.date); // Example task from original code
+        db.dbDatesHelper.refreshPrecludedDate(this.date); // Example task from original code
 
-        // Set the flag to allow special commands for today
         isActionDay16 = true;
     }
 
@@ -156,5 +151,9 @@ public class Controller {
 
     public boolean isVolunteerCollectionOpen() {
         return collectionStatus;
+    }
+
+    public void setDB(Model instance) {
+        this.db = instance;
     }
 }

@@ -58,7 +58,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
                 case PENDING_ADD -> tv.checkStatus(d);
                 case PENDING_REMOVE -> {
                     Date deletionDate = tv.getdeletionDate();
-                    if (deletionDate != null && deletionDate.equals(d))
+                    if (deletionDate != null && (deletionDate.equals(d) || deletionDate.isBefore(d)))
                         removeTipoVisitaByUID(tv.getUID());
                 }
                 case DISABLED -> removeTipoVisitaByUID(tv.getUID());
@@ -72,7 +72,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
         ArrayList<TipoVisita> out = new ArrayList<>();
 
         for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() != StatusItem.ACTIVE || tv.getStatus() == StatusItem.PENDING_REMOVE) //or != PENDING_ADD and != DISABLED
+            if (tv.getStatus() == StatusItem.ACTIVE || tv.getStatus() == StatusItem.PENDING_REMOVE) //or != PENDING_ADD and != DISABLED
                 out.add(tv);
         }
         return out;

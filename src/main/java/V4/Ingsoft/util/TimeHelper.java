@@ -13,6 +13,6 @@ public class TimeHelper implements Runnable {
     @Override
     public void run() {
         // Example: update the simulated date according to your preferred logic
-        controller.date.incrementa(); // Assuming incrementa() means increment
+        controller.date.incrementa();
     }
 }

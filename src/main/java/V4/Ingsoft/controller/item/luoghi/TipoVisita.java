@@ -123,7 +123,7 @@ public class TipoVisita extends Deletable {
             this.numMaxPartecipants = Integer.parseInt(args[9]);
             this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
 
-            this.insertionDate = d.clone();
+            this.insertionDate = d;
         } catch (Exception e) {
             throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
         }
@@ -221,6 +221,7 @@ public class TipoVisita extends Deletable {
                 + ", Max Participants=" + numMaxPartecipants // Changed "Numero Max Partecipanti"
                 + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
                 + ", Visit Status=" + si // Changed "Stato visita"
+                + ", PlaceUID=" + luogoUID
                 + "}\n";
     }
 

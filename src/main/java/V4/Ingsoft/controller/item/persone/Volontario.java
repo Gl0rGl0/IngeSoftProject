@@ -70,7 +70,7 @@ public class Volontario extends Persona {
      * @param disp la data per cui si vuole impostare la disponibilità
      */
     public void setAvailability(Date oggi, Date disp, boolean toAdd) {
-        if (!Date.monthsDifference(oggi, disp, 1)) {
+        if (Date.monthsDifference(oggi, disp) > 1) {
             ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return;
         }

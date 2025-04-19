@@ -40,7 +40,7 @@ public class MakePlanCommand extends AbstractCommand {
         if (!isExecutable())
             return;
 
-        if(!controller.isVolunteerCollectionOpen()){
+        if(controller.isVolunteerCollectionOpen()){
             ViewSE.println("Can't make the visits plan if the collection it's not closed");
             AssertionControl.logMessage("Can't make the visits plan if the collection it's not closed", 2, CLASSNAME);
             return;
@@ -49,7 +49,7 @@ public class MakePlanCommand extends AbstractCommand {
         ArrayList<TipoVisita> tipi = controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili();
         tipi.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
-        Month month = controller.date.getMonth().plus(1);
+        Month month = controller.date.clone().getMonth().plus(1);
         int year = controller.date.getYear();
         int daysInMonth = month.maxLength();
 

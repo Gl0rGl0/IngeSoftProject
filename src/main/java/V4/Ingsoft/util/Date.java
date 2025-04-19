@@ -52,23 +52,18 @@ public class Date {
         }
     }
 
-    public static boolean monthsDifference(Date d1, Date d2, int n) {
-        Month currentMonth;
-        Month targetMonth;
+    public static int monthsDifference(Date before, Date after) {
+        Month beforeMonth = before.clone().getMonth();
+        Month afterMonth = after.clone().getMonth();
 
-        if (d1.dayOfTheYear() < d2.dayOfTheYear()) {
-            currentMonth = d1.getMonth();
-            targetMonth = d2.getMonth();
-        } else {
-            targetMonth = d1.getMonth();
-            currentMonth = d2.getMonth();
-        }
+        if(before.getDay() >= 16)
+            beforeMonth = beforeMonth.plus(1);
 
-        if (d1.getDay() < 16) {
-            return (currentMonth.plus(n).equals(targetMonth));
-        } else {
-            return (currentMonth.plus(n + 1).equals(targetMonth));
-        }
+        int out = afterMonth.compareTo(beforeMonth);
+
+        out += ((after.getYear() - before.getYear()) * 12);
+
+        return out;
     }
 
     public static boolean between(Date initDay, Date date, Date finishDay) {
@@ -164,13 +159,8 @@ public class Date {
      * @return A new Date object, or null if the operation fails.
      */
     public Date minusDays(int days) {
-        try {
-            LocalDateTime newLocalDate = this.localDate.minusDays(days);
-            return new Date(newLocalDate);
-        } catch (Exception e) {
-            // Log error if needed
-            return null;
-        }
+        localDate = localDate.minusDays(days);
+        return this;
     }
 
     @Override
@@ -208,13 +198,12 @@ public class Date {
     }
 
     public Date addMonth(int n) {
-        localDate.plusMonths(n);
+        localDate = localDate.plusMonths(n);
         return this;
     }
 
     public Date addDay(int n) {
-        System.out.println("STO AGGIUNGENDO DEI GIORNI CADUSHUJGYSDSAUJYD");
-        localDate.plusDays(n);
+        localDate = localDate.plusDays(n);
         return this;
     }
 }

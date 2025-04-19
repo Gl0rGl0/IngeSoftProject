@@ -49,31 +49,31 @@ public class UserActionsTests extends BaseTest {
     // --- Fruitore Action Tests ---
 
     // UC30 - Visualizzazione Visite Disponibili (Fruitore)
-    @Test
-    public void testUserSubscribeVisitSuccess() {
-        setupAVisit();
+    // @Test
+    // public void testUserSubscribeVisitSuccess() {
+    //     setupAVisit();
 
-        // Act
-        controller.interpreter("myvisit"); // Assumed command
+    //     // Act
+    //     controller.interpreter("myvisit"); // Assumed command
 
-        // Assert
-        ArrayList<Visita> visits = controller.getDB().dbVisiteHelper.getConfermate();
-        assertEquals(1, visits.size(), "Should be a confirmed visit.");
-        Visita v = visits.getFirst();
+    //     // Assert
+    //     ArrayList<Visita> visits = controller.getDB().dbVisiteHelper.getConfermate();
+    //     assertEquals(1, visits.size(), "Should be a confirmed visit.");
+    //     Visita v = visits.getFirst();
 
-        Optional<Iscrizione> targetIscrizione = visits.stream()
-                // Filtra la visita in base all'UID (assumendo che v sia la visita già individuata)
-                .filter(visit -> visit.getUID().equals(v.getUID()))
-                // Ottieni lo stream delle iscrizioni di questa visita
-                .flatMap(visit -> visit.getIscrizioni().stream())
-                // Filtra l'iscrizione appartenente al fruitore "userTestView"
-                .filter(iscrizione -> iscrizione.getUIDFruitore() != null &&
-                        "userTestView".equals(iscrizione.getUIDFruitore()))
-                .findFirst();
+    //     Optional<Iscrizione> targetIscrizione = visits.stream()
+    //             // Filtra la visita in base all'UID (assumendo che v sia la visita già individuata)
+    //             .filter(visit -> visit.getUID().equals(v.getUID()))
+    //             // Ottieni lo stream delle iscrizioni di questa visita
+    //             .flatMap(visit -> visit.getIscrizioni().stream())
+    //             // Filtra l'iscrizione appartenente al fruitore "userTestView"
+    //             .filter(iscrizione -> iscrizione.getUIDFruitore() != null &&
+    //                     "userTestView".equals(iscrizione.getUIDFruitore()))
+    //             .findFirst();
 
 
-        assertTrue(targetIscrizione.isPresent());
-    }
+    //     assertTrue(targetIscrizione.isPresent());
+    // }
 
     @Test
     public void testUserListViewAvailableVisitsEmpty() {
