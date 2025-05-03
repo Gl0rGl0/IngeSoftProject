@@ -1,0 +1,31 @@
+package V5.Ingsoft.controller.commands;
+
+import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.commands.running.CommandList;
+import V5.Ingsoft.util.Payload;
+
+public class ChangePswCommand extends AbstractCommand {
+
+    public ChangePswCommand(Controller controller) {
+        this.controller = controller;
+        super.commandInfo = CommandList.CHANGEPSW;
+    }
+
+    @Override
+    public Payload execute(String[] options, String[] args) {
+        if (args == null || args.length < 1) {
+            return Payload.error(
+                "Usage: changepsw <newpassword>",
+                "Missing password argument in ChangePswCommand");
+        }
+        if (controller.getDB().changePassword(controller.user, args[0])) {
+            this.hasBeenExecuted = true;
+            return Payload.info(
+                "Password changed successfully!",
+                "Password changed for user: " + controller.user);
+        }
+        return Payload.error(
+            "Error changing password, please try again...",
+            "Password change failed for user: " + controller.user);
+    }
+}
