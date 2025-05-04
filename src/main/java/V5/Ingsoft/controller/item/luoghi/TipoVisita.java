@@ -124,6 +124,7 @@ public class TipoVisita extends Deletable {
             this.days = new ArrayList<>(Arrays.asList(DayOfWeekConverter.stringToDays(args[10])));
 
             this.insertionDate = d;
+            this.si = StatusItem.PENDING_ADD;
         } catch (Exception e) {
             throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
         }

@@ -18,7 +18,7 @@ public class RunningInterpreter extends Interpreter {
         commandRegistry.put("makeplan", new MakePlanCommand(controller));
         commandRegistry.put("visit", new VisitCommand(controller));
         commandRegistry.put("collection", new CollectionManagerCommand(controller));
-        commandRegistry.put("help", new HelpCommand(controller, CommandList.HELP));
+        commandRegistry.put("help", new HelpCommand(controller));
     }
 
 }

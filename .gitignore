@@ -20,3 +20,7 @@ target/
 qodana.yaml
 *.drawio
 *.png
+
+#gui
+resources/
+src/main/java/GUI/

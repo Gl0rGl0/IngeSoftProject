@@ -1,10 +1,14 @@
 package V5.Ingsoft.controller.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
+import V5.Ingsoft.util.Payload;
 
 public abstract class Deletable {
-    protected StatusItem si = StatusItem.PENDING_ADD;
+    @JsonIgnore
+    protected StatusItem si = StatusItem.ACTIVE;
     protected Date insertionDate;
     protected Date deletionDate;
 
@@ -12,7 +16,7 @@ public abstract class Deletable {
         switch (si) {
             case PENDING_ADD -> {
                 if (insertionDate == null) {
-                    AssertionControl.logMessage("Error while loading insertion date while adding, using today", 2, getClass().getSimpleName());
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using today", Payload.Level.WARN, getClass().getSimpleName());
                     this.insertionDate = d;
                     return;
                 }
@@ -22,7 +26,7 @@ public abstract class Deletable {
             }
             case PENDING_REMOVE -> {
                 if (deletionDate == null) {
-                    AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", 2, getClass().getSimpleName());
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", Payload.Level.WARN, getClass().getSimpleName());
                     this.deletionDate = d.clone().addMonth(2);
                     this.deletionDate.setDay(16);
                     return;
@@ -46,9 +50,5 @@ public abstract class Deletable {
 
     public StatusItem getStatus() {
         return this.si;
-    }
-
-    public boolean isDisabled(){
-        return this.si == StatusItem.DISABLED;
     }
 }

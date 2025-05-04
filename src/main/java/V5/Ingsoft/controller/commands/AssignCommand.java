@@ -3,6 +3,7 @@ package V5.Ingsoft.controller.commands;
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.CommandList;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.util.AssertionControl;
@@ -66,12 +67,12 @@ public class AssignCommand extends AbstractCommand {
                         "Cannot assign volunteer to visit.",
                         "Failed addTipoVisita for volunteer: " + volunteer);
                 }
-                if (v.isDisabled()) {
+                if (v.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                         "Cannot assign: volunteer status is DISABLED.",
                         "Volunteer disabled: " + volunteer);
                 }
-                if (t.isDisabled()) {
+                if (t.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                         "Cannot assign: visit type status is DISABLED.",
                         "Visit type disabled: " + visit);
@@ -104,12 +105,12 @@ public class AssignCommand extends AbstractCommand {
                         "Operation not permitted at this time.",
                         "AssignCommand not executable due to state");
                 }
-                if (l.isDisabled()) {
+                if (l.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                         "Cannot assign: place status is DISABLED.",
                         "Luogo disabled: " + place);
                 }
-                if (t.isDisabled()) {
+                if (t.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                         "Cannot assign: visit type status is DISABLED.",
                         "Visit type disabled: " + visit);

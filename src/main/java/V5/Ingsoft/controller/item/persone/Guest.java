@@ -2,6 +2,7 @@ package V5.Ingsoft.controller.item.persone;
 
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Payload;
 
 public class Guest extends Persona {
 
@@ -18,7 +19,7 @@ public class Guest extends Persona {
                     try {
                         instance = new Guest();
                     } catch (Exception e) {
-                        AssertionControl.logMessage("Error while building Guest: " + e.getMessage(), 1, "Guest");
+                        AssertionControl.logMessage("Error while building Guest: " + e.getMessage(), Payload.Level.ERROR, "Guest");
                     }
                 }
             }

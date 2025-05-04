@@ -3,6 +3,7 @@ package V5.Ingsoft.controller.item.persone;
 import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
+import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.view.ViewSE;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,10 +38,11 @@ public class Volontario extends Persona {
     private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
-
+    
     public Volontario(String[] a, Date d) throws Exception {
         this(a[0], a[1], true, true);
         this.insertionDate = d;
+        si = StatusItem.PENDING_ADD;
     }
 
     public boolean addTipoVisita(String uidTipoVisita) {
@@ -69,14 +71,15 @@ public class Volontario extends Persona {
      * @param oggi la data corrente (per aggiornare eventualmente il periodo)
      * @param disp la data per cui si vuole impostare la disponibilità
      */
-    public void setAvailability(Date oggi, Date disp, boolean toAdd) {
+    public Payload.Status setAvailability(Date oggi, Date disp, boolean toAdd) {
         if (Date.monthsDifference(oggi, disp) > 1) {
             ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
-            return;
+            return Payload.Status.ERROR;
         }
 
         availability[disp.getDay() - 1] = toAdd;
-        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd, 3, "Volontario.setAvailability");
+        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd, Payload.Level.INFO, "Volontario.setAvailability");
+        return Payload.Status.OK;
     }
 
     public void clearAvailability() {

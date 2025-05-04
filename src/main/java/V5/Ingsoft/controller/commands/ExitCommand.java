@@ -3,7 +3,6 @@ package V5.Ingsoft.controller.commands;
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.CommandList;
 import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.view.ViewSE;
 
 public class ExitCommand extends AbstractCommand {
     Controller controller;
@@ -15,10 +14,13 @@ public class ExitCommand extends AbstractCommand {
 
     @Override
     public Payload execute(String[] options, String[] args) {
+        // chiudi risorse, log, ecc.
         controller.close();
-        ViewSE.println("Program terminated. Goodbye!");
-        System.exit(0);
 
-        return null; //It cant be here
+        // prepari il Payload con la lambda
+        Runnable afterExit = () -> System.exit(0);
+
+        return Payload.info(afterExit,"ExitCommand: scheduled System.exit");
     }
+
 }

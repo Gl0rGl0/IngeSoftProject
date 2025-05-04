@@ -14,6 +14,7 @@ public class CollectionManagerCommand extends AbstractCommand {
 
     @Override
     public Payload execute(String[] options, String[] args) {
+        //Non so se lasciarlo
         if (controller == null)
             return Payload.error(
                 "Internal error: controller is null",

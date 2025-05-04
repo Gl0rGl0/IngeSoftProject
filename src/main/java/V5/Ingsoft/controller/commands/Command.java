@@ -14,4 +14,6 @@ public interface Command {
     boolean canBeExecutedBy(int userPriority);
 
     boolean hasBeenExecuted();
+
+    ListInterface getCommandInfo();
 }

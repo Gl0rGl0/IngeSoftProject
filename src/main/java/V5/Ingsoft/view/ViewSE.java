@@ -1,20 +1,34 @@
 package V5.Ingsoft.view;
 
 import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.commands.running.CommandList;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Payload;
 
 import java.util.Scanner;
 
 //Literally input/output management...
 public class ViewSE implements Runnable {
     private static final Scanner scanner = new Scanner(System.in);
-    // Instantiable class...
     private static final String MESSAGGIO_START = "Welcome to the Guided Tours management system, type 'help' for assistance";
     private final Controller controller;
 
     public ViewSE(Controller controller) {
         this.controller = controller;
+    }
+
+    public static void payloadOut(Payload out){
+        switch (out.getCommand()) {
+            case CommandList.EXIT -> {
+                println("Program terminated. Goodbye!");
+                ((Runnable) out.getData()).run();
+            }
+        
+            default -> println(out.getData());
+        }
+        // if(out.getCommand().equals(CommandList.LOGIN))
+        //     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     public static void print(Object out) {
@@ -49,11 +63,11 @@ public class ViewSE implements Runnable {
         }
 
         while (!controller.doneAll())
-            controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> "));
+            payloadOut(controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> ")));
 
-        AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Setup completed", Payload.Level.INFO, this.getClass().getSimpleName());
 
         while (true)
-            controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> "));
+            payloadOut(controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> ")));
     }
 }

@@ -25,4 +25,8 @@ public abstract class AbstractCommand implements Command {
     protected boolean isExecutable() {
         return controller.isActionDay16 || !controller.doneAll();
     }
+
+    public ListInterface getCommandInfo(){
+        return commandInfo;
+    }
 }

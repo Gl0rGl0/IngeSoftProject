@@ -40,7 +40,7 @@ public class JsonStorage {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            AssertionControl.logMessage("Error loading JSON file", 1, "JsonStorage");
+            AssertionControl.logMessage("Error loading JSON file", Payload.Level.ERROR, "JsonStorage");
             ViewSE.println("Error loading JSON file: " + e.getMessage());
             return new ArrayList<>();
         }
@@ -52,7 +52,7 @@ public class JsonStorage {
                     collection);
             return true;
         } catch (IOException e) {
-            AssertionControl.logMessage("Error saving JSON file", 1, "JsonStorage");
+            AssertionControl.logMessage("Error saving JSON file", Payload.Level.ERROR, "JsonStorage");
             ViewSE.println("Error saving JSON file: " + e.getMessage());
             return false;
         }
@@ -63,7 +63,7 @@ public class JsonStorage {
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(BASE_PATH + fileName + ".json"), new ArrayList<T>());
         } catch (IOException e) {
-            AssertionControl.logMessage("Error clearing JSON file", 1, "JsonStorage");
+            AssertionControl.logMessage("Error clearing JSON file", Payload.Level.ERROR, "JsonStorage");
             ViewSE.println("Error clearing JSON file: " + e.getMessage());
         }
     }
@@ -85,7 +85,7 @@ public class JsonStorage {
         try {
             return objectMapper.readValue(file, clazz);
         } catch (IOException e) {
-            AssertionControl.logMessage("Error loading JSON object file: " + filePath, 1, "JsonStorage");
+            AssertionControl.logMessage("Error loading JSON object file: " + filePath, Payload.Level.ERROR, "JsonStorage");
             ViewSE.println("Error loading JSON object file: " + e.getMessage());
             return null;
         }
@@ -104,7 +104,7 @@ public class JsonStorage {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(BASE_PATH + filePath), object); // Assuming filePath includes .json
             return true;
         } catch (IOException e) {
-            AssertionControl.logMessage("Error saving JSON object file: " + filePath, 1, "JsonStorage");
+            AssertionControl.logMessage("Error saving JSON object file: " + filePath, Payload.Level.ERROR, "JsonStorage");
             ViewSE.println("Error saving JSON object file: " + e.getMessage());
             return false;
         }

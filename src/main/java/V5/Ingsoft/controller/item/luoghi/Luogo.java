@@ -59,6 +59,7 @@ public class Luogo extends Deletable {
         this.UID = name.hashCode() + "l";
 
         this.insertionDate = d;
+        this.si = StatusItem.PENDING_ADD;
     }
 
     @Override

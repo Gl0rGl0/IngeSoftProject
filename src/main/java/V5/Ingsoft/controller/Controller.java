@@ -55,23 +55,23 @@ public class Controller {
      *
      * @param prompt the entered command string
      */
-    public void interpreter(String prompt) {
-        AssertionControl.logMessage("Attempting to execute: " + prompt, 3, this.getClass().getSimpleName());
+    public Payload interpreter(String prompt) {
+        AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Level.INFO, this.getClass().getSimpleName());
 
-        interpreter.interpret(prompt, getCurrentUser());
+        return interpreter.interpret(prompt, getCurrentUser());
     }
 
     public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter = new RunningInterpreter(this);
-        ViewSE.println("SETUP COMPLETED");
+        //ViewSE.println("SETUP COMPLETED");
     }
 
     public boolean setupCompleted() {
         boolean out = interpreter.doneAll();
 
         if (out)
-            AssertionControl.logMessage("Setup completed", 3, this.getClass().getSimpleName());
+            AssertionControl.logMessage("Setup completed", Payload.Level.INFO, this.getClass().getSimpleName());
 
         return out;
     }
@@ -124,8 +124,8 @@ public class Controller {
      * Sets the flag indicating that special commands are now allowed for this day.
      */
     private void performDay16Actions() {
-        AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, 3, getClass().getSimpleName());
-        db.dbDatesHelper.refreshPrecludedDate(this.date); // Example task from original code
+        AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, Payload.Level.INFO, getClass().getSimpleName());
+        db.dbDatesHelper.refreshPrecludedDate(this.date);
 
         isActionDay16 = true;
     }

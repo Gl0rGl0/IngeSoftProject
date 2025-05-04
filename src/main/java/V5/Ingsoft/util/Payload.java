@@ -1,5 +1,7 @@
 package V5.Ingsoft.util;
 
+import V5.Ingsoft.controller.commands.ListInterface;
+
 public class Payload {
     public enum Status { OK, ERROR }
     public enum Level  { ERROR, WARN, INFO, DEBUG }
@@ -8,6 +10,12 @@ public class Payload {
     private Object data;
     private String logMessage;
     private Level level;
+    private ListInterface command;
+    
+    public Payload(Status status, Object data){
+        this.status = status;
+        this.data = data;
+    }
 
     private Payload(Status status, Object data, String logMessage, Level level) {
         this.status = status;
@@ -46,6 +54,14 @@ public class Payload {
 
     public Level getLevel() {
         return level;
+    }
+
+    public void setCommand(ListInterface command){
+        this.command = command;
+    }
+
+    public ListInterface getCommand(){
+        return this.command;
     }
 
     @Override
