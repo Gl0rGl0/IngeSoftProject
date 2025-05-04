@@ -1,6 +1,9 @@
 package GUI.it.proj.frame;
 
-import GUI.it.proj.utils.Persona;
+import V5.Ingsoft.controller.item.persone.Configuratore;
+import V5.Ingsoft.controller.item.persone.Persona;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.controller.item.persone.Volontario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,22 +27,21 @@ public class AddPersonDialogController {
     private ComboBox<String> visitComboBox;
 
     private boolean edit = false;
-    private String role; // Il ruolo da assegnare alla nuova persona
+    private PersonaType role; // Il ruolo da assegnare alla nuova persona
     private PersonViewController parentController; // Riferimento al controller principale
 
     // Setter per il ruolo
-    public void setRole(String role) {
+    public void setRole(PersonaType role) {
         this.role = role;
         roleLabel.setText("   AGGIUNGI  " + role + "    ");
 
         // Se il ruolo è "Volontario", rendi visibile il ComboBox
-        if ("VOLONTARIO".equals(role)) {
+        if (role.equals(PersonaType.VOLONTARIO)) {
             ObservableList<String> visits = FXCollections.observableArrayList("Visita 1", "Visita 2", "Visita 3");
             visitComboBox.setItems(visits);
 
             visitComboBox.setVisible(true);
             visitComboBox.setManaged(true);
-            // loadVisitList(); // Carica la lista delle visite
         } else {
             visitComboBox.setVisible(false);
         }
@@ -69,8 +71,18 @@ public class AddPersonDialogController {
                 System.out.println("Volontario associato alla visita: " + selectedVisit);
             }
         } else {
-            Persona newPersona = new Persona(username, password, role);
-            // Aggiungi la nuova persona alla ListView appropriata
+            Persona newPersona;
+            try{
+                newPersona = switch(role){
+                    case CONFIGURATORE -> new Configuratore(username, password, true, true);
+                    case VOLONTARIO -> new Volontario(username, password, true, true);
+                    default -> throw new Exception();
+                };
+            } catch(Exception e) {
+                closeDialog();
+                return;
+            }
+
             parentController.addItem(newPersona);
         }
 

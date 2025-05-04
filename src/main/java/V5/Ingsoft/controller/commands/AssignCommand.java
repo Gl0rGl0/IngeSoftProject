@@ -62,11 +62,6 @@ public class AssignCommand extends AbstractCommand {
                         "Operation not permitted at this time.",
                         "AssignCommand not executable due to state");
                 }
-                if (!v.addTipoVisita(t.getUID())) {
-                    return Payload.error(
-                        "Cannot assign volunteer to visit.",
-                        "Failed addTipoVisita for volunteer: " + volunteer);
-                }
                 if (v.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                         "Cannot assign: volunteer status is DISABLED.",
@@ -76,6 +71,11 @@ public class AssignCommand extends AbstractCommand {
                     return Payload.error(
                         "Cannot assign: visit type status is DISABLED.",
                         "Visit type disabled: " + visit);
+                }
+                if (!v.addTipoVisita(t.getUID())) {
+                    return Payload.error(
+                        "Cannot assign volunteer to visit.",
+                        "Failed addTipoVisita for volunteer: " + volunteer);
                 }
                 if (!t.addVolontario(volunteer)) {
                     return Payload.error(
@@ -122,7 +122,12 @@ public class AssignCommand extends AbstractCommand {
                             "Scheduling conflict for visit " + visit + " at place " + place);
                     }
                 }
-                l.addTipoVisita(t.getUID());
+                if (!l.addTipoVisita(t.getUID())) {
+                    return Payload.error(
+                        "Cannot assign visit to place.",
+                        "Failed addTipoVisita for place: " + place);
+                }
+    
                 t.setLuogo(l.getUID());
                 return Payload.info(
                     "Assigned visit " + visit + " to place " + place,

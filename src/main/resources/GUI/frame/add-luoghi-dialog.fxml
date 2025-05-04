@@ -17,18 +17,13 @@
     fx:controller="GUI.it.proj.frame.AddLuoghiDialogController">
     <Group>
         <VBox spacing="10" alignment="CENTER" styleClass="section-box-full">
-            <Label fx:id="titleLabel" text="RolePlaceHolder" style="-fx-font-size: 20px" />
+            <Label fx:id="titleLabel" text="AGGIUNGI LUOGO" style="-fx-font-size: 20px" />
             <VBox spacing="10" alignment="CENTER" style="-fx-padding: 0 10 0 10;">
                 <TextField fx:id="titoloLuogo" promptText="Titolo" />
                 <TextArea fx:id="descrizioneLuogo" promptText="Descrizione" prefHeight="100"
                     wrapText="true" />
-                <HBox>
-                    <HBox style="-fx-padding: 0 10 0 10;" prefWidth="200">
-                        <TextField fx:id="lat" promptText="Latitudine" />
-                        <TextField fx:id="lon" promptText="Longitudine" />
-                    </HBox>
-                    <ComboBox fx:id="visitComboBox" prefWidth="200" />
-                </HBox>
+                <TextArea fx:id="posizione" promptText="Posizione" prefHeight="100"
+                    wrapText="true" />
                 <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
             </VBox>
             <HBox spacing="10" alignment="CENTER">

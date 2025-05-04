@@ -3,9 +3,14 @@ package GUI.it.proj.utils;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import GUI.it.proj.frame.ListViewController;
 import GUI.it.proj.frame.LuoghiViewController;
-import GUI.it.proj.frame.VisiteViewController;
+import GUI.it.proj.frame.TipoVisiteViewController;
+import GUI.it.proj.utils.interfaces.ListBase;
+import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.persone.Persona;
+import V5.Ingsoft.controller.item.persone.PersonaType;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,21 +42,21 @@ public class CellController<T> implements Initializable {
     private ImageView confirmImage;
 
     private T item;
-    ListViewController<T> parent;
+    ListBase<T> parent;
 
     public void setType(String type) {
         switch (type) {
-            case "CONFIGURATORE", "FRUITORE" -> {
+            case "configuratore", "volontario" -> {
                 descriptionText.setManaged(false);
                 descriptionText.setVisible(false);
                 modifyButton.setVisible(false);
                 modifyButton.setManaged(false);
             }
-            case "VOLONTARIO" -> {
+            case "fruitore" -> {
                 descriptionText.setManaged(false);
                 descriptionText.setVisible(false);
             }
-            case VisiteViewController.ID -> {
+            case TipoVisiteViewController.ID -> {
                 descriptionText.setManaged(true);
                 descriptionText.setVisible(true);
             }
@@ -72,12 +77,12 @@ public class CellController<T> implements Initializable {
                 usernameText.setText(persona.getUsername());
             }
             case Luogo luogo -> {
-                usernameText.setText(luogo.getTitolo());
-                descriptionText.setText(luogo.descrizione);
+                usernameText.setText(luogo.getName());
+                descriptionText.setText(luogo.getDescription());
             }
             case Visita visita -> {
-                usernameText.setText(visita.getTitolo());
-                descriptionText.setText(visita.descrizione);
+                usernameText.setText(visita.getTitle());
+                descriptionText.setText(visita.getTipoVisita().getDescription());
             }
             default -> {
             }
@@ -85,7 +90,7 @@ public class CellController<T> implements Initializable {
 
     }
 
-    public void setViewController(ListViewController<T> p) {
+    public void setViewController(ListBase<T> p) {
         this.parent = p;
     }
 
@@ -105,7 +110,7 @@ public class CellController<T> implements Initializable {
 
     @FXML
     private void handleModify() {
-        parent.modifyItem(item);
+        ((ListEditer<T>) parent).modifyItem(item, null);
     }
 
     @Override

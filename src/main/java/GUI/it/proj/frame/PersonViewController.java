@@ -1,11 +1,13 @@
 package GUI.it.proj.frame;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.Loader;
-import GUI.it.proj.utils.Persona;
+import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.persone.Persona;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
@@ -14,7 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class PersonViewController implements ListViewController<Persona> {
+public class PersonViewController implements ListEditer<Persona> {
     public static final String ID = "persone";
 
     @FXML private ListView<Persona> listConfiguratori;
@@ -33,13 +35,13 @@ public class PersonViewController implements ListViewController<Persona> {
         VBox.setVgrow(listFruitori, Priority.ALWAYS);
         VBox.setVgrow(listVolontari, Priority.ALWAYS);
 
-        setupListView(listConfiguratori, "CONFIGURATORE");
-        setupListView(listFruitori, "FRUITORE");
-        setupListView(listVolontari, "VOLONTARIO");
+        setupListView(listConfiguratori, PersonaType.CONFIGURATORE.toString());
+        setupListView(listFruitori, PersonaType.FRUITORE.toString());
+        setupListView(listVolontari, PersonaType.VOLONTARIO.toString());
 
-        listConfiguratori.getItems().addAll(generatePeople(20, "CONFIGURATORE"));
-        listFruitori.getItems().addAll(generatePeople(15, "FRUITORE"));
-        listVolontari.getItems().addAll(generatePeople(15, "VOLONTARIO"));
+        listConfiguratori.getItems().addAll(Launcher.controller.getDB().dbConfiguratoreHelper.getPersonList());
+        listFruitori.getItems().addAll(Launcher.controller.getDB().dbFruitoreHelper.getPersonList());
+        listVolontari.getItems().addAll(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
     }
 
     private void setupListView(ListView<Persona> listView, String roleFilter) {
@@ -48,46 +50,65 @@ public class PersonViewController implements ListViewController<Persona> {
 
     @Override
     public void removeItem(Persona user) {
-        switch (user.tipo) {
-            case "CONFIGURATORE" -> listConfiguratori.getItems().removeIf(p -> p.username.equals(user.username));
-            case "FRUITORE"     -> listFruitori.getItems().removeIf(p -> p.username.equals(user.username));
-            case "VOLONTARIO"  -> listVolontari.getItems().removeIf(p -> p.username.equals(user.username));
+        String prompt = null;
+        switch (user.getType()) {
+            case CONFIGURATORE -> prompt = "remove -c " + user.getUsername();
+            case FRUITORE      -> prompt = "remove -f " + user.getUsername();
+            case VOLONTARIO    -> prompt = "remove -v " + user.getUsername();
+            default -> {}
+        }
+
+        if(prompt == null)
+            return;
+
+        Payload out = Launcher.controller.interpreter(prompt);
+
+        if(out == null || out.getStatus() == Status.ERROR)
+            return;
+        
+        switch (user.getType()) {
+            case CONFIGURATORE -> listConfiguratori.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
+            case FRUITORE      -> listFruitori.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
+            case VOLONTARIO    -> listVolontari.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
+            default -> {}
         }
     }
 
     @Override
     public void addItem(Persona user) {
-        switch (user.tipo) {
-            case "CONFIGURATORE" -> listConfiguratori.getItems().add(user);
-            case "FRUITORE"     -> listFruitori.getItems().add(user);
-            case "VOLONTARIO"  -> listVolontari.getItems().add(user);
+        String prompt = null;
+        switch (user.getType()) {
+            case CONFIGURATORE -> prompt = "add -c " + user.getUsername();
+            case VOLONTARIO    -> prompt = "add -v " + user.getUsername();
+            default -> {}
         }
-    }
 
-    private List<Persona> generatePeople(int count, String role) {
-        List<Persona> people = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            people.add(new Persona("user" + i, "pass" + i, role));
+        if(prompt == null)
+            return;
+
+        Payload out = Launcher.controller.interpreter(prompt);
+
+        if(out == null || out.getStatus() == Status.ERROR)
+            return;
+        
+        switch (user.getType()) {
+            case CONFIGURATORE -> listConfiguratori.getItems().add(user);
+            case VOLONTARIO    -> listVolontari.getItems().add(user);
+            default -> {}
         }
-        return people;
     }
 
     @FXML
     private void onAggiungiConfiguratoreClick() {
-        showAddPersonDialog("CONFIGURATORE");
-    }
-
-    @FXML
-    private void onAggiungiFruitoreClick() {
-        showAddPersonDialog("FRUITORE");
+        showAddPersonDialog(PersonaType.CONFIGURATORE);
     }
 
     @FXML
     private void onAggiungiVolontarioClick() {
-        showAddPersonDialog("VOLONTARIO");
+        showAddPersonDialog(PersonaType.VOLONTARIO);
     }
 
-    private void showAddPersonDialog(String role) {
+    private void showAddPersonDialog(PersonaType role) {
         addPersonDialog = Loader.loadFXML("add-person-dialog");
         addPersonDialogController = (AddPersonDialogController) addPersonDialog.getUserData();
         addPersonDialogController.setRole(role);
@@ -99,11 +120,11 @@ public class PersonViewController implements ListViewController<Persona> {
     }
 
     @Override
-    public void modifyItem(Persona p) {
+    public void modifyItem(Persona p, Object o) {
         System.out.println("MODIFICO " + p.getUsername());
         addPersonDialog = Loader.loadFXML("add-person-dialog");
         addPersonDialogController = (AddPersonDialogController) addPersonDialog.getUserData();
-        addPersonDialogController.setRole(p.tipo);
+        addPersonDialogController.setRole(p.getType());
         addPersonDialogController.setParentController(this);
         addPersonDialogController.setStatus(true, p.getUsername());
 

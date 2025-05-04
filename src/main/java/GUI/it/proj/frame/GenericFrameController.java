@@ -2,7 +2,9 @@ package GUI.it.proj.frame;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Loader;
-import GUI.it.proj.utils.Persona;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -11,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.StackPane;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -37,17 +38,6 @@ public class GenericFrameController implements Initializable {
     @FXML
     private Button prenotazioniButton; // FRUITORE
 
-    private String[] roles = { "CONFIGURATORE", "VOLONTARIO", "FRUITORE" };
-    private ArrayList<Persona> db = new ArrayList<>();
-    private Persona current;
-
-    private ArrayList<Persona> genP(int n) {
-        ArrayList<Persona> out = new ArrayList<>();
-        for (int i = 0; i < n; i++)
-            out.add(new Persona(i + "u", i + "p", roles[i % 3]));
-        return out;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Allinea l'area di contenuto
@@ -61,18 +51,13 @@ public class GenericFrameController implements Initializable {
         contentFrames.put(FruitoriViewController.ID, Loader.loadFXML("fruitori-view"));
         contentFrames.put(HomeVisiteViewController.ID, Loader.loadFXML("home-view"));
 
-        // Supponiamo di aver già determinato il ruolo dall'autenticazione
-        // Per esempio, inizialmente assumiamo CONFIGURATORE
-        db = genP(3);
-        current = db.getFirst();
-
         showHome();
     }
 
     /**
      * Configura la navbar in base al ruolo corrente.
      */
-    private void configureNavbarForRole(String role) {
+    private void configureNavbarForRole(PersonaType role) {
         // Nascondi tutti gli elementi specifici
         databaseButton.setVisible(false);
         databaseButton.setManaged(false);
@@ -83,15 +68,15 @@ public class GenericFrameController implements Initializable {
 
         // Abilita gli elementi per il ruolo specifico
         switch (role) {
-            case "CONFIGURATORE":
+            case CONFIGURATORE:
                 databaseButton.setVisible(true);
                 databaseButton.setManaged(true);
                 break;
-            case "VOLONTARIO":
+            case VOLONTARIO:
                 volontarioButton.setVisible(true);
                 volontarioButton.setManaged(true);
                 break;
-            case "FRUITORE":
+            case FRUITORE:
                 prenotazioniButton.setVisible(true);
                 prenotazioniButton.setManaged(true);
                 break;
@@ -100,30 +85,28 @@ public class GenericFrameController implements Initializable {
                 break;
         }
 
-        int i = switch (current.tipo) {
-            case "CONFIGURATORE" -> 1;
-            case "FRUITORE" -> 3;
-            case "VOLONTARIO" -> 2;
-            default -> 0;
-        };
-        userMenuButton.setText(current.username + " " + i); // METTI IL NOME DEL ROLE
+        userMenuButton.setText(Launcher.controller.getCurrentUser().getUsername());
     }
 
     int i = 0;
-
     /**
      * Metodo di test per ciclare tra i ruoli (CONFIGURATORE, VOLONTARIO, FRUITORE).
      * Questo metodo è solo a scopo dimostrativo.
      */
     @FXML
     private void cycleRole() {
-        current = db.get((i++) % db.size());
-        configureNavbarForRole(current.tipo);
+        String[] usersTest = {"ADMIN PASSWORD", "volont1 pass1V", "fruit1 pass1F"};
+
+        Launcher.controller.interpreter("logout");
+        Launcher.controller.interpreter(usersTest[(i++)%3]);
+
+        showHome();
     }
 
     @FXML
     private void showHome() {
-        configureNavbarForRole(current.tipo);
+        configureNavbarForRole(Launcher.controller.getCurrentUser().getType());
+
         contentArea.getChildren().clear();
         contentArea.getChildren().add(contentFrames.get(HomeVisiteViewController.ID));
         // Label test = new Label("Home");
@@ -168,6 +151,9 @@ public class GenericFrameController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        Launcher.setRoot(LoginViewController.ID);
+        Payload res = Launcher.controller.interpreter("logout");
+
+        if(res != null && res.getStatus() == Status.OK)
+            Launcher.setRoot(LoginViewController.ID);
     }
 }

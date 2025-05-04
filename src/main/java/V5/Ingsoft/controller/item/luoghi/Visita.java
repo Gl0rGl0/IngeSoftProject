@@ -1,7 +1,6 @@
 package V5.Ingsoft.controller.item.luoghi;
 
 import V5.Ingsoft.controller.item.StatusVisita;
-import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.util.Date;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

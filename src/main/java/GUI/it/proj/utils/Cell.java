@@ -1,6 +1,9 @@
 package GUI.it.proj.utils;
 
-import GUI.it.proj.frame.ListViewController;
+import GUI.it.proj.utils.interfaces.ListBase;
+import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.luoghi.Visita;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
@@ -13,7 +16,8 @@ public class Cell<T> extends ListCell<T> {
     private Parent root;
     private CellController<T> controller;
 
-    public Cell(ListViewController<T> parent, String type, boolean buttonVisible) {
+    //al massimo parent implementerà anche l'editer
+    public Cell(ListBase<T> parent, String type, boolean buttonVisible) {
         // Load FXML directly to access the controller instance
         String resourcePath = "/GUI/frame/cell-view.fxml";
         URL fxmlUrl = getClass().getResource(resourcePath);

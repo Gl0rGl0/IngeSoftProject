@@ -3,8 +3,6 @@ package GUI.it.proj.frame;
 import java.io.IOException;
 
 import GUI.it.proj.Launcher;
-import GUI.it.proj.utils.Luogo;
-import GUI.it.proj.utils.Visita;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 public class LuoghiVisiteViewController {
-    public static final String ID = "luoghiEvisite";
+    public static final String ID = "luoghi-visite";
     @FXML
     private StackPane contentLuoghi;
     @FXML
@@ -24,8 +22,8 @@ public class LuoghiVisiteViewController {
 
     private LuoghiViewController luoghiController;
     private AddLuoghiDialogController luoghiDialogController;
-    private VisiteViewController visiteController;
-    private AddVisiteDialogController visiteDialogController;
+    private TipoVisiteViewController visiteController;
+    private AddTipoVisiteDialogController visiteDialogController;
 
     private Parent dialogLuoghi;
     private Parent dialogVisite;
@@ -49,13 +47,11 @@ public class LuoghiVisiteViewController {
             dialogLuoghi = loaderLuoghiDialog.load();
             luoghiDialogController = loaderLuoghiDialog.getController();
             luoghiDialogController.setParentController(luoghiController);
-            luoghiDialogController.setSuperParentController(this);
 
             FXMLLoader loaderVisiteDialog = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-visite-dialog.fxml"));
             dialogVisite = loaderVisiteDialog.load();
             visiteDialogController = loaderVisiteDialog.getController();
             visiteDialogController.setParentController(visiteController);
-            visiteDialogController.setSuperParentController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,6 +62,7 @@ public class LuoghiVisiteViewController {
         overlayMask.setVisible(false);
     }
 
+    //modale visite
     public void addVisita() {
         dialog.getChildren().clear();
         dialog.getChildren().add(dialogVisite);
@@ -73,26 +70,11 @@ public class LuoghiVisiteViewController {
         dialog.setVisible(true);
     }
 
-    public void editItem(Visita visita) {
-        visiteDialogController.setEdit(true);
-
-        dialog.getChildren().clear();
-        dialog.getChildren().add(dialogVisite);
-        overlayMask.setVisible(true);
-        dialog.setVisible(true);
-
-        System.out.println("Modifico " + visita.getTitolo());
-    }
-
+    //modale luoghi
     public void addLuogo() {
         dialog.getChildren().clear();
         dialog.getChildren().add(dialogLuoghi);
         overlayMask.setVisible(true);
         dialog.setVisible(true);
     }
-
-    public void editItem(Luogo luogo) {
-        System.out.println("Modifico " + luogo.getTitolo());
-    }
-
 }

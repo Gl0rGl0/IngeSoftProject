@@ -38,10 +38,6 @@
                 GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
                 <Label text="Fruitori" styleClass="section-title" />
                 <ListView fx:id="listFruitori" styleClass="checklist-view" />
-                <Button fx:id="btnAggiungiFruitore"
-                    text="+ Aggiungi Fruitore"
-                    styleClass="person-button"
-                    onAction="#onAggiungiFruitoreClick" />
             </VBox>
 
             <VBox fx:id="boxVolontari" spacing="15" styleClass="section-box"

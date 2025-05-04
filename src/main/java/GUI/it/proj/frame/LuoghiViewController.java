@@ -1,16 +1,17 @@
 package GUI.it.proj.frame;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
-import GUI.it.proj.utils.Luogo;
+import GUI.it.proj.utils.interfaces.ListBase;
+import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class LuoghiViewController implements ListViewController<Luogo> {
+public class LuoghiViewController implements ListBase<Luogo> {
     public static final String ID = "luoghi";
 
     @FXML
@@ -23,7 +24,7 @@ public class LuoghiViewController implements ListViewController<Luogo> {
         VBox.setVgrow(listLuoghi, Priority.ALWAYS);
 
         listLuoghi.setCellFactory(e -> new Cell<Luogo>(this, ID, true));
-        listLuoghi.getItems().addAll(generateLuoghi(20));
+        listLuoghi.getItems().addAll(Launcher.controller.getDB().dbLuoghiHelper.getLuoghi());
     }
 
     public void setParentController(LuoghiVisiteViewController parent) {
@@ -32,38 +33,25 @@ public class LuoghiViewController implements ListViewController<Luogo> {
 
     @Override
     public void removeItem(Luogo luogo) {
-        System.out.println("RIMUOVO " + luogo.getTitolo());
-        listLuoghi.getItems().removeIf(p -> p.getTitolo().equals(luogo.getTitolo()));
+        Payload res = Launcher.controller.interpreter("remove -L " + luogo.getName());
+        
+        if(res != null && res.getStatus() == Status.OK)
+            listLuoghi.getItems().removeIf(p -> p.getName().equals(luogo.getName()));
     }
 
-    // @Override
     public void addItem(Luogo luogo) {
-        // AGGIUNGI A DB parent.addVisita...
-        System.out.println("AGGIUNGO " + luogo.getTitolo());
+        System.out.println("AGGIUNGO " + luogo.getName());
         listLuoghi.getItems().add(luogo);
-    }
-
-    private List<Luogo> generateLuoghi(int count) {
-        List<Luogo> visite = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            visite.add(new Luogo("luogo" + i, "descr" + i, "1:1"));
-        }
-        visite.add(new Luogo("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "1:1"));
-        return visite;
-    }
-
-    @Override
-    public void modifyItem(Luogo luogo) {
-        System.out.println("MODIFICO " + luogo.getTitolo());
-        parent.editItem(luogo);
     }
 
     @FXML
     public void onAggiungiLuogoClick() {
         System.out.println("AGGIUNGO");
         parent.addLuogo();
+    }
+
+    public void closeDialog(){
+        parent.closeDialog();
     }
 
 }

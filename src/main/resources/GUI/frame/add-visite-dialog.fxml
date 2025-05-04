@@ -1,40 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import com.dlsc.gemsfx.TimePicker?>
+<?import com.dlsc.unitfx.IntegerInputField?>
+<?import org.controlsfx.control.CheckComboBox?>
+<?import GUI.it.proj.utils.SearchableCheckComboBox?>
 
 <StackPane xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="GUI.it.proj.frame.AddVisiteDialogController">
-    <Group>
-        <VBox spacing="10" alignment="CENTER" styleClass="section-box-full">
-            <Label fx:id="titleLabel" text="RolePlaceHolder" style="-fx-font-size: 20px" />
-            <VBox spacing="10" alignment="CENTER" style="-fx-padding: 0 10 0 10;">
-                <TextField fx:id="titolo" promptText="Titolo" />
-                <TextArea fx:id="descrizioneLuogo" promptText="Descrizione" prefHeight="100"
-                    wrapText="true" />
-                <HBox>
-                    <HBox style="-fx-padding: 0 10 0 10;" prefWidth="200">
-                        <TextField fx:id="lat" promptText="Latitudine" />
-                        <TextField fx:id="lon" promptText="Longitudine" />
-                    </HBox>
-                    <ComboBox fx:id="visitComboBox" prefWidth="200" />
-                </HBox>
-                <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
-            </VBox>
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-bnt" />
-            </HBox>
-        </VBox>
-    </Group>
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="GUI.it.proj.frame.AddTipoVisiteDialogController">
+    <VBox spacing="15" alignment="TOP_CENTER" styleClass="section-box-full" padding="20">
+        <!-- Titolo dialog -->
+        <Label fx:id="titleLabel" text="AGGIUNGI VISITA" style="-fx-font-size: 20px;" />
+
+        <!-- Griglia dei campi -->
+        <GridPane hgap="10" vgap="10">
+            <!-- Colonne: 30% label, 70% field -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="70"/>
+            </columnConstraints>
+
+            <!-- Riga 0 -->
+            <Label text="Titolo:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="titoloVisita" promptText="Titolo visita"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <!-- Riga 1 -->
+            <Label text="Descrizione:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="descrizioneVisita" promptText="Descrizione"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <!-- Riga 2 -->
+            <Label text="Posizione:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="posizione" promptText="Luogo"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <!-- Riga 3 -->
+            <Label text="Periodo Inizio:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="inizioGiornoPeriodo"
+                        GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <!-- Riga 4 -->
+            <Label text="Periodo Fine:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="fineGiornoPeriodo"
+                        GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <!-- Riga 5 -->
+            <Label text="Ora Inizio:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TimePicker fx:id="oraInizio" promptText="HH:mm"
+                       GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <!-- Riga 6 -->
+            <Label text="Durata (min):" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <IntegerInputField fx:id="durata"
+                          GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <!-- Riga 7 -->
+            <Label text="Gratuito:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <CheckBox fx:id="gratuito"
+                      GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+            <!-- Riga 8 -->
+            <Label text="Min Partecipanti:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+            <IntegerInputField fx:id="numeroMinimoPartecipanti" promptText="Es. 5"
+                       GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+            <!-- Riga 9 -->
+            <Label text="Max Partecipanti:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+            <IntegerInputField fx:id="numeroMassimoPartecipanti" promptText="Es. 20"
+                       GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+            <!-- Riga 10 -->
+            <Label text="Giorni Settimanali:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+            <CheckComboBox fx:id="giorni"
+                           GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+            <!-- Riga 11 -->
+            <Label text="Volontari UID:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+            <SearchableCheckComboBox fx:id="volontariUIDs"
+                                     GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <!-- Label di errore -->
+        <Label fx:id="errorLabel" text="" style="-fx-text-fill: red;" />
+
+        <!-- Bottoni in fondo -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Conferma" onAction="#onConfirm"
+                    styleClass="person-button" HBox.hgrow="ALWAYS"/>
+            <Button text="Annulla"  onAction="#onCancel"
+                    styleClass="person-button, grey-bnt" HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </VBox>
 </StackPane>

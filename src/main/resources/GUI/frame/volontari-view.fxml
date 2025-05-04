@@ -22,7 +22,7 @@
     <!-- List of visits in first column -->
     <VBox spacing="15" styleClass="section-box" GridPane.columnIndex="0" VBox.vgrow="ALWAYS" fillWidth="true">
         <Label text="Visite a cui sei associato" styleClass="section-title" />
-        <ListView fx:id="listVisite" styleClass="checklist-view" />
+        <ListView fx:id="listTipoVisiteAssign" styleClass="checklist-view" />
     </VBox>
 
     <!-- Calendar section with title -->

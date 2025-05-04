@@ -1,8 +1,10 @@
 package V5.Ingsoft.controller.commands.running;
 
+import java.util.ArrayList;
+
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
-import V5.Ingsoft.controller.item.StatusVisita;
+import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
@@ -42,73 +44,65 @@ public class MyVisitCommand extends AbstractCommand {
                 "Fruitore object null for user " + userF);
         }
 
-        StringBuilder out = new StringBuilder();
+        ArrayList<Visita> out = new ArrayList<>();
         for (String vUid : f.getVisiteUIDs()) {
             Visita v = controller.getDB().dbVisiteHelper.getVisitaByUID(vUid);
             if (v == null) continue;
-            if (v.getStatus() == StatusVisita.CANCELLED) {
-                out.append(v.getTitle())
-                   .append(" ( ")
-                   .append(v.getDate())
-                   .append(" ) CANCELLED\n");
-            } else {
-                out.append(v).append("\n");
-            }
+            // if (v.getStatus() == StatusVisita.CANCELLED) {
+            //     out.append(v.getTitle())
+            //        .append(" ( ")
+            //        .append(v.getDate())
+            //        .append(" ) CANCELLED\n");
+            // } else {
+            //     out.append(v).append("\n");
+            // }
+            out.add(v);
         }
-        String result = out.length() == 0
-            ? "You are not signed up for any visits"
-            : out.toString();
-        return Payload.info(
-            result,
-            "Listed fruitore subscriptions for " + userF);
+        if(out.size() == 0)
+            return Payload.warn("You are not signed up for any visits",
+                                "No visits found for the user: " + userF);
+
+        return Payload.info(out,
+                            "Listed fruitore subscriptions for " + userF);
     }
 
     private Payload listVolontari(String[] options, String[] args) {
-        String uid = controller.getCurrentUser().getUsername();
-        if (options == null || options.length < 1) {
-            return defaultVolunteerList(uid);
-        }
+        String userV = controller.getCurrentUser().getUsername();
+        //TODO SISTEMARE UN PO' DI COSe PERChÈ QUA NON VA BENE...
+
         if (args == null) {
             return Payload.error(
                 ERROR,
                 "Args null for volunteer list");
         }
         String[] a = StringUtils.joinQuotedArguments(args);
-        if (a.length < 2 || options[0].charAt(0) != 'l') {
+        if (a.length < 2) {
             return Payload.error(
                 ERROR,
-                "Invalid options/args for volunteer list");
+                "Invalid args for volunteer list");
         }
-        Visita v = controller.getDB().dbVisiteHelper.findVisita(a[0], a[1]);
-        if (v == null) {
-            return Payload.warn(
-                "No visit found with that name or date.",
-                "FindVisita returned null for " + a[0] + "," + a[1]);
-        }
-        StringBuilder out = new StringBuilder("List of registrations:\n");
-        for (Iscrizione i : v.getIscrizioni()) {
-            out.append(i).append("\n");
-        }
-        String result = out.length() == 0
-            ? "No registration found for your visits"
-            : out.toString();
-        return Payload.info(
-            result,
-            "Listed iscrizioni for volunteer " + uid);
-    }
 
-    private Payload defaultVolunteerList(String uid) {
-        StringBuilder out = new StringBuilder("List of visits you are assigned to:\n");
-        for (Visita v : controller.getDB().dbVisiteHelper.getConfermate()) {
-            if (v.getUidVolontario().equals(uid)) {
-                out.append(v).append("\n");
-            }
+        ArrayList<TipoVisita> out = new ArrayList<>();
+        for (TipoVisita tv : controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
+            if (tv == null) continue;
+            // if (v.getStatus() == StatusVisita.CANCELLED) {
+            //     out.append(v.getTitle())
+            //        .append(" ( ")
+            //        .append(v.getDate())
+            //        .append(" ) CANCELLED\n");
+            // } else {
+            //     out.append(v).append("\n");
+            // }
+            if(tv.assignedTo(userV))
+                out.add(tv);
         }
-        String result = out.length() == 0
-            ? "You have not been assigned any visits"
-            : out.toString();
+        if(out.size() == 0)
+            return Payload.warn(
+                "You have not been assigned any visits",
+                "No visits found for the user: " + userV);
+
         return Payload.info(
-            result,
-            "Listed confirmed visits for volunteer " + uid);
+            out,
+            "Listed confirmed visits for volunteer " + userV);
     }
 }

@@ -35,7 +35,7 @@ public class Volontario extends Persona {
         this.deletionDate = deletionDate;
     }
 
-    private Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
+    public Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
     

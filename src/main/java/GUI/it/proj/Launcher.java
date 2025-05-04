@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
 import GUI.it.proj.utils.Loader;
+import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.model.Model;
+
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
@@ -48,7 +51,11 @@ public class Launcher extends Application {
         scene.setRoot(Loader.loadFXML(String.format("%s-view", fxml)));
     }
 
+    public static Controller controller;
     public static void main(String[] args) {
+        Model model = Model.getInstance();
+        controller = new Controller(model);
+
         frames.put(GenericFrameController.ID, Loader.loadFXML("generic-view"));
         frames.put(LoginViewController.ID, Loader.loadFXML("login-view"));
 

@@ -82,10 +82,10 @@ public class Luogo extends Deletable {
         return sb.toString();
     }
 
-    public void addTipoVisita(String tvUID) {
+    public boolean addTipoVisita(String tvUID) {
         if (visiteUID.contains(tvUID))
-            return;
-        this.visiteUID.add(tvUID);
+            return false;
+        return this.visiteUID.add(tvUID);
     }
 
     public void removeTipoVisita(String tvUID) {
