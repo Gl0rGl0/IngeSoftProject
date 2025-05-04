@@ -22,5 +22,5 @@ qodana.yaml
 *.png
 
 #gui
-resources/
-src/main/java/GUI/
+# resources/
+# src/main/java/GUI/

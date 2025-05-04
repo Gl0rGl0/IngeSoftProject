@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="GUI.it.proj.frame.PersonViewController">
+
+    <!-- Contenuto con padding interno -->
+    <StackPane style="-fx-padding: 20;">
+        <GridPane style="-fx-background-color: white;" hgap="20" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="33" />
+                <ColumnConstraints percentWidth="33" />
+                <ColumnConstraints percentWidth="34" />
+            </columnConstraints>
+
+            <Region prefHeight="10000" visible="false" />
+
+            <VBox spacing="15" styleClass="section-box"
+                GridPane.columnIndex="0" VBox.vgrow="ALWAYS">
+                <Label text="Configuratori" styleClass="section-title" />
+                <ListView fx:id="listConfiguratori" styleClass="checklist-view" />
+                <Button fx:id="btnAggiungiConfiguratore"
+                    text="+ Aggiungi Configuratore"
+                    styleClass="person-button"
+                    onAction="#onAggiungiConfiguratoreClick" />
+            </VBox>
+
+            <VBox fx:id="boxFruitori" spacing="15" styleClass="section-box"
+                GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
+                <Label text="Fruitori" styleClass="section-title" />
+                <ListView fx:id="listFruitori" styleClass="checklist-view" />
+                <Button fx:id="btnAggiungiFruitore"
+                    text="+ Aggiungi Fruitore"
+                    styleClass="person-button"
+                    onAction="#onAggiungiFruitoreClick" />
+            </VBox>
+
+            <VBox fx:id="boxVolontari" spacing="15" styleClass="section-box"
+                GridPane.columnIndex="2" VBox.vgrow="ALWAYS">
+                <Label text="Volontari" styleClass="section-title" />
+                <ListView fx:id="listVolontari" styleClass="checklist-view" />
+                <Button fx:id="btnAggiungiVolontario"
+                    text="+ Aggiungi Volontario"
+                    styleClass="person-button"
+                    onAction="#onAggiungiVolontarioClick" />
+            </VBox>
+
+        </GridPane>
+    </StackPane>
+
+    <!-- Overlay che copre l'intero StackPane -->
+    <Region fx:id="overlayMask" visible="false"
+        style="-fx-background-color: rgba(0,0,0,0.3);"
+        StackPane.alignment="CENTER"
+        prefWidth="Infinity" prefHeight="Infinity" />
+
+    <StackPane fx:id="dialog" visible="false" />
+
+</StackPane>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.it.proj.frame.LoginViewController">
+    <center>
+        <VBox spacing="20.0" alignment="CENTER" fillWidth="false">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <Label text="VISITE GUIDATE" styleClass="title-label" alignment="CENTER"/>
+                   
+            <TextField fx:id="userTextField" promptText="Username" prefWidth="250"/>
+            <PasswordField fx:id="pwField" promptText="Password" prefWidth="250"/>
+            
+            <Button fx:id="loginButton" text="Login" onAction="#handleLoginAction" styleClass="btn-lg, btn-primary"/>
+            
+            <Label fx:id="messageLabel" visible="false" styleClass="message-label, error-label">
+                Password o username errati
+            </Label>
+
+        </VBox>
+    </center>
+</BorderPane>

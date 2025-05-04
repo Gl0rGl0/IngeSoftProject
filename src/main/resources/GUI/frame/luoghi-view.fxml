@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="GUI.it.proj.frame.LuoghiViewController">
+    <Region prefHeight="10000" visible="false" />
+
+    <!-- Contenuto con padding interno -->
+    <StackPane style="-fx-padding: 20;">
+        <VBox spacing="15" styleClass="section-box"
+            GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
+            <Label text="Luoghi" styleClass="section-title" />
+            <ListView fx:id="listLuoghi" styleClass="checklist-view" />
+            <Button fx:id="btnAggiungiLuogo"
+                text="+ Aggiungi Luogo"
+                styleClass="person-button"
+                onAction="#onAggiungiLuogoClick" />
+        </VBox>
+    </StackPane>
+
+</StackPane>

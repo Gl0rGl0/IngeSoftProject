@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="GUI.it.proj.frame.LuoghiVisiteViewController">
+
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50" />
+            <ColumnConstraints percentWidth="50" />
+        </columnConstraints>
+
+        <StackPane fx:id="contentLuoghi" GridPane.columnIndex="0" />
+        <StackPane fx:id="contentVisite" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <!-- Overlay che copre l'intero StackPane -->
+    <Region fx:id="overlayMask" visible="false"
+        style="-fx-background-color: rgba(0,0,0,0.3);"
+        StackPane.alignment="CENTER"
+        prefWidth="Infinity" prefHeight="Infinity" />
+
+    <StackPane fx:id="dialog" visible="false" />
+
+</StackPane>
