@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import GUI.it.proj.Launcher;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,15 +46,18 @@ public class LoginViewController implements Initializable {
         String username = userTextField.getText();
         String password = pwField.getText();
         System.out.println(username + " " + password);
-        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
-            if ("admin".equals(username) && "password".equals(password)) {
-                userTextField.clear();
-                pwField.clear();
-                Launcher.setRoot(GenericFrameController.ID);
-                System.out.println("PASSWORD OK");
-            } else {
-                messageLabel.setVisible(true);
-            }
+
+        if (username == null || password == null || username.isEmpty() || password.isEmpty())
+            return;
+
+        Payload res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
+        System.out.println(res);
+        if (res != null && res.getStatus() == Status.OK) {
+            userTextField.clear();
+            pwField.clear();
+            Launcher.setRoot(GenericFrameController.ID);
+        } else {
+            messageLabel.setVisible(true);
         }
     }
 }

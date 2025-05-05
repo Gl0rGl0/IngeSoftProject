@@ -3,7 +3,6 @@ package V5.Ingsoft.controller;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.*;
-import V5.Ingsoft.view.ViewSE;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

@@ -1,12 +1,15 @@
 package GUI.it.proj;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader; // Importa FXMLLoader
+import javafx.fxml.Initializable; // Importa Initializable
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
-import GUI.it.proj.utils.Loader;
+import GUI.it.proj.utils.Loader; // Potresti non averne più bisogno per caricare i frame principali
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.model.Model;
 
@@ -15,15 +18,28 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map; // Usa Map invece di HashMap per le dichiarazioni
 
 public class Launcher extends Application {
     private static Scene scene;
-    private static HashMap<String, Parent> frames = new HashMap<>();
+    private static Map<String, Parent> frames = new HashMap<>();
+    // Mappa per tenere i controller associati ai frame principali pre-caricati
+    private static Map<String, Initializable> controllers = new HashMap<>();
+
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Carica i frame (già fatti in main)
-        scene = new Scene(frames.get(GenericFrameController.ID), 1480, 960);
+        // Imposta la scena iniziale sul frame di login
+        Parent initialRoot = frames.get(LoginViewController.ID);
+        if (initialRoot == null) {
+             System.err.println("FATAL ERROR: Login frame not pre-loaded!");
+             // Potresti voler uscire o gestire l'errore
+             Platform.exit();
+             return;
+        }
+
+        scene = new Scene(initialRoot, 1480, 960);
+
         stage.setScene(scene);
         stage.setTitle("App visite guidate");
 
@@ -31,34 +47,119 @@ public class Launcher extends Application {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
 
-        // Poi carichi il tuo CSS qui, in modo sicuro
-        URL cssUrl = Launcher.class.getResource("/GUI/style/test.css");
+        // Poi carichi il tuo CSS qui
+        // Assicurati che il nome del file .css sia corretto (era test.css, ora app.css nell'esempio)
+        URL cssUrl = Launcher.class.getResource("/GUI/style/app.css"); // Usa app.css se quello è il nome compilato
         if (cssUrl != null) {
             scene.getStylesheets().add(cssUrl.toExternalForm());
         } else {
-            System.err.println("WARNING: /GUI/style/test.css non trovato nel classpath");
+            // WARNING: Assicurati che il lesscss-maven-plugin compili in /GUI/style/app.css
+            System.err.println("WARNING: /GUI/style/app.css non trovato nel classpath.");
         }
+
 
         stage.centerOnScreen();
         stage.show();
+
+        // Non chiamare setupAfterLogin o showHome qui.
+        // Questo avviene solo quando il GenericFrame viene impostato come root DOPO il login.
     }
 
-    public static void setRoot(String fxml) {
-        scene.setRoot(frames.get(fxml));
+    /**
+     * Imposta un frame pre-caricato come root della scena.
+     * Chiama setupAfterLogin sul controller del frame se appropriato.
+     * @param id L'ID del frame (chiave nella mappa 'frames').
+     */
+    public static void setRoot(String id) {
+        Parent root = frames.get(id);
+        if (root != null) {
+            scene.setRoot(root);
+
+            // Ottieni il controller associato
+            Initializable controller = controllers.get(id);
+
+            // Se il controller è GenericFrameController, chiama il suo metodo di setup post-login
+            if (controller instanceof GenericFrameController) {
+                ((GenericFrameController) controller).setupAfterLogin();
+            }
+            // Puoi aggiungere altri 'else if' qui per altri tipi di controller
+            // che potrebbero aver bisogno di setup quando vengono mostrati
+
+        } else {
+            System.err.println("Error: FXML frame '" + id + "' not found in pre-loaded frames.");
+            // Potresti voler mostrare uno stato di errore o tornare al login
+            // Esempio: setRoot(LoginViewController.ID);
+        }
     }
 
-    public static void setRoot(String fxml, boolean clear) {
-        scene.setRoot(Loader.loadFXML(String.format("%s-view", fxml)));
+    // Metodo originale setRoot con clear (per ricaricare FXML, se necessario) - Lascialo se lo usi altrove
+    // Nota: questo metodo *non* userà i frame pre-caricati e ricreerà l'UI e il controller
+    // ogni volta che viene chiamato.
+    public static void setRoot(String fxmlFileName, boolean clear) {
+        // Questa versione ricarica sempre l'FXML
+        Parent root = Loader.loadFXML(String.format("%s-view", fxmlFileName)); // Assumi che Loader.loadFXML ritorni solo Parent
+        if (root != null) {
+             scene.setRoot(root);
+             // NOTA: Se vuoi accedere al controller qui per chiamare setup,
+             // Loader.loadFXML dovrebbe ritornare anche l'FXMLLoader o il Controller.
+             // Per ora, questa versione non supporta setup post-caricamento automatico.
+             System.out.println("WARNING: setRoot(..., true) does not automatically call setupAfterLogin.");
+        } else {
+             System.err.println("Error: Failed to load FXML file '" + fxmlFileName + "-view.fxml'");
+        }
     }
+
 
     public static Controller controller;
+
     public static void main(String[] args) {
+        // Inizializza il modello e il controller PRIMA di caricare gli FXML
         Model model = Model.getInstance();
         controller = new Controller(model);
 
-        frames.put(GenericFrameController.ID, Loader.loadFXML("generic-view"));
-        frames.put(LoginViewController.ID, Loader.loadFXML("login-view"));
+        // Pre-carica i frame principali e i loro controller
+        // Usa un helper locale per caricare e memorizzare sia il Parent che il Controller
+        storeFrame(GenericFrameController.ID, "generic-view");
+        storeFrame(LoginViewController.ID, "login-view");
 
+
+        // Avvia l'applicazione JavaFX
         launch();
+    }
+
+    /**
+     * Helper per caricare un FXML, memorizzare il Parent e il Controller associato.
+     */
+    private static void storeFrame(String id, String fxmlFileName) {
+        try {
+            URL fxmlUrl = Launcher.class.getResource("/GUI/frame/" + fxmlFileName + ".fxml");
+            if (fxmlUrl == null) {
+                 System.err.println("FATAL ERROR: FXML file not found: /GUI/frame/" + fxmlFileName + ".fxml");
+                 // Puoi lanciare un'eccezione o uscire
+                 return;
+            }
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent root = loader.load();
+            Initializable ctrl = loader.getController(); // Ottieni il controller
+
+            frames.put(id, root);
+            controllers.put(id, ctrl); // Memorizza il controller
+
+            System.out.println("Pre-loaded frame: " + id + " with controller: " + (ctrl != null ? ctrl.getClass().getSimpleName() : "None"));
+
+        } catch (IOException e) {
+            System.err.println("FATAL ERROR: Failed to load FXML: " + fxmlFileName);
+            e.printStackTrace();
+            // Puoi lanciare un'eccezione o uscire
+        } catch (Exception e) {
+             System.err.println("FATAL ERROR: An unexpected error occurred while loading FXML: " + fxmlFileName);
+             e.printStackTrace();
+        }
+    }
+
+    // Potresti voler esporre i controller se necessario (ad es. per chiamare metodi specifici su un controller)
+    public static <T extends Initializable> T getController(String id) {
+         // Esegui un cast sicuro se conosci il tipo atteso
+         return (T) controllers.get(id);
     }
 }

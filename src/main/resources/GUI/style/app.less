@@ -1,0 +1,462 @@
+// ========================================
+// Tema Switch
+// Imposta questa variabile su 'light' o 'dark'
+// prima di compilare per scegliere il tema.
+// ========================================
+@theme: dark; // light o dark
+
+// ========================================
+// Variabili Base (per entrambi i temi)
+// ========================================
+
+// Colori Neutrali
+@color-light-bg-primary:      #ffffff;
+@color-dark-bg-primary:       #2b2b2b;
+@color-light-bg-section:      #ffffff;
+@color-dark-bg-section:       #3c3f41;
+@color-light-bg-lighter-hover: #f9f9f9;
+@color-dark-bg-lighter-hover:  #45494a;
+@color-light-bg-light-grey:    #f0f0f0;
+@color-dark-bg-light-grey:     #5a5a5a;
+@color-light-border-default:   #d1d1d1;
+@color-dark-border-default:    #5a5a5a;
+@color-light-border-lighter:   #e0e0e0;
+@color-dark-border-lighter:    #6a6a6a;
+@color-light-border-checkbox:  #cccccc;
+@color-dark-border-checkbox:   #8a8a8a;
+@color-light-text-default:     #333333;
+@color-dark-text-default:      #dddddd;
+@color-light-text-secondary:   #666666;
+@color-dark-text-secondary:    #aaaaaa;
+@color-light-text-blue-steel:  #2c3e50;
+@color-dark-text-blue-steel:   lighten(@color-light-text-blue-steel, 30%);
+@color-light-text-grey-mild:   #495057;
+@color-dark-text-grey-mild:    lighten(@color-light-text-grey-mild, 20%);
+@color-light-hover-blue-transparent: rgba(172, 198, 236, 0.33);
+@color-dark-hover-blue-transparent:  rgba(74, 144, 226, 0.33);
+
+// Colori Accentati
+@color-primary-blue:     #4a90e2;
+@color-success-green:    #4CAF50;
+@color-danger-red:       #da0f0f;
+@color-grey-dark-accent: #3a3e42;
+@color-white:            #ffffff;
+
+// Overlay
+@color-light-overlay-bg: rgba(0, 0, 0, 0.3);
+@color-dark-overlay-bg:  rgba(0, 0, 0, 0.5);
+
+// Comuni
+@border-radius-base:   8px;
+@border-radius-small:  4px;
+@padding-base:        15px;
+@padding-small:        8px;
+@padding-extra-small:  5px;
+
+
+// ========================================
+// Guarded mixin per sfondi
+// ========================================
+.themed-background-color(@t) when (@t = light) {
+  -fx-background-color: @color-light-bg-primary;
+}
+.themed-background-color(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-bg-primary;
+}
+
+.themed-section-background-color(@t) when (@t = light) {
+  -fx-background-color: @color-light-bg-section;
+}
+.themed-section-background-color(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-bg-section;
+}
+
+.themed-lighter-hover-background-color(@t) when (@t = light) {
+  -fx-background-color: @color-light-bg-lighter-hover;
+}
+.themed-lighter-hover-background-color(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-bg-lighter-hover;
+}
+
+.themed-light-grey-background-color(@t) when (@t = light) {
+  -fx-background-color: @color-light-bg-light-grey;
+}
+.themed-light-grey-background-color(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-bg-light-grey;
+}
+
+.themed-overlay-background(@t) when (@t = light) {
+  -fx-background-color: @color-light-overlay-bg;
+}
+.themed-overlay-background(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-overlay-bg;
+}
+
+
+// ========================================
+// Guarded mixin per bordi
+// ========================================
+.themed-border-color(@t) when (@t = light) {
+  -fx-border-color: @color-light-border-default;
+}
+.themed-border-color(@t) when (@t = dark) {
+  -fx-border-color: @color-dark-border-default;
+}
+
+.themed-lighter-border-color(@t) when (@t = light) {
+  -fx-border-color: @color-light-border-lighter;
+}
+.themed-lighter-border-color(@t) when (@t = dark) {
+  -fx-border-color: @color-dark-border-lighter;
+}
+
+.themed-checkbox-border-color(@t) when (@t = light) {
+  -fx-border-color: @color-light-border-checkbox;
+}
+.themed-checkbox-border-color(@t) when (@t = dark) {
+  -fx-border-color: @color-dark-border-checkbox;
+}
+
+
+// ========================================
+// Guarded mixin per testo e fill
+// ========================================
+.themed-text-fill(@t) when (@t = light) {
+  -fx-text-fill: @color-light-text-default;
+}
+.themed-text-fill(@t) when (@t = dark) {
+  -fx-text-fill: @color-dark-text-default;
+}
+
+.themed-fill(@t) when (@t = light) {
+  -fx-fill: @color-light-text-default;
+}
+.themed-fill(@t) when (@t = dark) {
+  -fx-fill: @color-dark-text-default;
+}
+
+.themed-text-secondary-fill(@t) when (@t = light) {
+  -fx-fill: @color-light-text-secondary;
+}
+.themed-text-secondary-fill(@t) when (@t = dark) {
+  -fx-fill: @color-dark-text-secondary;
+}
+
+.themed-text-blue-steel-fill(@t) when (@t = light) {
+  -fx-fill: @color-light-text-blue-steel;
+}
+.themed-text-blue-steel-fill(@t) when (@t = dark) {
+  -fx-fill: @color-dark-text-blue-steel;
+}
+
+.themed-text-grey-mild-text-fill(@t) when (@t = light) {
+  -fx-text-fill: @color-light-text-grey-mild;
+}
+.themed-text-grey-mild-text-fill(@t) when (@t = dark) {
+  -fx-text-fill: @color-dark-text-grey-mild;
+}
+
+.themed-button-hover-transparent-background(@t) when (@t = light) {
+  -fx-background-color: @color-light-hover-blue-transparent;
+}
+.themed-button-hover-transparent-background(@t) when (@t = dark) {
+  -fx-background-color: @color-dark-hover-blue-transparent;
+}
+
+
+// ========================================
+// Stili Generali
+// ========================================
+.root {
+  -fx-background-color: transparent;
+}
+
+.label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  .themed-text-fill(@theme);
+}
+
+.title-label {
+  -fx-font-size: 36px;
+  -fx-font-weight: bold;
+  .themed-text-fill(@theme);
+  -fx-padding: 10px 0 20px 0;
+}
+
+.message-label {
+  -fx-font-weight: bold;
+  -fx-padding: @padding-extra-small;
+  .themed-text-fill(@theme);
+}
+
+.error-label {
+  -fx-text-fill: @color-danger-red;
+}
+
+.success-label {
+  -fx-text-fill: @color-success-green;
+}
+
+
+// ========================================
+// Sezioni e Contenitori
+// ========================================
+.section-box {
+  -fx-padding: @padding-base;
+  .themed-border-color(@theme);
+  -fx-background-radius: @border-radius-base;
+  -fx-border-radius: @border-radius-base;
+  -fx-border-width: 1px;
+  .themed-background-color(@theme);
+}
+
+.section-box-full {
+  .themed-section-background-color(@theme);
+  -fx-background-radius: @border-radius-base;
+  -fx-padding: @padding-base;
+  .themed-border-color(@theme);
+  -fx-border-radius: @border-radius-base;
+  -fx-border-width: 1px;
+}
+
+.text-label-no-border {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+  .themed-text-fill(@theme);
+}
+
+
+// ========================================
+// Navbar
+// ========================================
+.navbar {
+  .themed-background-color(@theme);
+  -fx-padding: @padding-small;
+  .themed-border-color(@theme);
+  -fx-border-width: 0 0 1 0;
+}
+
+.logo-container {
+  .themed-border-color(@theme);
+  -fx-border-width: 0 1px 0 0;
+  -fx-padding: 0 10px 0 0;
+}
+
+
+// ========================================
+// Menu
+// ========================================
+.menu-item {
+  -fx-padding: 2px 5px;
+  .themed-text-fill(@theme);
+  .themed-background-color(@theme);
+
+  &:hover {
+    .themed-lighter-hover-background-color(@theme);
+  }
+}
+
+.menu-button {
+  .menu {
+    -fx-opacity: 1;
+    .themed-background-color(@theme);
+    -fx-border-radius: @border-radius-small;
+    -fx-background-radius: @border-radius-small;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+    .themed-border-color(@theme);
+    -fx-border-width: 1px;
+  }
+
+  .arrow {
+    .themed-fill(@theme);
+    -fx-shape: "M 0 0 L 8 8 L 16 0 Z";
+  }
+  &:showing .arrow {
+    -fx-shape: "M 0 8 L 8 0 L 16 8 Z";
+  }
+}
+
+
+// ========================================
+// Button
+// ========================================
+.btn {
+  -fx-background-color: transparent;
+  .themed-text-fill(@theme);
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 10px;
+  -fx-min-height: 50px;
+
+  &:hover {
+    .themed-button-hover-transparent-background(@theme);
+  }
+}
+
+
+// ========================================
+// Checklist (ControlsFX, etc.)
+// ========================================
+.checklist-view {
+  .themed-background-color(@theme);
+  -fx-padding: @padding-small;
+  .themed-lighter-border-color(@theme);
+  -fx-border-radius: @border-radius-base;
+  -fx-border-width: 1px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 2);
+
+  > .text-field {
+    .themed-background-color(@theme);
+    .themed-text-fill(@theme);
+    .themed-border-color(@theme);
+    -fx-border-width: 1px;
+    -fx-border-radius: @border-radius-small;
+    -fx-padding: 5px;
+    -fx-prompt-text-fill: derive(@color-light-text-default, 50%);
+  }
+
+  .list-cell {
+    -fx-padding: 10px 15px;
+    -fx-background-color: transparent;
+    .themed-text-fill(@theme);
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+
+    &:hover {
+      .themed-lighter-hover-background-color(@theme);
+    }
+    &:selected,
+    &:filled:selected {
+      -fx-background-color: derive(@color-primary-blue, 50%);
+      .themed-text-fill(@theme);
+    }
+  }
+
+  .check-box {
+    -fx-font-size: 14px;
+    .themed-text-grey-mild-text-fill(@theme);
+
+    .box {
+      .themed-background-color(@theme);
+      .themed-checkbox-border-color(@theme);
+      -fx-border-radius: @border-radius-small;
+      -fx-border-width: 1px;
+      -fx-padding: 2px;
+      -fx-min-width: 18px;
+      -fx-min-height: 18px;
+    }
+
+    &:selected .box {
+      -fx-background-color: @color-success-green;
+      -fx-border-color: derive(@color-success-green, -7%);
+    }
+    &:selected .mark {
+      -fx-background-color: @color-white;
+    }
+  }
+
+  .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+
+    .track {
+      .themed-light-grey-background-color(@theme);
+      -fx-background-insets: 0;
+      -fx-background-radius: @border-radius-small;
+    }
+    .thumb {
+      -fx-background-color: @color-primary-blue;
+      -fx-background-insets: 0;
+      -fx-background-radius: @border-radius-small;
+      &:hover {
+        -fx-background-color: derive(@color-primary-blue, -10%);
+      }
+    }
+  }
+}
+
+
+// ========================================
+// Pulsanti speciali
+// ========================================
+.person-button {
+  -fx-background-color: derive(@color-primary-blue, 20%);
+  -fx-text-fill: @color-white;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: @padding-small 20px;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+  -fx-cursor: hand;
+
+  &:hover {
+    -fx-background-color: @color-primary-blue;
+  }
+}
+
+.grey-bnt {
+  -fx-background-color: derive(@color-grey-dark-accent, 20%);
+  .themed-text-fill(@theme);
+  &:hover {
+    -fx-background-color: @color-grey-dark-accent;
+  }
+}
+
+.red-btn {
+  -fx-opacity: 1;
+  .themed-text-fill(@theme);
+  -fx-background-color: derive(@color-danger-red, 30%);
+  &:hover {
+    -fx-background-color: @color-danger-red;
+  }
+}
+
+
+// ========================================
+// Persona Cell
+// ========================================
+.list-cell {
+  .themed-background-color(@theme);
+  .themed-text-fill(@theme);
+
+  &:filled:selected {
+    -fx-background-color: derive(@color-primary-blue, 50%);
+    .themed-text-fill(@theme);
+  }
+}
+
+.cell-container {
+  -fx-alignment: center-left;
+  -fx-padding: @padding-extra-small;
+}
+
+.username-text {
+  -fx-font-weight: bold;
+  .themed-text-blue-steel-fill(@theme);
+}
+
+.role-text {
+  .themed-text-secondary-fill(@theme);
+}
+
+.modify-button {
+  -fx-background-color: derive(@color-success-green, 30%);
+  -fx-text-fill: @color-white;
+  -fx-padding: @padding-extra-small 15px;
+  -fx-background-radius: @border-radius-small;
+  &:hover {
+    -fx-background-color: @color-success-green;
+  }
+}
+
+
+// ========================================
+// Overlay per Dialoghi / Modal
+// ========================================
+.overlay {
+  .themed-overlay-background(@theme);
+  -fx-alignment: center;
+  -fx-pref-width: 100%;
+  -fx-pref-height: 100%;
+}

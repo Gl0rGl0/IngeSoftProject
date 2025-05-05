@@ -14,6 +14,7 @@ import com.dlsc.unitfx.IntegerInputField;
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.SearchableCheckComboBox;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.collections.FXCollections;
@@ -55,7 +56,7 @@ public class AddTipoVisiteDialogController {
     @FXML
     private CheckComboBox<String> giorni;
     @FXML
-    private SearchableCheckComboBox<String> volontariUIDs;
+    private CheckComboBox<Volontario> volontariUIDs;
 
     @FXML
     private ComboBox<String> placeComboBox;
@@ -70,7 +71,8 @@ public class AddTipoVisiteDialogController {
         ObservableList<String> places = FXCollections.observableArrayList("Visita 1", "Visita 2", "Visita 3");
         placeComboBox.setItems(places);
 
-        volontariUIDs.setItems(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
+        ObservableList<Volontario> voloList = FXCollections.observableArrayList(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
+        volontariUIDs.getItems().addAll(voloList);
     }
 
     // Setter per il controller principale
@@ -101,12 +103,11 @@ public class AddTipoVisiteDialogController {
         // 3. Selezioni multichoice
         List<String> giorniSel = giorni.getCheckModel().getCheckedItems();
 
-        List<String> volsSel   = volontariUIDs
-            .getCheckComboBox()
+        List<Volontario> volsSel   = volontariUIDs
             .getCheckModel()
             .getCheckedItems();
 
-        List<String> volNotSel = new ArrayList<>(volontariUIDs.getCheckComboBox().getItems());
+        List<Volontario> volNotSel = new ArrayList<>(volontariUIDs.getItems());
         volNotSel.removeAll(volsSel);
 
         // 4. Validazione di tutti i campi
@@ -165,15 +166,15 @@ public class AddTipoVisiteDialogController {
                 return;
             }
             
-            for(String s : volsSel){
-                if(nuova.assignedTo(s))
+            for(Volontario s : volsSel){
+                if(nuova.assignedTo(s.getUsername()))
                 continue;
                 
                 Launcher.controller.interpreter(String.format("assign -V %s %s", titolo, s));
             }
 
-            for(String s : volNotSel){
-                if(!nuova.assignedTo(s))
+            for(Volontario s : volNotSel){
+                if(!nuova.assignedTo(s.getUsername()))
                     continue;
                 
                 Launcher.controller.interpreter(String.format("deassign -V %s %s", titolo, s));

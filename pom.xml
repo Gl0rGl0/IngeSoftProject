@@ -121,39 +121,9 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M7</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
-                </plugin>
-                <!-- site lifecycle, see
-                https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.0.0</version>
-                </plugin>
-
-
-                <!-- GUI -->
+                <!-- ... (i plugin clean, resources, surefire, install, deploy, site, project-info-reports) ... -->
+    
+                <!-- GUI Plugins defined in pluginManagement -->
                 <plugin>
                     <groupId>org.lesscss</groupId>
                     <artifactId>lesscss-maven-plugin</artifactId>
@@ -167,8 +137,11 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <sourceDirectory>${project.basedir}/src/main/resources/it/proj/style</sourceDirectory>
-                        <outputDirectory>${project.basedir}/src/main/resources/it/proj/style</outputDirectory>
+                        <sourceDirectory>src/main/resources/GUI/style</sourceDirectory>
+                        <outputDirectory>src/main/resources/GUI/style</outputDirectory> <!-- O target/classes -->
+                         <includes>
+                             <include>*.less</include>
+                         </includes>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -177,6 +150,8 @@
                     <version>3.8.0</version>
                     <configuration>
                         <release>21</release>
+                        <source>21</source>
+                        <target>21</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -191,17 +166,53 @@
                         </archive>
                     </configuration>
                 </plugin>
+                <!-- Aggiungi qui in pluginManagement anche gli altri plugin di cui hai bisogno -->
+                <!-- <plugin> ... maven-surefire-plugin ... </plugin> -->
             </plugins>
         </pluginManagement>
+    
         <plugins>
+            <!-- LISTA DEI PLUGIN CHE DEVONO EFFETTIVAMENTE ESSERE ESEGUITI -->
+    
+            <!-- LESS Compiler Plugin - Deve essere listato qui per essere eseguito -->
+            <plugin>
+                <groupId>org.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
+                <!-- Non specificare version, executions, configuration qui -->
+            </plugin>
+    
+            <!-- Compiler Plugin - Deve essere listato qui per essere eseguito -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                 <!-- Non specificare version, configuration qui -->
+            </plugin>
+    
+            <!-- JAR Plugin - Deve essere listato qui per essere eseguito -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                 <!-- Non specificare version, configuration qui -->
+            </plugin>
+    
+            <!-- JavaFX Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version> <!-- Or latest version -->
+                <version>0.0.8</version>
                 <configuration>
-                    <mainClass>GUI.it.proj.Launcher</mainClass> <!-- Using the main class from jar plugin -->
+                    <mainClass>GUI.it.proj.Launcher</mainClass>
                 </configuration>
             </plugin>
+    
+             <!-- Aggiungi qui altri plugin necessari per l'esecuzione -->
+             <!-- Ad esempio, se vuoi che i test vengano eseguiti durante il ciclo di build normale -->
+             <!--
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+             </plugin>
+             -->
         </plugins>
     </build>
 </project>
