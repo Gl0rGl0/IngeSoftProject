@@ -13,7 +13,7 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (options == null || options.length < 1 || args == null || args.length < 1) {
             return Payload.error(
                 "Error using 'preclude'. Missing option or arguments.",
@@ -45,7 +45,7 @@ public class PrecludeCommand extends AbstractCommand {
         };
     }
 
-    private Payload addPrecludedDate(Date d) {
+    private Payload<String> addPrecludedDate(Date d) {
         if (controller.getDB().dbDatesHelper.addPrecludedDate(d)) {
             return Payload.info(
                 "Successfully added precluded date.",
@@ -57,7 +57,7 @@ public class PrecludeCommand extends AbstractCommand {
         }
     }
 
-    private Payload removePrecludedDate(Date d) {
+    private Payload<String> removePrecludedDate(Date d) {
         controller.getDB().dbDatesHelper.removePrecludedDate(d);
         return Payload.info(
             "Successfully removed precluded date.",

@@ -3,9 +3,9 @@ package V5.Ingsoft.controller.item.persone;
 import java.util.UUID;
 
 public class Iscrizione {
-    public String fruitoreUID;
-    public int quantity;
-    public String UIDIscrizione;
+    private String fruitoreUID;
+    private int quantity;
+    private String UIDIscrizione;
 
     public Iscrizione(String fruitoreUID, int quantity) {
         this.fruitoreUID = fruitoreUID;

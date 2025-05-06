@@ -2,13 +2,11 @@ package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
-import V5.Ingsoft.controller.commands.running.CommandList;
 import V5.Ingsoft.controller.item.StatusVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
-import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 
@@ -20,7 +18,7 @@ public class VisitCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (options == null || args == null) {
             return Payload.error(
                 "Internal error: invalid command structure.",
@@ -141,8 +139,7 @@ public class VisitCommand extends AbstractCommand {
                 if (v == null) {
                     return Payload.warn(
                         "Visit '" + visitName + "' on " + visitDate + " not found.",
-                        "Visit not found in VisitCommand"
-                    );
+                        "Visit not found in VisitCommand");
                 }
                 StatusVisita status = v.getStatus();
                 if (status != StatusVisita.PROPOSED && status != StatusVisita.COMPLETED) {
@@ -196,9 +193,15 @@ public class VisitCommand extends AbstractCommand {
                 if (i == null) {
                     return Payload.warn(
                         "No booking found with ID '" + subId + "'.",
-                        "Subscription not found in VisitCommand"
-                    );
+                        "Subscription not found in VisitCommand");
                 }
+
+                if (i.getUIDFruitore().equals(f.getUsername())) {
+                    return Payload.error(
+                        "The subscription doesn't match the current user",
+                        "Subscription not found in VisitCommand");
+                }
+
                 for (Visita v : controller.getDB().dbVisiteHelper.getVisite()) {
                     if ((v.getStatus() == StatusVisita.PROPOSED || v.getStatus() == StatusVisita.COMPLETED)
                         && v.getIscrizioni().stream()
@@ -216,14 +219,12 @@ public class VisitCommand extends AbstractCommand {
                 }
                 return Payload.warn(
                     "Booking ID '" + subId + "' not linked to any active visit.",
-                    "Unsubscription by ID failed in VisitCommand"
-                );
+                    "Unsubscription by ID failed in VisitCommand");
             }
             default:
                 return Payload.warn(
                     "Unknown option '-" + opt + "' for 'visit' command.",
-                    "Unrecognized option in VisitCommand: " + opt
-                );
+                    "Unrecognized option in VisitCommand: " + opt);
         }
     }
 }

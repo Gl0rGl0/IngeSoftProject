@@ -105,6 +105,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     //TESTING
+    @SuppressWarnings("unused")
     private void printAvailabilityVolontari() {
         if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
             ViewSE.println(ERROR_NOT_RECOGNIZED);

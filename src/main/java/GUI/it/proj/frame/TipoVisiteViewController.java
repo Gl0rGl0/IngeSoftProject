@@ -23,7 +23,7 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
         VBox.setVgrow(listVisita, Priority.ALWAYS);
 
         listVisita.setCellFactory(e -> new Cell<TipoVisita>(this, ID, true));
-        listVisita.getItems().addAll(Launcher.controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili());
+        listVisita.getItems().addAll(Launcher.controller.getDB().dbTipoVisiteHelper.getTipiVisita());
     }
 
     public void setParentController(LuoghiVisiteViewController parent) {

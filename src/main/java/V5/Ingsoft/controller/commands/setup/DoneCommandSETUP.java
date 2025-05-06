@@ -13,18 +13,16 @@ public class DoneCommandSETUP extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (controller.haveAllBeenExecuted()) {
             this.hasBeenExecuted = true;
             controller.switchInterpreter();
             return Payload.info(
                 "Setup complete, switching to running mode",
-                "All setup commands executed successfully"
-            );
+                "All setup commands executed successfully");
         }
         return Payload.warn(
             "Cannot complete setup: not all commands executed",
-            "DoneCommandSETUP invoked prematurely"
-        );
+            "DoneCommandSETUP invoked prematurely");
     }
 }

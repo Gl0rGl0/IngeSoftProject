@@ -18,7 +18,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (options == null || args == null) {
             return Payload.error(
                 "Internal error: invalid command structure.",

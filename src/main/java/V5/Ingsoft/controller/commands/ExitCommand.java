@@ -13,7 +13,7 @@ public class ExitCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<Runnable> execute(String[] options, String[] args) {
         // chiudi risorse, log, ecc.
         controller.close();
 

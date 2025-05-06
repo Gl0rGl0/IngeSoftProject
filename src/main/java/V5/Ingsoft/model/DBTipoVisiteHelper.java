@@ -1,6 +1,5 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.util.Date;
 
@@ -66,16 +65,6 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
                 }
             }
         }
-    }
-
-    public ArrayList<TipoVisita> getTipoVisiteIstanziabili() {
-        ArrayList<TipoVisita> out = new ArrayList<>();
-
-        for (TipoVisita tv : getTipiVisita()) {
-            if (tv.getStatus() == StatusItem.ACTIVE || tv.getStatus() == StatusItem.PENDING_REMOVE) //or != PENDING_ADD and != DISABLED
-                out.add(tv);
-        }
-        return out;
     }
 
     public boolean isNew() {

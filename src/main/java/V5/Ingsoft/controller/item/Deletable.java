@@ -51,4 +51,12 @@ public abstract class Deletable {
     public StatusItem getStatus() {
         return this.si;
     }
+
+    public boolean isUsable(){
+        return si == StatusItem.ACTIVE || si == StatusItem.PENDING_REMOVE;
+    }
+
+    public void setStatus(StatusItem si){
+        this.si = si;
+    }
 }

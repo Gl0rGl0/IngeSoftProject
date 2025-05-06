@@ -13,7 +13,7 @@ public class CollectionManagerCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         //Non so se lasciarlo
         if (controller == null)
             return Payload.error(
@@ -45,7 +45,7 @@ public class CollectionManagerCommand extends AbstractCommand {
         }
 
         return Payload.info(
-            "Executed collection operation '" + opt + "'",
+            opt == 'o' ? "Opened collection" : "Closed collection",
             CLASSNAME + ": executed '" + opt + "'");
     }
 }

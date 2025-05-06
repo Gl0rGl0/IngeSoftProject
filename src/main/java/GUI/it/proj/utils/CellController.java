@@ -10,7 +10,6 @@ import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Persona;
-import V5.Ingsoft.controller.item.persone.PersonaType;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

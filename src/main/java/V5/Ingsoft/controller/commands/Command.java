@@ -9,11 +9,15 @@ public interface Command {
      * @param options the options (without the initial hyphen)
      * @param args    the arguments
      */
-    Payload execute(String[] options, String[] args);
+    Payload<?> execute(String[] options, String[] args);
 
     boolean canBeExecutedBy(int userPriority);
 
     boolean hasBeenExecuted();
 
     ListInterface getCommandInfo();
+
+    default String getClassName() {
+        return this.getClass().getSimpleName();
+    }
 }

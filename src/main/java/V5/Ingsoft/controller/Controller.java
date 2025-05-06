@@ -54,7 +54,7 @@ public class Controller {
      *
      * @param prompt the entered command string
      */
-    public Payload interpreter(String prompt) {
+    public Payload<?> interpreter(String prompt) {
         AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Level.INFO, this.getClass().getSimpleName());
 
         return interpreter.interpret(prompt, getCurrentUser());

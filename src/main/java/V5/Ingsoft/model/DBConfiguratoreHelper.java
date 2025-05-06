@@ -4,7 +4,6 @@ import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.util.Payload.Status;
 
 public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
     private static final String CLASSNAME = DBConfiguratoreHelper.class.getSimpleName(); // Added for logging

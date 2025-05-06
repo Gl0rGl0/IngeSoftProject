@@ -28,6 +28,7 @@ public abstract class DBAbstractHelper<T> {
         return JsonStorage.saveList(fileJson, getItems());
     }
 
+    //Creata una copia
     protected ArrayList<T> getItems() {
         return new ArrayList<>(cachedItems.values());
     }

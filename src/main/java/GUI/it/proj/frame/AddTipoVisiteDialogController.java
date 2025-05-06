@@ -7,12 +7,10 @@ import java.util.List;
 
 import org.controlsfx.control.CheckComboBox;
 
-import com.dlsc.formsfx.model.structure.IntegerField;
 import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
-import GUI.it.proj.utils.SearchableCheckComboBox;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.util.Payload;

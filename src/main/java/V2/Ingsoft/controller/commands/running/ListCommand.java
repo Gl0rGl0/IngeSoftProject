@@ -10,7 +10,6 @@ import V2.Ingsoft.controller.item.persone.PersonaType;
 import V2.Ingsoft.controller.item.persone.Volontario;
 import V2.Ingsoft.view.ViewSE;
 
-import java.time.Month;
 import java.util.ArrayList;
 
 public class ListCommand extends AbstractCommand {
@@ -102,28 +101,6 @@ public class ListCommand extends AbstractCommand {
             case 'e' -> printEffettuate();
             default -> ViewSE.println(ERROR_NOT_RECOGNIZED);
         }
-    }
-
-    //TESTING
-    private void printAvailabilityVolontari() {
-        if (controller.getCurrentUser().getType() != PersonaType.CONFIGURATORE) {
-            ViewSE.println(ERROR_NOT_RECOGNIZED);
-            return;
-        }
-
-        Month targetMonth = controller.date.getMonth().plus(2);
-        if (controller.date.getDay() > 16)
-            targetMonth = targetMonth.plus(1);
-
-        StringBuilder out = new StringBuilder();
-        for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
-            out.append(v.getUsername()).append(":\n");
-            int i = 1;
-            for (boolean b : v.getAvailability()) {
-                out.append(String.format("%d:%d [%b]", i++, targetMonth.getValue(), b));
-            }
-        }
-        ViewSE.println(out);
     }
 
     private void printTipiVisita() {

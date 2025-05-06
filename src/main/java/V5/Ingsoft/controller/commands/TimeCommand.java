@@ -12,7 +12,7 @@ public class TimeCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         // Controller null-check
         if (controller == null) {
             return Payload.error(

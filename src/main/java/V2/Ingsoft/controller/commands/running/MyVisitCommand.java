@@ -2,9 +2,7 @@ package V2.Ingsoft.controller.commands.running;
 
 import V2.Ingsoft.controller.Controller;
 import V2.Ingsoft.controller.commands.AbstractCommand;
-import V2.Ingsoft.controller.item.StatusVisita;
 import V2.Ingsoft.controller.item.luoghi.Visita;
-import V2.Ingsoft.controller.item.persone.Fruitore;
 import V2.Ingsoft.controller.item.persone.Iscrizione;
 import V2.Ingsoft.controller.item.persone.PersonaType;
 import V2.Ingsoft.util.AssertionControl;
@@ -100,41 +98,6 @@ public class MyVisitCommand extends AbstractCommand {
         if(!addedSmth){
             out.setLength(0);
             out.append("You have not been assigned any visits");
-        }
-
-        ViewSE.println(out);
-    }
-
-    private void listFruitore() {
-        String userF = controller.getCurrentUser().getUsername();
-
-        if (userF == null)
-            return;
-
-        Fruitore f = controller.getDB().dbFruitoreHelper.getPersona(userF);
-        if (f == null)
-            return;
-
-        StringBuilder out = new StringBuilder();
-        boolean addedSmth = false;
-
-        out.append("List of visits you are registered for: ");
-        Visita v;
-        for (String vUid : f.getVisiteUIDs()) {
-            v = controller.getDB().dbVisiteHelper.getVisitaByUID(vUid);
-            if (v == null)
-                continue;
-            if(v.getStatus() == StatusVisita.CANCELLED){
-                out.append(v.getTitle() + ": ( " + v.getDate() + " ) " + StatusVisita.CANCELLED);
-            }else{
-                out.append(v).append("\n");
-            }
-            addedSmth = true;
-        }
-
-        if(!addedSmth){
-            out.setLength(0);
-            out.append("You are not signed up for any visits");
         }
 
         ViewSE.println(out);

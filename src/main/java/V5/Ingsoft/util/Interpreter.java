@@ -5,6 +5,7 @@ import V5.Ingsoft.controller.commands.AddCommand;
 import V5.Ingsoft.controller.commands.AssignCommand;
 import V5.Ingsoft.controller.commands.ChangePswCommand;
 import V5.Ingsoft.controller.commands.Command;
+import V5.Ingsoft.controller.commands.DisAssignCommand;
 import V5.Ingsoft.controller.commands.ExitCommand;
 import V5.Ingsoft.controller.commands.LogoutCommand;
 import V5.Ingsoft.controller.commands.SetPersoneMaxCommand;
@@ -31,6 +32,7 @@ public abstract class Interpreter {
         commandRegistry.put("logout",   new LogoutCommand(controller));
         commandRegistry.put("changepsw",new ChangePswCommand(controller));
         commandRegistry.put("assign",   new AssignCommand(controller));
+        commandRegistry.put("disassign",   new DisAssignCommand(controller));
         commandRegistry.put("setmax",   new SetPersoneMaxCommand(controller, true));
         commandRegistry.put("exit",     new ExitCommand(controller));
     }
@@ -38,10 +40,10 @@ public abstract class Interpreter {
     /**
      * Parses and executes a prompt, returning a Payload.
      */
-    public Payload interpret(String prompt, Persona currentUser) {
+    public Payload<?> interpret(String prompt, Persona currentUser) {
         // 1) Empty prompt
         if (prompt == null || prompt.isBlank()) {
-            Payload p = Payload.warn(MSG_NO_PROMPT, LOG_NO_PROMPT);
+            Payload<String> p = Payload.warn(MSG_NO_PROMPT, LOG_NO_PROMPT);
             p.setCommand(null);
             return p;
         }
@@ -49,7 +51,7 @@ public abstract class Interpreter {
         // 2) Tokenize
         String[] tokens = prompt.trim().split("\\s+");
         if (tokens.length == 0 || tokens[0].isBlank()) {
-            Payload p = Payload.warn(MSG_NO_PROMPT, LOG_NO_PROMPT);
+            Payload<String> p = Payload.warn(MSG_NO_PROMPT, LOG_NO_PROMPT);
             p.setCommand(null);
             return p;
         }
@@ -65,7 +67,7 @@ public abstract class Interpreter {
 
         Command command = commandRegistry.get(cmdKey);
         if (command == null) {
-            Payload p = Payload.error("\"" + cmdKey + "\"" + MSG_UNKNOWN, LOG_UNKNOWN);
+            Payload<String> p = Payload.error("\"" + cmdKey + "\"" + MSG_UNKNOWN, LOG_UNKNOWN);
             p.setCommand(null);
             return p;
         }
@@ -73,7 +75,7 @@ public abstract class Interpreter {
         // 3) Permission checks
         int userPri = currentUser.getType().getPriority();
         if (!command.canBeExecutedBy(userPri)) {
-            Payload p = Payload.error(
+            Payload<String> p = Payload.error(
                 "You do not have permissions to execute '" + cmdKey + "'.",
                 "Interpreter: permission denied for " + cmdKey
             );
@@ -82,7 +84,7 @@ public abstract class Interpreter {
         }
         if (currentUser.isNew() &&
             !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
-            Payload p = Payload.warn(
+            Payload<String> p = Payload.warn(
                 "You must change your password first via 'changepsw [new]'.",
                 "Interpreter: new user blocked for " + cmdKey
             );
@@ -93,8 +95,13 @@ public abstract class Interpreter {
         // 4) Execute
         String[] options = opts.toArray(String[]::new);
         String[] arguments = args.toArray(String[]::new);
-        Payload out = command.execute(options, arguments);
+        Payload<?> out = command.execute(options, arguments);
         out.setCommand(command.getCommandInfo());
+
+        if(out != null && out.getLogMessage() != null){
+            AssertionControl.logMessage(out.getLogMessage(), out.getLevel(), command.getClassName());
+        }
+
         return out;
     }
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
-import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
@@ -21,7 +20,7 @@ public class MyVisitCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         PersonaType tipo = controller.getCurrentUser().getType();
         switch (tipo) {
             case FRUITORE:
@@ -35,7 +34,7 @@ public class MyVisitCommand extends AbstractCommand {
         }
     }
 
-    private Payload listFruitore() {
+    private Payload<?> listFruitore() {
         String userF = controller.getCurrentUser().getUsername();
         Fruitore f = controller.getDB().dbFruitoreHelper.getPersona(userF);
         if (f == null) {
@@ -44,29 +43,21 @@ public class MyVisitCommand extends AbstractCommand {
                 "Fruitore object null for user " + userF);
         }
 
-        ArrayList<Visita> out = new ArrayList<>();
-        for (String vUid : f.getVisiteUIDs()) {
-            Visita v = controller.getDB().dbVisiteHelper.getVisitaByUID(vUid);
-            if (v == null) continue;
-            // if (v.getStatus() == StatusVisita.CANCELLED) {
-            //     out.append(v.getTitle())
-            //        .append(" ( ")
-            //        .append(v.getDate())
-            //        .append(" ) CANCELLED\n");
-            // } else {
-            //     out.append(v).append("\n");
-            // }
-            out.add(v);
+        ArrayList<Iscrizione> out = new ArrayList<>();
+        for (Iscrizione i : controller.getDB().dbIscrizionisHelper.getIscrizioni()) {
+            if(i.getUIDFruitore().equals(f.getUsername()))
+                out.add(i);
         }
+        
         if(out.size() == 0)
-            return Payload.warn("You are not signed up for any visits",
-                                "No visits found for the user: " + userF);
+            return Payload.warn(
+                "You are not signed up for any visits",
+                "No visits found for the user: " + userF);
 
-        return Payload.info(out,
-                            "Listed fruitore subscriptions for " + userF);
+        return Payload.info(out, "Listed fruitore subscriptions for " + userF);
     }
 
-    private Payload listVolontari(String[] options, String[] args) {
+    private Payload<?> listVolontari(String[] options, String[] args) {
         String userV = controller.getCurrentUser().getUsername();
         //TODO SISTEMARE UN PO' DI COSe PERChÈ QUA NON VA BENE...
 
@@ -83,16 +74,10 @@ public class MyVisitCommand extends AbstractCommand {
         }
 
         ArrayList<TipoVisita> out = new ArrayList<>();
-        for (TipoVisita tv : controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili()) {
+        for (TipoVisita tv : controller.getDB().dbTipoVisiteHelper.getTipiVisita()) {
             if (tv == null) continue;
-            // if (v.getStatus() == StatusVisita.CANCELLED) {
-            //     out.append(v.getTitle())
-            //        .append(" ( ")
-            //        .append(v.getDate())
-            //        .append(" ) CANCELLED\n");
-            // } else {
-            //     out.append(v).append("\n");
-            // }
+            if (!tv.isUsable()) continue;
+
             if(tv.assignedTo(userV))
                 out.add(tv);
         }

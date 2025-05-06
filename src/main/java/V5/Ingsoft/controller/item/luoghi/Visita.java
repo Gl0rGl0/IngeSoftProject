@@ -77,7 +77,7 @@ public class Visita {
 
     public boolean hasFruitore(String userF) {
         for (Iscrizione i : fruitori) {
-            if (i.fruitoreUID.equals(userF))
+            if (i.getUIDFruitore().equals(userF))
                 return true;
         }
         return false;

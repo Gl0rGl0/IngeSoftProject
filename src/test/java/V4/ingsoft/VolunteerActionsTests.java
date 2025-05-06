@@ -1,9 +1,7 @@
 package V4.ingsoft;
 
-import V4.Ingsoft.controller.item.StatusVisita;
 import V4.Ingsoft.controller.item.luoghi.Visita;
 import V4.Ingsoft.controller.item.persone.Volontario;
-import V4.Ingsoft.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

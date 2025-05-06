@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.geometry.Pos; // Potrebbe essere utile per allineamento
 
 /**
  * A custom JavaFX control that combines a TextField for searching

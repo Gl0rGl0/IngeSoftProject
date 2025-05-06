@@ -16,7 +16,7 @@ public class LoginCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (args == null || args.length < 2)
             return Payload.error(
                 "Usage: login <username> <password>",
@@ -27,9 +27,7 @@ public class LoginCommand extends AbstractCommand {
                 "Already logged in, please log out first",
                 CLASSNAME + ": login attempted while already logged in");
 
-        Payload result = controller.getDB().login(args[0], args[1]);
-        // log the raw result if desired
-        // AssertionControl.logMessage(result.getLogMessage(), result.getLevel(), CLASSNAME);
+        Payload<Persona>  result = controller.getDB().login(args[0], args[1]);
 
         if (result.getStatus() == Payload.Status.ERROR)
             return handleLoginError(result, args);
@@ -37,18 +35,18 @@ public class LoginCommand extends AbstractCommand {
         return handleLoginSuccess(result);
     }
 
-    private Payload handleLoginError(Payload result, String[] args) {
-        Persona p = (Persona) result.getData();
+    private Payload<String> handleLoginError(Payload<Persona> result, String[] args) {
+        Persona p = result.getData();
         if (p.getType() != PersonaType.GUEST) {
             return Payload.warn(
                 "Wrong password, please try again",
-                CLASSNAME + ": invalid password for user " + p.getUsername());
+                "Invalid password for user " + p.getUsername());
         }
         // user does not exist → allow registration if a second password is provided
         if (args.length < 3) {
             return Payload.warn(
-                "User not found. To register, provide the password twice",
-                CLASSNAME + ": registration password missing for new user " + args[0]);
+                "User not found",
+                "Registration password missing for new user " + args[0]);
         }
         if (args[2].equals(args[1])) {
             try {
@@ -58,30 +56,24 @@ public class LoginCommand extends AbstractCommand {
                 controller.user = f.getUsername();
                 return Payload.info(
                     "Account created and logged in as " + f.getUsername(),
-                    CLASSNAME + ": new account registered for " + f.getUsername());
+                    "New account registered for " + f.getUsername());
             } catch (Exception e) {
                 return Payload.error(
                     "Error during registration: " + e.getMessage(),
-                    CLASSNAME + ": exception creating new user: " + e.getMessage());
+                    "Exception creating new user: " + e.getMessage());
             }
         }
         return Payload.error(
             "Registration failed: passwords do not match",
-            CLASSNAME + ": password mismatch during registration for " + args[0]);
+            "Password mismatch during registration for " + args[0]);
     }
 
-    private Payload handleLoginSuccess(Payload result) {
-        Persona p = (Persona) result.getData();
+    private Payload<String> handleLoginSuccess(Payload<Persona> result) {
+        Persona p = result.getData();
         controller.user = p.getUsername();
         String msg = "Login successful as " + p.getUsername() + " (" + p.getType() + ")";
-        if (p.isNew()) {
-            msg += ". First login detected, please change your password with 'changepsw [newpassword]'";
-            return Payload.warn(
-                msg,
-                CLASSNAME + ": first login for " + p.getUsername());
-        }
-        return Payload.info(
-            msg,
-            CLASSNAME + ": login succeeded for " + p.getUsername());
+        if (p.isNew())
+            return Payload.warn(msg, "First login for " + p.getUsername());
+        return Payload.info(msg, "Login succeeded for " + p.getUsername());
     }
 }

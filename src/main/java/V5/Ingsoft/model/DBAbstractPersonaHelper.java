@@ -4,8 +4,6 @@ import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.util.Payload.Status;
-
 import java.util.ArrayList;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
@@ -97,11 +95,10 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     // Login logic seems reasonable, but add null checks
-    public Payload login(String user, String psw) {
+    public Payload<Persona> login(String user, String psw) {
         final String SUB_CLASSNAME = CLASSNAME + ".login<" + clazz.getSimpleName() + ">";
         if (user == null || user.trim().isEmpty() || psw == null || psw.isEmpty()) {
-            AssertionControl.logMessage("Attempted login with null/empty username or password.", Payload.Level.WARN, SUB_CLASSNAME);
-            return new Payload(Status.ERROR, null); // Return error payload
+            return Payload.warn(null, "Attempted login with null/empty username or password.");
         }
 
         String securedPsw = DBAbstractPersonaHelper.securePsw(user, psw);
@@ -118,17 +115,14 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             }
             if (p.getUsername().equals(user)) {
                 if (p.getPsw().equals(securedPsw)) {
-                    AssertionControl.logMessage("Successful login for user: " + user, Payload.Level.INFO, SUB_CLASSNAME);
-                    return new Payload(Status.OK, p); // Found user, password matches
+                    return Payload.info(p, "Successful login for user: " + user); // Found user, password matches
                 } else {
-                    AssertionControl.logMessage("Incorrect password attempt for user: " + user, Payload.Level.INFO, SUB_CLASSNAME);
-                    return new Payload(Status.ERROR, p); // Found user, but password incorrect
+                    return Payload.error(p, "Incorrect password attempt for user: " + user); // Found user, but password incorrect
                 }
             }
         }
         // If no matching user is found:
-        AssertionControl.logMessage("Login attempt for non-existent user: " + user, Payload.Level.INFO, SUB_CLASSNAME);
-        return new Payload(Status.ERROR, null);
+        return Payload.error(null, "Login attempt for non-existent user: " + user);
     }
 
     public boolean isNew() {

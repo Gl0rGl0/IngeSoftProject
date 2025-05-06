@@ -1,12 +1,7 @@
 package V4.ingsoft;
 
-import V4.Ingsoft.controller.item.luoghi.Visita;
-import V4.Ingsoft.controller.item.persone.Iscrizione;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -14,7 +14,7 @@ public class LogoutCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         if (controller.getCurrentUser().getType() == PersonaType.GUEST) {
             return Payload.warn(
                 "No user is logged in. Please log in first.",

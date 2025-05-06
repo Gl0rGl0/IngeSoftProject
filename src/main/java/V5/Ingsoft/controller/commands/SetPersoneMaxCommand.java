@@ -16,7 +16,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         if (args == null || args.length < 1)
             return Payload.error(
                 "Usage: setmax <number>", 

@@ -5,7 +5,6 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.*;
 import V5.Ingsoft.util.*;
-import V5.Ingsoft.util.Payload.Status;
 
 import java.util.ArrayList;
 
@@ -180,7 +179,7 @@ public class Model {
         for (String volontarioUID : volontariUIDsCopy) {
             Volontario volontario = dbVolontarioHelper.getPersona(volontarioUID);
             if (volontario != null) {
-                volontario.removeUIDVisita(tipoVisitaUID); // Corrected method name based on Volontario.java
+                volontario.removeTipoVisita(tipoVisitaUID); // Corrected method name based on Volontario.java
                 // Check if Volontario is now unassigned
                 if (volontario.getTipiVisiteUIDs().isEmpty()) {
                     // If unassigned, trigger its removal cascade
@@ -306,8 +305,8 @@ public class Model {
     // Search and login methods
     // ================================================================
 
-    public Payload login(String user, String psw) {
-        Payload out;
+    public Payload<Persona> login(String user, String psw) {
+        Payload<Persona> out;
 
         out = dbConfiguratoreHelper.login(user, psw);
         if (out.getData() != null)
@@ -321,7 +320,7 @@ public class Model {
         if (out.getData() != null)
             return out;
 
-        return new Payload(Status.ERROR, Guest.getInstance());
+        return Payload.<Persona>error(Guest.getInstance(), "No user found with that username.");
     }
 
     // ================================================================

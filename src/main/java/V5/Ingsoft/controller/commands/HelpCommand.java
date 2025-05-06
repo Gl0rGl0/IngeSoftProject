@@ -12,7 +12,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         String helpMsg;
         if (args != null && args.length > 0) {
             try {

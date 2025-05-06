@@ -4,7 +4,6 @@ import V5.Ingsoft.controller.Controller;
 
 public abstract class AbstractCommand implements Command {
 
-    protected final String CLASSNAME = this.getClass().getSimpleName();
     protected Controller controller;
     protected ListInterface commandInfo;
     protected boolean hasBeenExecuted = true; // by default, mark every command as already executed, so the 'and' check

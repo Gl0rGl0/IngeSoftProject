@@ -52,8 +52,8 @@ public class Volontario extends Persona {
         return false;
     }
 
-    public void removeUIDVisita(String uidTipoVisita) {
-        UIDvisitePresentabili.remove(uidTipoVisita);
+    public boolean removeTipoVisita(String uidTipoVisita) {
+        return this.UIDvisitePresentabili.remove(uidTipoVisita);
     }
 
     public ArrayList<String> getTipiVisiteUIDs() {

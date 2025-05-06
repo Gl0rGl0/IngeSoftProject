@@ -15,10 +15,8 @@ public class SetupInterpreter extends Interpreter {
         commandRegistry.put("login", new LoginCommandSETUP(controller)); // TO BE EXECUTED
         commandRegistry.put("help", new HelpCommand(controller));
 
-        //SOVRASCRIVE TRUE-->FALSE
+        //SOVRASCRIVE executed = TRUE-->FALSE
         commandRegistry.put("setmax", new SetPersoneMaxCommand(controller, false));
-
-        //commandRegistry.put("setambito", new SetAmbitoCommandSETUP(controller)); // TO BE EXECUTED - Uncommented
     }
 
 }

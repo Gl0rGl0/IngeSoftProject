@@ -1,7 +1,6 @@
 package GUI.it.proj.utils;
 
 import GUI.it.proj.utils.interfaces.ListBase;
-import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 
 import java.io.IOException;

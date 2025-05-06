@@ -20,29 +20,30 @@ public class MakePlanCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload execute(String[] options, String[] args) {
+    public Payload<?> execute(String[] options, String[] args) {
         if (!isExecutable()) {
             return Payload.warn(
                 "Action possible only on the 16th of the month and not on holidays!",
-                CLASSNAME + ": execution not allowed by schedule");
+                "Execution not allowed by schedule");
         }
         if (controller == null) {
             return Payload.error(
                 "Internal error: controller is null.",
-                CLASSNAME + ": null controller");
+                "Null controller");
         }
         if (controller.date == null || controller.getDB() == null) {
             return Payload.error(
                 "Internal error: dependencies missing.",
-                CLASSNAME + ": date or db null");
+                "Date or db null");
         }
         if (!controller.isVolunteerCollectionOpen()) {
             return Payload.warn(
                 "Cannot make plan while collection is open.",
-                CLASSNAME + ": collection still open");
+                "Collection still open");
         }
 
-        List<TipoVisita> types = controller.getDB().dbTipoVisiteHelper.getTipoVisiteIstanziabili();
+        List<TipoVisita> types = controller.getDB().dbTipoVisiteHelper.getTipiVisita();
+        types.removeIf(t -> !t.isUsable());
         types.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
         Month next = controller.date.clone().getMonth().plus(1);
@@ -58,7 +59,7 @@ public class MakePlanCommand extends AbstractCommand {
 
         return Payload.info(
             "Plan created: " + assignedCount + " visits assigned.",
-            CLASSNAME + ": assigned " + assignedCount + " visits");
+            "Assigned " + assignedCount + " visits");
     }
 
     private int processVisitsForDate(Date date, List<TipoVisita> types) {

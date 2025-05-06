@@ -203,8 +203,8 @@ public class TipoVisita extends Deletable {
         return false;
     }
 
-    public void removeVolontario(String uidVolontario) {
-        this.volontariUID.remove(uidVolontario);
+    public boolean removeVolontario(String uidVolontario) {
+        return this.volontariUID.remove(uidVolontario);
     }
 
     @Override
