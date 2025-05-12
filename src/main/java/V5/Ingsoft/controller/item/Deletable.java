@@ -7,7 +7,6 @@ import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
 public abstract class Deletable {
-    @JsonIgnore
     protected StatusItem si = StatusItem.ACTIVE;
     protected Date insertionDate;
     protected Date deletionDate;
@@ -52,6 +51,7 @@ public abstract class Deletable {
         return this.si;
     }
 
+    @JsonIgnore
     public boolean isUsable(){
         return si == StatusItem.ACTIVE || si == StatusItem.PENDING_REMOVE;
     }

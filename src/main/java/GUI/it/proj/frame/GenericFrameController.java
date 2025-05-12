@@ -2,16 +2,26 @@ package GUI.it.proj.frame;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Loader;
+import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -42,6 +52,8 @@ public class GenericFrameController implements Initializable {
     @FXML
     private Button prenotazioniButton; // FRUITORE
 
+    @FXML private AnchorPane toastContainer;  // Overlay for toasts
+
     // Questa variabile conterrà il riferimento a questa istanza del controller,
     // utile per accedere a questo controller da metodi statici di Launcher.
     // MA con il nuovo approccio in Launcher.setRoot non è strettamente necessario.
@@ -49,25 +61,16 @@ public class GenericFrameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // instance = this; // Se usi l'approccio con l'istanza statica
-
-        // Allinea l'area di contenuto
         contentArea.setAlignment(Pos.CENTER);
-
-        // Carica i frame Figli SOLO SE non sono già caricati
-        // Questa HashMap è static, quindi basta controllare se è vuota
-        if (contentFrames.isEmpty()) {
-            contentFrames.put(ChangePasswordViewController.ID, Loader.loadFXML("changepsw-view"));
-            contentFrames.put(PersonViewController.ID, Loader.loadFXML("persone-view"));
-            contentFrames.put(LuoghiVisiteViewController.ID, Loader.loadFXML("luoghi-visite-view"));
-            contentFrames.put(VolontariViewController.ID, Loader.loadFXML("volontari-view"));
-            contentFrames.put(FruitoriViewController.ID, Loader.loadFXML("fruitori-view"));
-            contentFrames.put(HomeVisiteViewController.ID, Loader.loadFXML("home-view"));
-            // Aggiungi altri frame figli qui
-        }
-
-        // Rimuovi la chiamata a showHome() da initialize()
-        // showHome(); // Questa chiamata viene fatta dopo il login nel nuovo metodo setupAfterLogin()
+    
+        // Caricamenti FXML esistenti…
+        contentFrames.put(HomeVisiteViewController.ID, Loader.loadFXML("home-view"));
+        contentFrames.put(ChangePasswordViewController.ID, Loader.loadFXML("changepsw-view"));
+    
+        // Posiziona il toastContainer in alto a destra
+        AnchorPane.setTopAnchor(toastContainer, 0.0);
+        AnchorPane.setRightAnchor(toastContainer, 0.0);
+        // Lo lasciamo parte del layout dello StackPane, non serve managed=false qui
     }
 
     /**
@@ -78,6 +81,19 @@ public class GenericFrameController implements Initializable {
     public void setupAfterLogin() {
         // Esegui qui le azioni che vuoi succedano ogni volta che il frame viene "mostrato" post-login
         System.out.println("GenericFrameController: Setup after login called.");
+
+        //Refresh content
+        
+        switch (Launcher.controller.getCurrentUser().getType()) {
+            case CONFIGURATORE -> {
+                contentFrames.put(PersonViewController.ID, Loader.loadFXML("persone-view"));
+                contentFrames.put(LuoghiVisiteViewController.ID, Loader.loadFXML("luoghi-visite-view"));
+            }
+            case VOLONTARIO -> contentFrames.put(VolontariViewController.ID, Loader.loadFXML("volontari-view"));
+            case FRUITORE -> contentFrames.put(FruitoriViewController.ID, Loader.loadFXML("fruitori-view"));
+            default -> {}
+        }
+
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
     }
 
@@ -128,14 +144,14 @@ public class GenericFrameController implements Initializable {
     // Metodo di test, lascialo pure come lo hai, solo per debug
     int i = 0;
     @FXML
-    private void cycleRole() {
-        String[] usersTest = {"ADMIN PASSWORD", "volont1 pass1V", "fruit1 pass1F"};
+    public void cycleRole() {
+        String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit1 pass1F"};
 
         Launcher.controller.interpreter("logout"); // Esegui logout prima
         Payload loginRes = Launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
 
         if (loginRes != null && loginRes.getStatus() == Status.OK) {
-             System.out.println("Cycled role login successful: " + Launcher.controller.getCurrentUser().getUsername());
+             System.out.println("Role login successful: " + Launcher.controller.getCurrentUser().getUsername());
              showHome(); // Chiama showHome per riconfigurare la navbar con il nuovo ruolo
         } else {
              System.err.println("Cycled role login failed.");
@@ -146,8 +162,9 @@ public class GenericFrameController implements Initializable {
     @FXML
     private void showHome() {
         // Configura la navbar prima di mostrare la home, basandosi sull'utente corrente
-        if (Launcher.controller != null && Launcher.controller.getCurrentUser() != null) {
-            configureNavbarForRole(Launcher.controller.getCurrentUser().getType());
+        Persona user = Launcher.controller.getCurrentUser();
+        if (Launcher.controller != null && user != null) {
+            configureNavbarForRole(user.getType());
         } else {
             // Questo caso non dovrebbe verificarsi se setupAfterLogin è chiamato solo post-login
             System.err.println("WARNING: showHome called without a logged-in user.");
@@ -241,6 +258,36 @@ public class GenericFrameController implements Initializable {
         }
     }
 
-    // Optional: add a getter for contentFrames if needed elsewhere (unlikely)
-    // public static HashMap<String, Parent> getContentFrames() { return contentFrames; }
+    public void toast(Payload<?> in) {
+        Payload<String> p = (Payload<String>) in;
+        Platform.runLater(() -> {
+            String msg = p.getData();
+            Payload.Level level = p.getLevel();
+            Label toast = new Label(msg);
+            toast.getStyleClass().addAll("toast", "toast-" + level.name().toLowerCase());
+            toast.setFont(Font.font(14));
+            toast.setPadding(new Insets(10));
+
+            // Position in top-right of container
+            toastContainer.getChildren().add(toast);
+
+            // Slide in
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), toast);
+            slideIn.setFromX(-320);
+            slideIn.setToX(-320); // move left into view
+            slideIn.setOnFinished(e -> toast.setOpacity(1));
+
+            // Pause visible
+            PauseTransition pause = new PauseTransition(Duration.seconds(5));
+
+            // Slide out
+            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), toast);
+            slideOut.setFromX(-320);
+            slideOut.setToX(0);
+            slideOut.setOnFinished(e -> toastContainer.getChildren().remove(toast));
+
+            SequentialTransition seq = new SequentialTransition(slideIn, pause, slideOut);
+            seq.play();
+        });
+    }
 }

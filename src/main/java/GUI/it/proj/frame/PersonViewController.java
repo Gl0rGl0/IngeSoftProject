@@ -39,9 +39,7 @@ public class PersonViewController implements ListEditer<Persona> {
         setupListView(listFruitori, PersonaType.FRUITORE.toString());
         setupListView(listVolontari, PersonaType.VOLONTARIO.toString());
 
-        listConfiguratori.getItems().addAll(Launcher.controller.getDB().dbConfiguratoreHelper.getPersonList());
-        listFruitori.getItems().addAll(Launcher.controller.getDB().dbFruitoreHelper.getPersonList());
-        listVolontari.getItems().addAll(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
+        refreshItems();
     }
 
     private void setupListView(ListView<Persona> listView, String roleFilter) {
@@ -66,12 +64,7 @@ public class PersonViewController implements ListEditer<Persona> {
         if(out == null || out.getStatus() == Status.ERROR)
             return;
         
-        switch (user.getType()) {
-            case CONFIGURATORE -> listConfiguratori.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
-            case FRUITORE      -> listFruitori.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
-            case VOLONTARIO    -> listVolontari.getItems().removeIf(p -> p.getUsername().equals(user.getUsername()));
-            default -> {}
-        }
+        refreshItems();
     }
 
     @Override
@@ -91,11 +84,7 @@ public class PersonViewController implements ListEditer<Persona> {
         if(out == null || out.getStatus() == Status.ERROR)
             return;
         
-        switch (user.getType()) {
-            case CONFIGURATORE -> listConfiguratori.getItems().add(user);
-            case VOLONTARIO    -> listVolontari.getItems().add(user);
-            default -> {}
-        }
+        refreshItems();
     }
 
     @FXML
@@ -119,24 +108,23 @@ public class PersonViewController implements ListEditer<Persona> {
         dialog.setVisible(true);
     }
 
-    @Override
-    public void modifyItem(Persona p, Object o) {
-        System.out.println("MODIFICO " + p.getUsername());
-        addPersonDialog = Loader.loadFXML("add-person-dialog");
-        addPersonDialogController = (AddPersonDialogController) addPersonDialog.getUserData();
-        addPersonDialogController.setRole(p.getType());
-        addPersonDialogController.setParentController(this);
-        addPersonDialogController.setStatus(true, p.getUsername());
-
-        overlayMask.setVisible(true);
-        dialog.getChildren().setAll(addPersonDialog);
-        dialog.setVisible(true);
-    }
-
     @FXML
     public void closeDialog() {
         overlayMask.setVisible(false);
         dialog.getChildren().clear();
         dialog.setVisible(false);
+    }
+
+    @Override
+    public void refreshItems() {
+        //niente migliorie per la memoria...
+        listConfiguratori.getItems().clear();
+        listConfiguratori.getItems().addAll(Launcher.controller.getDB().dbConfiguratoreHelper.getPersonList());
+
+        listFruitori.getItems().clear();
+        listFruitori.getItems().addAll(Launcher.controller.getDB().dbFruitoreHelper.getPersonList());
+
+        listVolontari.getItems().clear();
+        listVolontari.getItems().addAll(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
     }
 }

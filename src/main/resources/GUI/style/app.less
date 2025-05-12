@@ -3,7 +3,7 @@
 // Imposta questa variabile su 'light' o 'dark'
 // prima di compilare per scegliere il tema.
 // ========================================
-@theme: dark; // light o dark
+@theme: light; // light o dark
 
 // ========================================
 // Variabili Base (per entrambi i temi)
@@ -328,8 +328,8 @@
     }
     &:selected,
     &:filled:selected {
-      -fx-background-color: derive(@color-primary-blue, 50%);
-      .themed-text-fill(@theme);
+      -fx-background-color: transparent;
+      .themed-text-fill(transparent);
     }
   }
 
@@ -460,3 +460,17 @@
   -fx-pref-width: 100%;
   -fx-pref-height: 100%;
 }
+
+
+// ========================================
+// Overlay per Toast
+// ========================================
+.toast {
+  -fx-background-radius: 4;
+  -fx-text-fill: white;
+  -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.3), 4, 0, 0, 2);
+}
+.toast-error { -fx-background-color: #e74c3c; }
+.toast-warn  { -fx-background-color: #f39c12; }
+.toast-info  { -fx-background-color: #3498db; }
+.toast-debug { -fx-background-color: #95a5a6; }

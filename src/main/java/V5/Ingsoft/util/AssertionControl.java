@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class AssertionControl {
     public final static String VERSION = "V5";
     private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log";
+    private static final String LOG_PAYLOAD = JsonStorage.BASE_PATH + "payload.log";
 
     /**
      * Prints a message to the standard view.
@@ -40,6 +41,23 @@ public class AssertionControl {
                 message
             );
             fw.write(out + System.lineSeparator());
+        } catch (IOException e) {
+            print("Log error: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Logs a message with a given level and origin class name.
+     * @param message   the message to log
+     * @param level     log level (ERROR, WARN, INFO, DEBUG)
+     * @param className origin class simple name
+     * @return true if written successfully
+     */
+    public static boolean logPayload(Payload<?> p) {
+        try (FileWriter fw = new FileWriter(LOG_PAYLOAD, true)) {
+            fw.write(p.toString() + "\n");
         } catch (IOException e) {
             print("Log error: " + e.getMessage());
             return false;

@@ -18,7 +18,7 @@ public class RemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public Payload<?> execute(String[] options, String[] args) {
+    public Payload<String> execute(String[] options, String[] args) {
         if (options == null || args == null) {
             return Payload.error(
                 "Internal error: invalid command structure.",
@@ -75,7 +75,7 @@ public class RemoveCommand extends AbstractCommand {
                 // remove volontario
                 if (!isExecutable()) {
                     return Payload.warn(
-                        "Cannot remove volunteer: action not allowed now.",
+                        "Cannot remove volunteer: action not allowed now. Try Again on the 16th",
                         "RemoveCommand.removeVolontario: not executable"
                     );
                 }
@@ -99,7 +99,7 @@ public class RemoveCommand extends AbstractCommand {
                 // schedule removal of visit type
                 if (!isExecutable()) {
                     return Payload.warn(
-                        "Cannot schedule removal of visit type: action not allowed now.",
+                        "Cannot schedule removal of visit type: action not allowed now. Try Again on the 16th",
                         "RemoveCommand.removeTipoVisita: not executable"
                     );
                 }
@@ -122,7 +122,7 @@ public class RemoveCommand extends AbstractCommand {
                 // schedule removal of place
                 if (!isExecutable()) {
                     return Payload.warn(
-                        "Cannot schedule removal of place: action not allowed now.",
+                        "Cannot schedule removal of place: action not allowed now. Try Again on the 16th",
                         "RemoveCommand.removeLuogo: not executable"
                     );
                 }

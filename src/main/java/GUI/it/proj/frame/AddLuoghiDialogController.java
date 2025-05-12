@@ -31,11 +31,12 @@ public class AddLuoghiDialogController {
     private void onConfirm() {
         String titoloLuogo = this.titoloLuogo.getText();
         String descrizioneLuogo = this.descrizioneLuogo.getText();
-        String posizione = "";
+        String posizione = this.posizione.getText();
 
         if (titoloLuogo == null      || titoloLuogo.isBlank() ||
             descrizioneLuogo == null || descrizioneLuogo.isBlank() ||
             posizione == null        || posizione.isBlank()) {
+            System.out.println(titoloLuogo + descrizioneLuogo + posizione);
             errorLabel.setText("Tutti i campi sono obbligatori!");
             return;
         }

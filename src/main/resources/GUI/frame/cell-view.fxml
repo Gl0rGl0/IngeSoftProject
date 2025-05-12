@@ -15,18 +15,8 @@
 
     <VBox fx:id="textContainer" spacing="5" HBox.hgrow="ALWAYS">
         <Label fx:id="usernameText" style="-fx-font-weight: bold;" wrapText="true" />
-        <Label fx:id="descriptionText" wrapText="true" />
+        <Label fx:id="descriptionText" visible="false" managed="false" wrapText="true" />
     </VBox>
-
-
-    <Button fx:id="modifyButton" styleClass="person-button" onAction="#handleModify">
-        <graphic>
-            <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../icon/pencil.png" />
-            </ImageView>
-
-        </graphic>
-    </Button>
 
     <Button fx:id="deleteButton" styleClass="person-button, red-btn" onAction="#handleDelete">
         <graphic>

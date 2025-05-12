@@ -51,6 +51,6 @@ public class Payload<T> {
 
     @Override
     public String toString() {
-        return "Payload[status=" + status + ", userMessage='" + data + "']";
+        return "Payload[status=" + status + ", userMessage='" + data.toString() + "', dataType='" + data.getClass() + "']";
     }
 }

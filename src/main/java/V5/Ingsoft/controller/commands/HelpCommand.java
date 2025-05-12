@@ -17,7 +17,10 @@ public class HelpCommand extends AbstractCommand {
         if (args != null && args.length > 0) {
             try {
                 CommandList cl = CommandList.valueOf(args[0].toUpperCase());
-                helpMsg = cl.getHelpMessage(controller.getCurrentUser().getPriority());
+                    if(cl != null)
+                        helpMsg = cl.toString();
+                    else
+                        helpMsg = CommandList.valueOf("HELP").getHelpMessage(controller.getCurrentUser().getPriority());
                 return Payload.info(
                     helpMsg,
                     "Displayed help for command: " + args[0]);

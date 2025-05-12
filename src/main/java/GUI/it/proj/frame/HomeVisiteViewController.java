@@ -20,14 +20,12 @@ public class HomeVisiteViewController implements ListBase<Visita> {
         VBox.setVgrow(listVisite, Priority.ALWAYS);
 
         listVisite.setCellFactory(e -> new Cell<Visita>(this, TipoVisiteViewController.ID, false));
+        refreshItems();
+    }
+
+    @Override
+    public void refreshItems() {
+        listVisite.getItems().clear();
         listVisite.getItems().addAll(Launcher.controller.getDB().dbVisiteHelper.getVisiteProposte());
-    }
-
-    @Override
-    public void removeItem(Visita visita) {
-    }
-
-    @Override
-    public void addItem(Visita visita) {
     }
 }

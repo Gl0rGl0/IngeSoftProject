@@ -4,6 +4,7 @@ import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.controller.item.Deletable;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.DayOfWeekConverter;
+import V5.Ingsoft.util.StringUtils;
 import V5.Ingsoft.util.Time;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -241,5 +242,27 @@ public class TipoVisita extends Deletable {
 
     public void setLuogo(String luogoUID) {
         this.luogoUID = luogoUID;
+    }
+
+    public String toArray() {
+        return  "\"" + this.title + "\" " +
+                "\"" + this.description + "\" " +
+                "\"" + this.meetingPlace +  "\" " +
+                this.initDay + " " + 
+                this.finishDay + " " + 
+                this.initTime + " " + 
+                this.duration + " " + 
+                this.free + " " + 
+                this.numMinPartecipants + " " +
+                this.numMaxPartecipants + " " +
+                StringUtils.arrayToStringClean((String[]) this.days.toArray());
+    }
+
+    @Override
+    public boolean equals(Object a){
+        if(!(a instanceof TipoVisita))
+            return false;
+
+        return this.title.equals(((TipoVisita)a).getTitle());
     }
 }

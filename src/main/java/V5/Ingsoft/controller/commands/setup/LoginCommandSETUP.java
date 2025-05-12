@@ -16,7 +16,6 @@ public class LoginCommandSETUP extends AbstractCommand {
 
     @Override
     public Payload<?> execute(String[] options, String[] args) {
-        new LoginCommand(controller).execute(options, args);
         if (args == null || args.length < 2) {
             return Payload.error(
                 "Usage: login <username> <password>",

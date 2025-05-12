@@ -32,6 +32,9 @@ public class Controller {
         initDailyScheduler();
 
         interpreter = new SetupInterpreter(this);
+
+        if(db.isInitialized())
+            switchInterpreter();
     }
 
     private void initDailyScheduler() {
@@ -56,8 +59,12 @@ public class Controller {
      */
     public Payload<?> interpreter(String prompt) {
         AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Level.INFO, this.getClass().getSimpleName());
+        Payload<?> out = interpreter.interpret(prompt, getCurrentUser());
 
-        return interpreter.interpret(prompt, getCurrentUser());
+        if(out != null)
+            AssertionControl.logPayload(out);
+
+        return out;
     }
 
     public void switchInterpreter() {

@@ -1,18 +1,16 @@
 package GUI.it.proj.utils;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import GUI.it.proj.frame.FruitoriViewController;
 import GUI.it.proj.frame.LuoghiViewController;
 import GUI.it.proj.frame.TipoVisiteViewController;
 import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Persona;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -20,7 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class CellController<T> implements Initializable {
+public class CellController<T> {
     @FXML
     private HBox container;
     @FXML
@@ -32,8 +30,6 @@ public class CellController<T> implements Initializable {
     @FXML
     private Region spacer;
     @FXML
-    private Button modifyButton;
-    @FXML
     private Button deleteButton;
     @FXML
     private ImageView binImage;
@@ -41,30 +37,18 @@ public class CellController<T> implements Initializable {
     private ImageView confirmImage;
 
     private T item;
-    ListBase<T> parent;
+    ListBase<T> parentView;
+    ListEditer<T> parentEditer;
 
     public void setType(String type) {
         switch (type) {
-            case "configuratore", "volontario" -> {
-                descriptionText.setManaged(false);
-                descriptionText.setVisible(false);
-                modifyButton.setVisible(false);
-                modifyButton.setManaged(false);
-            }
-            case "fruitore" -> {
-                descriptionText.setManaged(false);
-                descriptionText.setVisible(false);
-            }
-            case TipoVisiteViewController.ID -> {
+            case   TipoVisiteViewController.ID, 
+                   LuoghiViewController.ID, 
+                   FruitoriViewController.ID -> {
                 descriptionText.setManaged(true);
                 descriptionText.setVisible(true);
             }
-            case LuoghiViewController.ID -> {
-                descriptionText.setManaged(true);
-                descriptionText.setVisible(true);
-            }
-            default -> {
-            }
+            default -> {}
         }
     }
 
@@ -74,23 +58,38 @@ public class CellController<T> implements Initializable {
         switch (item) {
             case Persona persona -> {
                 usernameText.setText(persona.getUsername());
+                if(!persona.isUsable())
+                    deleteButton.setDisable(true);
             }
             case Luogo luogo -> {
                 usernameText.setText(luogo.getName());
                 descriptionText.setText(luogo.getDescription());
+                if(!luogo.isUsable())
+                    deleteButton.setDisable(true);
             }
             case Visita visita -> {
                 usernameText.setText(visita.getTitle());
                 descriptionText.setText(visita.getTipoVisita().getDescription());
             }
+            case TipoVisita tvisita -> {
+                usernameText.setText(tvisita.getTitle());
+                descriptionText.setText(tvisita.getDescription());
+                if(!tvisita.isUsable())
+                    deleteButton.setDisable(true);
+            }
             default -> {
             }
         }
-
     }
 
     public void setViewController(ListBase<T> p) {
-        this.parent = p;
+        if(p instanceof ListEditer){
+            this.parentEditer = (ListEditer<T>) p;
+        }
+        else{
+            this.parentView = p;
+            hideAllButton();
+        }
     }
 
     private boolean confirm = false;
@@ -98,7 +97,7 @@ public class CellController<T> implements Initializable {
     @FXML
     private void handleDelete() {
         if (confirm) {
-            this.parent.removeItem(item);
+            this.parentEditer.removeItem(item);
             confirm = false;
             deleteButton.setGraphic(binImage);
         } else {
@@ -108,25 +107,15 @@ public class CellController<T> implements Initializable {
     }
 
     @FXML
-    private void handleModify() {
-        ((ListEditer<T>) parent).modifyItem(item, null);
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+    private void initialize() {
         deleteButton.setGraphic(binImage);
 
-        double d = deleteButton.getWidth();
-        double m = modifyButton.getWidth();
-        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty().subtract(d + m), 0.55));
+        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.55));
     }
 
     public void hideAllButton() {
         deleteButton.setManaged(false);
-        modifyButton.setManaged(false);
         deleteButton.setVisible(false);
-        modifyButton.setVisible(false);
         textContainer.prefWidthProperty().unbind();
         textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.95));
     }

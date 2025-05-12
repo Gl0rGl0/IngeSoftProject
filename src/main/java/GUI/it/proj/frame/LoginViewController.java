@@ -30,19 +30,20 @@ public class LoginViewController implements Initializable {
      * Metodo chiamato automaticamente dopo l'iniezione degli elementi FXML.
      */
     @FXML
-    public void initialize(URL location, ResourceBundle resources) {
-
-        // Richiedi il focus sul bottone per evitare che un TextField venga selezionato
-        Platform.runLater(() -> loginButton.requestFocus());
-        messageLabel.setVisible(false);
-        // test.setWrapText(true);
-    }
+    public void initialize(URL location, ResourceBundle resources) { }
 
     /**
      * Gestisce il click sul bottone di login.
      */
     @FXML
     private void handleLoginAction() {
+        if(!Launcher.controller.setupCompleted()){
+            messageLabel.setText("Se sei un Configuratore, si prega di completare la fase di SETUP da terminale prima di accedere all'applicazione.");
+            messageLabel.setVisible(true);
+            return;
+        }
+
+        
         String username = userTextField.getText();
         String password = pwField.getText();
         System.out.println(username + " " + password);
@@ -50,7 +51,7 @@ public class LoginViewController implements Initializable {
         if (username == null || password == null || username.isEmpty() || password.isEmpty())
             return;
 
-        Payload res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
+        Payload<?> res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
         System.out.println(res);
         if (res != null && res.getStatus() == Status.OK) {
             userTextField.clear();

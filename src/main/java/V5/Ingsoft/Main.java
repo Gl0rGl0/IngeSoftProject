@@ -38,8 +38,8 @@ public class Main {
         //initDimostrazione(controller);
         //System.out.println();
 
-        initDimostrazione(controller);
-        System.out.println();
+        // initDimostrazione(controller);
+        // System.out.println();
         view.run();
     }
 

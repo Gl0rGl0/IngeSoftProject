@@ -86,8 +86,6 @@ public class MyVisitCommand extends AbstractCommand {
                 "You have not been assigned any visits",
                 "No visits found for the user: " + userV);
 
-        return Payload.info(
-            out,
-            "Listed confirmed visits for volunteer " + userV);
+        return Payload.info(out, "Listed visit type for volunteer " + userV);
     }
 }

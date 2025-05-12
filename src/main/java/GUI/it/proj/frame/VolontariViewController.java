@@ -1,20 +1,24 @@
 package GUI.it.proj.frame;
 
+import java.util.Collection;
+
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Calendar;
 import GUI.it.proj.utils.Cell;
-import GUI.it.proj.utils.interfaces.ListEditer;
+import GUI.it.proj.utils.interfaces.ListBase;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class VolontariViewController implements ListEditer<TipoVisita> {
+public class VolontariViewController implements ListBase<TipoVisita> {
     public static final String ID = "volontario";
 
     @FXML
@@ -29,7 +33,7 @@ public class VolontariViewController implements ListEditer<TipoVisita> {
         listTipoVisiteAssign.setCellFactory(e -> new Cell<TipoVisita>(this, TipoVisiteViewController.ID, false));
         
         Persona current = Launcher.controller.getCurrentUser();
-        if(current.getType().equals(PersonaType.FRUITORE))
+        if(current.getType().equals(PersonaType.VOLONTARIO))
             listTipoVisiteAssign.getItems().addAll(Launcher.controller.getDB().trovaTipoVisiteByVolontario((Volontario)current));
 
         Calendar calendarComponent = new Calendar();
@@ -37,14 +41,12 @@ public class VolontariViewController implements ListEditer<TipoVisita> {
     }
 
     @Override
-    public void removeItem(TipoVisita visita) {
+    public void refreshItems() {
+        Payload res = Launcher.controller.interpreter("myvisit");
+
+        if(res != null && res.getStatus() == Status.OK){
+            this.listTipoVisiteAssign.getItems().clear();
+            this.listTipoVisiteAssign.getItems().addAll(((Payload<Collection<TipoVisita>>) res).getData());
+        }
     }
-
-	@Override
-	public void addItem(TipoVisita item) {
-	}
-
-	@Override
-	public void modifyItem(TipoVisita item, Object o) {
-	}
 }

@@ -70,6 +70,7 @@ public class Luogo extends Deletable {
                 .append(", Description='").append(description).append('\'')
                 .append(", Position=").append(position)
                 .append(", UID: ").append(UID)
+                .append(", Status: ").append(si)
                 .append(", Visits=[");
 
         if (!visiteUID.isEmpty()) {
@@ -110,5 +111,11 @@ public class Luogo extends Deletable {
 
     public String getUID() {
         return this.UID;
+    }
+
+    public String toArray() {
+        return  "\"" + this.name + "\" " +
+                "\"" + this.description + "\" " +
+                "\"" + this.position + "\" ";
     }
 }

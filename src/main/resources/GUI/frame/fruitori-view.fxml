@@ -14,8 +14,8 @@
     fx:controller="GUI.it.proj.frame.FruitoriViewController">
 
     <VBox spacing="15" styleClass="section-box" VBox.vgrow="ALWAYS">
-        <Label text="Visite a cui sei iscritto" styleClass="section-title" />
-        <ListView fx:id="listVisite" styleClass="checklist-view" />
+        <Label text="Le tue iscrizioni" styleClass="section-title" />
+        <ListView fx:id="listIscrizioni" styleClass="checklist-view" />
     </VBox>
 
 </StackPane>
