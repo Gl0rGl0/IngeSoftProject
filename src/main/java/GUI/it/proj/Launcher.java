@@ -6,6 +6,10 @@ import javafx.fxml.FXMLLoader; // Importa FXMLLoader
 import javafx.fxml.Initializable; // Importa Initializable
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
@@ -69,6 +73,7 @@ public class Launcher extends Application {
         // Questo avviene solo quando il GenericFrame viene impostato come root DOPO il login.
         controller.interpreter("login ADMIN PASSWORD");
         setRoot(GenericFrameController.ID);
+        openInterpreterWindow();
     }
 
     /**
@@ -166,6 +171,41 @@ public class Launcher extends Application {
     }
 
     public static void toast(Payload<?> p){
+        if(p == null)
+            return;
         ((GenericFrameController) getController(GenericFrameController.ID)).toast(p);
     }
+
+    private void openInterpreterWindow() {
+    Stage interpreterStage = new Stage();
+    interpreterStage.setTitle("Interprete comandi");
+
+    VBox layout = new VBox(10);
+    layout.setPadding(new javafx.geometry.Insets(10));
+
+    TextArea output = new TextArea();
+    output.setEditable(false);
+    output.setWrapText(true);
+
+    TextField input = new TextField();
+    input.setPromptText("Scrivi comando...");
+
+    Button sendButton = new Button("Invia");
+    sendButton.setOnAction(e -> {
+        String command = input.getText();
+        if (!command.isBlank()) {
+            Payload<?> result = controller.interpreter(command);
+            output.appendText("> " + command + "\n" + result + "\n\n");
+            input.clear();
+        }
+    });
+
+    input.setOnAction(sendButton.getOnAction()); // Invio con ENTER
+
+    layout.getChildren().addAll(output, input, sendButton);
+    Scene scene = new Scene(layout, 500, 400);
+    interpreterStage.setScene(scene);
+    interpreterStage.show();
+}
+
 }

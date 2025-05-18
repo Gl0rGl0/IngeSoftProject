@@ -38,6 +38,7 @@ public abstract class Deletable {
 
     public void setDeletionDate(Date d) {
         this.deletionDate = d;
+        si = StatusItem.PENDING_REMOVE;
     }
 
     public Date getdeletionDate() {

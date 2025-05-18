@@ -5,10 +5,13 @@ import GUI.it.proj.frame.LuoghiViewController;
 import GUI.it.proj.frame.TipoVisiteViewController;
 import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.Informable;
+import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Persona;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,16 +20,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
-public class CellController<T> {
+public class CellController<T extends Informable> {
     @FXML
     private HBox container;
     @FXML
     private VBox textContainer;
     @FXML
-    private Label usernameText;
+    private Label primaryText;
     @FXML
-    private Label descriptionText;
+    private Label secondaryText;
     @FXML
     private Region spacer;
     @FXML
@@ -45,48 +49,59 @@ public class CellController<T> {
             case   TipoVisiteViewController.ID, 
                    LuoghiViewController.ID, 
                    FruitoriViewController.ID -> {
-                descriptionText.setManaged(true);
-                descriptionText.setVisible(true);
+                secondaryText.setManaged(true);
+                secondaryText.setVisible(true);
             }
             default -> {}
         }
     }
 
+    private boolean disabled = false;
     public void setItem(T item) {
         this.item = item;
 
         switch (item) {
             case Persona persona -> {
-                usernameText.setText(persona.getUsername());
-                if(!persona.isUsable())
-                    deleteButton.setDisable(true);
+                primaryText.setText(persona.getUsername());
+                handleDisable(persona.getStatus() == StatusItem.PENDING_REMOVE);
             }
             case Luogo luogo -> {
-                usernameText.setText(luogo.getName());
-                descriptionText.setText(luogo.getDescription());
-                if(!luogo.isUsable())
-                    deleteButton.setDisable(true);
+                primaryText.setText(luogo.getName());
+                secondaryText.setText(luogo.getDescription());
+                handleDisable(luogo.getStatus() == StatusItem.PENDING_REMOVE);
             }
             case Visita visita -> {
-                usernameText.setText(visita.getTitle());
-                descriptionText.setText(visita.getTipoVisita().getDescription());
+                primaryText.setText(visita.getTitle());
+                secondaryText.setText(visita.getTipoVisita().getDescription());
             }
             case TipoVisita tvisita -> {
-                usernameText.setText(tvisita.getTitle());
-                descriptionText.setText(tvisita.getDescription());
-                if(!tvisita.isUsable())
-                    deleteButton.setDisable(true);
+                primaryText.setText(tvisita.getTitle());
+                secondaryText.setText(tvisita.getDescription());
+                handleDisable(tvisita.getStatus() == StatusItem.PENDING_REMOVE);
             }
             default -> {
             }
         }
     }
 
+    private void handleDisable(boolean exec){
+        if(exec){
+            deleteButton.getStyleClass().remove("red-bnt");
+            deleteButton.getStyleClass().add("grey-bnt");
+            disabled = true;
+            deleteButton.setDisable(true);
+        }else if(disabled){
+            deleteButton.getStyleClass().remove("grey-bnt");
+            deleteButton.getStyleClass().add("red-bnt");
+            disabled = false;
+            deleteButton.setDisable(false);
+        }
+    }
+
     public void setViewController(ListBase<T> p) {
         if(p instanceof ListEditer){
             this.parentEditer = (ListEditer<T>) p;
-        }
-        else{
+        } else {
             this.parentView = p;
             hideAllButton();
         }
@@ -97,12 +112,21 @@ public class CellController<T> {
     @FXML
     private void handleDelete() {
         if (confirm) {
-            this.parentEditer.removeItem(item);
+            this.parentEditer.removeItem(item.getMainInformation());
             confirm = false;
             deleteButton.setGraphic(binImage);
         } else {
             confirm = true;
             deleteButton.setGraphic(confirmImage);
+
+            PauseTransition resetConfirm = new PauseTransition(Duration.seconds(5));
+            resetConfirm.setOnFinished(e -> {
+                if (confirm) {
+                    confirm = false;
+                    deleteButton.setGraphic(binImage);
+                }
+            });
+            resetConfirm.play();
         }
     }
 

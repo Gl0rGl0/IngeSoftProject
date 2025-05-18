@@ -1,5 +1,6 @@
 package V5.Ingsoft.controller.item.luoghi;
 
+import V5.Ingsoft.controller.item.Informable;
 import V5.Ingsoft.controller.item.StatusVisita;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.util.Date;
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Visita {
+public class Visita implements Informable{
     @JsonIgnore
     public static final String PATH = "archivio-visite";
     @JsonIgnore
@@ -178,5 +179,10 @@ public class Visita {
         if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
             setStatus(StatusVisita.PROPOSED);
         }
+    }
+
+    @Override
+    public String getMainInformation() {
+        return this.getTitle();
     }
 }

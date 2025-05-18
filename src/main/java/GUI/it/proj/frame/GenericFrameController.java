@@ -11,6 +11,7 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +24,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -64,15 +66,14 @@ public class GenericFrameController implements Initializable {
         contentArea.setAlignment(Pos.CENTER);
     
         // Caricamenti FXML esistenti…
-        contentFrames.put(HomeVisiteViewController.ID, Loader.loadFXML("home-view"));
-        contentFrames.put(ChangePasswordViewController.ID, Loader.loadFXML("changepsw-view"));
-    
+        loadBaseFrames();
+
         // Posiziona il toastContainer in alto a destra
         AnchorPane.setTopAnchor(toastContainer, 0.0);
         AnchorPane.setRightAnchor(toastContainer, 0.0);
         // Lo lasciamo parte del layout dello StackPane, non serve managed=false qui
     }
-
+    
     /**
      * Metodo da chiamare dopo che il GenericFrame è stato impostato come root
      * della scena, ad esempio dopo un login di successo.
@@ -81,20 +82,45 @@ public class GenericFrameController implements Initializable {
     public void setupAfterLogin() {
         // Esegui qui le azioni che vuoi succedano ogni volta che il frame viene "mostrato" post-login
         System.out.println("GenericFrameController: Setup after login called.");
-
-        //Refresh content
         
+        //Refresh content
         switch (Launcher.controller.getCurrentUser().getType()) {
-            case CONFIGURATORE -> {
-                contentFrames.put(PersonViewController.ID, Loader.loadFXML("persone-view"));
-                contentFrames.put(LuoghiVisiteViewController.ID, Loader.loadFXML("luoghi-visite-view"));
-            }
+            case CONFIGURATORE -> loadConfigFrame();
             case VOLONTARIO -> contentFrames.put(VolontariViewController.ID, Loader.loadFXML("volontari-view"));
             case FRUITORE -> contentFrames.put(FruitoriViewController.ID, Loader.loadFXML("fruitori-view"));
             default -> {}
         }
-
+        
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
+    }
+
+    HomeVisiteViewController homeController;
+    private void loadBaseFrames(){
+        contentFrames.put(ChangePasswordViewController.ID, Loader.loadFXML("changepsw-view"));
+
+        try {
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/home-view.fxml"));
+            contentFrames.put(HomeVisiteViewController.ID, loader.load());
+            homeController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    LuoghiVisiteViewController lEVcontroller;
+    PersonViewController pcontroller;
+    private void loadConfigFrame(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-visite-view.fxml"));
+            contentFrames.put(LuoghiVisiteViewController.ID, loader.load());
+            lEVcontroller = loader.getController();
+
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/persone-view.fxml"));
+            contentFrames.put(PersonViewController.ID, loader.load());
+            pcontroller = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -102,6 +128,9 @@ public class GenericFrameController implements Initializable {
      * Configura la navbar in base al ruolo corrente.
      */
     private void configureNavbarForRole(PersonaType role) {
+        if(role == null)
+            return;
+        
         System.out.println("Configuring navbar for role: " + role);
         // Nascondi tutti gli elementi specifici
         databaseButton.setVisible(false);
@@ -147,15 +176,14 @@ public class GenericFrameController implements Initializable {
     public void cycleRole() {
         String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit1 pass1F"};
 
-        Launcher.controller.interpreter("logout"); // Esegui logout prima
-        Payload loginRes = Launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
+        handleLogout();
+        Payload<?> loginRes = Launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
 
         if (loginRes != null && loginRes.getStatus() == Status.OK) {
-             System.out.println("Role login successful: " + Launcher.controller.getCurrentUser().getUsername());
-             showHome(); // Chiama showHome per riconfigurare la navbar con il nuovo ruolo
+            Launcher.toast(Payload.info("Role login successful: " + Launcher.controller.getCurrentUser().getUsername(), ""));
+            showHome();
         } else {
-             System.err.println("Cycled role login failed.");
-             handleLogout(); // Torna al login se il test fallisce
+            System.err.println("Cycled role login failed.");
         }
     }
 
@@ -168,7 +196,6 @@ public class GenericFrameController implements Initializable {
         } else {
             // Questo caso non dovrebbe verificarsi se setupAfterLogin è chiamato solo post-login
             System.err.println("WARNING: showHome called without a logged-in user.");
-            // Potresti voler disabilitare la navbar o mostrare uno stato di errore
             configureNavbarForRole(null); // Esempio: passa null o un tipo 'unknown'
         }
 
@@ -177,7 +204,7 @@ public class GenericFrameController implements Initializable {
         Parent homeFrame = contentFrames.get(HomeVisiteViewController.ID);
         if (homeFrame != null) {
              contentArea.getChildren().add(homeFrame);
-             // new BounceIn(homeFrame).play(); // Se vuoi animazioni
+             homeController.refreshItems();
         } else {
             System.err.println("Error: Home frame not found in contentFrames.");
             // Mostra un messaggio di errore nell'area contenuto
@@ -189,72 +216,73 @@ public class GenericFrameController implements Initializable {
     private void showDBluoghiEvisite() {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(LuoghiVisiteViewController.ID);
-         if (frame != null) {
+        if (frame != null) {
             contentArea.getChildren().add(frame);
-         } else {
-             System.err.println("Error: LuoghiVisiteViewController frame not found in contentFrames.");
-         }
+        } else {
+            System.err.println("Error: LuoghiVisiteViewController frame not found in contentFrames.");
+        }
+        lEVcontroller.refreshItems();
+        pcontroller.closeDialog();
     }
 
     @FXML
     private void showDBpersone() {
         contentArea.getChildren().clear();
-         Parent frame = contentFrames.get(PersonViewController.ID);
-         if (frame != null) {
+        Parent frame = contentFrames.get(PersonViewController.ID);
+        if (frame != null) {
             contentArea.getChildren().add(frame);
-         } else {
-             System.err.println("Error: PersonViewController frame not found in contentFrames.");
-         }
+            pcontroller.refreshItems();
+        } else {
+            System.err.println("Error: PersonViewController frame not found in contentFrames.");
+        }
     }
 
     @FXML
     private void showChangePassword() {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(ChangePasswordViewController.ID);
-         if (frame != null) {
+        if (frame != null) {
             contentArea.getChildren().add(frame);
-         } else {
-             System.err.println("Error: ChangePasswordViewController frame not found in contentFrames.");
-         }
+        } else {
+            System.err.println("Error: ChangePasswordViewController frame not found in contentFrames.");
+        }
     }
 
     @FXML
     private void showVolontario() {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(VolontariViewController.ID);
-         if (frame != null) {
-            contentArea.getChildren().add(frame);
-         } else {
-             System.err.println("Error: VolontariViewController frame not found in contentFrames.");
-         }
+        if (frame != null) {
+        contentArea.getChildren().add(frame);
+        } else {
+        System.err.println("Error: VolontariViewController frame not found in contentFrames.");
+        }
     }
 
     @FXML
     private void showFruitore() {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(FruitoriViewController.ID);
-         if (frame != null) {
+        if (frame != null) {
             contentArea.getChildren().add(frame);
-         } else {
-             System.err.println("Error: FruitoriViewController frame not found in contentFrames.");
-         }
+        } else {
+            System.err.println("Error: FruitoriViewController frame not found in contentFrames.");
+        }
     }
 
     @FXML
     private void handleLogout() {
-        Payload res = Launcher.controller.interpreter("logout");
+        Payload<?> res = Launcher.controller.interpreter("logout");
 
         if(res != null && res.getStatus() == Status.OK) {
-             // Optional: clear contentArea before switching back to login
-             contentArea.getChildren().clear();
-             // Optional: reset navbar state if you want a clean slate on logout
-             configureNavbarForRole(null); // Or some other placeholder state
-
+            contentArea.getChildren().clear();
+            configureNavbarForRole(null); // Or some other placeholder state
+            
+            Launcher.toast(res);
             Launcher.setRoot(LoginViewController.ID);
         } else {
-            // Handle logout failure if necessary
-            System.err.println("Logout failed: " + (res != null ? res.getLogMessage() : "Unknown error"));
-            // Optionally display an error message to the user
+            Launcher.toast(Payload.error("Logout failed", res.getLogMessage()));
+            showHome();
         }
     }
 
@@ -267,27 +295,32 @@ public class GenericFrameController implements Initializable {
             toast.getStyleClass().addAll("toast", "toast-" + level.name().toLowerCase());
             toast.setFont(Font.font(14));
             toast.setPadding(new Insets(10));
-
-            // Position in top-right of container
+    
+            // Aggiungi al container e ancora in alto a destra
             toastContainer.getChildren().add(toast);
-
-            // Slide in
+            AnchorPane.setTopAnchor(toast, 10.0);
+            AnchorPane.setRightAnchor(toast, 10.0);
+    
+            // Forza il layout per ottenere la larghezza reale
+            toast.applyCss();
+            toast.layout();
+            double offset = toast.getWidth() + 20;
+    
+            // Slide in da destra
             TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), toast);
-            slideIn.setFromX(-320);
-            slideIn.setToX(-320); // move left into view
-            slideIn.setOnFinished(e -> toast.setOpacity(1));
-
-            // Pause visible
+            slideIn.setFromX(offset);
+            slideIn.setToX(0);
+    
+            // Pausa visibile
             PauseTransition pause = new PauseTransition(Duration.seconds(5));
-
-            // Slide out
+    
+            // Slide out verso destra
             TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), toast);
-            slideOut.setFromX(-320);
-            slideOut.setToX(0);
+            slideOut.setFromX(0);
+            slideOut.setToX(offset);
             slideOut.setOnFinished(e -> toastContainer.getChildren().remove(toast));
-
-            SequentialTransition seq = new SequentialTransition(slideIn, pause, slideOut);
-            seq.play();
+    
+            new SequentialTransition(slideIn, pause, slideOut).play();
         });
-    }
+    }    
 }

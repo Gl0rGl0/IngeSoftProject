@@ -25,7 +25,7 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
     private void initialize() {
         VBox.setVgrow(listVisita, Priority.ALWAYS);
 
-        listVisita.setCellFactory(e -> new Cell<TipoVisita>(this, ID, true));
+        listVisita.setCellFactory(e -> new Cell<TipoVisita>(this, ID));
         refreshItems();
     }
 
@@ -34,23 +34,11 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
     }
 
     @Override
-    public void removeItem(TipoVisita tipoVisita) {
-        Payload res = Launcher.controller.interpreter("add -T \"" + tipoVisita.getTitle() + "\"");
+    public void removeItem(String tipoVisitaTitle) {
+        Payload res = Launcher.controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
 
-        System.out.println("RIMUOVO " + tipoVisita.getTitle());
-        //listVisita.getItems().removeIf(p -> p.getTitle().equals(tipoVisita.getTitle()));
+        System.out.println("RIMUOVO " + tipoVisitaTitle);
         if(res != null && res.getStatus() == Status.OK)
-            refreshItems();
-    }
-
-    // @Override
-    public void addItem(TipoVisita tipoVisita) {
-        Payload res = Launcher.controller.interpreter("add -T " + tipoVisita.toArray());
-
-        System.out.println("AGGIUNGO " + tipoVisita.getTitle());
-        if(res != null && res.getStatus() == Status.OK)
-            //Se non è cambiato nulla è inutile refreshare
-            //if(!((Payload<Collection<TipoVisita>>) res).getData().equals(this.listVisita.getItems()))
             refreshItems();
     }
 
@@ -70,4 +58,7 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
         }
     }
 
+    public void closeDialog() {
+        parent.closeDialog();
+    }
 }

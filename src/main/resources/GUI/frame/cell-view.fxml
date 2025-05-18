@@ -14,8 +14,8 @@
     style="-fx-border-color: #d1d1d1; -fx-border-width: 0 0 1px 0; -fx-padding: 0 0 5px 0;">
 
     <VBox fx:id="textContainer" spacing="5" HBox.hgrow="ALWAYS">
-        <Label fx:id="usernameText" style="-fx-font-weight: bold;" wrapText="true" />
-        <Label fx:id="descriptionText" visible="false" managed="false" wrapText="true" />
+        <Label fx:id="primaryText" style="-fx-font-weight: bold;" wrapText="true" />
+        <Label fx:id="secondaryText" visible="false" managed="false" wrapText="true" />
     </VBox>
 
     <Button fx:id="deleteButton" styleClass="person-button, red-btn" onAction="#handleDelete">

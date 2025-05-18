@@ -2,7 +2,9 @@ package V5.Ingsoft.controller.item.persone;
 
 import java.util.UUID;
 
-public class Iscrizione {
+import V5.Ingsoft.controller.item.Informable;
+
+public class Iscrizione implements Informable{
     private String fruitoreUID;
     private int quantity;
     private String UIDIscrizione;
@@ -31,5 +33,10 @@ public class Iscrizione {
         return "ID=" + UIDIscrizione +
                 "\nFruitore=" + fruitoreUID +
                 "\nQuantity=" + quantity;
+    }
+
+    @Override
+    public String getMainInformation() {
+        return this.UIDIscrizione;
     }
 }

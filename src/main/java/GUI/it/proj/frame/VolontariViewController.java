@@ -30,7 +30,7 @@ public class VolontariViewController implements ListBase<TipoVisita> {
     private void initialize() {
         VBox.setVgrow(listTipoVisiteAssign, Priority.ALWAYS);
 
-        listTipoVisiteAssign.setCellFactory(e -> new Cell<TipoVisita>(this, TipoVisiteViewController.ID, false));
+        listTipoVisiteAssign.setCellFactory(e -> new Cell<TipoVisita>(this, TipoVisiteViewController.ID));
         
         Persona current = Launcher.controller.getCurrentUser();
         if(current.getType().equals(PersonaType.VOLONTARIO))

@@ -20,10 +20,10 @@ public abstract class Persona extends Deletable {
 
     public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception {
         if (username == null || username.isBlank())
-            throw new Exception("Error in " + personaType + " constructor: Username can't be empty");
+            throw new Exception("Username can't be empty");
 
         if (psw == null || psw.isEmpty())
-            throw new Exception("Error in " + personaType + " constructor: Password can't be empty");
+            throw new Exception("Password can't be empty");
 
         this.username = username;
         this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
@@ -63,5 +63,10 @@ public abstract class Persona extends Deletable {
 
     public int getPriority() {
         return this.personaType.getPriority();
+    }
+
+    @Override
+    public String getMainInformation(){
+        return this.username;
     }
 }

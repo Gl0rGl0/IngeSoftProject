@@ -25,7 +25,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
     private void initialize() {
         VBox.setVgrow(listLuoghi, Priority.ALWAYS);
 
-        listLuoghi.setCellFactory(e -> new Cell<Luogo>(this, ID, true));
+        listLuoghi.setCellFactory(e -> new Cell<Luogo>(this, ID));
         refreshItems();
     }
 
@@ -34,26 +34,34 @@ public class LuoghiViewController implements ListEditer<Luogo> {
     }
 
     @Override
-    public void removeItem(Luogo luogo) {
-        Payload res = Launcher.controller.interpreter("remove -L \"" + luogo.getName() + "\"");
+    public void removeItem(String luogoTitle) {
+        Payload res = Launcher.controller.interpreter("remove -L \"" + luogoTitle + "\"");
 
-        if(res == null)
-            return;
-
-        System.out.println("RIMUOVO " + luogo.getName());
-
-        if(res.getStatus() == Status.OK)
-            refreshItems();
-        else
+        if(res == null || res.getStatus() == Status.ERROR){
             Launcher.toast(res);
+        }else{
+            refreshItems();
+        }
     }
     
-    public void addItem(Luogo luogo) {
-        Payload res = Launcher.controller.interpreter("add -L " + luogo.toArray());
-        System.out.println("AGGIUNGO " + luogo.getName());
+    public void addItem(String... luogoDet) {
+        if(luogoDet == null || luogoDet.length < 4){
+            Launcher.toast(Payload.error(null, "Errore nell'aggiunta del luogo"));
+            return;
+        }
 
+        StringBuilder out = new StringBuilder();
+        for(String s : luogoDet){
+            out.append("\"").append(s).append("\" ");
+        }
+
+        Payload res = Launcher.controller.interpreter("add -L " + out.toString());
+        
         if(res != null && res.getStatus() == Status.OK)
             refreshItems();
+        else{
+            Launcher.toast(Payload.error(null, "Errore nell'aggiunta del luogo"));
+        }
     }
 
     @FXML
@@ -73,5 +81,4 @@ public class LuoghiViewController implements ListEditer<Luogo> {
             this.listLuoghi.getItems().addAll(((Payload<Collection<Luogo>>) res).getData());
         }
     }
-
 }

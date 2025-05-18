@@ -77,4 +77,9 @@ public class LuoghiVisiteViewController {
         overlayMask.setVisible(true);
         dialog.setVisible(true);
     }
+
+    public void refreshItems() {
+        luoghiController.refreshItems();
+        visiteController.refreshItems();
+    }
 }

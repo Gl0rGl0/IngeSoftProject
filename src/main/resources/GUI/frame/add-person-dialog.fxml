@@ -25,7 +25,7 @@
             </VBox>
             <HBox spacing="10" alignment="CENTER">
                 <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-bnt" />
+                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-bnt" style="-fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </Group>

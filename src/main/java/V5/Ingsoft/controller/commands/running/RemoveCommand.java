@@ -127,7 +127,7 @@ public class RemoveCommand extends AbstractCommand {
                     );
                 }
                 Luogo place = controller.getDB().dbLuoghiHelper.findLuogo(id);
-                if (place == null || !controller.getDB().removeLuogo(id)) {
+                if (place == null) {
                     return Payload.warn(
                         "Failed to remove place '" + id + "'. It might not exist.",
                         "Failed to remove place: " + id

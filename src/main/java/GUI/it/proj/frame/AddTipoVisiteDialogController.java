@@ -27,8 +27,6 @@ import javafx.scene.control.TextField;
 public class AddTipoVisiteDialogController {
 
     @FXML
-    private Label errorLabel;
-    @FXML
     private Label titleLabel;
 
     @FXML
@@ -60,8 +58,7 @@ public class AddTipoVisiteDialogController {
     private ComboBox<String> placeComboBox;
 
     private boolean edit = false;
-    private TipoVisiteViewController parentController; // Riferimento al controller principale
-    private LuoghiVisiteViewController superParentController;
+    private TipoVisiteViewController parentController;
 
     @FXML
     public void initialize() {
@@ -78,25 +75,21 @@ public class AddTipoVisiteDialogController {
         this.parentController = controller;
     }
 
-    public void setSuperParentController(LuoghiVisiteViewController superParentController) {
-        this.superParentController = superParentController;
-    }
-
     // Handler per il pulsante Conferma
     @FXML
     private void onConfirm() {
         // 1. Lettura testi
-        String titolo    = titoloVisita.getText();
-        String descr     = descrizioneVisita.getText();
-        String luogo     = posizione.getText();
+        String titolo = titoloVisita.getText();
+        String descr  = descrizioneVisita.getText();
+        String luogo  = posizione.getText();
         
         // 2. Lettura date e durata
-        LocalTime ora       = oraInizio.getValue();
-        LocalDate inizio = inizioGiornoPeriodo.getValue();
-        LocalDate fine   = fineGiornoPeriodo.getValue();
-        Integer dur      = durata.getValue();
-        Integer minPart   = numeroMinimoPartecipanti.getValue();
-        Integer maxPart   = numeroMassimoPartecipanti.getValue();
+        LocalTime ora   = oraInizio.getValue();
+        LocalDate inizio= inizioGiornoPeriodo.getValue();
+        LocalDate fine  = fineGiornoPeriodo.getValue();
+        Integer dur     = durata.getValue();
+        Integer minPart = numeroMinimoPartecipanti.getValue();
+        Integer maxPart = numeroMassimoPartecipanti.getValue();
 
         // 3. Selezioni multichoice
         List<String> giorniSel = giorni.getCheckModel().getCheckedItems();
@@ -121,12 +114,7 @@ public class AddTipoVisiteDialogController {
             giorniSel.isEmpty() ||
             volsSel.isEmpty()) {
             
-            errorLabel.setText(
-            "Compila tutti i campi:\n" +
-            "- Titolo, descrizione, posizione, ora\n" +
-            "- Date di inizio e fine\n" +
-            "- Durata, min/max partecipanti\n" +
-            "- Almeno un giorno e un volontario");
+            Launcher.toast(Payload.error("Tutti i campi sono obbligatori!",""));
             return;
         }
 
@@ -136,7 +124,7 @@ public class AddTipoVisiteDialogController {
         // 6. Preparazione stringa di comando
         //   Virgolette per i campi che potrebbero contenere spazi
         String cmd = String.format(
-            "add -T \"%s\" \"%s\" \"%s\" %d/%d/%d %d/%d/%d %d:%d %d %b %d %d %s",
+            "\"%s\" \"%s\" \"%s\" %d/%d/%d %d/%d/%d %d:%d %d %b %d %d %s",
             titolo,
             descr,
             luogo,
@@ -148,39 +136,31 @@ public class AddTipoVisiteDialogController {
             minPart,
             maxPart,
             giorniCsv );
-            
-            // 7. Invocazione interpreter
-            Payload res = Launcher.controller.interpreter(cmd);
-            TipoVisita nuova;
 
-            // 8. Gestione risultato
-            if (res != null && res.getStatus() == Status.OK) {
-                // Assumo che esista un helper per recuperare la visita creata
-                nuova = Launcher.controller.getDB().dbTipoVisiteHelper.findTipoVisita(titolo);
-                parentController.addItem(nuova); 
-                //TODO refresh al posto di aggiungere
-            } else {
-                errorLabel.setText("Errore creazione visita");
-                return;
-            }
-            
-            for(Volontario s : volsSel){
-                if(nuova.assignedTo(s.getUsername()))
-                continue;
-                
-                Launcher.controller.interpreter(String.format("assign -V %s %s", titolo, s));
-            }
+        Payload<?> res = Launcher.controller.interpreter("add -T " + cmd);
+        Launcher.toast(res);
 
-            for(Volontario s : volNotSel){
-                if(!nuova.assignedTo(s.getUsername()))
-                    continue;
-                
-                Launcher.controller.interpreter(String.format("deassign -V %s %s", titolo, s));
-                //TODO implement deassign
-            }
+        // 8. Gestione risultato
+        if (res == null || res.getStatus() == Status.ERROR) return;
+        
+        TipoVisita nuova = Launcher.controller.getDB().dbTipoVisiteHelper.findTipoVisita(titolo);
+        if(nuova == null) return;
+        
+        for(Volontario s : volsSel){
+            if(nuova.assignedTo(s.getUsername())) continue;
             
-            closeDialog();
+            Launcher.controller.interpreter(String.format("assign -V %s %s", titolo, s));
         }
+
+        for(Volontario s : volNotSel){
+            if(!nuova.assignedTo(s.getUsername())) continue;
+            
+            Launcher.controller.interpreter(String.format("disassign -V %s %s", titolo, s));
+        }
+        
+        parentController.refreshItems();
+        closeDialog();
+    }
         
         
         // Handler per il pulsante Annulla
@@ -190,7 +170,7 @@ public class AddTipoVisiteDialogController {
     }
 
     private void closeDialog() {
-        superParentController.closeDialog();
+        parentController.closeDialog();
     }
 
     public void setEdit(boolean edit) {

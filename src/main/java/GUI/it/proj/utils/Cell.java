@@ -2,6 +2,7 @@ package GUI.it.proj.utils;
 
 import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.Informable;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 
 import java.io.IOException;
@@ -12,12 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
-public class Cell<T> extends ListCell<T> {
+public class Cell<T extends Informable> extends ListCell<T> {
     private Parent root;
     private CellController<T> controller;
 
     //al massimo parent implementerà anche l'editer
-    public Cell(ListEditer<T> parent, String type, boolean buttonVisible) {
+    public Cell(ListEditer<T> parent, String type) {
         // Load FXML directly to access the controller instance
         String resourcePath = "/GUI/frame/cell-view.fxml";
         URL fxmlUrl = getClass().getResource(resourcePath);
@@ -47,7 +48,7 @@ public class Cell<T> extends ListCell<T> {
         });
     }
 
-    public Cell(ListBase<T> parent, String type, boolean buttonVisible) {
+    public Cell(ListBase<T> parent, String type) {
         // Load FXML directly to access the controller instance
         String resourcePath = "/GUI/frame/cell-view.fxml";
         URL fxmlUrl = getClass().getResource(resourcePath);
@@ -68,9 +69,7 @@ public class Cell<T> extends ListCell<T> {
             throw new UncheckedIOException("Failed to load FXML: " + resourcePath, e);
         }
 
-        if (!buttonVisible) {
-            controller.hideAllButton();
-        }
+        controller.hideAllButton();
 
         this.setOnMouseClicked(e -> {
             T item = getItem();

@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import GUI.it.proj.Launcher;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

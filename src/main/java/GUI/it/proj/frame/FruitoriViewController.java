@@ -10,8 +10,6 @@ import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 
 public class FruitoriViewController implements ListBase<Iscrizione> {
     public static final String ID = "fruitori";
@@ -23,7 +21,7 @@ public class FruitoriViewController implements ListBase<Iscrizione> {
     private void initialize() {
         //VBox.setVgrow(listIscrizioni, Priority.ALWAYS);
         
-        listIscrizioni.setCellFactory(e -> new Cell<Iscrizione>(this, FruitoriViewController.ID, false));
+        listIscrizioni.setCellFactory(e -> new Cell<Iscrizione>(this, FruitoriViewController.ID));
         refreshItems();
     }
 
@@ -31,7 +29,7 @@ public class FruitoriViewController implements ListBase<Iscrizione> {
     public void refreshItems() {
         listIscrizioni.getItems().clear();
 
-        Payload res = Launcher.controller.interpreter("myvisit");
+        Payload<?> res = Launcher.controller.interpreter("myvisit");
         if(res != null && res.getStatus() == Status.OK)
             listIscrizioni.getItems().addAll((Collection<Iscrizione>) res.getData());
     }

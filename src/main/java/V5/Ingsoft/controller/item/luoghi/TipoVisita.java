@@ -76,40 +76,40 @@ public class TipoVisita extends Deletable {
     // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) throws Exception {
         if (args.length < 11)
-            throw new Exception("Error in TipoVisita constructor: Insufficient number of arguments");
+            throw new Exception("Insufficient number of arguments");
 
         if (args[0].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Title name can't be empty");
+            throw new Exception("Title name can't be empty");
 
         if (args[1].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Description can't be empty");
+            throw new Exception("Description can't be empty");
 
         if (args[2].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Position can't be empty");
+            throw new Exception("Position can't be empty");
 
         if (args[3].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Initial day is empty");
+            throw new Exception("Initial day is empty");
 
         if (args[4].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Last day can't be empty");
+            throw new Exception("Last day can't be empty");
 
         if (args[5].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Starting time can't be empty");
+            throw new Exception("Starting time can't be empty");
 
         if (args[6].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Duration can't be empty");
+            throw new Exception("Duration can't be empty");
 
         if (args[7].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Cost is empty");
+            throw new Exception("Cost is empty");
 
         if (args[8].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Minumum number of partecipants can't be empty");
+            throw new Exception("Minumum number of partecipants can't be empty");
 
         if (args[9].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Maximum number of partecipants day is empty");
+            throw new Exception("Maximum number of partecipants day is empty");
 
         if (args[10].isBlank())
-            throw new Exception("Error in TipoVisita constructor: Day of visit is empty");
+            throw new Exception("Day of visit is empty");
 
         try {
             this.title = args[0];
@@ -264,5 +264,10 @@ public class TipoVisita extends Deletable {
             return false;
 
         return this.title.equals(((TipoVisita)a).getTitle());
+    }
+
+    @Override
+    public String getMainInformation() {
+        return this.title;
     }
 }

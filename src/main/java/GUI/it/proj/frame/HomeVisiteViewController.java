@@ -19,7 +19,7 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     private void initialize() {
         VBox.setVgrow(listVisite, Priority.ALWAYS);
 
-        listVisite.setCellFactory(e -> new Cell<Visita>(this, TipoVisiteViewController.ID, false));
+        listVisite.setCellFactory(e -> new Cell<Visita>(this, TipoVisiteViewController.ID));
         refreshItems();
     }
 

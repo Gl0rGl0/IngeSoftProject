@@ -6,7 +6,7 @@ import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
-public abstract class Deletable {
+public abstract class Deletable implements Informable{
     protected StatusItem si = StatusItem.ACTIVE;
     protected Date insertionDate;
     protected Date deletionDate;
@@ -20,8 +20,8 @@ public abstract class Deletable {
                     return;
                 }
 
-                if (Date.monthsDifference(insertionDate, d) > 2)
-                    this.si = StatusItem.ACTIVE;
+                if (Date.monthsDifference(insertionDate, d) >= 2)
+                    this.si = StatusItem.ACTIVE;   
             }
             case PENDING_REMOVE -> {
                 if (deletionDate == null) {
@@ -41,6 +41,7 @@ public abstract class Deletable {
 
     public void setDeletionDate(Date d) {
         this.deletionDate = d;
+        si = StatusItem.PENDING_REMOVE;
     }
 
     public Date getdeletionDate() {

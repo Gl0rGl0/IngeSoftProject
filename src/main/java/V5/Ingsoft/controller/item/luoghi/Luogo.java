@@ -118,4 +118,9 @@ public class Luogo extends Deletable {
                 "\"" + this.description + "\" " +
                 "\"" + this.position + "\" ";
     }
+
+    @Override
+    public String getMainInformation() {
+        return this.name;
+    }
 }
