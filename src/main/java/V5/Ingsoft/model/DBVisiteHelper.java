@@ -37,11 +37,11 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public void addVisita(Visita toAdd) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".addVisita";
         if (toAdd == null || toAdd.getUID() == null || toAdd.getUID().trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to add null Visita or Visita with null/empty UID.", Payload.Level.ERROR, CLASSNAME);
+            AssertionControl.logMessage("Attempted to add null Visita or Visita with null/empty UID.", Payload.Status.ERROR, CLASSNAME);
             return;
         }
         if (cachedItems.containsKey(toAdd.getUID())) {
-            AssertionControl.logMessage("Attempted to add Visita with duplicate UID: " + toAdd.getUID(), Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Attempted to add Visita with duplicate UID: " + toAdd.getUID(), Payload.Status.WARN, CLASSNAME);
             return;
         }
         cachedItems.put(toAdd.getUID(), toAdd);
@@ -57,17 +57,17 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public void removeVisitaByUID(String uid) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".removeVisitaByUID";
         if (uid == null || uid.trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to remove Visita with null/empty UID.", Payload.Level.ERROR, CLASSNAME);
+            AssertionControl.logMessage("Attempted to remove Visita with null/empty UID.", Payload.Status.ERROR, CLASSNAME);
             return;
         }
         if (cachedItems.containsKey(uid)) {
             cachedItems.remove(uid);
             boolean success = saveJson(); // Save after removal
             if (!success) {
-                AssertionControl.logMessage("Failed to save JSON after removing Visita UID: " + uid, Payload.Level.ERROR, CLASSNAME);
+                AssertionControl.logMessage("Failed to save JSON after removing Visita UID: " + uid, Payload.Status.ERROR, CLASSNAME);
             }
         } else {
-            AssertionControl.logMessage("Attempted to remove non-existent Visita UID: " + uid, Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Attempted to remove non-existent Visita UID: " + uid, Payload.Status.WARN, CLASSNAME);
         }
     }
 
@@ -80,7 +80,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public Visita findVisita(String title, String data) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".findVisita";
         if (title == null || title.trim().isEmpty() || data == null || data.trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to find Visita with null/empty title or data string.", Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Attempted to find Visita with null/empty title or data string.", Payload.Status.WARN, CLASSNAME);
             return null;
         }
 
@@ -88,7 +88,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         try {
             d = new Date(data);
         } catch (Exception e) {
-            AssertionControl.logMessage("Error while parsing the date.", Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Error while parsing the date.", Payload.Status.WARN, CLASSNAME);
             return null;
         }
 
@@ -155,7 +155,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public void checkVisite(Date d) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".checkVisite";
         if (d == null) {
-            AssertionControl.logMessage("Current date 'd' cannot be null.", Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Current date 'd' cannot be null.", Payload.Status.WARN, CLASSNAME);
             return;
         }
 
@@ -167,13 +167,13 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
 
         for (Visita v : currentVisits) {
             if (v == null) {
-                AssertionControl.logMessage("Null Visita found in cache during daily check.", Payload.Level.ERROR, CLASSNAME);
+                AssertionControl.logMessage("Null Visita found in cache during daily check.", Payload.Status.ERROR, CLASSNAME);
                 continue;
             }
 
             Date visitDate = v.getDate();
             if (visitDate == null) {
-                AssertionControl.logMessage("Visita with UID " + v.getUID() + " has null date.", Payload.Level.ERROR, CLASSNAME);
+                AssertionControl.logMessage("Visita with UID " + v.getUID() + " has null date.", Payload.Status.ERROR, CLASSNAME);
                 continue;
             }
 
@@ -228,7 +228,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         if (tv == null) {
             AssertionControl.logMessage(
                     "Visita UID " + v.getUID() + " has null TipoVisita.",
-                    Payload.Level.ERROR, className
+                    Payload.Status.ERROR, className
             );
             return false;
         }
@@ -243,10 +243,10 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     private void finalizeVisit(Visita v, boolean hasEnoughParticipants, String className) {
         if (hasEnoughParticipants) {
             v.setStatus(StatusVisita.CONFIRMED);
-            AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", Payload.Level.INFO, className);
+            AssertionControl.logMessage("Visita UID " + v.getUID() + " confirmed.", Payload.Status.INFO, className);
         } else {
             v.setStatus(StatusVisita.CANCELLED);
-            AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", Payload.Level.INFO, className);
+            AssertionControl.logMessage("Visita UID " + v.getUID() + " cancelled (insufficient participants).", Payload.Status.INFO, className);
         }
     }
 
@@ -273,11 +273,11 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
             if (currentStatus == StatusVisita.CONFIRMED) {
                 v.setStatus(StatusVisita.COMPLETED);
                 uidsToRemove.add(v.getUID());
-                AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", Payload.Level.INFO, className);
+                AssertionControl.logMessage("Visita UID " + v.getUID() + " marked COMPLETED and archived.", Payload.Status.INFO, className);
                 changed = true;
             } else if (currentStatus == StatusVisita.CANCELLED) {
                 uidsToRemove.add(v.getUID());
-                AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", Payload.Level.INFO, className);
+                AssertionControl.logMessage("Cancelled Visita UID " + v.getUID() + " removed after date passed.", Payload.Status.INFO, className);
                 changed = true;
             }
 
@@ -304,7 +304,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public Visita getVisitaByUID(String uid) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisitaByUID";
         if (uid == null || uid.trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to get Visita with null/empty UID.", Payload.Level.ERROR, CLASSNAME);
+            AssertionControl.logMessage("Attempted to get Visita with null/empty UID.", Payload.Status.ERROR, CLASSNAME);
             return null;
         }
         return cachedItems.get(uid);
@@ -319,7 +319,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisiteByVolontarioAndData";
         List<Visita> out = new ArrayList<>();
         if (usernameV == null || usernameV.trim().isEmpty() || d == null) {
-            AssertionControl.logMessage("Attempted getVisiteByVolontarioAndData with null/empty username or null date.", Payload.Level.ERROR, CLASSNAME);
+            AssertionControl.logMessage("Attempted getVisiteByVolontarioAndData with null/empty username or null date.", Payload.Status.ERROR, CLASSNAME);
             return out; // Return empty list
         }
 
@@ -335,7 +335,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
     public boolean volontarioHaConflitto(Volontario v, Date data, TipoVisita t) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".volontarioHaConflitto";
         if (v == null || data == null || t == null || v.getUsername() == null || t.getInitTime() == null) {
-            AssertionControl.logMessage("Null argument provided to volontarioHaConflitto.", Payload.Level.WARN, CLASSNAME);
+            AssertionControl.logMessage("Null argument provided to volontarioHaConflitto.", Payload.Status.WARN, CLASSNAME);
             return true; // Treat null input as a conflict to be safe? Or return false? Returning true seems safer.
         }
 
@@ -345,7 +345,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> {
         for (Visita visita : visiteGiornaliere) {
             // Add null checks for safety
             if (visita == null || visita.getTipoVisita() == null || visita.getTipoVisita().getInitTime() == null) {
-                AssertionControl.logMessage("Encountered null Visita or related data during conflict check for Volontario: " + v.getUsername(), Payload.Level.WARN, CLASSNAME);
+                AssertionControl.logMessage("Encountered null Visita or related data during conflict check for Volontario: " + v.getUsername(), Payload.Status.WARN, CLASSNAME);
                 continue; // Skip this potentially corrupt visit data
             }
             int initTimeV = visita.getTipoVisita().getInitTime().getMinutes();

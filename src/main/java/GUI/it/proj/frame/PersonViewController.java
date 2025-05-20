@@ -2,6 +2,8 @@ package GUI.it.proj.frame;
 
 import java.io.IOException;
 
+import com.dlsc.gemsfx.EnhancedLabel;
+
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
@@ -29,9 +31,20 @@ public class PersonViewController implements ListEditer<Persona> {
     @FXML private Region overlayMask;
 
     private AddPersonDialogController addPersonDialogController;
+    private Parent addPersonDialog;
 
     @FXML
     private void initialize() {
+        FXMLLoader loaderPerson = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-person-dialog.fxml"));
+
+        try {
+            addPersonDialog = loaderPerson.load();
+            addPersonDialogController = loaderPerson.getController();
+            addPersonDialogController.setParentController(this);
+        } catch (IOException e) {
+            return;
+        }
+
         VBox.setVgrow(listConfiguratori, Priority.ALWAYS);
         VBox.setVgrow(listFruitori, Priority.ALWAYS);
         VBox.setVgrow(listVolontari, Priority.ALWAYS);
@@ -70,7 +83,7 @@ public class PersonViewController implements ListEditer<Persona> {
         Payload<?> out = Launcher.controller.interpreter(prompt);
         Launcher.toast(out);
 
-        if(out != null && out.getStatus() == Status.OK)
+        if(out != null && out.getStatus() == Status.INFO)
             refreshItems();
     }
 
@@ -85,17 +98,6 @@ public class PersonViewController implements ListEditer<Persona> {
     }
 
     private void showAddPersonDialog(PersonaType role) {
-        FXMLLoader loaderPerson = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-person-dialog.fxml"));
-        Parent addPersonDialog;
-
-        try {
-            addPersonDialog = loaderPerson.load();
-            addPersonDialogController = loaderPerson.getController();
-            addPersonDialogController.setParentController(this);
-        } catch (IOException e) {
-            return;
-        }
-        
         addPersonDialogController.setRole(role);
         overlayMask.setVisible(true);
         dialog.getChildren().setAll(addPersonDialog);

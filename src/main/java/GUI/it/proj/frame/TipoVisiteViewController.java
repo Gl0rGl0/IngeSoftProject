@@ -35,24 +35,25 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
 
     @Override
     public void removeItem(String tipoVisitaTitle) {
-        Payload res = Launcher.controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
+        Payload<?> res = Launcher.controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
 
         System.out.println("RIMUOVO " + tipoVisitaTitle);
-        if(res != null && res.getStatus() == Status.OK)
+        if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
+        
+        Launcher.toast(res);
     }
 
     @FXML
     public void onAggiungiVisitaClick() {
-        System.out.println("AGGIUNGO VISITA");
         parent.addVisita();
     }
 
     @Override
     public void refreshItems() {
-        Payload res = Launcher.controller.interpreter("list -T");
+        Payload<?> res = Launcher.controller.interpreter("list -T");
 
-        if(res != null && res.getStatus() == Status.OK){
+        if(res != null && res.getStatus() == Status.INFO){
             this.listVisita.getItems().clear();
             this.listVisita.getItems().addAll(((Payload<Collection<TipoVisita>>) res).getData());
         }

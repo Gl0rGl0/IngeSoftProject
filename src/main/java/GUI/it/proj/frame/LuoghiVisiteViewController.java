@@ -11,14 +11,10 @@ import javafx.scene.layout.StackPane;
 
 public class LuoghiVisiteViewController {
     public static final String ID = "luoghi-visite";
-    @FXML
-    private StackPane contentLuoghi;
-    @FXML
-    private StackPane contentVisite;
-    @FXML
-    private Region overlayMask;
-    @FXML
-    private StackPane dialog;
+    @FXML private StackPane contentLuoghi;
+    @FXML private StackPane contentVisite;
+    @FXML private Region overlayMask;
+    @FXML private StackPane dialog;
 
     private LuoghiViewController luoghiController;
     private AddLuoghiDialogController luoghiDialogController;

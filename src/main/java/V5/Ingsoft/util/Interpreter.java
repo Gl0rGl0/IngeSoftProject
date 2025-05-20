@@ -99,7 +99,7 @@ public abstract class Interpreter {
         out.setCommand(command.getCommandInfo());
 
         if(out != null && out.getLogMessage() != null){
-            AssertionControl.logMessage(out.getLogMessage(), out.getLevel(), command.getClassName());
+            AssertionControl.logMessage(out.getLogMessage(), out.getStatus(), command.getClassName());
         }
 
         return out;

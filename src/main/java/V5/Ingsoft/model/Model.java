@@ -43,7 +43,7 @@ public class Model {
 
         appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
         if (appSettings == null) {
-            AssertionControl.logMessage("Settings file not found or invalid, creating default settings.", Payload.Level.ERROR, "Model");
+            AssertionControl.logMessage("Settings file not found or invalid, creating default settings.", Payload.Status.ERROR, "Model");
             appSettings = new AppSettings();
             // Attempt to save the new default settings immediately
             JsonStorage.saveObject(AppSettings.PATH, appSettings);
@@ -70,13 +70,13 @@ public class Model {
     // ================================================================
     public boolean removeFruitore(String username) {
         if (username == null || username.trim().isEmpty()) {
-            AssertionControl.logMessage("Fruitore username cannot be null or empty for removal", Payload.Level.WARN, getClass().getSimpleName());
+            AssertionControl.logMessage("Fruitore username cannot be null or empty for removal", Payload.Status.WARN, getClass().getSimpleName());
             return false;
         }
 
         Fruitore fruitore = dbFruitoreHelper.getPersona(username);
         if (fruitore == null) {
-            AssertionControl.logMessage("Attempted to remove non-existent Fruitore: " + username, Payload.Level.ERROR, "Model");
+            AssertionControl.logMessage("Attempted to remove non-existent Fruitore: " + username, Payload.Status.ERROR, "Model");
             return false;
         }
 
@@ -105,13 +105,13 @@ public class Model {
 
     public boolean removeVolontario(String username) {
         if (username == null || username.trim().isEmpty()) {
-            AssertionControl.logMessage("Volontario username cannot be null or empty for removal", Payload.Level.WARN, getClass().getSimpleName());
+            AssertionControl.logMessage("Volontario username cannot be null or empty for removal", Payload.Status.WARN, getClass().getSimpleName());
             return false;
         }
 
         Volontario volontario = dbVolontarioHelper.getPersona(username);
         if (volontario == null) {
-            AssertionControl.logMessage("Attempted to remove non-existent Volontario: " + username, Payload.Level.ERROR, "Model");
+            AssertionControl.logMessage("Attempted to remove non-existent Volontario: " + username, Payload.Status.ERROR, "Model");
             return false; // Volontario not found
         }
 
@@ -148,14 +148,14 @@ public class Model {
     // New/Refactored method for removal by UID with cascade
     public void removeTipoVisitaByUID(String tipoVisitaUID) {
         if (tipoVisitaUID == null || tipoVisitaUID.trim().isEmpty()) {
-            AssertionControl.logMessage("TipoVisita UID cannot be null or empty for removal", Payload.Level.WARN, getClass().getSimpleName());
+            AssertionControl.logMessage("TipoVisita UID cannot be null or empty for removal", Payload.Status.WARN, getClass().getSimpleName());
             return;
         }
 
         TipoVisita tipoVisita = dbTipoVisiteHelper.getTipiVisitaByUID(tipoVisitaUID);
         if (tipoVisita == null) {
             // This might happen legitimately during cascade, so maybe just log?
-            AssertionControl.logMessage("Attempted to remove non-existent or already removed TipoVisita UID: " + tipoVisitaUID, Payload.Level.ERROR, "Model");
+            AssertionControl.logMessage("Attempted to remove non-existent or already removed TipoVisita UID: " + tipoVisitaUID, Payload.Status.ERROR, "Model");
             return; // Already removed or never existed
         }
 
@@ -226,14 +226,14 @@ public class Model {
     public boolean removeLuogoByUID(String luogoUID) {
 
         if (luogoUID == null || luogoUID.trim().isEmpty()) {
-            AssertionControl.logMessage("Luogo UID cannot be null or empty for removal", Payload.Level.WARN, getClass().getSimpleName());
+            AssertionControl.logMessage("Luogo UID cannot be null or empty for removal", Payload.Status.WARN, getClass().getSimpleName());
             return false;
         }
 
         Luogo luogo = dbLuoghiHelper.getLuogoByUID(luogoUID);
         if (luogo == null) {
             // This might happen legitimately during cascade
-            AssertionControl.logMessage("Attempted to remove non-existent or already removed Luogo UID: " + luogoUID, Payload.Level.ERROR, "Model");
+            AssertionControl.logMessage("Attempted to remove non-existent or already removed Luogo UID: " + luogoUID, Payload.Status.ERROR, "Model");
             return false; // Already removed or never existed
         }
 

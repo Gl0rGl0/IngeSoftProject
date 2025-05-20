@@ -39,20 +39,16 @@ public class GenericFrameController implements Initializable {
     private static final HashMap<String, Parent> contentFrames = new HashMap<>();
 
     // Elementi comuni
-    @FXML
-    private MenuButton userMenuButton;
-    @FXML
-    private StackPane contentArea;
+    @FXML private MenuButton userMenuButton;
+    @FXML private StackPane contentArea;
 
     // Elementi specifici per ruolo
-    @FXML
-    private MenuButton databaseButton; // CONFIGURATORE
+    @FXML private MenuButton databaseButton; // CONFIGURATORE
+    @FXML private Button orarioManagerButton;
 
-    @FXML
-    private Button volontarioButton; // VOLONTARIO
+    @FXML private Button volontarioButton; // VOLONTARIO
 
-    @FXML
-    private Button prenotazioniButton; // FRUITORE
+    @FXML private Button prenotazioniButton; // FRUITORE
 
     @FXML private AnchorPane toastContainer;  // Overlay for toasts
 
@@ -91,7 +87,12 @@ public class GenericFrameController implements Initializable {
             default -> {}
         }
         
+        
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
+        
+        if(Launcher.controller.getCurrentUser().isNew()){
+            showChangePassword();
+        }
     }
 
     HomeVisiteViewController homeController;
@@ -108,7 +109,8 @@ public class GenericFrameController implements Initializable {
     }
     
     LuoghiVisiteViewController lEVcontroller;
-    PersonViewController pcontroller;
+    PersonViewController persController;
+    OrarioViewController oController;
     private void loadConfigFrame(){
         try {
             FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-visite-view.fxml"));
@@ -117,7 +119,11 @@ public class GenericFrameController implements Initializable {
 
             loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/persone-view.fxml"));
             contentFrames.put(PersonViewController.ID, loader.load());
-            pcontroller = loader.getController();
+            persController = loader.getController();
+
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/orario-view.fxml"));
+            contentFrames.put(OrarioViewController.ID, loader.load());
+            oController = loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,8 +141,12 @@ public class GenericFrameController implements Initializable {
         // Nascondi tutti gli elementi specifici
         databaseButton.setVisible(false);
         databaseButton.setManaged(false);
+        orarioManagerButton.setVisible(false);
+        orarioManagerButton.setManaged(false);
+        
         volontarioButton.setVisible(false);
         volontarioButton.setManaged(false);
+        
         prenotazioniButton.setVisible(false);
         prenotazioniButton.setManaged(false);
 
@@ -145,6 +155,9 @@ public class GenericFrameController implements Initializable {
             case CONFIGURATORE:
                 databaseButton.setVisible(true);
                 databaseButton.setManaged(true);
+
+                orarioManagerButton.setVisible(true);
+                orarioManagerButton.setManaged(true);
                 break;
             case VOLONTARIO:
                 volontarioButton.setVisible(true);
@@ -163,7 +176,7 @@ public class GenericFrameController implements Initializable {
         // Aggiorna il testo dell'utente nella navbar
         // Assicurati che Launcher.controller.getCurrentUser() non sia null qui
         if (Launcher.controller != null && Launcher.controller.getCurrentUser() != null) {
-             userMenuButton.setText(Launcher.controller.getCurrentUser().getUsername());
+            userMenuButton.setText(Launcher.controller.getCurrentUser().getUsername());
         } else {
             userMenuButton.setText("Utente Sconosciuto"); // Placeholder o errore
             System.err.println("WARNING: User not logged in when configuring navbar.");
@@ -174,16 +187,29 @@ public class GenericFrameController implements Initializable {
     int i = 0;
     @FXML
     public void cycleRole() {
-        String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit1 pass1F"};
+        String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit2 pass2F"};
 
-        handleLogout();
+        Payload<?> res = Launcher.controller.interpreter("logout");
+
+        if(res != null && res.getStatus() != Status.ERROR) {
+            contentArea.getChildren().clear();
+            configureNavbarForRole(null);
+            
+            Launcher.toast(res);
+            //Launcher.setRoot(LoginViewController.ID);
+        } else {
+            Launcher.toast(Payload.error("Logout failed", res.getLogMessage()));
+            showHome();
+            return;
+        }
+
         Payload<?> loginRes = Launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
 
-        if (loginRes != null && loginRes.getStatus() == Status.OK) {
+        if (loginRes != null && loginRes.getStatus() != Status.ERROR) {
             Launcher.toast(Payload.info("Role login successful: " + Launcher.controller.getCurrentUser().getUsername(), ""));
-            showHome();
+            setupAfterLogin();
         } else {
-            System.err.println("Cycled role login failed.");
+            System.err.println("Cycled role login failed." + loginRes);
         }
     }
 
@@ -222,7 +248,7 @@ public class GenericFrameController implements Initializable {
             System.err.println("Error: LuoghiVisiteViewController frame not found in contentFrames.");
         }
         lEVcontroller.refreshItems();
-        pcontroller.closeDialog();
+        persController.closeDialog();
     }
 
     @FXML
@@ -231,9 +257,21 @@ public class GenericFrameController implements Initializable {
         Parent frame = contentFrames.get(PersonViewController.ID);
         if (frame != null) {
             contentArea.getChildren().add(frame);
-            pcontroller.refreshItems();
+            persController.refreshItems();
         } else {
             System.err.println("Error: PersonViewController frame not found in contentFrames.");
+        }
+    }
+
+    @FXML
+    private void showOrarioManager() {
+        contentArea.getChildren().clear();
+        Parent frame = contentFrames.get(OrarioViewController.ID);
+        if (frame != null) {
+            contentArea.getChildren().add(frame);
+            oController.refreshData();
+        } else {
+            System.err.println("Error: OrarioViewController frame not found in contentFrames.");
         }
     }
 
@@ -274,7 +312,7 @@ public class GenericFrameController implements Initializable {
     private void handleLogout() {
         Payload<?> res = Launcher.controller.interpreter("logout");
 
-        if(res != null && res.getStatus() == Status.OK) {
+        if(res != null && res.getStatus() == Status.INFO) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null); // Or some other placeholder state
             
@@ -290,9 +328,9 @@ public class GenericFrameController implements Initializable {
         Payload<String> p = (Payload<String>) in;
         Platform.runLater(() -> {
             String msg = p.getData();
-            Payload.Level level = p.getLevel();
+            Payload.Status status = p.getStatus();
             Label toast = new Label(msg);
-            toast.getStyleClass().addAll("toast", "toast-" + level.name().toLowerCase());
+            toast.getStyleClass().addAll("toast", "toast-" + status.name().toLowerCase());
             toast.setFont(Font.font(14));
             toast.setPadding(new Insets(10));
     

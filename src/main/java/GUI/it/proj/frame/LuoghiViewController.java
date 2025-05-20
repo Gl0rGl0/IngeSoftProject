@@ -57,7 +57,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
 
         Payload res = Launcher.controller.interpreter("add -L " + out.toString());
         
-        if(res != null && res.getStatus() == Status.OK)
+        if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
         else{
             Launcher.toast(Payload.error(null, "Errore nell'aggiunta del luogo"));
@@ -76,7 +76,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
     public void refreshItems() {
         Payload res = Launcher.controller.interpreter("list -L");
 
-        if(res != null && res.getStatus() == Status.OK){
+        if(res != null && res.getStatus() == Status.INFO){
             this.listLuoghi.getItems().clear();
             this.listLuoghi.getItems().addAll(((Payload<Collection<Luogo>>) res).getData());
         }

@@ -78,6 +78,15 @@
                     </items>
                 </MenuButton>
 
+                <!-- Bottone OrarioManager (Configuratore) -->
+                <Button fx:id="orarioManagerButton" text="Orario Manager" styleClass="btn, label" onAction="#showOrarioManager">
+                    <graphic>
+                        <ImageView fitHeight="28" fitWidth="28">
+                            <Image url="@../icon/calendar-clock.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+
                 <!-- VOLONTARIO: Bottone Visite Lavoro -->
                 <Button fx:id="volontarioButton" text="Area Personale" styleClass="btn"
                     visible="false" managed="false" onAction="#showVolontario">

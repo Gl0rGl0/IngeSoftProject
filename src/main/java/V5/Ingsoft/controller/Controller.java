@@ -1,6 +1,7 @@
 package V5.Ingsoft.controller;
 
 import V5.Ingsoft.controller.item.persone.Persona;
+import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.*;
 
@@ -58,7 +59,7 @@ public class Controller {
      * @param prompt the entered command string
      */
     public Payload<?> interpreter(String prompt) {
-        AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Level.INFO, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Status.INFO, this.getClass().getSimpleName());
         Payload<?> out = interpreter.interpret(prompt, getCurrentUser());
 
         if(out != null)
@@ -77,7 +78,7 @@ public class Controller {
         boolean out = interpreter.doneAll();
 
         if (out)
-            AssertionControl.logMessage("Setup completed", Payload.Level.INFO, this.getClass().getSimpleName());
+            AssertionControl.logMessage("Setup completed", Payload.Status.INFO, this.getClass().getSimpleName());
 
         return out;
     }
@@ -130,7 +131,7 @@ public class Controller {
      * Sets the flag indicating that special commands are now allowed for this day.
      */
     private void performDay16Actions() {
-        AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, Payload.Level.INFO, getClass().getSimpleName());
+        AssertionControl.logMessage("Performing Day 16 actions on: " + this.date, Payload.Status.INFO, getClass().getSimpleName());
         db.dbDatesHelper.refreshPrecludedDate(this.date);
 
         isActionDay16 = true;
@@ -159,5 +160,16 @@ public class Controller {
 
     public void setDB(Model instance) {
         this.db = instance;
+    }
+
+    public double getVolontariStats(){
+        double res = 0;
+
+        for(Volontario v : getDB().dbVolontarioHelper.getPersonList())
+            res += v.getNAvailability();
+
+        double lunghezzaMese = this.date.getMonth().maxLength();
+
+        return res / lunghezzaMese;
     }
 }

@@ -25,7 +25,7 @@ public class AssertionControl {
      * @param className origin class simple name
      * @return true if written successfully
      */
-    public static boolean logMessage(String message, Payload.Level level, String className) {
+    public static boolean logMessage(String message, Payload.Status level, String className) {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {
             String type = switch (level) {
                 case ERROR -> "ERROR";

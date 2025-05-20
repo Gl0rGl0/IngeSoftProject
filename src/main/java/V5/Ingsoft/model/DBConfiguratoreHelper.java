@@ -25,22 +25,22 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
     public boolean addConfiguratore(Configuratore c) {
         final String SUB_CLASSNAME = CLASSNAME + ".addConfiguratore";
         if (c == null || c.getUsername() == null || c.getUsername().trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to add null Configuratore or Configuratore with null/empty username.", Payload.Level.ERROR, SUB_CLASSNAME);
+            AssertionControl.logMessage("Attempted to add null Configuratore or Configuratore with null/empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
         }
         String username = c.getUsername();
 
         if (cachedItems.containsKey(username)) { // Use containsKey for clarity
-            AssertionControl.logMessage("Attempted to add duplicate Configuratore: " + username, Payload.Level.WARN, SUB_CLASSNAME);
+            AssertionControl.logMessage("Attempted to add duplicate Configuratore: " + username, Payload.Status.WARN, SUB_CLASSNAME);
             return false; // Do not overwrite existing configurator
         }
 
         cachedItems.put(username, c);
         boolean success = saveJson(getPersonList());
         if (success) {
-            AssertionControl.logMessage("Added Configuratore: " + username, Payload.Level.INFO, SUB_CLASSNAME);
+            AssertionControl.logMessage("Added Configuratore: " + username, Payload.Status.INFO, SUB_CLASSNAME);
         } else {
-            AssertionControl.logMessage("Failed to save JSON after adding Configuratore: " + username, Payload.Level.ERROR, SUB_CLASSNAME);
+            AssertionControl.logMessage("Failed to save JSON after adding Configuratore: " + username, Payload.Status.ERROR, SUB_CLASSNAME);
             // Consider removing from cache if save failed?
             // cachedItems.remove(username);
         }

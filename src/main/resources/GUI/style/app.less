@@ -177,6 +177,15 @@
   .themed-text-fill(@theme);
 }
 
+.fill-label {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: @padding-small 20px;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+  -fx-text-fill: white;
+}
+
 .title-label {
   -fx-font-size: 36px;
   -fx-font-weight: bold;
@@ -191,11 +200,17 @@
 }
 
 .error-label {
-  -fx-text-fill: @color-danger-red;
+  -fx-background-color: derive(@color-danger-red, 20%);
 }
 
 .success-label {
-  -fx-text-fill: @color-success-green;
+  -fx-background-color: derive(@color-success-green, 20%);
+}
+
+.error-border {
+  -fx-border-color: #da0f0f;
+  -fx-border-width: 2px;
+  -fx-border-radius: @border-radius-small
 }
 
 
@@ -324,12 +339,12 @@
     -fx-cursor: hand;
 
     &:hover {
-      .themed-lighter-hover-background-color(@theme);
+      // .themed-lighter-hover-background-color(@theme);
+      .themed-lighter-hover-background-color(transparent);
     }
     &:selected,
     &:filled:selected {
-      -fx-background-color: transparent;
-      .themed-text-fill(transparent);
+      .themed-lighter-hover-background-color(@theme);
     }
   }
 
@@ -338,13 +353,14 @@
     .themed-text-grey-mild-text-fill(@theme);
 
     .box {
-      .themed-background-color(@theme);
+      //.themed-background-color(@theme);
       .themed-checkbox-border-color(@theme);
       -fx-border-radius: @border-radius-small;
       -fx-border-width: 1px;
       -fx-padding: 2px;
       -fx-min-width: 18px;
       -fx-min-height: 18px;
+      -fx-background-color: @color-danger-red;
     }
 
     &:selected .box {
@@ -395,7 +411,7 @@
   }
 }
 
-.grey-bnt {
+.grey-btn {
   -fx-background-color: derive(@color-grey-dark-accent, 20%);
   .themed-text-fill(@theme);
   &:hover {
@@ -412,9 +428,24 @@
   }
 }
 
+.green-btn {
+  -fx-opacity: 1;
+  .themed-text-fill(@theme);
+  -fx-background-color: derive(@color-success-green, 30%);
+  &:hover {
+    -fx-background-color: @color-success-green;
+  }
+}
 
+.small-btn {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: @padding-extra-small;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+}
 // ========================================
-// Persona Cell
+// List Cell
 // ========================================
 .list-cell {
   .themed-background-color(@theme);
@@ -474,3 +505,34 @@
 .toast-warn  { -fx-background-color: #f39c12; }
 .toast-info  { -fx-background-color: #3498db; }
 .toast-debug { -fx-background-color: #95a5a6; }
+
+
+// ========================================
+// VolontariAvailability
+// ========================================
+/* dimensioni base dei box */
+.day-box {
+  -fx-pref-height: 20px;
+  -fx-border-color: @color-light-border-default;
+  -fx-border-width: 1px;
+  -fx-border-radius: 3px;
+  -fx-background-radius: 3px;
+}
+
+/* disponibilità true/false */
+.day-available {
+  -fx-background-color: derive(@color-success-green, 30%);
+}
+.day-unavailable {
+  -fx-background-color: derive(@color-danger-red, 30%);
+}
+
+/* padding tra le righe */
+.vol-row {
+  -fx-padding: 5px 0;
+}
+
+.containerScroll {
+  -fx-background-color: @color-light-bg-primary;
+  -fx-border-color: transparent;
+}

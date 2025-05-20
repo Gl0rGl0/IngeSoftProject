@@ -15,7 +15,7 @@ public abstract class Deletable implements Informable{
         switch (si) {
             case PENDING_ADD -> {
                 if (insertionDate == null) {
-                    AssertionControl.logMessage("Error while loading insertion date while adding, using today", Payload.Level.WARN, getClass().getSimpleName());
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using today", Payload.Status.WARN, getClass().getSimpleName());
                     this.insertionDate = d;
                     return;
                 }
@@ -25,7 +25,7 @@ public abstract class Deletable implements Informable{
             }
             case PENDING_REMOVE -> {
                 if (deletionDate == null) {
-                    AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", Payload.Level.WARN, getClass().getSimpleName());
+                    AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", Payload.Status.WARN, getClass().getSimpleName());
                     this.deletionDate = d.clone().addMonth(2);
                     this.deletionDate.setDay(16);
                     return;

@@ -4,12 +4,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader; // Importa FXMLLoader
 import javafx.fxml.Initializable; // Importa Initializable
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
@@ -47,6 +49,16 @@ public class Launcher extends Application {
         }
         
         scene = new Scene(initialRoot, 1480, 960);
+
+        var screens = Screen.getScreens();
+        if (screens.size() > 1) {
+            Screen secondScreen = screens.get(1);
+            Rectangle2D bounds = secondScreen.getVisualBounds();
+
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+        }
+        
         
         stage.setScene(scene);
         stage.setTitle("App visite guidate");
@@ -63,7 +75,6 @@ public class Launcher extends Application {
             // WARNING: Assicurati che il lesscss-maven-plugin compili in /GUI/style/app.css
             System.err.println("WARNING: /GUI/style/app.css non trovato nel classpath.");
         }
-        
         
         stage.centerOnScreen();
         stage.setMaximized(true);
@@ -177,35 +188,35 @@ public class Launcher extends Application {
     }
 
     private void openInterpreterWindow() {
-    Stage interpreterStage = new Stage();
-    interpreterStage.setTitle("Interprete comandi");
+        Stage interpreterStage = new Stage();
+        interpreterStage.setTitle("Interprete comandi");
 
-    VBox layout = new VBox(10);
-    layout.setPadding(new javafx.geometry.Insets(10));
+        VBox layout = new VBox(10);
+        layout.setPadding(new javafx.geometry.Insets(10));
 
-    TextArea output = new TextArea();
-    output.setEditable(false);
-    output.setWrapText(true);
+        TextArea output = new TextArea();
+        output.setEditable(false);
+        output.setWrapText(true);
 
-    TextField input = new TextField();
-    input.setPromptText("Scrivi comando...");
+        TextField input = new TextField();
+        input.setPromptText("Scrivi comando...");
 
-    Button sendButton = new Button("Invia");
-    sendButton.setOnAction(e -> {
-        String command = input.getText();
-        if (!command.isBlank()) {
-            Payload<?> result = controller.interpreter(command);
-            output.appendText("> " + command + "\n" + result + "\n\n");
-            input.clear();
-        }
-    });
+        Button sendButton = new Button("Invia");
+        sendButton.setOnAction(e -> {
+            String command = input.getText();
+            if (!command.isBlank()) {
+                Payload<?> result = controller.interpreter(command);
+                output.appendText("> " + command + "\n" + result + "\n\n");
+                input.clear();
+            }
+        });
 
-    input.setOnAction(sendButton.getOnAction()); // Invio con ENTER
+        input.setOnAction(sendButton.getOnAction()); // Invio con ENTER
 
-    layout.getChildren().addAll(output, input, sendButton);
-    Scene scene = new Scene(layout, 500, 400);
-    interpreterStage.setScene(scene);
-    interpreterStage.show();
-}
+        layout.getChildren().addAll(output, input, sendButton);
+        Scene scene = new Scene(layout, 500, 400);
+        interpreterStage.setScene(scene);
+        interpreterStage.show();
+    }
 
 }

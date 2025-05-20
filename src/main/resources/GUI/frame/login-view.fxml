@@ -3,13 +3,13 @@
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
+<?import com.dlsc.gemsfx.EnhancedPasswordField?>
 
 <?import java.lang.String?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.it.proj.frame.LoginViewController">
@@ -22,7 +22,7 @@
             <Label text="VISITE GUIDATE" styleClass="title-label" alignment="CENTER"/>
                    
             <TextField fx:id="userTextField" promptText="Username" prefWidth="250"/>
-            <PasswordField fx:id="pwField" promptText="Password" prefWidth="250"/>
+            <EnhancedPasswordField fx:id="pwField" promptText="Password" prefWidth="250"/>
             
             <Button fx:id="loginButton" text="Login" onAction="#handleLoginAction" styleClass="btn-lg, btn-primary"/>
             

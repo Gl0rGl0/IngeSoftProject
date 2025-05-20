@@ -50,7 +50,7 @@ public class ListCommand extends AbstractCommand {
     private Payload<Collection<Volontario>> listVolontari() {
         ArrayList<Volontario> out = new ArrayList<>();
         for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
-            if(!v.isUsable()) continue;
+            // if(!v.isUsable()) continue;
             out.add(v);
         }
         
@@ -60,7 +60,7 @@ public class ListCommand extends AbstractCommand {
     private Payload<Collection<TipoVisita>> listTipoVisite() {
         ArrayList<TipoVisita> out = new ArrayList<>();
         for (TipoVisita t : controller.getDB().dbTipoVisiteHelper.getTipiVisita()) {
-            if(!t.isUsable()) continue;
+            // if(!t.isUsable()) continue;
             out.add(t);
         }
         

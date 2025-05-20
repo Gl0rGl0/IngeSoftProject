@@ -23,9 +23,9 @@
                 <ComboBox fx:id="visitComboBox" visible="false" managed="false" prefWidth="200" />
                 <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
             </VBox>
-            <HBox spacing="10" alignment="CENTER">
+            <HBox spacing="15" alignment="CENTER">
                 <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-bnt" style="-fx-text-fill: white;"/>
+                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </Group>

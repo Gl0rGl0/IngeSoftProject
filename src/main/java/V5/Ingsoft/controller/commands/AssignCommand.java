@@ -153,7 +153,7 @@ public class AssignCommand extends AbstractCommand {
 
             // Sfrutta il metodo overlaps definito in TipoVisita
             if (visitaDaAssegnare.overlaps(altraVisita)) {
-                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), Payload.Level.WARN, getClassName());
+                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), Payload.Status.WARN, getClassName());
                 return false;
             }
         }

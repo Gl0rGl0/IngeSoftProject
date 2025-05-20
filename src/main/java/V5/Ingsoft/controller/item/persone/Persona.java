@@ -59,7 +59,7 @@ public abstract class Persona extends Deletable {
 
     @Override
     public String toString() {
-        return "Username: " + getUsername() + " - Password: *****";
+        return "Username: " + getUsername();
     }
 
     public int getPriority() {

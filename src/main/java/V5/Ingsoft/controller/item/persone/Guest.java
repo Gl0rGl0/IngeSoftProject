@@ -19,7 +19,7 @@ public class Guest extends Persona {
                     try {
                         instance = new Guest();
                     } catch (Exception e) {
-                        AssertionControl.logMessage("Error while building Guest: " + e.getMessage(), Payload.Level.ERROR, "Guest");
+                        AssertionControl.logMessage("Error while building Guest: " + e.getMessage(), Payload.Status.ERROR, "Guest");
                     }
                 }
             }

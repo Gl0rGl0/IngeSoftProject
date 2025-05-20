@@ -44,7 +44,7 @@ public class VolontariViewController implements ListBase<TipoVisita> {
     public void refreshItems() {
         Payload res = Launcher.controller.interpreter("myvisit");
 
-        if(res != null && res.getStatus() == Status.OK){
+        if(res != null && res.getStatus() == Status.INFO){
             this.listTipoVisiteAssign.getItems().clear();
             this.listTipoVisiteAssign.getItems().addAll(((Payload<Collection<TipoVisita>>) res).getData());
         }

@@ -44,7 +44,7 @@ public class LoginCommand extends AbstractCommand {
         }
         // user does not exist → allow registration if a second password is provided
         if (args.length < 3) {
-            return Payload.warn(
+            return Payload.error(
                 "User not found",
                 "Registration password missing for new user " + args[0]);
         }

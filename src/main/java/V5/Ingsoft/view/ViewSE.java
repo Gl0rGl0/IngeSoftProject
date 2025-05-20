@@ -65,7 +65,7 @@ public class ViewSE implements Runnable {
         while (!controller.doneAll())
             payloadOut(controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> ")));
 
-        AssertionControl.logMessage("Setup completed", Payload.Level.INFO, this.getClass().getSimpleName());
+        AssertionControl.logMessage("Setup completed", Payload.Status.INFO, this.getClass().getSimpleName());
 
         while (true)
             payloadOut(controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> ")));

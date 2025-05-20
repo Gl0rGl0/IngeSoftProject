@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.decoration.Decorator;
 
 import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.unitfx.IntegerInputField;
@@ -22,6 +23,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class AddTipoVisiteDialogController {
@@ -29,33 +31,20 @@ public class AddTipoVisiteDialogController {
     @FXML
     private Label titleLabel;
 
-    @FXML
-    private TextField titoloVisita;
-    @FXML
-    private TextField descrizioneVisita;
-    @FXML
-    private TextField posizione;
-    @FXML
-    private DatePicker inizioGiornoPeriodo;
-    @FXML
-    private DatePicker fineGiornoPeriodo;
-    @FXML
-    private TimePicker oraInizio;
-    @FXML
-    private IntegerInputField durata;
-    @FXML
-    private CheckBox gratuito;
-    @FXML
-    private IntegerInputField numeroMinimoPartecipanti;
-    @FXML
-    private IntegerInputField numeroMassimoPartecipanti;
-    @FXML
-    private CheckComboBox<String> giorni;
-    @FXML
-    private CheckComboBox<Volontario> volontariUIDs;
+    @FXML private TextField titoloVisita;
+    @FXML private TextArea descrizioneVisita;
+    @FXML private TextField posizione;
+    @FXML private DatePicker inizioGiornoPeriodo;
+    @FXML private DatePicker fineGiornoPeriodo;
+    @FXML private TimePicker oraInizio;
+    @FXML private IntegerInputField durata;
+    @FXML private CheckBox gratuito;
+    @FXML private IntegerInputField numeroMinimoPartecipanti;
+    @FXML private IntegerInputField numeroMassimoPartecipanti;
+    @FXML private CheckComboBox<String> giorni;
+    @FXML private CheckComboBox<Volontario> volontariUIDs;
 
-    @FXML
-    private ComboBox<String> placeComboBox;
+    @FXML private ComboBox<String> placeComboBox;
 
     private boolean edit = false;
     private TipoVisiteViewController parentController;
@@ -84,12 +73,12 @@ public class AddTipoVisiteDialogController {
         String luogo  = posizione.getText();
         
         // 2. Lettura date e durata
-        LocalTime ora   = oraInizio.getValue();
-        LocalDate inizio= inizioGiornoPeriodo.getValue();
-        LocalDate fine  = fineGiornoPeriodo.getValue();
-        Integer dur     = durata.getValue();
-        Integer minPart = numeroMinimoPartecipanti.getValue();
-        Integer maxPart = numeroMassimoPartecipanti.getValue();
+        LocalTime ora    = oraInizio.getTime();
+        LocalDate inizio = inizioGiornoPeriodo.getValue();
+        LocalDate fine   = fineGiornoPeriodo.getValue();
+        Integer dur      = durata.getValue();
+        Integer minPart  = numeroMinimoPartecipanti.getValue();
+        Integer maxPart  = numeroMassimoPartecipanti.getValue();
 
         // 3. Selezioni multichoice
         List<String> giorniSel = giorni.getCheckModel().getCheckedItems();
@@ -112,7 +101,7 @@ public class AddTipoVisiteDialogController {
             minPart   == null ||
             maxPart   == null ||
             giorniSel.isEmpty() ||
-            volsSel.isEmpty()) {
+            volsSel.isEmpty()) {          
             
             Launcher.toast(Payload.error("Tutti i campi sono obbligatori!",""));
             return;

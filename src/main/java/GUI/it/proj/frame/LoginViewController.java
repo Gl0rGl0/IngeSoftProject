@@ -3,6 +3,11 @@ package GUI.it.proj.frame;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.materialdesign.MaterialDesign;
+
+import com.dlsc.gemsfx.EnhancedPasswordField;
+
 import GUI.it.proj.Launcher;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
@@ -10,8 +15,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.StackPane;
 
 public class LoginViewController implements Initializable {
     public final static String ID = "login";
@@ -19,7 +25,8 @@ public class LoginViewController implements Initializable {
     @FXML
     private TextField userTextField;
     @FXML
-    private PasswordField pwField;
+    // private PasswordField pwField;
+    EnhancedPasswordField pwField;
     @FXML
     private Button loginButton;
     @FXML
@@ -29,7 +36,22 @@ public class LoginViewController implements Initializable {
      * Metodo chiamato automaticamente dopo l'iniezione degli elementi FXML.
      */
     @FXML
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) { 
+   
+        //set right node
+        FontIcon fontIcon = new FontIcon();
+        fontIcon.iconCodeProperty().bind(pwField.showPasswordProperty().map(it -> it ? MaterialDesign.MDI_EYE : MaterialDesign.MDI_EYE_OFF));
+
+        StackPane right = new StackPane(fontIcon);
+        right.getStyleClass().add("right-icon-wrapper");
+        right.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                pwField.setShowPassword(!pwField.isShowPassword());
+            }
+        });
+
+        pwField.setRight(right);
+    }
 
     /**
      * Gestisce il click sul bottone di login.
@@ -41,18 +63,27 @@ public class LoginViewController implements Initializable {
             messageLabel.setVisible(true);
             return;
         }
-
         
         String username = userTextField.getText();
         String password = pwField.getText();
-        System.out.println(username + " " + password);
 
-        if (username == null || password == null || username.isEmpty() || password.isEmpty())
+        if(username == null || username.isEmpty()){
+            userTextField.getStyleClass().add("error-border");
             return;
+        }else{
+            userTextField.getStyleClass().remove("error-border");
+        }
+
+        if(password == null || password.isEmpty()){
+            pwField.getStyleClass().add("error-border");
+            return;
+        }else{
+            pwField.getStyleClass().remove("error-border");
+        }
 
         Payload<?> res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
         System.out.println(res);
-        if (res != null && res.getStatus() == Status.OK) {
+        if (res != null && res.getStatus() != Status.ERROR) {
             userTextField.clear();
             pwField.clear();
             Launcher.setRoot(GenericFrameController.ID);

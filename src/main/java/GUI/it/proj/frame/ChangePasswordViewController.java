@@ -29,6 +29,13 @@ public class ChangePasswordViewController implements Initializable {
         phase = "change";
 
         resetButton.requestFocus();
+
+        if(Launcher.controller.getCurrentUser().isNew()){
+            messageLabel.setText("Sei pregato di cambiare la password per il primo accesso.");
+            messageLabel.setVisible(true);
+        }else{
+            messageLabel.setVisible(false);
+        }
     }
 
     @FXML

@@ -6,6 +6,14 @@
   -fx-font-weight: bold;
   -fx-text-fill: #333333;
 }
+.fill-label {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 8px 20px;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
+  -fx-text-fill: white;
+}
 .title-label {
   -fx-font-size: 36px;
   -fx-font-weight: bold;
@@ -18,10 +26,15 @@
   -fx-text-fill: #333333;
 }
 .error-label {
-  -fx-text-fill: #da0f0f;
+  -fx-background-color: derive(#da0f0f, 20%);
 }
 .success-label {
-  -fx-text-fill: #4caf50;
+  -fx-background-color: derive(#4caf50, 20%);
+}
+.error-border {
+  -fx-border-color: #da0f0f;
+  -fx-border-width: 2px;
+  -fx-border-radius: 4px;
 }
 .section-box {
   -fx-padding: 15px;
@@ -114,25 +127,22 @@
   -fx-border-color: transparent;
   -fx-cursor: hand;
 }
-.checklist-view .list-cell:hover {
-  -fx-background-color: #f9f9f9;
-}
 .checklist-view .list-cell:selected,
 .checklist-view .list-cell:filled:selected {
-  -fx-background-color: transparent;
+  -fx-background-color: #f9f9f9;
 }
 .checklist-view .check-box {
   -fx-font-size: 14px;
   -fx-text-fill: #495057;
 }
 .checklist-view .check-box .box {
-  -fx-background-color: #ffffff;
   -fx-border-color: #cccccc;
   -fx-border-radius: 4px;
   -fx-border-width: 1px;
   -fx-padding: 2px;
   -fx-min-width: 18px;
   -fx-min-height: 18px;
+  -fx-background-color: #da0f0f;
 }
 .checklist-view .check-box:selected .box {
   -fx-background-color: #4caf50;
@@ -171,11 +181,11 @@
 .person-button:hover {
   -fx-background-color: #4a90e2;
 }
-.grey-bnt {
+.grey-btn {
   -fx-background-color: derive(#3a3e42, 20%);
   -fx-text-fill: #333333;
 }
-.grey-bnt:hover {
+.grey-btn:hover {
   -fx-background-color: #3a3e42;
 }
 .red-btn {
@@ -185,6 +195,21 @@
 }
 .red-btn:hover {
   -fx-background-color: #da0f0f;
+}
+.green-btn {
+  -fx-opacity: 1;
+  -fx-text-fill: #333333;
+  -fx-background-color: derive(#4caf50, 30%);
+}
+.green-btn:hover {
+  -fx-background-color: #4caf50;
+}
+.small-btn {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 5px;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
 }
 .list-cell {
   -fx-background-color: #ffffff;
@@ -236,5 +261,28 @@
 }
 .toast-debug {
   -fx-background-color: #95a5a6;
+}
+/* dimensioni base dei box */
+.day-box {
+  -fx-pref-height: 20px;
+  -fx-border-color: #d1d1d1;
+  -fx-border-width: 1px;
+  -fx-border-radius: 3px;
+  -fx-background-radius: 3px;
+}
+/* disponibilità true/false */
+.day-available {
+  -fx-background-color: derive(#4caf50, 30%);
+}
+.day-unavailable {
+  -fx-background-color: derive(#da0f0f, 30%);
+}
+/* padding tra le righe */
+.vol-row {
+  -fx-padding: 5px 0;
+}
+.containerScroll {
+  -fx-background-color: #ffffff;
+  -fx-border-color: transparent;
 }
 

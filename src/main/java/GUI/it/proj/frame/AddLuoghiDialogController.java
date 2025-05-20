@@ -8,12 +8,9 @@ import javafx.scene.control.TextField;
 
 public class AddLuoghiDialogController {
 
-    @FXML
-    private TextField titoloLuogo;
-    @FXML
-    private TextArea descrizioneLuogo;
-    @FXML
-    private TextArea posizione;
+    @FXML private TextField titoloLuogo;
+    @FXML private TextArea descrizioneLuogo;
+    @FXML private TextField posizione;
 
     private LuoghiViewController parentController;
 

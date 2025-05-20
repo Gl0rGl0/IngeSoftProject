@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>   
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import com.dlsc.unitfx.IntegerInputField?>
+<?import org.kordamp.ikonli.materialdesign.MaterialDesign?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="GUI.it.proj.frame.OrarioViewController">
+    
+    <GridPane style="-fx-padding: 20;">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints percentHeight="50"/>
+            <RowConstraints percentHeight="50"/>
+        </rowConstraints>
+
+        <VBox spacing="30" alignment="CENTER"
+              GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" fillWidth="true" styleClass="section-box-full">
+              <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent" GridPane.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox fx:id="container" spacing="5" style="-fx-padding: 10;" styleClass="containerScroll"/>
+              </ScrollPane>              
+        </VBox>
+
+        <VBox spacing="50" alignment="CENTER" styleClass="section-box-full"
+              GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <HBox spacing="15" alignment="CENTER">
+                <Label text="Disponibilità volontari attuale:" style="-fx-font-size:20px;"/>
+                <Label fx:id="status" text="STATO" styleClass="fill-label"/>
+            </HBox>
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Apri" onAction="#onOpenCollection"
+                        styleClass="person-button, green-btn"/>
+                <Button text="Chiudi" onAction="#onCloseCollection"
+                        styleClass="person-button, red-btn"/>
+            </HBox>
+            <HBox spacing="30" alignment="CENTER">
+                <Label text="Media disponibilità/GG: " style="-fx-font-size:20px;" />
+                <Label fx:id="stats" text="0" style="-fx-font-size:20px;"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="50" alignment="CENTER" styleClass="section-box-full"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <HBox spacing="15" alignment="CENTER">
+                <Label text="Ambito Territoriale: " style="-fx-font-size:20px;"/>
+                <TextField fx:id="ambitoField" disable="true" style="-fx-font-size:20px;"/>
+            </HBox>      
+            <Button text="Componi Orario" onAction="#onMakeOrario"
+                    styleClass="person-button" style="-fx-font-size:18px;"/>
+            <HBox spacing="15" alignment="CENTER">
+                <Label text="Numero massimo di iscrizioni/fruitore: " style="-fx-font-size:18px;"/>
+                
+                <HBox spacing="10" alignment="CENTER">
+                    <IntegerInputField fx:id="numMaxField" prefWidth="50" prefHeight="30" style="-fx-font-size:16px;"/>
+                    <Button fx:id="confirmButton"
+                            onAction="#onConfirmNum"
+                            styleClass="person-button, green-btn, small-btn"
+                            prefWidth="40" prefHeight="30">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi-check" iconSize="18"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </HBox>  
+        </VBox>
+
+    </GridPane>
+</StackPane>

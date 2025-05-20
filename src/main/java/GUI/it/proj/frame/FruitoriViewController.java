@@ -30,7 +30,7 @@ public class FruitoriViewController implements ListBase<Iscrizione> {
         listIscrizioni.getItems().clear();
 
         Payload<?> res = Launcher.controller.interpreter("myvisit");
-        if(res != null && res.getStatus() == Status.OK)
+        if(res != null && res.getStatus() == Status.INFO)
             listIscrizioni.getItems().addAll((Collection<Iscrizione>) res.getData());
     }
 }

@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.scene.control.Tooltip;
 
 public class CellController<T extends Informable> {
     @FXML
@@ -63,12 +64,12 @@ public class CellController<T extends Informable> {
         switch (item) {
             case Persona persona -> {
                 primaryText.setText(persona.getUsername());
-                handleDisable(persona.getStatus() == StatusItem.PENDING_REMOVE);
+                handleDisable(persona.getStatus());
             }
             case Luogo luogo -> {
                 primaryText.setText(luogo.getName());
                 secondaryText.setText(luogo.getDescription());
-                handleDisable(luogo.getStatus() == StatusItem.PENDING_REMOVE);
+                handleDisable(luogo.getStatus());
             }
             case Visita visita -> {
                 primaryText.setText(visita.getTitle());
@@ -77,24 +78,41 @@ public class CellController<T extends Informable> {
             case TipoVisita tvisita -> {
                 primaryText.setText(tvisita.getTitle());
                 secondaryText.setText(tvisita.getDescription());
-                handleDisable(tvisita.getStatus() == StatusItem.PENDING_REMOVE);
+                handleDisable(tvisita.getStatus());
             }
             default -> {
             }
         }
     }
 
-    private void handleDisable(boolean exec){
-        if(exec){
-            deleteButton.getStyleClass().remove("red-bnt");
-            deleteButton.getStyleClass().add("grey-bnt");
-            disabled = true;
-            deleteButton.setDisable(true);
-        }else if(disabled){
-            deleteButton.getStyleClass().remove("grey-bnt");
-            deleteButton.getStyleClass().add("red-bnt");
-            disabled = false;
-            deleteButton.setDisable(false);
+    private void handleDisable(StatusItem status){
+        switch(status){
+            case PENDING_REMOVE, DISABLED -> {
+                if(disabled)
+                    return;
+                
+                // Solo se è PENDING_REMOVE, aggiungi un tooltip
+                if(status == StatusItem.PENDING_REMOVE) {
+                    Tooltip tip = new Tooltip("Questo oggetto verrà rimosso.");
+                    Tooltip.install(deleteButton, tip);
+                }
+                deleteButton.getStyleClass().remove("red-btn");
+                deleteButton.getStyleClass().add("grey-btn");
+                deleteButton.setDisable(true);
+                disabled = true;
+            }
+            case ACTIVE, PENDING_ADD -> {
+                if(!disabled)
+                    return;
+                
+                    // Rimuovi eventuale tooltip
+                deleteButton.setTooltip(null);
+                
+                deleteButton.getStyleClass().remove("grey-btn");
+                deleteButton.getStyleClass().add("red-btn");
+                disabled = false;
+                deleteButton.setDisable(false);
+            }
         }
     }
 

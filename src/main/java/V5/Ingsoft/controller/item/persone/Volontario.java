@@ -78,8 +78,8 @@ public class Volontario extends Persona {
         }
 
         availability[disp.getDay() - 1] = toAdd;
-        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd, Payload.Level.INFO, "Volontario.setAvailability");
-        return Payload.Status.OK;
+        AssertionControl.logMessage("Set availability: " + this.getUsername() + "Date: " + disp + " to: " + toAdd, Payload.Status.INFO, "Volontario.setAvailability");
+        return Payload.Status.INFO;
     }
 
     public void clearAvailability() {
