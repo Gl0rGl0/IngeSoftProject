@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.setup.CommandListSETUP;
+import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.AppSettings;
 import V5.Ingsoft.util.JsonStorage;

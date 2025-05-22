@@ -1,7 +1,7 @@
 package V5.Ingsoft.view;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.running.CommandList;
+import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;

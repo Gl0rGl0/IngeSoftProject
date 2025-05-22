@@ -2,7 +2,7 @@ package V5.Ingsoft.controller.commands.setup;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
-import V5.Ingsoft.controller.commands.running.LoginCommand;
+import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.Payload;

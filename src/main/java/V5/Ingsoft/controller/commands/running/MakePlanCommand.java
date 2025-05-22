@@ -2,10 +2,11 @@ package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
-import V5.Ingsoft.controller.item.StatusItem;
+import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
@@ -14,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MakePlanCommand extends AbstractCommand {
+    
     public MakePlanCommand(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandList.MAKEPLAN;

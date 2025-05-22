@@ -1,6 +1,6 @@
 package V5.Ingsoft.controller.item.persone;
 
-import V5.Ingsoft.controller.item.StatusItem;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;

@@ -2,7 +2,7 @@ package V5.Ingsoft.controller.item.persone;
 
 import java.util.UUID;
 
-import V5.Ingsoft.controller.item.Informable;
+import V5.Ingsoft.controller.item.interfaces.Informable;
 
 public class Iscrizione implements Informable{
     private String fruitoreUID;

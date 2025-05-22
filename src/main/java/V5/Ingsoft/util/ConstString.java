@@ -98,6 +98,17 @@ public class ConstString {
 
     public static final String ASSIGN_LINE_INFO = "Assigns a visit to a place or a volunteer to a visit";
 
+    public static final String DISASSIGN_INFO = """
+            disassign [-L] [String: placeTitle] [String: visitTitle]
+                placeTitle     Title of the place to disassign the visit type from
+                visitTitle     Title of the visit to disassign
+            disassign [-V] [String: visitTitle] [String: volunteerUsername]
+                visitTitle        Title of the visit to disassign the volunteer from
+                volunteerUsername Username of the volunteer to disassign
+            """;
+
+    public static final String DISASSIGN_LINE_INFO = "Disssigns a visit from a place or a volunteer from a visit";
+
     public static final String LIST_INFO = """
             list -L | -v
                 -L:  List of visitable places

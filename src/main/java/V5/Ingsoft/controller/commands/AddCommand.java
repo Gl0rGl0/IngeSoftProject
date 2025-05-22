@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.running.CommandList;
+import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.luoghi.Luogo;

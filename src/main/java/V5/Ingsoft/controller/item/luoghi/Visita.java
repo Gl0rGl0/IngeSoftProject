@@ -1,8 +1,8 @@
 package V5.Ingsoft.controller.item.luoghi;
 
-import V5.Ingsoft.controller.item.Informable;
-import V5.Ingsoft.controller.item.StatusVisita;
+import V5.Ingsoft.controller.item.interfaces.Informable;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
+import V5.Ingsoft.controller.item.statuses.StatusVisita;
 import V5.Ingsoft.util.Date;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;

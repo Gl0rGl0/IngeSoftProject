@@ -2,11 +2,12 @@ package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
-import V5.Ingsoft.controller.item.StatusVisita;
+import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.controller.item.statuses.StatusVisita;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 

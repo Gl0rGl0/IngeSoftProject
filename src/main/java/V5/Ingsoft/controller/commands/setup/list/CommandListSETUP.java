@@ -1,4 +1,4 @@
-package V5.Ingsoft.controller.commands.setup;
+package V5.Ingsoft.controller.commands.setup.list;
 
 import V5.Ingsoft.controller.commands.ListInterface;
 import V5.Ingsoft.controller.item.persone.PersonaType;

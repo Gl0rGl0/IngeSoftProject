@@ -1,7 +1,7 @@
 package GUI.it.proj.utils;
 
 import GUI.it.proj.utils.interfaces.ListBase;
-import V5.Ingsoft.controller.item.Informable;
+import V5.Ingsoft.controller.item.interfaces.Informable;
 
 public class EditCell<T extends Informable> extends Cell<T>{
 

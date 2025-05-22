@@ -10,7 +10,7 @@ import V5.Ingsoft.controller.commands.ExitCommand;
 import V5.Ingsoft.controller.commands.LogoutCommand;
 import V5.Ingsoft.controller.commands.SetPersoneMaxCommand;
 import V5.Ingsoft.controller.commands.TimeCommand;
-import V5.Ingsoft.controller.commands.setup.CommandListSETUP;
+import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 
@@ -32,7 +32,7 @@ public abstract class Interpreter {
         commandRegistry.put("logout",   new LogoutCommand(controller));
         commandRegistry.put("changepsw",new ChangePswCommand(controller));
         commandRegistry.put("assign",   new AssignCommand(controller));
-        commandRegistry.put("disassign",   new DisAssignCommand(controller));
+        commandRegistry.put("disassign",new DisAssignCommand(controller));
         commandRegistry.put("setmax",   new SetPersoneMaxCommand(controller, true));
         commandRegistry.put("exit",     new ExitCommand(controller));
     }

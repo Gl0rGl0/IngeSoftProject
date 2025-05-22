@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.item.luoghi;
 
-import V5.Ingsoft.controller.item.StatusItem;
-import V5.Ingsoft.controller.item.Deletable;
+import V5.Ingsoft.controller.item.interfaces.Deletable;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.DayOfWeekConverter;
 import V5.Ingsoft.util.StringUtils;

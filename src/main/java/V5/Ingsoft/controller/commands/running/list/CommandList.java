@@ -1,4 +1,4 @@
-package V5.Ingsoft.controller.commands.running;
+package V5.Ingsoft.controller.commands.running.list;
 
 import V5.Ingsoft.controller.commands.ListInterface;
 import V5.Ingsoft.controller.item.persone.PersonaType;
@@ -32,6 +32,10 @@ public enum CommandList implements ListInterface {
             PersonaType.MAX.getPriority()),
 
     ASSIGN(ConstString.ASSIGN_INFO, ConstString.ASSIGN_LINE_INFO,
+            PersonaType.CONFIGURATORE.getPriority(),
+            PersonaType.CONFIGURATORE.getPriority()),
+    
+    DISASSIGN(ConstString.DISASSIGN_INFO, ConstString.DISASSIGN_LINE_INFO,
             PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()),
 

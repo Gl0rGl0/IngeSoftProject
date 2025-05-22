@@ -90,7 +90,6 @@ public abstract class Interpreter {
 
     public boolean haveAllBeenExecuted() {
         // si potrebbero mettere solo quelli di setup
-        // TODO
         for (Command c : commandRegistry.values()) {
             if (c instanceof DoneCommandSETUP) {
                 continue;

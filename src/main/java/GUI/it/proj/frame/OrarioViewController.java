@@ -6,8 +6,8 @@ import java.util.List;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
-import V5.Ingsoft.controller.item.StatusItem;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;

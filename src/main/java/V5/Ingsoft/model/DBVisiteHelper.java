@@ -1,9 +1,9 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.StatusVisita;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.statuses.StatusVisita;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;

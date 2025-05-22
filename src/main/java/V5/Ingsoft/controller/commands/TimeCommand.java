@@ -3,7 +3,7 @@ package V5.Ingsoft.controller.commands;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.running.CommandList;
+import V5.Ingsoft.controller.commands.running.list.CommandList;
 
 public class TimeCommand extends AbstractCommand {
     public TimeCommand(Controller controller) {
