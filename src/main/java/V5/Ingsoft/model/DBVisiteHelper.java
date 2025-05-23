@@ -1,5 +1,6 @@
 package V5.Ingsoft.model;
 
+import V5.Ingsoft.controller.item.interfaces.Product;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
@@ -11,7 +12,7 @@ import V5.Ingsoft.util.Payload;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBVisiteHelper extends DBAbstractHelper<Visita> {
+public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
     private final ArrayList<Visita> archivio = new ArrayList<>();
 
     public DBVisiteHelper() {

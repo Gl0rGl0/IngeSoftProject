@@ -1,11 +1,12 @@
 package V5.Ingsoft.model;
 
+import V5.Ingsoft.controller.item.interfaces.Product;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.util.Date;
 
 import java.util.ArrayList;
 
-public class DBLuoghiHelper extends DBAbstractHelper<Luogo> {
+public class DBLuoghiHelper extends DBAbstractHelper<Luogo> implements Product{
 
     public DBLuoghiHelper() {
         super(Luogo.PATH, Luogo.class);

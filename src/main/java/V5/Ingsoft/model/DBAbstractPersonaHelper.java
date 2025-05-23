@@ -7,7 +7,6 @@ import V5.Ingsoft.util.Payload;
 import java.util.ArrayList;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
-    private static final String CLASSNAME = DBAbstractPersonaHelper.class.getSimpleName(); // Added for logging
 
     public DBAbstractPersonaHelper(PersonaType personaType) {
         super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass());

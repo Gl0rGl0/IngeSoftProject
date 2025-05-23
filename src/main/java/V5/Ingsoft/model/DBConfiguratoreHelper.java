@@ -1,12 +1,12 @@
 package V5.Ingsoft.model;
 
+import V5.Ingsoft.controller.item.interfaces.Product;
 import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;
 
-public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> {
-    private static final String CLASSNAME = DBConfiguratoreHelper.class.getSimpleName(); // Added for logging
+public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore> implements Product {
 
     public DBConfiguratoreHelper() {
         super(PersonaType.CONFIGURATORE);
@@ -35,14 +35,12 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
             return false; // Do not overwrite existing configurator
         }
 
-        cachedItems.put(username, c);
         boolean success = saveJson(getPersonList());
         if (success) {
+            cachedItems.put(username, c);
             AssertionControl.logMessage("Added Configuratore: " + username, Payload.Status.INFO, SUB_CLASSNAME);
         } else {
             AssertionControl.logMessage("Failed to save JSON after adding Configuratore: " + username, Payload.Status.ERROR, SUB_CLASSNAME);
-            // Consider removing from cache if save failed?
-            // cachedItems.remove(username);
         }
         return success;
     }

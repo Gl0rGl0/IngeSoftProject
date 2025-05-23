@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public abstract class DBAbstractHelper<T> {
+    public static final String CLASSNAME = DBAbstractPersonaHelper.class.getSimpleName();
+    
     protected final Class<T> clazz;
     protected final HashMap<String, T> cachedItems = new HashMap<>();
     private final String fileJson;

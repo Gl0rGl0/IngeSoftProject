@@ -1,11 +1,13 @@
 package V5.Ingsoft.model;
 
+import V5.Ingsoft.controller.item.interfaces.Product;
 import V5.Ingsoft.util.Date;
 
 import java.time.Month;
 import java.util.ArrayList;
 
-public class DBDatesHelper {
+public class DBDatesHelper implements Product{
+    public static final String CLASSNAME = DBDatesHelper.class.getSimpleName(); 
     private final ArrayList<Date> precludedDates = new ArrayList<>();
 
     /**

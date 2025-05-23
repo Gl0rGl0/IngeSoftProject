@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import V5.Ingsoft.view.ViewSE;
-
 /**
  * Simple class to hold application settings that need to be persisted.
  */
@@ -25,11 +23,10 @@ public class AppSettings {
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
 
         if(ambitoTerritoriale != null)
-            ViewSE.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona="+maxPrenotazioniPerPersona);
+            System.out.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona="+maxPrenotazioniPerPersona);
     }
 
-    public AppSettings() {
-    }
+    public AppSettings() {}
 
     // --- Getters ---
 

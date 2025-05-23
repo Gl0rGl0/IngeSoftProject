@@ -19,6 +19,7 @@ target/
 #useless
 qodana.yaml
 *.drawio
+*.txt
 
 #gui
 # resources/

@@ -4,6 +4,7 @@ import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.*;
+import V5.Ingsoft.factory.DBHelperFactory;
 import V5.Ingsoft.util.*;
 
 import java.util.ArrayList;
@@ -20,16 +21,21 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
+    private static final DBHelperFactory factory = new DBHelperFactory();
+
     // Constructor and helper initialization
     private Model() {
-        dbConfiguratoreHelper = new DBConfiguratoreHelper();
-        dbFruitoreHelper = new DBFruitoreHelper();
-        dbVolontarioHelper = new DBVolontarioHelper();
-        dbTipoVisiteHelper = new DBTipoVisiteHelper();
-        dbVisiteHelper = new DBVisiteHelper();
-        dbLuoghiHelper = new DBLuoghiHelper();
-        dbDatesHelper = new DBDatesHelper();
-        dbIscrizionisHelper = new DBIscrizioniHelper();
+        dbConfiguratoreHelper = factory.factoryMethod(DBConfiguratoreHelper.CLASSNAME, DBConfiguratoreHelper.class);
+        dbFruitoreHelper = factory.factoryMethod(DBFruitoreHelper.CLASSNAME, DBFruitoreHelper.class);
+        dbVolontarioHelper = factory.factoryMethod(DBVolontarioHelper.CLASSNAME, DBVolontarioHelper.class);
+
+        dbTipoVisiteHelper = factory.factoryMethod(DBTipoVisiteHelper.CLASSNAME, DBTipoVisiteHelper.class);
+        dbVisiteHelper = factory.factoryMethod(DBVisiteHelper.CLASSNAME, DBVisiteHelper.class);
+
+        dbLuoghiHelper = factory.factoryMethod(DBLuoghiHelper.CLASSNAME, DBLuoghiHelper.class);
+        
+        dbDatesHelper = factory.factoryMethod(DBDatesHelper.CLASSNAME, DBDatesHelper.class);
+        dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.CLASSNAME, DBIscrizioniHelper.class);
     }
 
     public static Model getInstance() {
