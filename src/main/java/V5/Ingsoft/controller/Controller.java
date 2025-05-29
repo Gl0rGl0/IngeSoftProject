@@ -4,6 +4,10 @@ import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.*;
+import V5.Ingsoft.util.interpreter.Interpreter;
+import V5.Ingsoft.util.interpreter.InterpreterContext;
+import V5.Ingsoft.util.interpreter.RunningInterpreter;
+import V5.Ingsoft.util.interpreter.SetupInterpreter;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +22,7 @@ public class Controller {
 
     // Initially the user is a Guest (not logged in)
     public String user;
-    public Interpreter interpreter;
+    public InterpreterContext interpreter = new InterpreterContext(this);
     public Date date = new Date(); // simply sets today's date
     // Flag indicating if today is the designated day (16th or first working day after)
     // for special monthly actions (add/remove/assign/generate plan).
@@ -31,8 +35,6 @@ public class Controller {
 
         initVirtualTime();
         initDailyScheduler();
-
-        interpreter = new SetupInterpreter(this);
 
         if(db.isInitialized())
             switchInterpreter();
@@ -62,20 +64,18 @@ public class Controller {
         AssertionControl.logMessage("Attempting to execute: " + prompt, Payload.Status.INFO, this.getClass().getSimpleName());
         Payload<?> out = interpreter.interpret(prompt, getCurrentUser());
 
-        if(out != null)
-            AssertionControl.logPayload(out);
+        AssertionControl.logPayload(out);
 
         return out;
     }
 
     public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
-        this.interpreter = new RunningInterpreter(this);
-        //ViewSE.println("SETUP COMPLETED");
+        this.interpreter.switchInterpreter();
     }
 
     public boolean setupCompleted() {
-        boolean out = interpreter.doneAll();
+        boolean out = interpreter.checkSetup();
 
         if (out)
             AssertionControl.logMessage("Setup completed", Payload.Status.INFO, this.getClass().getSimpleName());
@@ -83,12 +83,12 @@ public class Controller {
         return out;
     }
 
-    public boolean haveAllBeenExecuted() {
-        return interpreter.haveAllBeenExecuted();
+    public boolean hasExecutedAllCommands() {
+        return interpreter.hasExecutedAllCommands();
     }
 
-    public boolean doneAll() {
-        return interpreter.doneAll() && db.isInitialized();
+    public boolean isSetupCompleted() {
+        return interpreter.checkSetup() && db.isInitialized();
     }
 
     public Persona getCurrentUser() {

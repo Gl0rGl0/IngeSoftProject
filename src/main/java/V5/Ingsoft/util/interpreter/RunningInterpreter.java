@@ -1,4 +1,4 @@
-package V5.Ingsoft.util;
+package V5.Ingsoft.util.interpreter;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.HelpCommand;
@@ -20,5 +20,4 @@ public class RunningInterpreter extends Interpreter {
         commandRegistry.put("collection", new CollectionManagerCommand(controller));
         commandRegistry.put("help", new HelpCommand(controller));
     }
-
 }

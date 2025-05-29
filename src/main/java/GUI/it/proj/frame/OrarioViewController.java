@@ -7,12 +7,10 @@ import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
 import V5.Ingsoft.controller.item.persone.Volontario;
-import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;

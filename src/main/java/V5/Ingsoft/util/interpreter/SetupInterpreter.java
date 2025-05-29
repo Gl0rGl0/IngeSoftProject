@@ -1,10 +1,12 @@
-package V5.Ingsoft.util;
+package V5.Ingsoft.util.interpreter;
 
 import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.commands.Command;
 import V5.Ingsoft.controller.commands.HelpCommand;
 import V5.Ingsoft.controller.commands.SetPersoneMaxCommand;
 import V5.Ingsoft.controller.commands.setup.DoneCommandSETUP;
 import V5.Ingsoft.controller.commands.setup.LoginCommandSETUP;
+import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 
 public class SetupInterpreter extends Interpreter {
 
@@ -19,4 +21,17 @@ public class SetupInterpreter extends Interpreter {
         commandRegistry.put("setmax", new SetPersoneMaxCommand(controller, false));
     }
 
+    @Override
+    public boolean hasExecutedAllCommands() {
+        for (Command c : commandRegistry.values()) {
+            if (c.getCommandInfo().equals(CommandListSETUP.DONE)) continue;
+            if (!c.hasBeenExecuted()) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isSetupCompleted() {
+        return hasExecutedAllCommands() && commandRegistry.get("done").hasBeenExecuted();
+    }
 }

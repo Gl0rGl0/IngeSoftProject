@@ -15,7 +15,7 @@ public class DoneCommandSETUP extends AbstractCommand {
 
     @Override
     public Payload<?> execute(String[] options, String[] args) {
-        if (controller.haveAllBeenExecuted()) {
+        if (controller.hasExecutedAllCommands()) {
             this.hasBeenExecuted = true;
             controller.switchInterpreter();
             return Payload.info(

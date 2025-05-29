@@ -22,7 +22,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     protected boolean isExecutable() {
-        return controller.isActionDay16 || !controller.doneAll();
+        return controller.isActionDay16 || !controller.isSetupCompleted();
     }
 
     public ListInterface getCommandInfo(){

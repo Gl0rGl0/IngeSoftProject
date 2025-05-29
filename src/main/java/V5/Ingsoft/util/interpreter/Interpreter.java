@@ -1,4 +1,4 @@
-package V5.Ingsoft.util;
+package V5.Ingsoft.util.interpreter;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AddCommand;
@@ -10,9 +10,10 @@ import V5.Ingsoft.controller.commands.ExitCommand;
 import V5.Ingsoft.controller.commands.LogoutCommand;
 import V5.Ingsoft.controller.commands.SetPersoneMaxCommand;
 import V5.Ingsoft.controller.commands.TimeCommand;
-import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Payload;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public abstract class Interpreter {
     /**
      * Parses and executes a prompt, returning a Payload.
      */
-    public Payload<?> interpret(String prompt, Persona currentUser) {
+    public final Payload<?> interpret(String prompt, Persona currentUser) {
         // 1) Empty prompt
         if (prompt == null || prompt.isBlank()) {
             Payload<String> p = Payload.warn(MSG_NO_PROMPT, LOG_NO_PROMPT);
@@ -105,18 +106,17 @@ public abstract class Interpreter {
         return out;
     }
 
+    public void switchInterpreter(){
+        
+    }
+
     /** Returns true if all non-setup commands have been executed. */
-    public boolean haveAllBeenExecuted() {
-        for (Command c : commandRegistry.values()) {
-            if (c.getCommandInfo().equals(CommandListSETUP.DONE)) continue;
-            if (!c.hasBeenExecuted()) return false;
-        }
+    public boolean hasExecutedAllCommands() {
         return true;
     }
 
     /** For setup phase, checks that "done" was executed. */
-    public boolean doneAll() {
-        if (!(this instanceof SetupInterpreter)) return true;
-        return haveAllBeenExecuted() && commandRegistry.get("done").hasBeenExecuted();
+    public boolean isSetupCompleted() {
+        return true;
     }
 }

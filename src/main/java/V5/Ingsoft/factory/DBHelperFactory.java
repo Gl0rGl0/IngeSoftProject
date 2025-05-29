@@ -14,7 +14,7 @@ import V5.Ingsoft.model.DBTipoVisiteHelper;
 import V5.Ingsoft.model.DBVisiteHelper;
 import V5.Ingsoft.model.DBVolontarioHelper;
 
-public class DBHelperFactory implements BaseFactory {
+public final class DBHelperFactory implements BaseFactory {
 
     private static final Map<String, Supplier<? extends Product>> registry = new HashMap<>();
 

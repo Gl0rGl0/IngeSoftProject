@@ -1,12 +1,10 @@
 package V5.Ingsoft.util;
 
-import V5.Ingsoft.view.ViewSE;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class AssertionControl {
+public final class AssertionControl {
     public final static String VERSION = "V5";
     private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log";
     private static final String LOG_PAYLOAD = JsonStorage.BASE_PATH + "payload.log";
@@ -15,7 +13,7 @@ public class AssertionControl {
      * Prints a message to the standard view.
      */
     public static void print(Object out) {
-        ViewSE.println(out);
+        System.out.println(out);
     }
 
     /**
@@ -25,7 +23,7 @@ public class AssertionControl {
      * @param className origin class simple name
      * @return true if written successfully
      */
-    public static boolean logMessage(String message, Payload.Status level, String className) {
+    synchronized public static boolean logMessage(String message, Payload.Status level, String className) {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {
             String type = switch (level) {
                 case ERROR -> "ERROR";
@@ -55,7 +53,8 @@ public class AssertionControl {
      * @param className origin class simple name
      * @return true if written successfully
      */
-    public static boolean logPayload(Payload<?> p) {
+    synchronized public static boolean logPayload(Payload<?> p) {
+        if(p == null) return true;
         try (FileWriter fw = new FileWriter(LOG_PAYLOAD, true)) {
             fw.write(p.toString() + "\n");
         } catch (IOException e) {

@@ -1,6 +1,5 @@
 package V5.Ingsoft.util;
 
-import V5.Ingsoft.view.ViewSE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -10,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class JsonStorage {
+public final class JsonStorage {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     public static String BASE_PATH = "data/";
@@ -20,7 +19,7 @@ public class JsonStorage {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // if (!new File(BASE_PATH).exists()) {
         //     BASE_PATH = System.getProperty("java.io.tmpdir") + "/ingesoft/";
-        //     ViewSE.println("'data/' folder not available. Using " + BASE_PATH + " for saving.");
+        //     System.out.println("'data/' folder not available. Using " + BASE_PATH + " for saving.");
         //     new File(BASE_PATH).mkdirs();
         // }
         // bello ma non balla
@@ -41,7 +40,7 @@ public class JsonStorage {
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
             AssertionControl.logMessage("Error loading JSON file", Payload.Status.ERROR, "JsonStorage");
-            ViewSE.println("Error loading JSON file: " + e.getMessage());
+            System.out.println("Error loading JSON file: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -53,7 +52,7 @@ public class JsonStorage {
             return true;
         } catch (IOException e) {
             AssertionControl.logMessage("Error saving JSON file", Payload.Status.ERROR, "JsonStorage");
-            ViewSE.println("Error saving JSON file: " + e.getMessage());
+            System.out.println("Error saving JSON file: " + e.getMessage());
             return false;
         }
     }
@@ -64,7 +63,7 @@ public class JsonStorage {
                     .writeValue(new File(BASE_PATH + fileName + ".json"), new ArrayList<T>());
         } catch (IOException e) {
             AssertionControl.logMessage("Error clearing JSON file", Payload.Status.ERROR, "JsonStorage");
-            ViewSE.println("Error clearing JSON file: " + e.getMessage());
+            System.out.println("Error clearing JSON file: " + e.getMessage());
         }
     }
 
@@ -86,7 +85,7 @@ public class JsonStorage {
             return objectMapper.readValue(file, clazz);
         } catch (IOException e) {
             AssertionControl.logMessage("Error loading JSON object file: " + filePath, Payload.Status.ERROR, "JsonStorage");
-            ViewSE.println("Error loading JSON object file: " + e.getMessage());
+            System.out.println("Error loading JSON object file: " + e.getMessage());
             return null;
         }
     }
@@ -105,7 +104,7 @@ public class JsonStorage {
             return true;
         } catch (IOException e) {
             AssertionControl.logMessage("Error saving JSON object file: " + filePath, Payload.Status.ERROR, "JsonStorage");
-            ViewSE.println("Error saving JSON object file: " + e.getMessage());
+            System.out.println("Error saving JSON object file: " + e.getMessage());
             return false;
         }
     }

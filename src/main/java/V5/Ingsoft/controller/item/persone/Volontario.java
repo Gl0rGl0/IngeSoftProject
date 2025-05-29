@@ -4,7 +4,6 @@ import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.view.ViewSE;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -73,7 +72,7 @@ public class Volontario extends Persona {
      */
     public Payload.Status setAvailability(Date oggi, Date disp, boolean toAdd) {
         if (Date.monthsDifference(oggi, disp) > 1) {
-            ViewSE.println("Errore, non puoi inserire una data al di fuori del mese successivo");
+            System.out.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return Payload.Status.ERROR;
         }
 

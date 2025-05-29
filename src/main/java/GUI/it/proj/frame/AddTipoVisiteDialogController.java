@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.decoration.Decorator;
 
 import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.unitfx.IntegerInputField;

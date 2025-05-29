@@ -18,7 +18,7 @@ public class ViewSE implements Runnable {
         this.controller = controller;
     }
 
-    public static void payloadOut(Payload out){
+    public static void payloadOut(Payload<?> out){
         switch (out.getCommand()) {
             case CommandList.EXIT -> {
                 println("Program terminated. Goodbye!");
@@ -62,7 +62,7 @@ public class ViewSE implements Runnable {
             Model.setAmbito(ambito);
         }
 
-        while (!controller.doneAll())
+        while (!controller.isSetupCompleted())
             payloadOut(controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> ")));
 
         AssertionControl.logMessage("Setup completed", Payload.Status.INFO, this.getClass().getSimpleName());

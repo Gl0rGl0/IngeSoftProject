@@ -2,8 +2,6 @@ package GUI.it.proj.frame;
 
 import java.io.IOException;
 
-import com.dlsc.gemsfx.EnhancedLabel;
-
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
