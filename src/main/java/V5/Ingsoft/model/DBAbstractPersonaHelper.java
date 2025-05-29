@@ -18,7 +18,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         // Add null checks for robustness at the beginning
         if (user == null || psw == null) {
             // Log this? Should not happen if called from login which checks args.
-            AssertionControl.logMessage("Attempted to secure password with null user or psw.", Payload.Status.ERROR, CLASSNAME + ".securePsw");
+            AssertionControl.logMessage("Attempted to secure password with null user or psw.", Payload.Status.ERROR, "SecurePsw");
             // Returning a default or throwing might be better depending on usage context
             return "invalid_input_hash"; // Return a default non-null string
         }
@@ -31,7 +31,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     synchronized public boolean removePersona(String username) {
-        final String SUB_CLASSNAME = CLASSNAME + ".removePersona<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".removePersona<" + clazz.getSimpleName() + ">";
         if (username == null || username.trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to remove persona with null or empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
@@ -54,7 +54,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public boolean changePassword(String username, String newPsw) {
-        final String SUB_CLASSNAME = CLASSNAME + ".changePassword<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".changePassword<" + clazz.getSimpleName() + ">";
         if (username == null || username.trim().isEmpty() || newPsw == null || newPsw.isEmpty()) {
             AssertionControl.logMessage("Attempted to change password with null/empty username or new password.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
@@ -84,7 +84,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public T getPersona(String user) {
-        final String SUB_CLASSNAME = CLASSNAME + ".getPersona<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".getPersona<" + clazz.getSimpleName() + ">";
         if (user == null || user.trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to get persona with null or empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return null;
@@ -94,7 +94,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     // Login logic seems reasonable, but add null checks
     public Payload<Persona> login(String user, String psw) {
-        final String SUB_CLASSNAME = CLASSNAME + ".login<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".login<" + clazz.getSimpleName() + ">";
         if (user == null || user.trim().isEmpty() || psw == null || psw.isEmpty()) {
             return Payload.warn(null, "Attempted login with null/empty username or password.");
         }
@@ -129,9 +129,9 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public void close() {
-        final String SUB_CLASSNAME = CLASSNAME + ".close<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".close<" + clazz.getSimpleName() + ">";
         // Consider adding logging
         AssertionControl.logMessage("Closing helper and saving data for " + clazz.getSimpleName(), Payload.Status.INFO, SUB_CLASSNAME);
         saveJson(getPersonList());
     }
-} // End of class
+}

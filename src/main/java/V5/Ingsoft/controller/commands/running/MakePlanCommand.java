@@ -38,7 +38,7 @@ public class MakePlanCommand extends AbstractCommand {
                 "Internal error: dependencies missing.",
                 "Date or db null");
         }
-        if (!controller.isVolunteerCollectionOpen()) {
+        if (controller.isVolunteerCollectionOpen()) {
             return Payload.warn(
                 "Cannot make plan while collection is open.",
                 "Collection still open");

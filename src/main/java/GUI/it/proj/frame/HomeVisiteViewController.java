@@ -15,9 +15,12 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     @FXML
     private ListView<Visita> listVisite;
 
+    VisitaIscrizioneDialogController vicontroller;
+
     @FXML
     private void initialize() {
         VBox.setVgrow(listVisite, Priority.ALWAYS);
+        vicontroller = new VisitaIscrizioneDialogController();
 
         listVisite.setCellFactory(e -> new Cell<Visita>(this, TipoVisiteViewController.ID));
         refreshItems();
@@ -28,4 +31,10 @@ public class HomeVisiteViewController implements ListBase<Visita> {
         listVisite.getItems().clear();
         listVisite.getItems().addAll(Launcher.controller.getDB().dbVisiteHelper.getVisiteProposte());
     }
+
+    public void closeDialog() {
+        throw new UnsupportedOperationException("Unimplemented method 'closeDialog'");
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package V4.ingsoft;
+package V5.ingsoft;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -220,7 +220,7 @@ public class UserActionsTests extends BaseTest {
     @Test
     public void testUserCancelSubscriptionSuccess() {
         // Arrange
-        String username = "userCancel";
+        // String username = "userCancel";
         String visitUID = "TVUser_10-07-2025"; // Hypothetical Visit UID
         // TODO: Ensure visit exists in 'proposta' state.
         controller.interpreter("assign " + visitUID + " 2"); // Subscribe

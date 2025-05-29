@@ -16,31 +16,31 @@ import V5.Ingsoft.model.DBVolontarioHelper;
 
 public final class DBHelperFactory implements BaseFactory {
 
-    private static final Map<String, Supplier<? extends Product>> registry = new HashMap<>();
+    private static final Map<Class<? extends Product>, Supplier<? extends Product>> registry = new HashMap<>();
 
     static {
-        registry.put(DBConfiguratoreHelper.CLASSNAME, DBConfiguratoreHelper::new);
-        registry.put(DBVolontarioHelper.CLASSNAME, DBVolontarioHelper::new);
-        registry.put(DBFruitoreHelper.CLASSNAME, DBFruitoreHelper::new);
-        registry.put(DBTipoVisiteHelper.CLASSNAME, DBTipoVisiteHelper::new);
-        registry.put(DBVisiteHelper.CLASSNAME, DBVisiteHelper::new);
-        registry.put(DBLuoghiHelper.CLASSNAME, DBLuoghiHelper::new);
-        registry.put(DBIscrizioniHelper.CLASSNAME, DBIscrizioniHelper::new);
-        registry.put(DBDatesHelper.CLASSNAME, DBDatesHelper::new);
+        registry.put(DBConfiguratoreHelper.class, DBConfiguratoreHelper::new);
+        registry.put(DBVolontarioHelper.class, DBVolontarioHelper::new);
+        registry.put(DBFruitoreHelper.class, DBFruitoreHelper::new);
+        registry.put(DBTipoVisiteHelper.class, DBTipoVisiteHelper::new);
+        registry.put(DBVisiteHelper.class, DBVisiteHelper::new);
+        registry.put(DBLuoghiHelper.class, DBLuoghiHelper::new);
+        registry.put(DBIscrizioniHelper.class, DBIscrizioniHelper::new);
+        registry.put(DBDatesHelper.class, DBDatesHelper::new);
     }
 
     @Override
-    public <T extends Product> T factoryMethod(String type, Class<T> clazz) {
-        Supplier<? extends Product> supplier = registry.get(type);
+    public <T extends Product> T factoryMethod(Class<T> clazz) {
+        Supplier<? extends Product> supplier = registry.get(clazz);
         if (supplier == null) {
             throw new UnsupportedOperationException(
-                "Factory non implementata per il tipo: " + type
+                "Factory non implementata per il tipo: " + clazz.getSimpleName()
             );
         }
         Product p = supplier.get();
         if (!clazz.isInstance(p)) {
             throw new ClassCastException(
-                "Factory ha restituito un tipo diverso da " + clazz.getSimpleName()
+                "Factory ha restituito un tipo diverso da " + clazz.getSimpleName() + "( " + p.getClass().getSimpleName() + " )"
             );
         }
         return clazz.cast(p);

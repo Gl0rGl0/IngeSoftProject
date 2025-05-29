@@ -4,11 +4,7 @@ import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.*;
-import V5.Ingsoft.util.interpreter.Interpreter;
 import V5.Ingsoft.util.interpreter.InterpreterContext;
-import V5.Ingsoft.util.interpreter.RunningInterpreter;
-import V5.Ingsoft.util.interpreter.SetupInterpreter;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 

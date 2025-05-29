@@ -1,4 +1,4 @@
-package V4.ingsoft;
+package V5.ingsoft;
 
 import V4.Ingsoft.controller.item.persone.PersonaType;
 import V4.Ingsoft.model.Model;

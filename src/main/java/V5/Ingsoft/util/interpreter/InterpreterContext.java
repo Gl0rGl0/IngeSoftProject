@@ -11,7 +11,6 @@ public class InterpreterContext {
     public InterpreterContext(Controller c){
         this.controller = c;
 
-        c.setupCompleted();
         current = new SetupInterpreter(c);
     }
 
@@ -30,6 +29,6 @@ public class InterpreterContext {
     }
 
     public Payload<?> interpret(String prompt, Persona currentUser) {
-        return controller.interpreter(prompt);
+        return current.interpret(prompt, currentUser);
     }
 }

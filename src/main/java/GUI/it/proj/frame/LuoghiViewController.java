@@ -35,7 +35,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
 
     @Override
     public void removeItem(String luogoTitle) {
-        Payload res = Launcher.controller.interpreter("remove -L \"" + luogoTitle + "\"");
+        Payload<?> res = Launcher.controller.interpreter("remove -L \"" + luogoTitle + "\"");
 
         if(res == null || res.getStatus() == Status.ERROR){
             Launcher.toast(res);
@@ -55,7 +55,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
             out.append("\"").append(s).append("\" ");
         }
 
-        Payload res = Launcher.controller.interpreter("add -L " + out.toString());
+        Payload<?> res = Launcher.controller.interpreter("add -L " + out.toString());
         
         if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
@@ -74,7 +74,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
     }
 
     public void refreshItems() {
-        Payload res = Launcher.controller.interpreter("list -L");
+        Payload<?> res = Launcher.controller.interpreter("list -L");
 
         if(res != null && res.getStatus() == Status.INFO){
             this.listLuoghi.getItems().clear();

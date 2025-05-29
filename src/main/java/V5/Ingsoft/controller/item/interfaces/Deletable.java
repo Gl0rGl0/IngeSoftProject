@@ -55,7 +55,7 @@ public abstract class Deletable implements Informable{
 
     @JsonIgnore
     public boolean isUsable(){
-        return si == StatusItem.ACTIVE || si == StatusItem.PENDING_REMOVE;
+        return si == StatusItem.ACTIVE;
     }
 
     public void setStatus(StatusItem si){

@@ -25,17 +25,17 @@ public class Model {
 
     // Constructor and helper initialization
     private Model() {
-        dbConfiguratoreHelper = factory.factoryMethod(DBConfiguratoreHelper.CLASSNAME, DBConfiguratoreHelper.class);
-        dbFruitoreHelper = factory.factoryMethod(DBFruitoreHelper.CLASSNAME, DBFruitoreHelper.class);
-        dbVolontarioHelper = factory.factoryMethod(DBVolontarioHelper.CLASSNAME, DBVolontarioHelper.class);
+        dbConfiguratoreHelper = factory.factoryMethod(DBConfiguratoreHelper.class);
+        dbFruitoreHelper = factory.factoryMethod(DBFruitoreHelper.class);
+        dbVolontarioHelper = factory.factoryMethod(DBVolontarioHelper.class);
 
-        dbTipoVisiteHelper = factory.factoryMethod(DBTipoVisiteHelper.CLASSNAME, DBTipoVisiteHelper.class);
-        dbVisiteHelper = factory.factoryMethod(DBVisiteHelper.CLASSNAME, DBVisiteHelper.class);
+        dbTipoVisiteHelper = factory.factoryMethod(DBTipoVisiteHelper.class);
+        dbVisiteHelper = factory.factoryMethod(DBVisiteHelper.class);
 
-        dbLuoghiHelper = factory.factoryMethod(DBLuoghiHelper.CLASSNAME, DBLuoghiHelper.class);
+        dbLuoghiHelper = factory.factoryMethod(DBLuoghiHelper.class);
         
-        dbDatesHelper = factory.factoryMethod(DBDatesHelper.CLASSNAME, DBDatesHelper.class);
-        dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.CLASSNAME, DBIscrizioniHelper.class);
+        dbDatesHelper = factory.factoryMethod(DBDatesHelper.class);
+        dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.class);
     }
 
     public static Model getInstance() {

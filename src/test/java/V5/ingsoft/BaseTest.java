@@ -1,4 +1,4 @@
-package V4.ingsoft;
+package V5.ingsoft;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.controller.item.persone.PersonaType;
@@ -23,21 +23,11 @@ public class BaseTest {
     // Helper to reset data files before each test
     protected void resetDataFiles() {
         // Delete existing files to ensure clean state for setup
-        try {
-            Files.deleteIfExists(Paths.get(configPath));
-        } catch (IOException e) { /* Ignore */ }
-        try {
-            Files.deleteIfExists(Paths.get(volontariPath));
-        } catch (IOException e) { /* Ignore */ }
-        try {
-            Files.deleteIfExists(Paths.get(fruitoriPath));
-        } catch (IOException e) { /* Ignore */ }
-        try {
-            Files.deleteIfExists(Paths.get(luoghiPath));
-        } catch (IOException e) { /* Ignore */ }
-        try {
-            Files.deleteIfExists(Paths.get(tipiVisitaPath));
-        } catch (IOException e) { /* Ignore */ }
+        try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
+        try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
+        try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
+        try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
+        try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
         Model.getInstance().clearAll();
         Model.appSettings = null;
         Model.instance = null;

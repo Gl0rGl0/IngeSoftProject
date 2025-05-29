@@ -23,7 +23,7 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
     }
 
     public boolean addConfiguratore(Configuratore c) {
-        final String SUB_CLASSNAME = CLASSNAME + ".addConfiguratore";
+        final String SUB_CLASSNAME = getClassName() + ".addConfiguratore";
         if (c == null || c.getUsername() == null || c.getUsername().trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to add null Configuratore or Configuratore with null/empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
