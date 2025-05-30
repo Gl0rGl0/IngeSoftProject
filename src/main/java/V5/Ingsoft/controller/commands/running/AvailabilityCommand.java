@@ -4,6 +4,7 @@ import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
@@ -49,7 +50,7 @@ public class AvailabilityCommand extends AbstractCommand {
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                if (controller.getDB().dbDatesHelper.getPrecludedDates().contains(d)) {
+                if (Model.getInstance().dbDatesHelper.getPrecludedDates().contains(d)) {
                     feedback.append("Date ").append(d).append(" is precluded and was ignored\n");
                     continue;
                 }

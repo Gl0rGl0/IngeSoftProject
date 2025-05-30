@@ -17,7 +17,7 @@ import V5.Ingsoft.view.ViewSE;
 // -> Benefit: GUI where the string is sent directly to the controller without
 // going through the keyboard
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Model model = Model.getInstance();
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
@@ -35,21 +35,18 @@ public class Main {
                 default -> {} // -B o vuoto
             }
         
-        //initDimostrazione(controller);
-        //System.out.println();
-
-        // initDimostrazione(controller);
-        // System.out.println();
+        initDimostrazione(controller);
+        System.out.println();
         view.run();
     }
 
     private static void resetAll(Controller controller) {
-        controller.getDB().clearAll();
+        Model.getInstance().clearAll();
         Model.deleteInstance();
         controller.setDB(Model.getInstance());
     }
 
-    private static void initDimostrazione(Controller controller) {
+    private static void initDimostrazione(Controller controller) throws Exception {
         resetAll(controller);
         Initer.dimostrazione(controller);
     }

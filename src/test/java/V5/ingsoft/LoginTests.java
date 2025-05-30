@@ -1,7 +1,9 @@
 package V5.ingsoft;
 
-import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,15 +84,15 @@ public class LoginTests extends BaseTest {
         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be of type CONFIGURATORE.");
 
         //Verify that config_first can't do anything
-        int nConfig = controller.getDB().dbConfiguratoreHelper.getPersonList().size();
+        int nConfig = Model.getInstance().dbConfiguratoreHelper.getItems().size();
         controller.interpreter("add -c dont add");
 
-        assertEquals(nConfig, controller.getDB().dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
+        assertEquals(nConfig, Model.getInstance().dbConfiguratoreHelper.getItems().size(), "Size of configuratore should remain the same");
         // Act: Change password
         controller.interpreter("changepsw newSecurePassword");
         controller.interpreter("add -c dont add");
 
-        assertEquals(nConfig + 1, controller.getDB().dbConfiguratoreHelper.getPersonList().size(), "Size of configuratore should remain the same");
+        assertEquals(nConfig + 1, Model.getInstance().dbConfiguratoreHelper.getItems().size(), "Size of configuratore should remain the same");
 
         // Verify login with new password
         controller.interpreter("logout");
@@ -193,7 +195,7 @@ public class LoginTests extends BaseTest {
         // Act
         controller.interpreter("login volont_first password");
 
-        Volontario v = controller.getDB().dbVolontarioHelper.getPersona("volont_first");
+        Volontario v = Model.getInstance().dbVolontarioHelper.getItem("volont_first");
         assertNotNull(v, "Volontario should not be null");
 
         // Assert

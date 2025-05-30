@@ -7,6 +7,8 @@ import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.statuses.StatusVisita;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class ListCommand extends AbstractCommand {
     
     private Payload<Collection<Luogo>> listLuoghi() {
         ArrayList<Luogo> out = new ArrayList<>();
-        for (Luogo l : controller.getDB().dbLuoghiHelper.getLuoghi()) {
+        for (Luogo l : Model.getInstance().dbLuoghiHelper.getItems()) {
             if(!l.isUsable()) continue;
             out.add(l);
         }
@@ -50,7 +52,7 @@ public class ListCommand extends AbstractCommand {
 
     private Payload<Collection<Volontario>> listVolontari() {
         ArrayList<Volontario> out = new ArrayList<>();
-        for (Volontario v : controller.getDB().dbVolontarioHelper.getPersonList()) {
+        for (Volontario v : Model.getInstance().dbVolontarioHelper.getItems()) {
             // if(!v.isUsable()) continue;
             out.add(v);
         }
@@ -60,7 +62,7 @@ public class ListCommand extends AbstractCommand {
 
     private Payload<Collection<TipoVisita>> listTipoVisite() {
         ArrayList<TipoVisita> out = new ArrayList<>();
-        for (TipoVisita t : controller.getDB().dbTipoVisiteHelper.getTipiVisita()) {
+        for (TipoVisita t : Model.getInstance().dbTipoVisiteHelper.getItems()) {
             // if(!t.isUsable()) continue;
             out.add(t);
         }
@@ -72,23 +74,15 @@ public class ListCommand extends AbstractCommand {
         char sub = (options.length > 1 && options[1] != null && !options[1].isEmpty())
             ? options[1].charAt(0) : 'a';
         return switch (sub) {
-            case 'a' -> listAllType();
-            case 'p' -> Payload.<Collection<Visita>>info(controller.getDB().dbVisiteHelper.getVisiteProposte(), "List of proposed visits returned");
-            case 'c' -> Payload.<Collection<Visita>>info(controller.getDB().dbVisiteHelper.getCompletate(), "List of completed visits returned");
-            case 'C' -> Payload.<Collection<Visita>>info(controller.getDB().dbVisiteHelper.getVisiteCancellate(), "List of cancelled visits returned");
-            case 'e' -> Payload.<Collection<Visita>>info(controller.getDB().dbVisiteHelper.getVisiteEffettuate(), "List of performed visits returned");
+            case 'a' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getItems()           , "List of all visit categories returned");
+            case 'p' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteProposte()  , "List of proposed visits returned");
+            case 'c' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteComplete()  , "List of complete visits returned");
+            case 'C' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteConfermate(), "List of confirmed visits returned");
+            case 'd' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteCancellate(), "List of cancelled visits returned");
+            case 'e' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteEffettuate(), "List of performed visits returned");
             default  -> Payload.warn(
                             "Option '" + sub + "' not recognized for 'list V'", 
                             "Unknown sub-option '" + sub + "'");
         };
-    }
-
-    private Payload<Collection<Collection<Visita>>> listAllType() {
-        ArrayList<Collection<Visita>> out =new ArrayList<>();
-        out.add(controller.getDB().dbVisiteHelper.getVisiteProposte());
-        out.add(controller.getDB().dbVisiteHelper.getCompletate());
-        out.add(controller.getDB().dbVisiteHelper.getVisiteCancellate());
-        out.add(controller.getDB().dbVisiteHelper.getVisiteEffettuate());
-        return Payload.info(out,"Returned list of all visit categories");
     }
 }

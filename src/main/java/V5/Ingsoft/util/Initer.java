@@ -85,7 +85,7 @@ public class Initer {
         if (c.date.getDay() >= 16)
             meseNum = meseNum.plus(1);
 
-        for (Volontario v : c.getDB().dbVolontarioHelper.getPersonList()) {
+        for (Volontario v : Model.getInstance().dbVolontarioHelper.getItems()) {
             for (int i = 0; i < GGDISP; i++)
                 try {
                     v.setAvailability(c.date, new Date(String.format("%d/%d/2025",
@@ -97,7 +97,7 @@ public class Initer {
     }
 
     public static void setupPhase(Controller controller) {
-        controller.getDB();
+        Model.getInstance();
         Model.setAmbito("Brescia");
         controller.interpreter("time -s 1/2/2025");
 
@@ -122,7 +122,7 @@ public class Initer {
         controller.interpreter("time -s 16/5/2025");
     }
 
-    public static void dimostrazione(Controller controller) {
+    public static void dimostrazione(Controller controller) throws Exception {
         setupPhase(controller);
         //è il 16 aprile
 

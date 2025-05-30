@@ -5,6 +5,7 @@ import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 public class LoginCommandSETUP extends AbstractCommand {
@@ -26,7 +27,7 @@ public class LoginCommandSETUP extends AbstractCommand {
                 "Already logged in. Please logout to switch accounts.",
                 "LoginCommandSETUP: user already logged in");
         }
-        Payload<Persona> result = controller.getDB().login(args[0], args[1]);
+        Payload<Persona> result = Model.getInstance().login(args[0], args[1]);
         if (result.getStatus() == Payload.Status.ERROR) {
             return result;
         }

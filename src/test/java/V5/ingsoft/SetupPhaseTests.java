@@ -91,8 +91,8 @@ public class SetupPhaseTests extends BaseTest {
         controller.interpreter("add -L TestPlace \"Test Description\" 10.1,20.2"); // Correct setup command
 
         // Assert
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should exist after adding.");
-        assertEquals("Test Description", controller.getDB().dbLuoghiHelper.findLuogo("TestPlace").getDescription());
+        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should exist after adding.");
+        assertEquals("Test Description", Model.getInstance().dbLuoghiHelper.findLuogo("TestPlace").getDescription());
         // Could also check coordinates if GPS class has getters/equals
     }
 
@@ -105,8 +105,8 @@ public class SetupPhaseTests extends BaseTest {
         controller.interpreter("add -L Place2 \"Address based location\" \"123 Main St, City\""); // Correct setup command (assuming GPS string can be address)
 
         // Assert
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("Place2"), "Place2 should exist after adding with address.");
-        assertEquals("Address based location", controller.getDB().dbLuoghiHelper.findLuogo("Place2").getDescription());
+        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("Place2"), "Place2 should exist after adding with address.");
+        assertEquals("Address based location", Model.getInstance().dbLuoghiHelper.findLuogo("Place2").getDescription());
         // Could check GPS object if it stores the address string
     }
 
@@ -120,8 +120,8 @@ public class SetupPhaseTests extends BaseTest {
         controller.interpreter("add -L TestPlace \"Second Place\" 30.3,40.4");
 
         // Assert
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should still exist.");
-        assertEquals("First Place", controller.getDB().dbLuoghiHelper.findLuogo("TestPlace").getDescription(), "Place1 description should not change on duplicate add attempt.");
+        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("TestPlace"), "TestPlace should still exist.");
+        assertEquals("First Place", Model.getInstance().dbLuoghiHelper.findLuogo("TestPlace").getDescription(), "Place1 description should not change on duplicate add attempt.");
     }
 
     @Test
@@ -134,7 +134,7 @@ public class SetupPhaseTests extends BaseTest {
 
         // Assert
         // Assuming empty title is invalid
-        assertNull(controller.getDB().dbLuoghiHelper.findLuogo(""), "Place with empty title should not be added.");
+        assertNull(Model.getInstance().dbLuoghiHelper.findLuogo(""), "Place with empty title should not be added.");
     }
 
     // UC9 - Associazione TipoVisita-Luogo (Setup) is implicitly tested via 'add tipovisita' tests.
@@ -184,7 +184,7 @@ public class SetupPhaseTests extends BaseTest {
         assertFalse(controller.setupCompleted(), "Setup should not be complete if luogo is missing.");
         // Verify luogo can still be added
         controller.interpreter("add -L PlaceAfterFail \"Added after fail\" 1.1:2.2");
-        assertNotNull(controller.getDB().dbLuoghiHelper.findLuogo("PlaceAfterFail"), "Should be able to add luogo if 'done' failed.");
+        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("PlaceAfterFail"), "Should be able to add luogo if 'done' failed.");
     }
 
 }

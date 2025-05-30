@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import V5.Ingsoft.controller.item.interfaces.Product;
+import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
 import V5.Ingsoft.model.DBConfiguratoreHelper;
 import V5.Ingsoft.model.DBDatesHelper;
 import V5.Ingsoft.model.DBFruitoreHelper;
@@ -16,7 +16,7 @@ import V5.Ingsoft.model.DBVolontarioHelper;
 
 public final class DBHelperFactory implements BaseFactory {
 
-    private static final Map<Class<? extends Product>, Supplier<? extends Product>> registry = new HashMap<>();
+    private static final Map<Class<? extends DBHelperInterface<?>>, Supplier<? extends DBHelperInterface<?>>> registry = new HashMap<>();
 
     static {
         registry.put(DBConfiguratoreHelper.class, DBConfiguratoreHelper::new);
@@ -30,14 +30,14 @@ public final class DBHelperFactory implements BaseFactory {
     }
 
     @Override
-    public <T extends Product> T factoryMethod(Class<T> clazz) {
-        Supplier<? extends Product> supplier = registry.get(clazz);
+    public <T extends DBHelperInterface<?>> T factoryMethod(Class<T> clazz) {
+        Supplier<? extends DBHelperInterface<?>> supplier = registry.get(clazz);
         if (supplier == null) {
             throw new UnsupportedOperationException(
                 "Factory non implementata per il tipo: " + clazz.getSimpleName()
             );
         }
-        Product p = supplier.get();
+        DBHelperInterface<?> p = supplier.get();
         if (!clazz.isInstance(p)) {
             throw new ClassCastException(
                 "Factory ha restituito un tipo diverso da " + clazz.getSimpleName() + "( " + p.getClass().getSimpleName() + " )"

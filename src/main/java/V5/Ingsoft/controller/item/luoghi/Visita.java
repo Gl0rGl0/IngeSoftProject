@@ -1,8 +1,9 @@
 package V5.Ingsoft.controller.item.luoghi;
 
-import V5.Ingsoft.controller.item.interfaces.Informable;
+import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.statuses.StatusVisita;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -13,35 +14,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Visita implements Informable{
+public class Visita extends Deletable{
     @JsonIgnore
     public static final String PATH = "archivio-visite";
     @JsonIgnore
     private final ArrayList<Iscrizione> fruitori = new ArrayList<>();
     private final Date date;
-    private final String UID;
     @JsonIgnore
     private TipoVisita tipo;
-    @JsonIgnore
-    private String volontarioUID;
     private StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
 
     @JsonCreator
     public Visita(
             @JsonProperty("data") Date data,
             @JsonProperty("UID") String UID,
-            @JsonProperty("stato") StatusVisita status) {
+            @JsonProperty("stato") StatusVisita status) throws Exception{
+        super(UID);
 
+        this.tipo = Model.getInstance().dbTipoVisiteHelper.getItem(getTipoVisitaUID());
         this.date = data;
-        this.UID = UID;
         this.status = status;
+
+        if(tipo == null) throw new Exception("TipoVisita not found.");
     }
 
-    public Visita(TipoVisita tipo, Date date, String uidVolontario) {
+    public Visita(TipoVisita tipo, Date date, String uidVolontario) throws Exception{
+        super(String.format("%s@%s@%s",tipo.getUID(), date.toString(), uidVolontario));
+
         this.tipo = tipo;
         this.date = date;
-        this.volontarioUID = uidVolontario;
-        this.UID = tipo.getUID() + date.toString() + uidVolontario;
     }
 
     public StatusVisita getStatus() {
@@ -52,16 +53,16 @@ public class Visita implements Informable{
         this.status = status;
     }
 
-    public String getUidVolontario() {
-        return this.volontarioUID;
-    }
-
     public String getUID() {
         return this.UID;
     }
 
-    public String tipoVisitaUID() {
-        return this.tipo.getUID();
+    public String getVolontarioUID() {
+        return this.UID.split("@")[2];
+    }
+
+    public String getTipoVisitaUID() {
+        return this.UID.split("@")[0];
     }
 
     public TipoVisita getTipoVisita() {
@@ -98,7 +99,7 @@ public class Visita implements Informable{
         if (getCurrentNumber() == tipo.getNumMaxPartecipants()) {
             setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
-        return i.getUIDIscrizione();
+        return i.getUID();
     }
 
     /**
@@ -128,7 +129,7 @@ public class Visita implements Informable{
         int capienzaAttuale = getCurrentNumber();
         for (Iscrizione i : fruitori) {
             // Ensure null safety for user comparison
-            if (userSubUID != null && userSubUID.equals(i.getUIDIscrizione())) {
+            if (userSubUID != null && userSubUID.equals(i.getUID())) {
                 boolean removed = fruitori.remove(i);
                 if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed
@@ -156,7 +157,7 @@ public class Visita implements Informable{
             + "\n\tDate: " + date
             + "\n\tTime: " + tipo.getInitTime()
             + "\n\tTicket required: " + tipo.isFree()
-            + "\n\tVolunteer: " + getUidVolontario()
+            + "\n\tVolunteer: " + getVolontarioUID()
             + "\n";
     }
 
@@ -172,7 +173,7 @@ public class Visita implements Informable{
      */
     public void removeIscrizioneByUID(String uidIscrizione) {
         int capienzaAttuale = getCurrentNumber();
-        boolean removed = fruitori.removeIf(iscrizione -> iscrizione.getUIDIscrizione().equals(uidIscrizione));
+        boolean removed = fruitori.removeIf(iscrizione -> iscrizione.getUID().equals(uidIscrizione));
 
         // If an iscrizione was removed and the visit was previously full (COMPLETED),
         // it should become PROPOSED again.

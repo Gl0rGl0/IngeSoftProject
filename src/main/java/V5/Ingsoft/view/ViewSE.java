@@ -53,8 +53,8 @@ public class ViewSE implements Runnable {
     public void run() {
         println(MESSAGGIO_START);
 
-        controller.getDB();
-        if (!Model.appSettings.isAmbitoSet()) {
+        Model.getInstance();
+        if (!Model.getInstance().appSettings.isAmbitoSet()) {
             String ambito;
             do {
                 ambito = ViewSE.read("Inserisci l'ambito territoriale per iniziare la fase di setup dell'applicazione: ");

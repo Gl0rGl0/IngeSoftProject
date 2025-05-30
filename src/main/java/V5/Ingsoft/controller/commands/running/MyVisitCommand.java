@@ -9,6 +9,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 
@@ -36,7 +37,7 @@ public class MyVisitCommand extends AbstractCommand {
 
     private Payload<?> listFruitore() {
         String userF = controller.getCurrentUser().getUsername();
-        Fruitore f = controller.getDB().dbFruitoreHelper.getPersona(userF);
+        Fruitore f = Model.getInstance().dbFruitoreHelper.getPersona(userF);
         if (f == null) {
             return Payload.error(
                 "User data not found.",
@@ -44,7 +45,7 @@ public class MyVisitCommand extends AbstractCommand {
         }
 
         ArrayList<Iscrizione> out = new ArrayList<>();
-        for (Iscrizione i : controller.getDB().dbIscrizionisHelper.getIscrizioni()) {
+        for (Iscrizione i : Model.getInstance().dbIscrizionisHelper.getItems()) {
             if(i.getUIDFruitore().equals(f.getUsername()))
                 out.add(i);
         }
@@ -73,7 +74,7 @@ public class MyVisitCommand extends AbstractCommand {
         }
 
         ArrayList<TipoVisita> out = new ArrayList<>();
-        for (TipoVisita tv : controller.getDB().dbTipoVisiteHelper.getTipiVisita()) {
+        for (TipoVisita tv : Model.getInstance().dbTipoVisiteHelper.getItems()) {
             if (tv == null) continue;
             if (!tv.isUsable()) continue;
 

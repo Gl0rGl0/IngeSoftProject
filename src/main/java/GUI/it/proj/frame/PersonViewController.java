@@ -7,6 +7,7 @@ import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
@@ -66,7 +67,7 @@ public class PersonViewController implements ListEditer<Persona> {
 
     @Override
     public void removeItem(String user) {
-        Persona res = Launcher.controller.getDB().findPersona(user);
+        Persona res = Model.getInstance().findPersona(user);
         String prompt = null;
         switch (res.getType()) {
             case CONFIGURATORE -> prompt = "remove -c " + user;
@@ -119,16 +120,16 @@ public class PersonViewController implements ListEditer<Persona> {
     
     public void refreshConfiguratori(){
         listConfiguratori.getItems().clear();
-        listConfiguratori.getItems().addAll(Launcher.controller.getDB().dbConfiguratoreHelper.getPersonList());
+        listConfiguratori.getItems().addAll(Model.getInstance().dbConfiguratoreHelper.getItems());
     }
 
     public void refreshFruitori(){
         listFruitori.getItems().clear();
-        listFruitori.getItems().addAll(Launcher.controller.getDB().dbFruitoreHelper.getPersonList());
+        listFruitori.getItems().addAll(Model.getInstance().dbFruitoreHelper.getItems());
     }
 
     public void refreshVolontari(){
         listVolontari.getItems().clear();
-        listVolontari.getItems().addAll(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
+        listVolontari.getItems().addAll(Model.getInstance().dbVolontarioHelper.getItems());
     }
 }

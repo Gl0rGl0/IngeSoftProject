@@ -1,7 +1,9 @@
 package V5.ingsoft;
 
-import V4.Ingsoft.controller.item.luoghi.Visita;
-import V4.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +39,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("list -v"); // Run general list command (will list all volunteers)
 
         // Assert state for VolRegime
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertNotNull(vol, "Volunteer VolRegime should exist.");
         assertFalse(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer VolRegime should have assigned types.");
         assertTrue(vol.getTipiVisiteUIDs().contains("TVRegime".hashCode() + "t"), "Volunteer VolRegime should be assigned to TVRegime.");
@@ -56,7 +58,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("list -v"); // Run general list command
 
         // Assert state for volTestEmpty
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("volTestEmpty");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("volTestEmpty");
         assertNotNull(vol, "Volunteer volTestEmpty should exist.");
         assertTrue(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer volTestEmpty should have no assigned types.");
     }
@@ -78,7 +80,7 @@ public class VolunteerActionsTests extends BaseTest {
         controller.interpreter("setav -a " + futureDate); // Use correct command
 
         // Assert: Check internal state if possible, otherwise assume command worked
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertNotNull(vol, "Volunteer should still exist.");
         assertTrue(vol.getAvailability()[7 - 1], "Executed availability command successfully (verification of future state requires specific getters).");
     }
@@ -97,7 +99,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertFalse(vol.getAvailability()[7 - 1], "Executed setav with invalid format (verify logs for parsing error message).");
     }
 
@@ -115,7 +117,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // We expect the command to fail gracefully due to parsing error in Date or AvailabilityCommand.
         // No state change should occur. Check logs for specific error.
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertFalse(vol.getAvailability()[7 - 1], "Executed setav with invalid date (verify logs for parsing error message).");
     }
 
@@ -135,7 +137,7 @@ public class VolunteerActionsTests extends BaseTest {
 
         // Assert
         // The command should execute, but the internal logic in Volontario.setAvailability but its not assigned because its outside the allowed windows
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertFalse(vol.getAvailability()[4 - 1], "Executed setav outside allowed window (verify internal logic prevents update).");
     }
 
@@ -161,7 +163,7 @@ public class VolunteerActionsTests extends BaseTest {
 
         // Assert
         // The AvailabilityCommand.manageDate checks precluded dates and should skip the update.
-        Volontario vol = controller.getDB().dbVolontarioHelper.getPersona("VolRegime");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertFalse(vol.isAvailabile(1), "Executed setav for a precluded date (verify internal logic prevents update).");
     }
 
@@ -208,10 +210,10 @@ public class VolunteerActionsTests extends BaseTest {
 
     //     // Act
     //     controller.interpreter("myvisit"); // Use correct command
-    //     Visita v = controller.getDB().dbVisiteHelper.findVisita(visitTypeName, visitDate);
+    //     Visita v = Model.getInstance().dbVisiteHelper.findVisita(visitTypeName, visitDate);
 
     //     // Assert: Fetch visits and check if the expected one is assigned and confirmed.
-    //     List<Visita> allVisits = controller.getDB().dbVisiteHelper.getVisite();
+    //     List<Visita> allVisits = Model.getInstance().dbVisiteHelper.getVisite();
 
     //     String expectedVisitUID = visitTypeName.hashCode() + "t" + d + username; // Reconstruct expected UID based on Visita constructor logic
     //     assertEquals(expectedVisitUID, v.getUID());
@@ -241,8 +243,8 @@ public class VolunteerActionsTests extends BaseTest {
         List<Visita> assignedVisits = new java.util.ArrayList<>();
         String currentUsername = controller.getCurrentUser().getUsername(); // Should be volTestAssignEmpty
 
-        for (Visita visit : controller.getDB().dbVisiteHelper.getVisite()) {
-            if (visit != null && currentUsername.equals(visit.getUidVolontario())) {
+        for (Visita visit : Model.getInstance().dbVisiteHelper.getItems()) {
+            if (visit != null && currentUsername.equals(visit.getVolontarioUID())) {
                 assignedVisits.add(visit);
             }
         }

@@ -1,6 +1,8 @@
 package V5.Ingsoft.util;
 
 import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.item.interfaces.Storageble;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -10,13 +12,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.*;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Date {
+public class Date extends Storageble {
 
+    public static final String PATH = "dates";
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime localDate;
 
     @JsonCreator
-    public Date(@JsonProperty("localDate") LocalDateTime lc) {
+    public Date(@JsonProperty("localDate") LocalDateTime lc,
+                @JsonProperty("UID") String id) throws Exception {
+        super(id);
+
+        this.localDate = lc;
+    }
+
+    public Date(LocalDateTime lc) throws Exception {
+        super(LocalDate.now().hashCode() + "d");
+
         this.localDate = lc;
     }
 
@@ -26,12 +38,15 @@ public class Date {
      * @param gg day
      * @param mm month
      * @param aa year
+     * @throws Exception 
      */
-    public Date(int gg, int mm, int aa) {
+    public Date(int gg, int mm, int aa) throws Exception {
+        super(LocalDate.of(aa, mm, gg).hashCode() + "d");
         this.localDate = LocalDate.of(aa, mm, gg).atStartOfDay();
     }
 
-    public Date() {
+    public Date() throws Exception {
+        super(LocalDate.now().hashCode() + "d");
         this.localDate = LocalDateTime.now();
     }
 
@@ -41,6 +56,8 @@ public class Date {
      * @param in the string containing the date and optionally a time part
      */
     public Date(String in) throws Exception {
+        super(LocalDate.now().hashCode() + "d");
+        
         String[] parts = in.split("-");
 
         setDate(parts[0].split("/"));
@@ -193,8 +210,12 @@ public class Date {
      * @return a new Date instance with the same localDate value.
      */
     @Override
-    public Date clone() {
-        return new Date(this.localDate);
+    public Date clone(){
+        try {
+            return new Date(this.localDate);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Date addMonth(int n) {

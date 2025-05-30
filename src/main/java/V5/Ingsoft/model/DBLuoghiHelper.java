@@ -1,48 +1,12 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.interfaces.Product;
+import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.util.Date;
 
-import java.util.ArrayList;
-
-public class DBLuoghiHelper extends DBAbstractHelper<Luogo> implements Product{
+public class DBLuoghiHelper extends DBMapHelper<Luogo> implements DBWithStatus{
 
     public DBLuoghiHelper() {
         super(Luogo.PATH, Luogo.class);
-
-        getJson().forEach(l -> cachedItems.put(l.getUID(), l));
-    }
-
-    public Luogo getLuogoByUID(String uid) {
-        return cachedItems.get(uid);
-    }
-
-    public ArrayList<Luogo> getLuoghi() {
-        return super.getItems();
-    }
-
-    /**
-     * Aggiunge un nuovo Luogo nel file delle proprietà.
-     * Simile a addPersona(), ma adattato per Luogo.
-     *
-     * @param toAdd il luogo da aggiungere
-     * @return true se l'aggiunta è andata a buon fine, false altrimenti.
-     */
-    public boolean addLuogo(Luogo toAdd) {
-        if (cachedItems.get(toAdd.getUID()) != null)
-            return false;
-
-        cachedItems.put(toAdd.getUID(), toAdd);
-        return saveJson(getLuoghi());
-    }
-
-    public boolean removeLuogoByUID(String toRemoveUID) {
-        if (cachedItems.get(toRemoveUID) == null)
-            return false;
-
-        cachedItems.remove(toRemoveUID);
-        return saveJson(getLuoghi());
     }
 
     /**
@@ -52,7 +16,7 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> implements Product{
      * @return il Luogo trovato, oppure null se non esiste.
      */
     public Luogo findLuogo(String name) {
-        for (Luogo l : getLuoghi()) {
+        for (Luogo l : getItems()) {
             if (l.getName().equalsIgnoreCase(name)) {
                 return l;
             }
@@ -62,15 +26,5 @@ public class DBLuoghiHelper extends DBAbstractHelper<Luogo> implements Product{
 
     public boolean isNew() {
         return cachedItems.isEmpty();
-    }
-
-    public void close() {
-        saveJson(getLuoghi());
-    }
-
-    public void checkLuoghi(Date d) {
-        for (Luogo l : getLuoghi()) {
-            l.checkStatus(d);
-        }
     }
 }

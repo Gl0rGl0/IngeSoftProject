@@ -34,8 +34,8 @@ public class SetPersoneMaxCommand extends AbstractCommand {
                 "NumberFormatException in SetPersoneMaxCommand: " + e.getMessage());
         }
 
-        Model.appSettings.setMaxPrenotazioniPerPersona(max);
-        boolean saved = JsonStorage.saveObject(AppSettings.PATH, Model.appSettings);
+        Model.getInstance().appSettings.setMaxPrenotazioniPerPersona(max);
+        boolean saved = JsonStorage.saveObject(AppSettings.PATH, Model.getInstance().appSettings);
         if (!saved)
             return Payload.error(
                 "Error saving settings", 

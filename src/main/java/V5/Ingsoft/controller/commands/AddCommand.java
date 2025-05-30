@@ -4,6 +4,7 @@ import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.util.Payload;
@@ -46,7 +47,7 @@ public class AddCommand extends AbstractCommand {
                         "Error creating configurator: " + e.getMessage(),
                         "Exception in addConfiguratore: " + e.getMessage());
                 }
-                if (controller.getDB().dbConfiguratoreHelper.addConfiguratore(c)) {
+                if (Model.getInstance().dbConfiguratoreHelper.addItem(c)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Configurator '" + username + "' added successfully.",
@@ -71,7 +72,7 @@ public class AddCommand extends AbstractCommand {
                         "Error creating volunteer: " + e.getMessage(),
                         "Exception in addVolontario: " + e.getMessage());
                 }
-                if (controller.getDB().dbVolontarioHelper.addVolontario(v)) {
+                if (Model.getInstance().dbVolontarioHelper.addItem(v)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Volunteer '" + volName + "' added successfully.",
@@ -97,7 +98,7 @@ public class AddCommand extends AbstractCommand {
                         "Error creating place: " + e.getMessage(),
                         "Exception in addLuogo: " + e.getMessage());
                 }
-                if (controller.getDB().dbLuoghiHelper.addLuogo(l)) {
+                if (Model.getInstance().dbLuoghiHelper.addItem(l)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Place '" + placeName + "' added successfully.",
@@ -123,7 +124,7 @@ public class AddCommand extends AbstractCommand {
                         "Error creating visit type: " + e.getMessage(),
                         "Exception in addTipoVisita: " + e.getMessage());
                 }
-                if (controller.getDB().dbTipoVisiteHelper.addTipoVisita(t)) {
+                if (Model.getInstance().dbTipoVisiteHelper.addItem(t)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Visit type '" + title + "' added successfully.",

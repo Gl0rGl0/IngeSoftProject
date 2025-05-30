@@ -1,7 +1,7 @@
 package V5.Ingsoft.factory;
 
-import V5.Ingsoft.controller.item.interfaces.Product;
+import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
 
 public interface BaseFactory {
-    <T extends Product> T factoryMethod(Class<T> clazz);
+    <T extends DBHelperInterface<?>> T factoryMethod(Class<T> clazz);
 }

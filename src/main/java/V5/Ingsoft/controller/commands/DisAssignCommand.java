@@ -4,6 +4,7 @@ import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.util.Payload;
@@ -43,13 +44,13 @@ public class DisAssignCommand extends AbstractCommand {
         switch (opt) {
             case "V": {
                 String visit = arg[0], volunteer = arg[1];
-                Volontario v = controller.getDB().dbVolontarioHelper.getPersona(volunteer);
+                Volontario v = Model.getInstance().dbVolontarioHelper.getPersona(volunteer);
                 if (v == null) {
                     return Payload.warn(
                         "No volunteer found with username: " + volunteer,
                         "Volunteer not found: " + volunteer);
                 }
-                TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita(visit);
+                TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(visit);
                 if (t == null) {
                     return Payload.warn(
                         "No visit type found with title: " + visit,
@@ -81,13 +82,13 @@ public class DisAssignCommand extends AbstractCommand {
             }
             case "L": {
                 String place = arg[0], visit  = arg[1];
-                Luogo l = controller.getDB().getLuogoByName(place);
+                Luogo l = Model.getInstance().getLuogoByName(place);
                 if (l == null) {
                     return Payload.warn(
                         "No place found with name: " + place,
                         "Luogo not found: " + place);
                 }
-                TipoVisita t = controller.getDB().dbTipoVisiteHelper.findTipoVisita(visit);
+                TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(visit);
                 if (t == null) {
                     return Payload.warn(
                         "No visit type found with title: " + visit,

@@ -3,6 +3,7 @@ package V5.Ingsoft.controller.commands.running;
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
@@ -47,7 +48,7 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private Payload<String> addPrecludedDate(Date d) {
-        if (controller.getDB().dbDatesHelper.addPrecludedDate(d)) {
+        if (Model.getInstance().dbDatesHelper.addPrecludedDate(d)) {
             return Payload.info(
                 "Successfully added precluded date.",
                 "Added precluded date: " + d);
@@ -59,7 +60,7 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private Payload<String> removePrecludedDate(Date d) {
-        controller.getDB().dbDatesHelper.removePrecludedDate(d);
+        Model.getInstance().dbDatesHelper.removePrecludedDate(d);
         return Payload.info(
             "Successfully removed precluded date.",
             "Removed precluded date: " + d);

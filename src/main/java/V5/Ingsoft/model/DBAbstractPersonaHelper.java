@@ -4,14 +4,11 @@ import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;
-import java.util.ArrayList;
 
 public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstractHelper<T> {
 
     public DBAbstractPersonaHelper(PersonaType personaType) {
         super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass());
-        // INIT DATABASE
-        getJson().forEach(p -> cachedItems.put(p.getUsername(), p));
     }
 
     public static String securePsw(String user, String psw) {
@@ -26,24 +23,16 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         return Integer.toHexString(user.hashCode() + psw.hashCode());
     }
 
-    public ArrayList<T> getPersonList() {
-        return super.getItems();
-    }
-
-    synchronized public boolean removePersona(String username) {
+    @Override
+    synchronized public boolean removeItem(String username) {
         final String SUB_CLASSNAME = getClassName() + ".removePersona<" + clazz.getSimpleName() + ">";
         if (username == null || username.trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to remove persona with null or empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
         }
 
-        if (cachedItems.remove(username) == null) {
-            AssertionControl.logMessage("Attempted to remove non-existent persona: " + username, Payload.Status.WARN, SUB_CLASSNAME);
-            return false; // Persona not found
-        }
-
-        // Persona was removed from cache, now save
-        boolean success = saveJson(getPersonList());
+        // Remove Persona from cache, now save
+        boolean success = super.removeItem(username);
         if (success) {
             AssertionControl.logMessage("Removed persona: " + username, Payload.Status.INFO, SUB_CLASSNAME);
         } else {
@@ -69,11 +58,18 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
         String oldPsw = toChange.getPsw();
         String toSet = DBAbstractPersonaHelper.securePsw(username, newPsw);
+
+        if (oldPsw.equals(toSet)) {
+            AssertionControl.logMessage("Attempted to change password with the same psw.", Payload.Status.WARN, SUB_CLASSNAME);
+            return false;
+        }
+
         toChange.setPsw(toSet);
 
-        boolean success = saveJson(getPersonList());
+        boolean success = saveDB();
         if (success) {
-            toChange.setAsNotNew();
+            if(!toChange.isNew())
+                toChange.setAsNotNew();
             AssertionControl.logMessage("Password changed successfully for user: " + username, Payload.Status.INFO, SUB_CLASSNAME);
             return true;
         } else {
@@ -132,6 +128,6 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
         final String SUB_CLASSNAME = getClassName() + ".close<" + clazz.getSimpleName() + ">";
         // Consider adding logging
         AssertionControl.logMessage("Closing helper and saving data for " + clazz.getSimpleName(), Payload.Status.INFO, SUB_CLASSNAME);
-        saveJson(getPersonList());
+        saveDB();
     }
 }

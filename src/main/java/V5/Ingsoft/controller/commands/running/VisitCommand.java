@@ -8,6 +8,7 @@ import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.statuses.StatusVisita;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 
@@ -61,7 +62,7 @@ public class VisitCommand extends AbstractCommand {
                 }
                 Fruitore f = (Fruitore) controller.getCurrentUser();
 
-                Visita v = controller.getDB().dbVisiteHelper.findVisita(visitName, visitDate);
+                Visita v = Model.getInstance().dbVisiteHelper.findVisita(visitName, visitDate);
                 if (v == null) {
                     return Payload.warn(
                         "Visit '" + visitName + "' on " + visitDate + " not found.",
@@ -87,14 +88,22 @@ public class VisitCommand extends AbstractCommand {
                         "Invalid quantity '" + qtyStr + "'. Must be a positive integer.",
                         "Invalid quantity in VisitCommand");
                 }
-                int max = V5.Ingsoft.model.Model.appSettings.getMaxPrenotazioniPerPersona();
+                int max = Model.getInstance().appSettings.getMaxPrenotazioniPerPersona();
                 if (qty > max) {
                     return Payload.warn(
                         "Cannot register more than " + max + " per booking.",
                         "Exceeded max booking in VisitCommand");
                 }
 
-                Iscrizione i = new Iscrizione(f.getUsername(), qty);
+                Iscrizione i;
+                try {
+                    i = new Iscrizione(f.getUsername(), qty);
+                } catch (Exception e) {
+                    return Payload.error(
+                        "Registration successful! Your booking code is",
+                        "Booking successful in VisitCommand");
+                }
+
                 String result = v.addPartecipants(i);
                 if ("capacity".equals(result)) {
                     return Payload.warn(
@@ -106,9 +115,9 @@ public class VisitCommand extends AbstractCommand {
                         "Already registered in VisitCommand");
                 } else {
                     f.subscribeToVisit(v.getUID());
-                    controller.getDB().dbIscrizionisHelper.addIscrizione(i);
-                    controller.getDB().dbVisiteHelper.saveJson();
-                    controller.getDB().dbFruitoreHelper.saveJson();
+                    Model.getInstance().dbIscrizionisHelper.addItem(i);
+                    Model.getInstance().dbVisiteHelper.saveDB();
+                    Model.getInstance().dbFruitoreHelper.saveDB();
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Registration successful! Your booking code is: " + result,
@@ -136,7 +145,7 @@ public class VisitCommand extends AbstractCommand {
                 }
                 Fruitore f = (Fruitore) controller.getCurrentUser();
 
-                Visita v = controller.getDB().dbVisiteHelper.findVisita(visitName, visitDate);
+                Visita v = Model.getInstance().dbVisiteHelper.findVisita(visitName, visitDate);
                 if (v == null) {
                     return Payload.warn(
                         "Visit '" + visitName + "' on " + visitDate + " not found.",
@@ -151,8 +160,8 @@ public class VisitCommand extends AbstractCommand {
                 }
                 if (v.removePartecipant(f.getUsername())) {
                     f.removeFromVisita(v.getUID());
-                    controller.getDB().dbVisiteHelper.saveJson();
-                    controller.getDB().dbFruitoreHelper.saveJson();
+                    Model.getInstance().dbVisiteHelper.saveDB();
+                    Model.getInstance().dbFruitoreHelper.saveDB();
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Booking for '" + visitName + "' on " + visitDate + " removed successfully.",
@@ -190,7 +199,7 @@ public class VisitCommand extends AbstractCommand {
                 }
                 Fruitore f = (Fruitore) controller.getCurrentUser();
 
-                Iscrizione i = controller.getDB().dbIscrizionisHelper.getIscrizione(subId);
+                Iscrizione i = Model.getInstance().dbIscrizionisHelper.getItem(subId);
                 if (i == null) {
                     return Payload.warn(
                         "No booking found with ID '" + subId + "'.",
@@ -203,14 +212,14 @@ public class VisitCommand extends AbstractCommand {
                         "Subscription not found in VisitCommand");
                 }
 
-                for (Visita v : controller.getDB().dbVisiteHelper.getVisite()) {
+                for (Visita v : Model.getInstance().dbVisiteHelper.getItems()) {
                     if ((v.getStatus() == StatusVisita.PROPOSED || v.getStatus() == StatusVisita.COMPLETED)
                         && v.getIscrizioni().stream()
-                              .anyMatch(is -> subId.equals(is.getUIDIscrizione())))
+                              .anyMatch(is -> subId.equals(is.getUID())))
                     {
-                        controller.getDB().unsubscribeUserToVisit(v, i);
-                        controller.getDB().dbVisiteHelper.saveJson();
-                        controller.getDB().dbFruitoreHelper.saveJson();
+                        Model.getInstance().unsubscribeUserToVisit(v, i);
+                        Model.getInstance().dbVisiteHelper.saveDB();
+                        Model.getInstance().dbFruitoreHelper.saveDB();
                         this.hasBeenExecuted = true;
                         return Payload.info(
                             "Booking ID '" + subId + "' removed from visit '" + v.getTitle() + "'.",

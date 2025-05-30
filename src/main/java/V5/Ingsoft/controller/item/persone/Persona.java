@@ -21,6 +21,8 @@ public abstract class Persona extends Deletable {
     private boolean isNew;
 
     public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception {
+        super(username);
+        
         if (username == null || username.isBlank())
             throw new Exception("Username can't be empty");
 

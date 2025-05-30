@@ -6,6 +6,7 @@ import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
@@ -46,7 +47,7 @@ public class RemoveCommand extends AbstractCommand {
         switch (opt) {
             case 'c': {
                 // remove configurator
-                if (controller.getDB().dbConfiguratoreHelper.removePersona(id)) {
+                if (Model.getInstance().dbConfiguratoreHelper.removeItem(id)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Configurator '" + id + "' removed successfully.",
@@ -60,7 +61,7 @@ public class RemoveCommand extends AbstractCommand {
             }
             case 'f': {
                 // remove fruitore
-                if (controller.getDB().removeFruitore(id)) {
+                if (Model.getInstance().removeFruitore(id)) {
                     this.hasBeenExecuted = true;
                     return Payload.info(
                         "Fruitore '" + id + "' removed successfully.",
@@ -81,7 +82,7 @@ public class RemoveCommand extends AbstractCommand {
                     );
                 }
 
-                Volontario vol = controller.getDB().dbVolontarioHelper.getPersona(id);
+                Volontario vol = Model.getInstance().dbVolontarioHelper.getPersona(id);
                 if (vol == null) {
                     return Payload.warn(
                         "Failed to remove volunteer '" + id + "'. It might not exist.",
@@ -104,7 +105,7 @@ public class RemoveCommand extends AbstractCommand {
                         "RemoveCommand.removeTipoVisita: not executable"
                     );
                 }
-                TipoVisita tv = controller.getDB().dbTipoVisiteHelper.findTipoVisita(id);
+                TipoVisita tv = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(id);
                 if (tv == null) {
                     return Payload.warn(
                         "Visit type '" + id + "' not found.",
@@ -127,7 +128,7 @@ public class RemoveCommand extends AbstractCommand {
                         "RemoveCommand.removeLuogo: not executable"
                     );
                 }
-                Luogo place = controller.getDB().dbLuoghiHelper.findLuogo(id);
+                Luogo place = Model.getInstance().dbLuoghiHelper.findLuogo(id);
                 if (place == null) {
                     return Payload.warn(
                         "Failed to remove place '" + id + "'. It might not exist.",

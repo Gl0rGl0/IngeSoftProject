@@ -3,18 +3,24 @@ package V5.Ingsoft.controller.item.interfaces;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import V5.Ingsoft.controller.item.statuses.StatusItem;
+import V5.Ingsoft.controller.item.statuses.Statuses;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
-public abstract class Deletable implements Informable{
-    protected StatusItem si = StatusItem.ACTIVE;
+public abstract class Deletable extends Storageble implements Informable{
+    
+    public Deletable(String uid) throws Exception {
+        super(uid);
+    }
+
+    protected Statuses si = StatusItem.ACTIVE;
     protected Date insertionDate;
     protected Date deletionDate;
 
     public void checkStatus(Date d) {
         switch (si) {
-            case PENDING_ADD -> {
+            case StatusItem.PENDING_ADD -> {
                 if (insertionDate == null) {
                     AssertionControl.logMessage("Error while loading insertion date while adding, using today", Payload.Status.WARN, getClass().getSimpleName());
                     this.insertionDate = d;
@@ -24,7 +30,7 @@ public abstract class Deletable implements Informable{
                 if (Date.monthsDifference(insertionDate, d) >= 2)
                     this.si = StatusItem.ACTIVE;   
             }
-            case PENDING_REMOVE -> {
+            case StatusItem.PENDING_REMOVE -> {
                 if (deletionDate == null) {
                     AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", Payload.Status.WARN, getClass().getSimpleName());
                     this.deletionDate = d.clone().addMonth(2);
@@ -49,7 +55,7 @@ public abstract class Deletable implements Informable{
         return this.deletionDate;
     }
 
-    public StatusItem getStatus() {
+    public Statuses getStatus() {
         return this.si;
     }
 

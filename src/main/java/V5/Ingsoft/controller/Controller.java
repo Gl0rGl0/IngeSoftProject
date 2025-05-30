@@ -19,7 +19,7 @@ public class Controller {
     // Initially the user is a Guest (not logged in)
     public String user;
     public InterpreterContext interpreter = new InterpreterContext(this);
-    public Date date = new Date(); // simply sets today's date
+    public Date date; // simply sets today's date
     // Flag indicating if today is the designated day (16th or first working day after)
     // for special monthly actions (add/remove/assign/generate plan).
     // Initialize to false, assuming it's not the 16th initially.
@@ -28,6 +28,12 @@ public class Controller {
 
     public Controller(Model db) {
         this.db = db;
+
+        try {
+            this.date = new Date();
+        } catch (Exception e) {
+            System.exit(1);
+        }
 
         initVirtualTime();
         initDailyScheduler();
@@ -137,13 +143,9 @@ public class Controller {
         db.closeAll();
     }
 
-    public Model getDB() {
-        return db;
-    }
-
     public void openCollection() {
         collectionStatus = true;
-        getDB().dbVolontarioHelper.resetAllAvailability();
+        Model.getInstance().dbVolontarioHelper.resetAllAvailability();
     }
 
     public void closeCollection() {
@@ -161,7 +163,7 @@ public class Controller {
     public double getVolontariStats(){
         double res = 0;
 
-        for(Volontario v : getDB().dbVolontarioHelper.getPersonList())
+        for(Volontario v : Model.getInstance().dbVolontarioHelper.getItems())
             res += v.getNAvailability();
 
         double lunghezzaMese = this.date.getMonth().maxLength();

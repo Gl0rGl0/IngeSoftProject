@@ -80,6 +80,6 @@ public class BaseTest {
     @AfterEach
     public void cleanup() {
         controller.interpreter("logout");
-        controller.getDB().closeAll();
+        Model.getInstance().closeAll();
     }
 }

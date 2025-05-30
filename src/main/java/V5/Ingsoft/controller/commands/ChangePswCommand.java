@@ -2,6 +2,7 @@ package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 public class ChangePswCommand extends AbstractCommand {
@@ -18,7 +19,7 @@ public class ChangePswCommand extends AbstractCommand {
                 "Usage: changepsw <newpassword>",
                 "Missing password argument in ChangePswCommand");
         }
-        if (controller.getDB().changePassword(controller.user, args[0])) {
+        if (Model.getInstance().changePassword(controller.user, args[0])) {
             this.hasBeenExecuted = true;
             return Payload.info(
                 "Password changed successfully!",

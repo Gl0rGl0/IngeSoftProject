@@ -1,6 +1,6 @@
 package V5.Ingsoft.controller.item.statuses;
 
-public enum StatusVisita {
+public enum StatusVisita implements Statuses{
     PROPOSED,   // PROPOSTA
     CONFIRMED,  // CONFERMATA
     COMPLETED,  // COMPLETA

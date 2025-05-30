@@ -19,7 +19,6 @@ public class Luogo extends Deletable {
     private final String name;
     private final String description;
     private final String position;
-    private final String UID;
     private final ArrayList<String> visiteUID = new ArrayList<>();
 
     @JsonCreator
@@ -30,33 +29,35 @@ public class Luogo extends Deletable {
             @JsonProperty("UID") String UID,
             @JsonProperty("status") StatusItem status,
             @JsonProperty("insertionDate") Date insertionDate,
-            @JsonProperty("deletionDate") Date deletionDate) {
+            @JsonProperty("deletionDate") Date deletionDate) throws Exception {
+        super(UID);
         this.name = name;
         this.description = description;
         this.position = position;
-        this.UID = UID;
         this.si = status;
         this.insertionDate = insertionDate;
         this.deletionDate = deletionDate;
     }
 
     public Luogo(String[] a, Date d) throws Exception {
+        super(a[0].hashCode() + "l");
+        
         if (a.length < 3)
-            throw new Exception("Error in Luogo constructor: Insufficient number of arguments");
+            throw new Exception("Insufficient number of arguments");
 
         if (a[0].isBlank())
-            throw new Exception("Error in Luogo constructor: Title name can't be empty");
+            throw new Exception("Title name can't be empty");
 
         if (a[1].isBlank())
-            throw new Exception("Error in Luogo constructor: Description can't be empty");
+            throw new Exception("Description can't be empty");
 
         if (a[2].isBlank())
-            throw new Exception("Error in Luogo constructor: Position can't be empty");
+            throw new Exception("Position can't be empty");
+        
 
         this.name = a[0];
         this.description = a[1];
         this.position = a[2];
-        this.UID = name.hashCode() + "l";
 
         this.insertionDate = d;
         this.si = StatusItem.PENDING_ADD;

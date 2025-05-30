@@ -7,6 +7,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
@@ -33,7 +34,7 @@ public class MakePlanCommand extends AbstractCommand {
                 "Internal error: controller is null.",
                 "Null controller");
         }
-        if (controller.date == null || controller.getDB() == null) {
+        if (controller.date == null || Model.getInstance() == null) {
             return Payload.error(
                 "Internal error: dependencies missing.",
                 "Date or db null");
@@ -44,7 +45,7 @@ public class MakePlanCommand extends AbstractCommand {
                 "Collection still open");
         }
 
-        List<TipoVisita> types = controller.getDB().dbTipoVisiteHelper.getTipiVisita();
+        List<TipoVisita> types = Model.getInstance().dbTipoVisiteHelper.getItems();
         types.removeIf(t -> !t.isUsable());
         types.sort(Comparator.comparingInt(t -> t.getInitTime().getMinutes()));
 
@@ -55,8 +56,13 @@ public class MakePlanCommand extends AbstractCommand {
         int assignedCount = 0;
 
         for (int day = 1; day <= daysInMonth; day++) {
-            Date current = new Date(day, nextMonthValue, year);
-            assignedCount += processVisitsForDate(current, types);
+            Date current;
+            try {
+                current = new Date(day, nextMonthValue, year);
+                assignedCount += processVisitsForDate(current, types);
+            } catch (Exception e) {
+                continue;
+            }
         }
 
         return Payload.info(
@@ -70,7 +76,7 @@ public class MakePlanCommand extends AbstractCommand {
             if (tv == null) continue;
             if (tv.getStatus() != StatusItem.ACTIVE) continue;
             if (!tv.getDays().contains(date.dayOfTheWeek())) continue;
-            if (controller.getDB().dbDatesHelper.getPrecludedDates().contains(date)) continue;
+            if (Model.getInstance().dbDatesHelper.getPrecludedDates().contains(date)) continue;
             if (!Date.between(tv.getInitDay(), date, tv.getFinishDay())) continue;
             count += assignVisitForDate(tv, date);
         }
@@ -80,12 +86,17 @@ public class MakePlanCommand extends AbstractCommand {
     private int assignVisitForDate(TipoVisita tv, Date date) {
         int count = 0;
         for (String uid : tv.getVolontariUIDs()) {
-            Volontario v = controller.getDB().dbVolontarioHelper.getPersona(uid);
+            Volontario v = Model.getInstance().dbVolontarioHelper.getPersona(uid);
             if (v == null) continue;
             if (!v.isAvailabile(date.getDay())) continue;
-            if (controller.getDB().dbVisiteHelper.volontarioHaConflitto(v, date, tv)) continue;
-            Visita newVisit = new Visita(tv, date, uid);
-            controller.getDB().dbVisiteHelper.addVisita(newVisit);
+            if (Model.getInstance().dbVisiteHelper.volontarioHaConflitto(v, date, tv)) continue;
+            Visita newVisit;
+            try {
+                newVisit = new Visita(tv, date, uid);
+                Model.getInstance().dbVisiteHelper.addVisita(newVisit);
+            } catch (Exception e) {
+                continue;
+            }
             count++;
         }
         return count;

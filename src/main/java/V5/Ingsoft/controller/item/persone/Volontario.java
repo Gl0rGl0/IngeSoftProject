@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class Volontario extends Persona {
+public class Volontario extends Persona{
     public static final String PATH = "volontari";
 
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();

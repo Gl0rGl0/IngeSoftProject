@@ -6,6 +6,7 @@ import V5.Ingsoft.controller.commands.running.list.CommandList;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 public class LoginCommand extends AbstractCommand {
@@ -28,7 +29,7 @@ public class LoginCommand extends AbstractCommand {
                 "Already logged in, please log out first",
                 CLASSNAME + ": login attempted while already logged in");
 
-        Payload<Persona>  result = controller.getDB().login(args[0], args[1]);
+        Payload<Persona>  result = Model.getInstance().login(args[0], args[1]);
 
         if (result.getStatus() == Payload.Status.ERROR)
             return handleLoginError(result, args);
@@ -53,7 +54,7 @@ public class LoginCommand extends AbstractCommand {
             try {
                 Fruitore f = new Fruitore(args);
                 f.setAsNotNew();
-                controller.getDB().dbFruitoreHelper.addFruitore(f);
+                Model.getInstance().dbFruitoreHelper.addFruitore(f);
                 controller.user = f.getUsername();
                 return Payload.info(
                     "Account created and logged in as " + f.getUsername(),

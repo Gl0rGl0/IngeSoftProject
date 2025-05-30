@@ -4,6 +4,7 @@ import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListBase;
 import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.model.Model;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
@@ -29,7 +30,7 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     @Override
     public void refreshItems() {
         listVisite.getItems().clear();
-        listVisite.getItems().addAll(Launcher.controller.getDB().dbVisiteHelper.getVisiteProposte());
+        listVisite.getItems().addAll(Model.getInstance().dbVisiteHelper.getVisiteProposte());
     }
 
     public void closeDialog() {

@@ -30,7 +30,6 @@ public class TipoVisita extends Deletable {
     private final int numMinPartecipants;
     private final int numMaxPartecipants;
     private final ArrayList<DayOfWeek> days;
-    private final String UID;
 
     private ArrayList<String> volontariUID = new ArrayList<>();
     private String luogoUID = null;
@@ -53,7 +52,9 @@ public class TipoVisita extends Deletable {
             @JsonProperty("status") StatusItem status,
             @JsonProperty("insertionDate") Date insertionDate,
             @JsonProperty("deletionDate") Date deletionDate,
-            @JsonProperty("UID") String UID) {
+            @JsonProperty("UID") String UID) throws Exception {
+        super(UID);
+
         this.title = title;
         this.description = description;
         this.meetingPlace = meetingPlace;
@@ -70,11 +71,12 @@ public class TipoVisita extends Deletable {
         this.si = status;
         this.insertionDate = insertionDate;
         this.deletionDate = deletionDate;
-        this.UID = UID;
     }
 
     // Should this be split into some function? (?)
     public TipoVisita(String[] args, Date d) throws Exception {
+        super(args[0].hashCode() + "t");
+
         if (args.length < 11)
             throw new Exception("Insufficient number of arguments");
 
@@ -129,9 +131,6 @@ public class TipoVisita extends Deletable {
         } catch (Exception e) {
             throw new Exception("Error in TipoVisita constructor while parsing: " + e.getMessage());
         }
-
-
-        this.UID = title.hashCode() + "t";
     }
 
     public String getDaysString() {

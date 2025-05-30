@@ -50,11 +50,10 @@ public class OrarioViewController {
         int daysInMonth = yM.lengthOfMonth();
     
         // Recupera la lista dei volontari
-        List<Volontario> lista = Launcher
-            .controller
-            .getDB()
+        List<Volontario> lista = Model
+            .getInstance()
             .dbVolontarioHelper
-            .getPersonList();
+            .getItems();
         lista.removeIf(v -> !v.isUsable());
     
         for (Volontario v : lista) {
@@ -93,11 +92,10 @@ public class OrarioViewController {
         YearMonth yM = YearMonth.now().plusMonths(1);
         int daysInMonth = yM.lengthOfMonth();
         
-        List<Volontario> lista = Launcher
-            .controller
-            .getDB()
+        List<Volontario> lista = Model
+            .getInstance()
             .dbVolontarioHelper
-            .getPersonList();
+            .getItems();
             lista.removeIf(v -> !v.isUsable());
             
             // assumiamo che initAvailability abbia aggiunto una riga per ogni volontario
@@ -176,10 +174,10 @@ public class OrarioViewController {
     }
 
     private String getAmbito(){
-        return Model.appSettings.getAmbitoTerritoriale();
+        return Model.getInstance().appSettings.getAmbitoTerritoriale();
     }
 
     private int getNumMax(){
-        return Model.appSettings.getMaxPrenotazioniPerPersona();
+        return Model.getInstance().appSettings.getMaxPrenotazioniPerPersona();
     }
 }

@@ -13,6 +13,7 @@ import com.dlsc.unitfx.IntegerInputField;
 import GUI.it.proj.Launcher;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.collections.FXCollections;
@@ -54,7 +55,7 @@ public class AddTipoVisiteDialogController {
         ObservableList<String> places = FXCollections.observableArrayList("Visita 1", "Visita 2", "Visita 3");
         placeComboBox.setItems(places);
 
-        ObservableList<Volontario> voloList = FXCollections.observableArrayList(Launcher.controller.getDB().dbVolontarioHelper.getPersonList());
+        ObservableList<Volontario> voloList = FXCollections.observableArrayList(Model.getInstance().dbVolontarioHelper.getItems());
         volontariUIDs.getItems().addAll(voloList);
     }
 
@@ -131,7 +132,7 @@ public class AddTipoVisiteDialogController {
         // 8. Gestione risultato
         if (res == null || res.getStatus() == Status.ERROR) return;
         
-        TipoVisita nuova = Launcher.controller.getDB().dbTipoVisiteHelper.findTipoVisita(titolo);
+        TipoVisita nuova = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(titolo);
         if(nuova == null) return;
         
         for(Volontario s : volsSel){

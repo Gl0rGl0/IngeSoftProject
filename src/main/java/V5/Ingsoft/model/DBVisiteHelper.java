@@ -1,6 +1,7 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.interfaces.Product;
+import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
+import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
@@ -12,21 +13,11 @@ import V5.Ingsoft.util.Payload;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
+public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
     private final ArrayList<Visita> archivio = new ArrayList<>();
 
     public DBVisiteHelper() {
         super(Visita.PATH, Visita.class);
-
-        archivio.addAll(getJson());
-    }
-
-    /**
-     * Legge il file delle proprietà e restituisce la lista delle visite.
-     * Simile a getPersonList() in DBAbstractPersonaHelper, ma adattato per Visita.
-     */
-    public ArrayList<Visita> getVisite() {
-        return super.getItems();
     }
 
     /**
@@ -47,7 +38,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
         }
         cachedItems.put(toAdd.getUID(), toAdd);
         // Consider saving immediately or batching saves
-        // saveJson();
+        // saveDB();
     }
 
     /**
@@ -63,7 +54,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
         }
         if (cachedItems.containsKey(uid)) {
             cachedItems.remove(uid);
-            boolean success = saveJson(); // Save after removal
+            boolean success = saveDB(); // Save after removal
             if (!success) {
                 AssertionControl.logMessage("Failed to save JSON after removing Visita UID: " + uid, Payload.Status.ERROR, CLASSNAME);
             }
@@ -93,7 +84,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
             return null;
         }
 
-        for (Visita v : getVisite()) {
+        for (Visita v : getItems()) {
             // Add null checks for safety inside the loop
             if (v != null &&
                     v.getTitle() != null &&
@@ -106,40 +97,30 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
         return null;
     }
 
-    public ArrayList<Visita> getCompletate() {
-        ArrayList<Visita> out = new ArrayList<>();
-        for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.COMPLETED)
-                out.add(v);
-        }
-
-        return out;
+    public ArrayList<Visita> getVisiteComplete() {
+        return getVisitaByStatus(StatusVisita.COMPLETED);
     }
 
-    public ArrayList<Visita> getConfermate() {
-        ArrayList<Visita> out = new ArrayList<>();
-        for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.CONFIRMED)
-                out.add(v);
-        }
-
-        return out;
+    public ArrayList<Visita> getVisiteConfermate() {
+        return getVisitaByStatus(StatusVisita.CONFIRMED);
     }
 
     public ArrayList<Visita> getVisiteCancellate() {
-        ArrayList<Visita> out = new ArrayList<>();
-        for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.CANCELLED)
-                out.add(v);
-        }
-
-        return out;
+        return getVisitaByStatus(StatusVisita.CANCELLED);
     }
 
     public ArrayList<Visita> getVisiteProposte() {
+        return getVisitaByStatus(StatusVisita.PROPOSED);
+    }
+
+    public ArrayList<Visita> getVisiteEffettuate() {
+        return getVisitaByStatus(StatusVisita.PERFORMED);
+    }
+
+    public ArrayList<Visita> getVisitaByStatus(StatusVisita sv){
         ArrayList<Visita> out = new ArrayList<>();
-        for (Visita v : getVisite()) {
-            if (v.getStatus() == StatusVisita.PROPOSED)
+        for (Visita v : getItems()) {
+            if (v.getStatus() == sv)
                 out.add(v);
         }
 
@@ -195,7 +176,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
         }
 
         if (changed || !uidsToRemove.isEmpty()) {
-            saveJson(); // Salva cambiamenti alla cache
+            saveDB(); // Salva cambiamenti alla cache
         }
     }
 
@@ -282,25 +263,11 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
                 changed = true;
             }
 
-            writeVisitaEffettuata(v);
         }
 
         return changed;
     }
 
-    /**
-     * Adds a completed visit to the archive and saves the archive.
-     *
-     * @param toAdd The visit to archive.
-     */
-    private void writeVisitaEffettuata(Visita toAdd) {
-        archivio.add(toAdd);
-        saveJson(archivio);
-    }
-
-    public ArrayList<Visita> getVisiteEffettuate() {
-        return archivio;
-    }
 
     public Visita getVisitaByUID(String uid) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisitaByUID";
@@ -313,7 +280,7 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
 
     public void close() {
         // Save the archive before closing
-        saveJson(archivio);
+        saveDB();
     }
 
     public List<Visita> getVisiteByVolontarioAndData(String usernameV, Date d) {
@@ -324,10 +291,10 @@ public class DBVisiteHelper extends DBAbstractHelper<Visita> implements Product{
             return out; // Return empty list
         }
 
-        for (Visita v : getVisite()) {
+        for (Visita v : getItems()) {
             // Add null checks for safety
-            if (v != null && v.getUidVolontario() != null && v.getDate() != null &&
-                    v.getUidVolontario().equals(usernameV) && v.getDate().equals(d))
+            if (v != null && v.getVolontarioUID() != null && v.getDate() != null &&
+                    v.getVolontarioUID().equals(usernameV) && v.getDate().equals(d))
                 out.add(v);
         }
         return out;

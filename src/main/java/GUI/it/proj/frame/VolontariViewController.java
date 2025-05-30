@@ -10,6 +10,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ public class VolontariViewController implements ListBase<TipoVisita> {
         
         Persona current = Launcher.controller.getCurrentUser();
         if(current.getType().equals(PersonaType.VOLONTARIO))
-            listTipoVisiteAssign.getItems().addAll(Launcher.controller.getDB().trovaTipoVisiteByVolontario((Volontario)current));
+            listTipoVisiteAssign.getItems().addAll(Model.getInstance().trovaTipoVisiteByVolontario((Volontario)current));
 
         Calendar calendarComponent = new Calendar();
         calendar.getChildren().add(calendarComponent.getView());
@@ -42,7 +43,7 @@ public class VolontariViewController implements ListBase<TipoVisita> {
 
     @Override
     public void refreshItems() {
-        Payload res = Launcher.controller.interpreter("myvisit");
+        Payload<?> res = Launcher.controller.interpreter("myvisit");
 
         if(res != null && res.getStatus() == Status.INFO){
             this.listTipoVisiteAssign.getItems().clear();

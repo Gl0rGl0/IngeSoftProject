@@ -11,6 +11,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
+import V5.Ingsoft.controller.item.statuses.Statuses;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -85,9 +86,9 @@ public class CellController<T extends Informable> {
         }
     }
 
-    private void handleDisable(StatusItem status){
-        switch(status){
-            case PENDING_REMOVE, DISABLED -> {
+    private void handleDisable(Statuses status){
+        switch((StatusItem) status){
+            case StatusItem.PENDING_REMOVE, StatusItem.DISABLED -> {
                 if(disabled)
                     return;
                 
@@ -101,7 +102,7 @@ public class CellController<T extends Informable> {
                 deleteButton.setDisable(true);
                 disabled = true;
             }
-            case ACTIVE, PENDING_ADD -> {
+            case StatusItem.ACTIVE, StatusItem.PENDING_ADD -> {
                 if(!disabled)
                     return;
                 
@@ -113,6 +114,8 @@ public class CellController<T extends Informable> {
                 disabled = false;
                 deleteButton.setDisable(false);
             }
+            
+            default -> {}
         }
     }
 

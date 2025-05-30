@@ -3,6 +3,8 @@ package V5.Ingsoft.controller.item.persone;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import V5.Ingsoft.controller.item.statuses.StatusItem;
+
 import java.util.ArrayList;
 
 public class Fruitore extends Persona {
@@ -11,7 +13,8 @@ public class Fruitore extends Persona {
     public Fruitore(
             @JsonProperty("username") String username,
             @JsonProperty("psw") String psw,
-            @JsonProperty("new") boolean isNew) throws Exception {
+            @JsonProperty("new") boolean isNew,
+            @JsonProperty("status") StatusItem status) throws Exception {
         this(username, psw, isNew, false);
     }
 
