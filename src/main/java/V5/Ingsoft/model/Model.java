@@ -10,8 +10,9 @@ import V5.Ingsoft.util.*;
 import java.util.ArrayList;
 
 public class Model {
-    public static volatile Model instance = null;
-    public AppSettings appSettings;
+    public static volatile Model instance = new Model();
+
+    public final AppSettings appSettings;
     public final DBConfiguratoreHelper dbConfiguratoreHelper;
     public final DBFruitoreHelper dbFruitoreHelper;
     public final DBVolontarioHelper dbVolontarioHelper;
@@ -21,49 +22,33 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
-    private static final DBHelperFactory factory = new DBHelperFactory();
+    private final DBHelperFactory factory;
 
     // Constructor and helper initialization
     private Model() {
+        factory = new DBHelperFactory();
+
         dbConfiguratoreHelper = factory.factoryMethod(DBConfiguratoreHelper.class);
-        dbFruitoreHelper = factory.factoryMethod(DBFruitoreHelper.class);
-        dbVolontarioHelper = factory.factoryMethod(DBVolontarioHelper.class);
+        dbFruitoreHelper =      factory.factoryMethod(DBFruitoreHelper.class);
+        dbVolontarioHelper =    factory.factoryMethod(DBVolontarioHelper.class);
 
-        dbTipoVisiteHelper = factory.factoryMethod(DBTipoVisiteHelper.class);
-        dbVisiteHelper = factory.factoryMethod(DBVisiteHelper.class);
+        dbTipoVisiteHelper =    factory.factoryMethod(DBTipoVisiteHelper.class);
+        dbVisiteHelper =        factory.factoryMethod(DBVisiteHelper.class);
 
-        dbLuoghiHelper = factory.factoryMethod(DBLuoghiHelper.class);
+        dbLuoghiHelper =        factory.factoryMethod(DBLuoghiHelper.class);
         
-        dbDatesHelper = factory.factoryMethod(DBDatesHelper.class);
-        dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.class);
+        dbDatesHelper =         factory.factoryMethod(DBDatesHelper.class);
+        dbIscrizionisHelper =   factory.factoryMethod(DBIscrizioniHelper.class);
 
         appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
-        if (appSettings == null) {
-            AssertionControl.logMessage("Settings file not found or invalid, creating default settings.", Payload.Status.ERROR, "Model");
-            appSettings = new AppSettings();
-            // Attempt to save the new default settings immediately
-            JsonStorage.saveObject(AppSettings.PATH, appSettings);
-        }
     }
 
-    public static Model getInstance() {
-        if (instance == null) {
-            synchronized (Model.class) {
-                if (instance == null) {
-                    instance = new Model();
-                }
-            }
-        }
-
-        return instance;
+    synchronized public static Model getInstance() {
+        return Model.instance;
     }
 
-    public static void deleteInstance() {
-        instance = null;
-    }
-
-    public static void setAmbito(String ambito) {
-        getInstance().appSettings.setAmbitoTerritoriale(ambito);
+    public void setAmbito(String ambito) {
+        appSettings.setAmbitoTerritoriale(ambito);
     }
 
     // Removed setAmbito, getAmbito, getMaxPrenotazioni, setMaxPrenotazioni methods.

@@ -3,7 +3,7 @@ package V5.Ingsoft.util;
 import V5.Ingsoft.controller.commands.ListInterface;
 
 public class Payload<T> {
-    public enum Status  { ERROR, WARN, INFO, DEBUG }
+    public static enum Status  { ERROR, WARN, INFO, DEBUG }
 
     private Status status;
     private T data;

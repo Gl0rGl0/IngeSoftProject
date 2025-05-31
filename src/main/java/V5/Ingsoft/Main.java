@@ -42,7 +42,6 @@ public class Main {
 
     private static void resetAll(Controller controller) {
         Model.getInstance().clearAll();
-        Model.deleteInstance();
         controller.setDB(Model.getInstance());
     }
 

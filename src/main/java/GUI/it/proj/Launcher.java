@@ -133,8 +133,7 @@ public class Launcher extends Application {
 
     public static void main(String[] args) {
         // Inizializza il modello e il controller PRIMA di caricare gli FXML
-        Model model = Model.getInstance();
-        controller = new Controller(model);
+        controller = new Controller();
         
         // Pre-carica i frame principali e i loro controller
         // Usa un helper locale per caricare e memorizzare sia il Parent che il Controller
@@ -143,6 +142,7 @@ public class Launcher extends Application {
 
         // Avvia l'applicazione JavaFX
         launch();
+        // System.exit(0);
     }
 
     /**

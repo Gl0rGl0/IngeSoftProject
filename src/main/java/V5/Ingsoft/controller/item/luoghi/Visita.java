@@ -12,36 +12,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public class Visita extends Deletable{
-    @JsonIgnore
-    public static final String PATH = "archivio-visite";
-    @JsonIgnore
-    private final ArrayList<Iscrizione> fruitori = new ArrayList<>();
+    @JsonIgnore public static final String PATH = "visite";
+
     private final Date date;
-    @JsonIgnore
-    private TipoVisita tipo;
+    private final String tipoVisitaUID;
+    private final String volontarioUID;
+    private final ArrayList<Iscrizione> fruitori = new ArrayList<>();
     private StatusVisita status = StatusVisita.PROPOSED; // Updated enum constant
 
     @JsonCreator
     public Visita(
             @JsonProperty("data") Date data,
             @JsonProperty("UID") String UID,
+            @JsonProperty("tvUID") String tVUID,
+            @JsonProperty("volUID") String volUID,
             @JsonProperty("stato") StatusVisita status) throws Exception{
         super(UID);
 
-        this.tipo = Model.getInstance().dbTipoVisiteHelper.getItem(getTipoVisitaUID());
+        this.tipoVisitaUID = tVUID;
+        this.volontarioUID = volUID;
         this.date = data;
         this.status = status;
-
-        if(tipo == null) throw new Exception("TipoVisita not found.");
     }
 
     public Visita(TipoVisita tipo, Date date, String uidVolontario) throws Exception{
-        super(String.format("%s@%s@%s",tipo.getUID(), date.toString(), uidVolontario));
+        super(String.format("%s-%s-%s",tipo.getUID(), date.toString(), uidVolontario).hashCode() + "v");
 
-        this.tipo = tipo;
+        this.tipoVisitaUID = tipo.getUID();
+        this.volontarioUID = uidVolontario;
         this.date = date;
     }
 
@@ -53,20 +55,16 @@ public class Visita extends Deletable{
         this.status = status;
     }
 
-    public String getUID() {
-        return this.UID;
-    }
-
     public String getVolontarioUID() {
-        return this.UID.split("@")[2];
+        return this.volontarioUID;
     }
 
     public String getTipoVisitaUID() {
-        return this.UID.split("@")[0];
+        return this.tipoVisitaUID;
     }
 
     public TipoVisita getTipoVisita() {
-        return tipo;
+        return Model.getInstance().dbTipoVisiteHelper.getItem(this.tipoVisitaUID);
     }
 
     public Date getDate() {
@@ -74,7 +72,7 @@ public class Visita extends Deletable{
     }
 
     public String getTitle() {
-        return tipo.getTitle();
+        return getTipoVisita().getTitle();
     }
 
     public boolean hasFruitore(String userF) {
@@ -86,7 +84,9 @@ public class Visita extends Deletable{
     }
 
     public String addPartecipants(Iscrizione i) {
-        if (tipo.getNumMaxPartecipants() - getCurrentNumber() < i.getQuantity()) {
+        int max = getTipoVisita().getNumMaxPartecipants();
+
+        if (max - getCurrentNumber() < i.getQuantity()) {
             return "capacity"; // Indicates full capacity
         }
 
@@ -96,7 +96,7 @@ public class Visita extends Deletable{
 
         fruitori.add(i);
 
-        if (getCurrentNumber() == tipo.getNumMaxPartecipants()) {
+        if (getCurrentNumber() == max) {
             setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
         return i.getUID();
@@ -110,12 +110,14 @@ public class Visita extends Deletable{
      * @return true if a participant was found and removed, false otherwise.
      */
     public boolean removePartecipant(String user) {
+        int max = getTipoVisita().getNumMaxPartecipants();
+
         int capienzaAttuale = getCurrentNumber();
         for (Iscrizione i : fruitori) {
             // Ensure null safety for user comparison
             if (user != null && user.equals(i.getUIDFruitore())) {
                 boolean removed = fruitori.remove(i);
-                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+                if (removed && capienzaAttuale == max && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed
                     setStatus(StatusVisita.PROPOSED);
                 }
@@ -126,12 +128,14 @@ public class Visita extends Deletable{
     }
 
     public boolean removePartecipantBySubscription(String userSubUID) {
+        int max = getTipoVisita().getNumMaxPartecipants();
+
         int capienzaAttuale = getCurrentNumber();
         for (Iscrizione i : fruitori) {
             // Ensure null safety for user comparison
             if (userSubUID != null && userSubUID.equals(i.getUID())) {
                 boolean removed = fruitori.remove(i);
-                if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+                if (removed && capienzaAttuale == max && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed
                     setStatus(StatusVisita.PROPOSED);
                 }
@@ -151,12 +155,14 @@ public class Visita extends Deletable{
 
     @Override
     public String toString() {
-        return "Title: " + tipo.getTitle()
-            + "\n\tDescription: " + tipo.getDescription()
-            + "\n\tMeeting Point: " + tipo.getMeetingPlace()
+        TipoVisita tv = getTipoVisita();
+
+        return "Title: " + tv.getTitle()
+            + "\n\tDescription: " + tv.getDescription()
+            + "\n\tMeeting Point: " + tv.getMeetingPlace()
             + "\n\tDate: " + date
-            + "\n\tTime: " + tipo.getInitTime()
-            + "\n\tTicket required: " + tipo.isFree()
+            + "\n\tTime: " + tv.getInitTime()
+            + "\n\tTicket required: " + tv.isFree()
             + "\n\tVolunteer: " + getVolontarioUID()
             + "\n";
     }
@@ -177,7 +183,7 @@ public class Visita extends Deletable{
 
         // If an iscrizione was removed and the visit was previously full (COMPLETED),
         // it should become PROPOSED again.
-        if (removed && capienzaAttuale == tipo.getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
+        if (removed && capienzaAttuale == getTipoVisita().getNumMaxPartecipants() && this.status == StatusVisita.COMPLETED) {
             setStatus(StatusVisita.PROPOSED);
         }
     }

@@ -1,6 +1,5 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
 import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
-    private final ArrayList<Visita> archivio = new ArrayList<>();
 
     public DBVisiteHelper() {
         super(Visita.PATH, Visita.class);

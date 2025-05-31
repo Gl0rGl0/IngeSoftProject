@@ -42,6 +42,22 @@ public class Controller {
             switchInterpreter();
     }
 
+    public Controller() {
+        db = Model.getInstance();
+        
+        try {
+            this.date = new Date();
+        } catch (Exception e) {
+            System.exit(1);
+        }
+
+        initVirtualTime();
+        initDailyScheduler();
+
+        if(db.isInitialized())
+            switchInterpreter();
+    }
+
     private void initDailyScheduler() {
         ScheduledExecutorService dailyTask = newSingleThreadScheduledExecutor();
         dailyTask.scheduleAtFixedRate(this::dailyAction, 0, 60 * 60 * 24 / SECONDIVIRTUALI_PS, TimeUnit.SECONDS);

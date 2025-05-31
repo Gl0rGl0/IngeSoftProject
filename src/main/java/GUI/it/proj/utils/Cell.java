@@ -1,5 +1,6 @@
 package GUI.it.proj.utils;
 
+import GUI.it.proj.frame.HomeVisiteViewController;
 import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.interfaces.Informable;
@@ -76,6 +77,7 @@ public class Cell<T extends Informable> extends ListCell<T> {
             if (!isEmpty() && item instanceof Visita) {
                 System.out.println("Cella cliccata all'indice: " + getIndex());
                 System.out.println("Elemento associato: " + item);
+                ((HomeVisiteViewController) parent).showVisita((Visita) item);
             }
         });
     }

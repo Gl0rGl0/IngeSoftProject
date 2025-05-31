@@ -11,8 +11,8 @@ public class AppSettings {
 
     public static final String PATH = "settings.json"; // Define the settings file path
 
-    private String ambitoTerritoriale;
-    private int maxPrenotazioniPerPersona; // Default value if not loaded
+    private String ambitoTerritoriale = "default";
+    private int maxPrenotazioniPerPersona = 1; // Default value if not loaded
 
     @JsonCreator
     public AppSettings(
@@ -25,8 +25,6 @@ public class AppSettings {
         if(ambitoTerritoriale != null)
             System.out.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona="+maxPrenotazioniPerPersona);
     }
-
-    public AppSettings() {}
 
     // --- Getters ---
 
@@ -48,7 +46,6 @@ public class AppSettings {
 
         if (isAmbitoSet())
             JsonStorage.saveObject(PATH, this);
-
     }
 
     public int getMaxPrenotazioniPerPersona() {

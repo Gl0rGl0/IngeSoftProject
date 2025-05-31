@@ -6,7 +6,6 @@ import java.util.List;
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
-import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
@@ -94,8 +93,7 @@ public class PersonViewController implements ListEditer<Persona> {
         showAddPersonDialog(PersonaType.CONFIGURATORE);
     }
 
-    @FXML
-    private void onAggiungiVolontarioClick() {
+    @FXML private void onAggiungiVolontarioClick() {
         showAddPersonDialog(PersonaType.VOLONTARIO);
     }
 

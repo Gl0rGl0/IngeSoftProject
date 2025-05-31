@@ -1,51 +1,100 @@
 package GUI.it.proj.frame;
 
+import com.dlsc.unitfx.IntegerInputField;
+
 import GUI.it.proj.Launcher;
+import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.util.Payload;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 
+/**
+ * Controller del dialog per creare/modificare una Visita.
+ * Contiene i campi: titoloVisita, descrizioneVisita, posizione; 
+ * e bottoni Conferma/Annulla.
+ */
 public class VisitaIscrizioneDialogController {
 
-    @FXML private TextField titoloLuogo;
-    @FXML private TextArea descrizioneLuogo;
-    @FXML private TextField posizione;
+    @FXML private Label titleVisit;
+    @FXML private Label descriptionVisit;
+    @FXML private Label dateVisit;
+    @FXML private Label positionVisit;
+    @FXML private Label currentSub;
+    @FXML private Label timeStart;
+    @FXML private IntegerInputField numSub;
 
+    // Riferimento al controller padre (HomeVisiteViewController)
     private HomeVisiteViewController parentController;
 
     public void setParentController(HomeVisiteViewController controller) {
         this.parentController = controller;
     }
 
-    // Handler per il pulsante Conferma
-    @FXML
-    private void onConfirm() {
-        String titoloLuogo = this.titoloLuogo.getText();
-        String descrizioneLuogo = this.descrizioneLuogo.getText();
-        String posizione = this.posizione.getText();
+    /**
+     * Se viene aperto il dialog con una Visita già esistente,
+     * possiamo pre‐caricare i campi. Se invece passo null, 
+     * consideriamo il form come "nuova Visita".
+     */
+    public void setVisitaCorrente(Visita v) {
+        if(v == null) error();
 
-        if (titoloLuogo == null      || titoloLuogo.isBlank() ||
-            descrizioneLuogo == null || descrizioneLuogo.isBlank() ||
-            posizione == null        || posizione.isBlank()) {
-            Launcher.toast(Payload.error("Tutti i campi sono obbligatori!", ""));
-            return;
-        }
+        TipoVisita t = v.getTipoVisita();
 
-        Payload<?> res = Launcher.controller.interpreter(String.format("add -L %s %s %s", titoloLuogo, descrizioneLuogo, posizione));
-        Launcher.toast(res);
+        if(t == null) error();
 
+        titleVisit.setText(t.getTitle());
+        descriptionVisit.setText(t.getDescription());
+        positionVisit.setText(t.getMeetingPlace());
+        timeStart.setText(t.getInitTime().toString());
+
+        dateVisit.setText(v.getDate().toString());
+        currentSub.setText(v.getCurrentNumber()+"");
+    }
+    
+    private void error() {
+        Launcher.toast(Payload.error("Cannot load visit now. Try again later.", null));
         closeDialog();
     }
 
-    // Handler per il pulsante Annulla
+    /**
+     * Handler per il pulsante "Conferma".
+     * Se visitaCorrente == null -> comando "add"
+     * Altrimenti -> comando "update" (ipotizzando che l’interprete supporti 
+     * l’update con id o simile).
+     */
+    @FXML
+    private void onConfirm() {
+        String title = titleVisit.getText();
+        String date = dateVisit.getText();
+        int quantity = numSub.getValue();
+
+        Payload<?> res = Launcher.controller.interpreter(String.format("visit -a \"%s\" %s %s", title, date, quantity));
+        Launcher.toast(res);
+
+        // Se l’operazione è andata a buon fine (INFO), ricaricare la lista delle visite
+        if (res != null && res.getStatus() == Payload.Status.INFO) {
+            parentController.refreshItems();
+            closeDialog();
+        }
+    }
+
     @FXML
     private void onCancel() {
         closeDialog();
     }
 
     private void closeDialog() {
-        parentController.closeDialog();
-    }
+        titleVisit.setText("");
+        descriptionVisit.setText("");
+        dateVisit.setText("");
+        positionVisit.setText("");
+        currentSub.setText("");
+        timeStart.setText("");
 
+        // Semplicemente chiama il metodo del parent
+        if (parentController != null) {
+            parentController.closeDialog();
+        }
+    }
 }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public final class JsonStorage {
 
@@ -29,7 +30,7 @@ public final class JsonStorage {
         }
     }
 
-    synchronized public static <T> ArrayList<T> loadList(String fileName, Class<T> clazz) {
+    synchronized public static <T> List<T> loadList(String fileName, Class<T> clazz) {
         File file = new File(BASE_PATH + fileName + ".json");
         if (!file.exists()) {
             return new ArrayList<>();
@@ -39,7 +40,7 @@ public final class JsonStorage {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            AssertionControl.logMessage("Error loading JSON file", Payload.Status.ERROR, "JsonStorage");
+            //AssertionControl.logMessage("Error loading JSON file", Payload.Status.ERROR, "JsonStorage");
             System.out.println("Error loading JSON file: " + e.getMessage());
             return new ArrayList<>();
         }

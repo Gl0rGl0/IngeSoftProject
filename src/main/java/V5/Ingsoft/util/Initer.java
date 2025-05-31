@@ -97,8 +97,7 @@ public class Initer {
     }
 
     public static void setupPhase(Controller controller) {
-        Model.getInstance();
-        Model.setAmbito("Brescia");
+        Model.getInstance().setAmbito("Brescia");
         controller.interpreter("time -s 1/2/2025");
 
         controller.interpreter("login ADMIN PASSWORD");
