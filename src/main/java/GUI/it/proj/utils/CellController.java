@@ -5,6 +5,7 @@ import GUI.it.proj.frame.LuoghiViewController;
 import GUI.it.proj.frame.TipoVisiteViewController;
 import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.interfaces.Informable;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
@@ -12,6 +13,7 @@ import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.controller.item.statuses.Statuses;
+import V5.Ingsoft.model.Model;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -25,22 +27,15 @@ import javafx.util.Duration;
 import javafx.scene.control.Tooltip;
 
 public class CellController<T extends Informable> {
-    @FXML
-    private HBox container;
-    @FXML
-    private VBox textContainer;
-    @FXML
-    private Label primaryText;
-    @FXML
-    private Label secondaryText;
-    @FXML
-    private Region spacer;
-    @FXML
-    private Button deleteButton;
-    @FXML
-    private ImageView binImage;
-    @FXML
-    private ImageView confirmImage;
+    @FXML private HBox container;
+    @FXML private VBox textContainer;
+    @FXML private Label primaryText;
+    @FXML private Label secondaryText;
+    @FXML private Label importantDate;
+    @FXML private Region spacer;
+    @FXML private Button deleteButton;
+    @FXML private ImageView binImage;
+    @FXML private ImageView confirmImage;
 
     private T item;
     ListBase<T> parentView;
@@ -73,11 +68,14 @@ public class CellController<T extends Informable> {
                 handleDisable(luogo.getStatus());
             }
             case Visita visita -> {
-                primaryText.setText(visita.getTitle());
+                primaryText.setText(visita.getTitle() + " " + visita.getDate());
                 secondaryText.setText(visita.getTipoVisita().getDescription());
             }
             case TipoVisita tvisita -> {
                 primaryText.setText(tvisita.getTitle());
+                Luogo luogo = Model.getInstance().dbLuoghiHelper.getItem(tvisita.getLuogo());
+                if(luogo != null)
+                    importantDate.setText(luogo.getName());
                 secondaryText.setText(tvisita.getDescription());
                 handleDisable(tvisita.getStatus());
             }
@@ -96,13 +94,15 @@ public class CellController<T extends Informable> {
                 if(status == StatusItem.PENDING_REMOVE) {
                     Tooltip tip = new Tooltip("Questo oggetto verrà rimosso.");
                     Tooltip.install(deleteButton, tip);
+                    importantDate.setText("REMOVE: " + ((Deletable) item).getdeletionDate());
                 }
+
                 deleteButton.getStyleClass().remove("red-btn");
                 deleteButton.getStyleClass().add("grey-btn");
                 deleteButton.setDisable(true);
                 disabled = true;
             }
-            case StatusItem.ACTIVE, StatusItem.PENDING_ADD -> {
+            case StatusItem.ACTIVE -> {
                 if(!disabled)
                     return;
                 
@@ -113,6 +113,10 @@ public class CellController<T extends Informable> {
                 deleteButton.getStyleClass().add("red-btn");
                 disabled = false;
                 deleteButton.setDisable(false);
+            }
+
+            case StatusItem.PENDING_ADD -> {
+                importantDate.setText("PENDING: " + ((Deletable) item).getUsableDate());
             }
             
             default -> {}

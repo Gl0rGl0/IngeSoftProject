@@ -1,6 +1,6 @@
 package GUI.it.proj.frame;
 
-import java.util.Collection;
+import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
@@ -55,7 +55,9 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
 
         if(res != null && res.getStatus() == Status.INFO){
             this.listVisita.getItems().clear();
-            this.listVisita.getItems().addAll(((Payload<Collection<TipoVisita>>) res).getData());
+            List<TipoVisita> insert = ((Payload<List<TipoVisita>>) res).getData();
+            insert.sort((v1, v2) -> v1.sort(v2) );
+            listVisita.getItems().addAll(insert);
         }
     }
 

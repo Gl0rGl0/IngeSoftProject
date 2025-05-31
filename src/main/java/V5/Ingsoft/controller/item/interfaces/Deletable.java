@@ -18,6 +18,8 @@ public abstract class Deletable extends Storageble implements Informable{
     protected Date insertionDate;
     protected Date deletionDate;
 
+    private int monthChange = 2;
+
     public void checkStatus(Date d) {
         switch (si) {
             case StatusItem.PENDING_ADD -> {
@@ -27,13 +29,13 @@ public abstract class Deletable extends Storageble implements Informable{
                     return;
                 }
 
-                if (Date.monthsDifference(insertionDate, d) >= 2)
+                if (Date.monthsDifference(insertionDate, d) >= monthChange)
                     this.si = StatusItem.ACTIVE;   
             }
             case StatusItem.PENDING_REMOVE -> {
                 if (deletionDate == null) {
                     AssertionControl.logMessage("Error while loading insertion date while adding, using 2 month from now", Payload.Status.WARN, getClass().getSimpleName());
-                    this.deletionDate = d.clone().addMonth(2);
+                    this.deletionDate = d.clone().addMonth(monthChange);
                     this.deletionDate.setDay(16);
                     return;
                 }
@@ -53,6 +55,10 @@ public abstract class Deletable extends Storageble implements Informable{
 
     public Date getdeletionDate() {
         return this.deletionDate;
+    }
+
+    public Date getUsableDate() {
+        return this.insertionDate.clone().addMonth(monthChange);
     }
 
     public Statuses getStatus() {

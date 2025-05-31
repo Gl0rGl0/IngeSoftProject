@@ -239,6 +239,12 @@ public class TipoVisita extends Deletable {
         return this.luogoUID;
     }
 
+    public int sort(TipoVisita o){
+        int i = luogoUID == null ? 0 : luogoUID.length();
+        int ii = o.luogoUID == null ? 0 : o.luogoUID.length();
+        return i - ii;
+    }
+
     public void setLuogo(String luogoUID) {
         this.luogoUID = luogoUID;
     }

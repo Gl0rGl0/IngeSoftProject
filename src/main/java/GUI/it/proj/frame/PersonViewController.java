@@ -1,12 +1,16 @@
 package GUI.it.proj.frame;
 
 import java.io.IOException;
+import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
+import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
@@ -31,11 +35,10 @@ public class PersonViewController implements ListEditer<Persona> {
 
     private AddPersonDialogController addPersonDialogController;
     private Parent addPersonDialog;
+    FXMLLoader loaderPerson = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-person-dialog.fxml"));
 
     @FXML
     private void initialize() {
-        FXMLLoader loaderPerson = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-person-dialog.fxml"));
-
         try {
             addPersonDialog = loaderPerson.load();
             addPersonDialogController = loaderPerson.getController();
@@ -97,6 +100,12 @@ public class PersonViewController implements ListEditer<Persona> {
     }
 
     private void showAddPersonDialog(PersonaType role) {
+        try {
+            addPersonDialog = loaderPerson.load();
+        } catch (IOException e) {
+            return;
+        }
+        
         addPersonDialogController.setRole(role);
         overlayMask.setVisible(true);
         dialog.getChildren().setAll(addPersonDialog);
@@ -130,6 +139,8 @@ public class PersonViewController implements ListEditer<Persona> {
 
     public void refreshVolontari(){
         listVolontari.getItems().clear();
-        listVolontari.getItems().addAll(Model.getInstance().dbVolontarioHelper.getItems());
+        List<Volontario> insert = Model.getInstance().dbVolontarioHelper.getItems();
+        insert.sort((v1, v2) -> ((StatusItem) v1.getStatus()).ordinal() - ((StatusItem) v2.getStatus()).ordinal());
+        listVolontari.getItems().addAll(insert);
     }
 }

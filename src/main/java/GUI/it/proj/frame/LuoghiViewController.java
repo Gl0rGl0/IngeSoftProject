@@ -1,11 +1,12 @@
 package GUI.it.proj.frame;
 
-import java.util.Collection;
+import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
@@ -75,10 +76,12 @@ public class LuoghiViewController implements ListEditer<Luogo> {
 
     public void refreshItems() {
         Payload<?> res = Launcher.controller.interpreter("list -L");
-
+        
         if(res != null && res.getStatus() == Status.INFO){
             this.listLuoghi.getItems().clear();
-            this.listLuoghi.getItems().addAll(((Payload<Collection<Luogo>>) res).getData());
+            List<Luogo> insert = ((Payload<List<Luogo>>) res).getData();
+            insert.sort((v1, v2) -> ((StatusItem) v1.getStatus()).ordinal() - ((StatusItem) v2.getStatus()).ordinal());
+            listLuoghi.getItems().addAll(insert);
         }
     }
 }

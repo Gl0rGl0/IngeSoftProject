@@ -20,6 +20,9 @@
   -fx-text-fill: #333333;
   -fx-padding: 10px 0 20px 0;
 }
+.disable-title {
+  -fx-text-fill: #3a3e42;
+}
 .message-label {
   -fx-font-weight: bold;
   -fx-padding: 5px;
