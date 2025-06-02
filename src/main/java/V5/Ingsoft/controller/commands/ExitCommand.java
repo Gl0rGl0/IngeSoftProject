@@ -20,7 +20,7 @@ public class ExitCommand extends AbstractCommand {
         // prepari il Payload con la lambda
         Runnable afterExit = () -> System.exit(0);
 
-        return Payload.info(afterExit,"ExitCommand: scheduled System.exit");
+        return Payload.info(afterExit, "ExitCommand: scheduled System.exit");
     }
 
 }

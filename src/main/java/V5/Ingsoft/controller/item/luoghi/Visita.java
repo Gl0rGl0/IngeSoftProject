@@ -12,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
-public class Visita extends Deletable{
-    @JsonIgnore public static final String PATH = "visite";
+public class Visita extends Deletable {
+    @JsonIgnore
+    public static final String PATH = "visite";
 
     private final Date date;
     private final String tipoVisitaUID;
@@ -30,7 +30,7 @@ public class Visita extends Deletable{
             @JsonProperty("UID") String UID,
             @JsonProperty("tvUID") String tVUID,
             @JsonProperty("volUID") String volUID,
-            @JsonProperty("stato") StatusVisita status) throws Exception{
+            @JsonProperty("stato") StatusVisita status) throws Exception {
         super(UID);
 
         this.tipoVisitaUID = tVUID;
@@ -39,8 +39,8 @@ public class Visita extends Deletable{
         this.status = status;
     }
 
-    public Visita(TipoVisita tipo, Date date, String uidVolontario) throws Exception{
-        super(String.format("%s-%s-%s",tipo.getUID(), date.toString(), uidVolontario).hashCode() + "v");
+    public Visita(TipoVisita tipo, Date date, String uidVolontario) throws Exception {
+        super(String.format("%s-%s-%s", tipo.getUID(), date.toString(), uidVolontario).hashCode() + "v");
 
         this.tipoVisitaUID = tipo.getUID();
         this.volontarioUID = uidVolontario;
@@ -158,13 +158,13 @@ public class Visita extends Deletable{
         TipoVisita tv = getTipoVisita();
 
         return "Title: " + tv.getTitle()
-            + "\n\tDescription: " + tv.getDescription()
-            + "\n\tMeeting Point: " + tv.getMeetingPlace()
-            + "\n\tDate: " + date
-            + "\n\tTime: " + tv.getInitTime()
-            + "\n\tTicket required: " + tv.isFree()
-            + "\n\tVolunteer: " + getVolontarioUID()
-            + "\n";
+                + "\n\tDescription: " + tv.getDescription()
+                + "\n\tMeeting Point: " + tv.getMeetingPlace()
+                + "\n\tDate: " + date
+                + "\n\tTime: " + tv.getInitTime()
+                + "\n\tTicket required: " + tv.isFree()
+                + "\n\tVolunteer: " + getVolontarioUID()
+                + "\n";
     }
 
     public ArrayList<Iscrizione> getIscrizioni() {

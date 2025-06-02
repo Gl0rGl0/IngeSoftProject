@@ -3,7 +3,7 @@ package V5.Ingsoft.model;
 import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 
-public class DBLuoghiHelper extends DBMapHelper<Luogo> implements DBWithStatus{
+public class DBLuoghiHelper extends DBMapHelper<Luogo> implements DBWithStatus {
 
     public DBLuoghiHelper() {
         super(Luogo.PATH, Luogo.class);

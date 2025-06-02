@@ -1,9 +1,8 @@
 package V5.Ingsoft.controller.item.persone;
 
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import V5.Ingsoft.controller.item.statuses.StatusItem;
 
 import java.util.ArrayList;
 

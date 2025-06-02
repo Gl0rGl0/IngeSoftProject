@@ -2,7 +2,6 @@ package V5.Ingsoft.util;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.item.interfaces.Storageble;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -38,7 +37,6 @@ public class Date extends Storageble {
      * @param gg day
      * @param mm month
      * @param aa year
-     * @throws Exception 
      */
     public Date(int gg, int mm, int aa) throws Exception {
         super(LocalDate.of(aa, mm, gg).hashCode() + "d");
@@ -57,7 +55,7 @@ public class Date extends Storageble {
      */
     public Date(String in) throws Exception {
         super(LocalDate.now().hashCode() + "d");
-        
+
         String[] parts = in.split("-");
 
         setDate(parts[0].split("/"));
@@ -73,7 +71,7 @@ public class Date extends Storageble {
         Month beforeMonth = before.clone().getMonth();
         Month afterMonth = after.clone().getMonth();
 
-        if(before.getDay() >= 16)
+        if (before.getDay() >= 16)
             beforeMonth = beforeMonth.plus(1);
 
         int out = afterMonth.compareTo(beforeMonth);
@@ -210,7 +208,7 @@ public class Date extends Storageble {
      * @return a new Date instance with the same localDate value.
      */
     @Override
-    public Date clone(){
+    public Date clone() {
         try {
             return new Date(this.localDate);
         } catch (Exception e) {

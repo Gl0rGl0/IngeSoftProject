@@ -1,7 +1,5 @@
 package V5.Ingsoft.controller.commands.running;
 
-import java.util.ArrayList;
-
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
@@ -13,6 +11,8 @@ import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 
+import java.util.ArrayList;
+
 public class MyVisitCommand extends AbstractCommand {
 
     public MyVisitCommand(Controller controller) {
@@ -23,16 +23,13 @@ public class MyVisitCommand extends AbstractCommand {
     @Override
     public Payload<?> execute(String[] options, String[] args) {
         PersonaType tipo = controller.getCurrentUser().getType();
-        switch (tipo) {
-            case FRUITORE:
-                return listFruitore();
-            case VOLONTARIO:
-                return listVolontari( args);
-            default:
-                return Payload.warn(
+        return switch (tipo) {
+            case FRUITORE -> listFruitore();
+            case VOLONTARIO -> listVolontari(args);
+            default -> Payload.warn(
                     "Option valid only for volunteers and visitors.",
                     "Invalid persona type " + tipo);
-        }
+        };
     }
 
     private Payload<?> listFruitore() {
@@ -40,20 +37,20 @@ public class MyVisitCommand extends AbstractCommand {
         Fruitore f = Model.getInstance().dbFruitoreHelper.getPersona(userF);
         if (f == null) {
             return Payload.error(
-                "User data not found.",
-                "Fruitore object null for user " + userF);
+                    "User data not found.",
+                    "Fruitore object null for user " + userF);
         }
 
         ArrayList<Iscrizione> out = new ArrayList<>();
         for (Iscrizione i : Model.getInstance().dbIscrizionisHelper.getItems()) {
-            if(i.getUIDFruitore().equals(f.getUsername()))
+            if (i.getUIDFruitore().equals(f.getUsername()))
                 out.add(i);
         }
-        
-        if(out.size() == 0)
+
+        if (out.isEmpty())
             return Payload.warn(
-                "You are not signed up for any visits",
-                "No visits found for the user: " + userF);
+                    "You are not signed up for any visits",
+                    "No visits found for the user: " + userF);
 
         return Payload.info(out, "Listed fruitore subscriptions for " + userF);
     }
@@ -63,14 +60,14 @@ public class MyVisitCommand extends AbstractCommand {
 
         if (args == null) {
             return Payload.error(
-                "No args for volunteer list",
-                "Args null for volunteer list");
+                    "No args for volunteer list",
+                    "Args null for volunteer list");
         }
         String[] a = StringUtils.joinQuotedArguments(args);
         if (a.length < 2) {
             return Payload.error(
-                "Invalid args for volunteer list",
-                "Invalid args for volunteer list");
+                    "Invalid args for volunteer list",
+                    "Invalid args for volunteer list");
         }
 
         ArrayList<TipoVisita> out = new ArrayList<>();
@@ -78,13 +75,13 @@ public class MyVisitCommand extends AbstractCommand {
             if (tv == null) continue;
             if (!tv.isUsable()) continue;
 
-            if(tv.assignedTo(userV))
+            if (tv.assignedTo(userV))
                 out.add(tv);
         }
-        if(out.size() == 0)
+        if (out.isEmpty())
             return Payload.warn(
-                "You have not been assigned any visits",
-                "No visits found for the user: " + userV);
+                    "You have not been assigned any visits",
+                    "No visits found for the user: " + userV);
 
         return Payload.info(out, "Listed visit type for volunteer " + userV);
     }

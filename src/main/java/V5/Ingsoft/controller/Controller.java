@@ -3,8 +3,12 @@ package V5.Ingsoft.controller;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
-import V5.Ingsoft.util.*;
+import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Date;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.TimeHelper;
 import V5.Ingsoft.util.interpreter.InterpreterContext;
+
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -13,9 +17,6 @@ import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
-
-    private Model db;
-
     // Initially the user is a Guest (not logged in)
     public String user;
     public InterpreterContext interpreter = new InterpreterContext(this);
@@ -24,6 +25,7 @@ public class Controller {
     // for special monthly actions (add/remove/assign/generate plan).
     // Initialize to false, assuming it's not the 16th initially.
     public boolean isActionDay16 = false;
+    private Model db;
     private boolean collectionStatus;
 
     public Controller(Model db) {
@@ -38,13 +40,13 @@ public class Controller {
         initVirtualTime();
         initDailyScheduler();
 
-        if(db.isInitialized())
+        if (db.isInitialized())
             switchInterpreter();
     }
 
     public Controller() {
         db = Model.getInstance();
-        
+
         try {
             this.date = new Date();
         } catch (Exception e) {
@@ -54,7 +56,7 @@ public class Controller {
         initVirtualTime();
         initDailyScheduler();
 
-        if(db.isInitialized())
+        if (db.isInitialized())
             switchInterpreter();
     }
 
@@ -121,25 +123,25 @@ public class Controller {
         int currentDay = date.getDay();
         boolean isHolidayToday = this.date.holiday(); // Assumes Date.holiday() checks the current date
 
-        if(currentDay > 18 || currentDay <= 15){
+        if (currentDay > 18 || currentDay <= 15) {
             isActionDay16 = false;
             return;
         }
 
-        if(isHolidayToday){
+        if (isHolidayToday) {
             isActionDay16 = false;
             return;
         }
 
-        if(currentDay == 16){
+        if (currentDay == 16) {
             performDay16Actions();
             return;
         }
 
         Date yesterday = date.clone().minusDays(1);
-        if(yesterday.holiday()){
+        if (yesterday.holiday()) {
             performDay16Actions();
-        }else{
+        } else {
             isActionDay16 = false;
         }
     }
@@ -176,10 +178,10 @@ public class Controller {
         this.db = instance;
     }
 
-    public double getVolontariStats(){
+    public double getVolontariStats() {
         double res = 0;
 
-        for(Volontario v : Model.getInstance().dbVolontarioHelper.getItems())
+        for (Volontario v : Model.getInstance().dbVolontarioHelper.getItems())
             res += v.getNAvailability();
 
         double lunghezzaMese = this.date.getMonth().maxLength();

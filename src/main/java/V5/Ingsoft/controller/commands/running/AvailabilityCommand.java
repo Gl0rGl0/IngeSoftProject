@@ -3,9 +3,9 @@ package V5.Ingsoft.controller.commands.running;
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
-import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 
@@ -20,30 +20,29 @@ public class AvailabilityCommand extends AbstractCommand {
     public Payload<String> execute(String[] options, String[] args) {
         if (controller.getCurrentUser().getType() != PersonaType.VOLONTARIO)
             return Payload.error(
-                "Only volunteers can set availability",
-                "Non-volunteer attempted availability change");
+                    "Only volunteers can set availability",
+                    "Non-volunteer attempted availability change");
 
         if (options == null || options.length < 1 || args == null || args.length < 1)
             return Payload.error(
-                "Usage: setav -<a|r> <date1> [date2 ...]",
-                "Missing options or arguments");
+                    "Usage: setav -<a|r> <date1> [date2 ...]",
+                    "Missing options or arguments");
 
         char opt = options[0].charAt(0);
-        switch (opt) {
-            case 'a': return manageDate(args, true);
-            case 'r': return manageDate(args, false);
-            default:
-                return Payload.error(
+        return switch (opt) {
+            case 'a' -> manageDate(args, true);
+            case 'r' -> manageDate(args, false);
+            default -> Payload.error(
                     "Option '-" + opt + "' not recognized for 'setav'",
                     "Unknown option '" + opt + "'");
-        }
+        };
     }
 
     private Payload<String> manageDate(String[] args, boolean toAdd) {
         if (!controller.isVolunteerCollectionOpen())
             return Payload.warn(
-                "Cannot edit availability while collection is closed.",
-                "Collection closed.");
+                    "Cannot edit availability while collection is closed.",
+                    "Collection closed.");
 
         Volontario v = (Volontario) controller.getCurrentUser();
         StringBuilder feedback = new StringBuilder();
@@ -64,7 +63,7 @@ public class AvailabilityCommand extends AbstractCommand {
         }
         String result = feedback.toString().trim();
         return Payload.info(
-            result.isEmpty() ? "No changes applied" : result,
-            "Managed availability for " + args.length + " date(s)");
+                result.isEmpty() ? "No changes applied" : result,
+                "Managed availability for " + args.length + " date(s)");
     }
 }

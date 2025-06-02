@@ -6,6 +6,7 @@ import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Payload;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 //Literally input/output management...
@@ -18,14 +19,12 @@ public class ViewSE implements Runnable {
         this.controller = controller;
     }
 
-    public static void payloadOut(Payload<?> out){
-        switch (out.getCommand()) {
-            case CommandList.EXIT -> {
-                println("Program terminated. Goodbye!");
-                ((Runnable) out.getData()).run();
-            }
-        
-            default -> println(out.getData());
+    public static void payloadOut(Payload<?> out) {
+        if (out.getCommand().equals(CommandList.EXIT)) {
+            println("Program terminated. Goodbye!");
+            ((Runnable) out.getData()).run();
+        } else {
+            println(out.getData());
         }
         // if(out.getCommand().equals(CommandList.LOGIN))
         //     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -53,8 +52,7 @@ public class ViewSE implements Runnable {
     public void run() {
         println(MESSAGGIO_START);
 
-        Model.getInstance();
-        if (!Model.getInstance().appSettings.isAmbitoSet()) {
+        if (!Objects.requireNonNull(Model.getInstance().appSettings).isAmbitoSet()) {
             String ambito;
             do {
                 ambito = ViewSE.read("Inserisci l'ambito territoriale per iniziare la fase di setup dell'applicazione: ");
@@ -67,7 +65,10 @@ public class ViewSE implements Runnable {
 
         AssertionControl.logMessage("Setup completed", Payload.Status.INFO, this.getClass().getSimpleName());
 
-        while (true)
-            payloadOut(controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> ")));
+        new Thread(() -> {
+            while (true) {
+                payloadOut(controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> ")));
+            }
+        }).start();
     }
 }

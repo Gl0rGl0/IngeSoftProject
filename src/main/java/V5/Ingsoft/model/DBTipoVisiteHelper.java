@@ -5,7 +5,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Date;
 
-public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWithStatus{
+public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWithStatus {
 
     public DBTipoVisiteHelper() {
         super(TipoVisita.PATH, TipoVisita.class);
@@ -37,7 +37,8 @@ public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWit
                         removeItem(tv.getUID());
                 }
                 case StatusItem.DISABLED -> removeItem(tv.getUID());
-                default -> {}
+                default -> {
+                }
             }
         }
     }

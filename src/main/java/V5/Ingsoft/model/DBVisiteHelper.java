@@ -12,7 +12,7 @@ import V5.Ingsoft.util.Payload;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
+public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus {
 
     public DBVisiteHelper() {
         super(Visita.PATH, Visita.class);
@@ -115,7 +115,7 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
         return getVisitaByStatus(StatusVisita.PERFORMED);
     }
 
-    public ArrayList<Visita> getVisitaByStatus(StatusVisita sv){
+    public ArrayList<Visita> getVisitaByStatus(StatusVisita sv) {
         ArrayList<Visita> out = new ArrayList<>();
         for (Visita v : getItems()) {
             if (v.getStatus() == sv)
@@ -132,7 +132,8 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
      *
      * @param d The current simulated date.
      */
-    public void checkVisite(Date d) {
+    @Override
+    public void checkItems(Date d) {
         final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".checkVisite";
         if (d == null) {
             AssertionControl.logMessage("Current date 'd' cannot be null.", Payload.Status.WARN, CLASSNAME);
@@ -142,7 +143,7 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
         ArrayList<String> uidsToRemove = new ArrayList<>();
         boolean changed = false;
 
-        // Creiamo una copia delle visite correnti per evitare modifiche concurrenti
+        // Creiamo una copia delle visite correnti per evitare modifiche concorrenti
         ArrayList<Visita> currentVisits = new ArrayList<>(cachedItems.values());
 
         for (Visita v : currentVisits) {
@@ -189,7 +190,7 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
      * @return true se lo stato della visita è stato aggiornato, false altrimenti.
      */
     private boolean processPreDeadlineVisit(Visita v, Date currentDay, String className) {
-        Date visitDate    = v.getDate();
+        Date visitDate = v.getDate();
         Date deadlineDate = visitDate.clone().minusDays(3);
 
         // Se non siamo ancora arrivati al termine delle iscrizioni, esci subito
@@ -231,7 +232,6 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
     }
 
 
-
     /**
      * Gestisce la pulizia post-visita. Se la data della visita è precedente alla data corrente,
      * la visita viene considerata per l'eliminazione. Se la visita era CONFIRMED, viene segnato come COMPLETED
@@ -264,16 +264,6 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus{
         }
 
         return changed;
-    }
-
-
-    public Visita getVisitaByUID(String uid) {
-        final String CLASSNAME = DBVisiteHelper.class.getSimpleName() + ".getVisitaByUID";
-        if (uid == null || uid.trim().isEmpty()) {
-            AssertionControl.logMessage("Attempted to get Visita with null/empty UID.", Payload.Status.ERROR, CLASSNAME);
-            return null;
-        }
-        return cachedItems.get(uid);
     }
 
     public void close() {

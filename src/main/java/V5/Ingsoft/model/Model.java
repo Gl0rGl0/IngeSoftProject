@@ -22,23 +22,21 @@ public class Model {
     public final DBDatesHelper dbDatesHelper;
     public final DBIscrizioniHelper dbIscrizionisHelper;
 
-    private final DBHelperFactory factory;
-
     // Constructor and helper initialization
     private Model() {
-        factory = new DBHelperFactory();
+        DBHelperFactory factory = new DBHelperFactory();
 
         dbConfiguratoreHelper = factory.factoryMethod(DBConfiguratoreHelper.class);
-        dbFruitoreHelper =      factory.factoryMethod(DBFruitoreHelper.class);
-        dbVolontarioHelper =    factory.factoryMethod(DBVolontarioHelper.class);
+        dbFruitoreHelper = factory.factoryMethod(DBFruitoreHelper.class);
+        dbVolontarioHelper = factory.factoryMethod(DBVolontarioHelper.class);
 
-        dbTipoVisiteHelper =    factory.factoryMethod(DBTipoVisiteHelper.class);
-        dbVisiteHelper =        factory.factoryMethod(DBVisiteHelper.class);
+        dbTipoVisiteHelper = factory.factoryMethod(DBTipoVisiteHelper.class);
+        dbVisiteHelper = factory.factoryMethod(DBVisiteHelper.class);
 
-        dbLuoghiHelper =        factory.factoryMethod(DBLuoghiHelper.class);
-        
-        dbDatesHelper =         factory.factoryMethod(DBDatesHelper.class);
-        dbIscrizionisHelper =   factory.factoryMethod(DBIscrizioniHelper.class);
+        dbLuoghiHelper = factory.factoryMethod(DBLuoghiHelper.class);
+
+        dbDatesHelper = factory.factoryMethod(DBDatesHelper.class);
+        dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.class);
 
         appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
     }
@@ -193,7 +191,7 @@ public class Model {
         dbTipoVisiteHelper.removeItem(tipoVisitaUID);
     }
 
-    private void removeVisits(ArrayList<Visita> toRemove){
+    private void removeVisits(ArrayList<Visita> toRemove) {
         for (Visita visita : toRemove) {
             // Removing a Visita also requires removing its Iscrizioni
             for (Iscrizione iscrizione : visita.getIscrizioni()) {
@@ -310,7 +308,7 @@ public class Model {
         if (out.getData() != null)
             return out;
 
-        return Payload.<Persona>error(Guest.getInstance(), "No user found with that username.");
+        return Payload.error(Guest.getInstance(), "No user found with that username.");
     }
 
     // ================================================================
@@ -370,7 +368,7 @@ public class Model {
         return !this.dbConfiguratoreHelper.isNew() && appSettings.isAmbitoSet();
     }
 
-    public void unsubscribeUserToVisit(Visita v, Iscrizione i){
+    public void unsubscribeUserToVisit(Visita v, Iscrizione i) {
         v.removeIscrizioneByUID(i.getUID());
         Fruitore f = dbFruitoreHelper.getPersona(i.getUIDFruitore());
         f.removeFromVisita(v.getUID());

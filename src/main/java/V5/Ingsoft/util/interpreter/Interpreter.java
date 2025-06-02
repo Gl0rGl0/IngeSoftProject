@@ -1,15 +1,7 @@
 package V5.Ingsoft.util.interpreter;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.AddCommand;
-import V5.Ingsoft.controller.commands.AssignCommand;
-import V5.Ingsoft.controller.commands.ChangePswCommand;
-import V5.Ingsoft.controller.commands.Command;
-import V5.Ingsoft.controller.commands.DisAssignCommand;
-import V5.Ingsoft.controller.commands.ExitCommand;
-import V5.Ingsoft.controller.commands.LogoutCommand;
-import V5.Ingsoft.controller.commands.SetPersoneMaxCommand;
-import V5.Ingsoft.controller.commands.TimeCommand;
+import V5.Ingsoft.controller.commands.*;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
@@ -20,22 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class Interpreter {
-    private static final String MSG_NO_PROMPT     = "Error: no command provided.";
-    private static final String LOG_NO_PROMPT     = "Interpreter: prompt null or blank";
-    private static final String MSG_UNKNOWN       = " is not recognized as an internal command.";
-    private static final String LOG_UNKNOWN       = "Interpreter: unknown command";
+    private static final String MSG_NO_PROMPT = "Error: no command provided.";
+    private static final String LOG_NO_PROMPT = "Interpreter: prompt null or blank";
+    private static final String MSG_UNKNOWN = " is not recognized as an internal command.";
+    private static final String LOG_UNKNOWN = "Interpreter: unknown command";
 
     protected HashMap<String, Command> commandRegistry = new HashMap<>();
 
     public Interpreter(Controller controller) {
-        commandRegistry.put("add",      new AddCommand(controller));
-        commandRegistry.put("time",     new TimeCommand(controller));
-        commandRegistry.put("logout",   new LogoutCommand(controller));
-        commandRegistry.put("changepsw",new ChangePswCommand(controller));
-        commandRegistry.put("assign",   new AssignCommand(controller));
-        commandRegistry.put("disassign",new DisAssignCommand(controller));
-        commandRegistry.put("setmax",   new SetPersoneMaxCommand(controller, true));
-        commandRegistry.put("exit",     new ExitCommand(controller));
+        commandRegistry.put("add", new AddCommand(controller));
+        commandRegistry.put("time", new TimeCommand(controller));
+        commandRegistry.put("logout", new LogoutCommand(controller));
+        commandRegistry.put("changepsw", new ChangePswCommand(controller));
+        commandRegistry.put("assign", new AssignCommand(controller));
+        commandRegistry.put("disassign", new DisAssignCommand(controller));
+        commandRegistry.put("setmax", new SetPersoneMaxCommand(controller, true));
+        commandRegistry.put("exit", new ExitCommand(controller));
     }
 
     /**
@@ -63,7 +55,7 @@ public abstract class Interpreter {
         for (int i = 1; i < tokens.length; i++) {
             String t = tokens[i];
             if (t.startsWith("-") && t.length() > 1) opts.add(t.substring(1));
-            else                                     args.add(t);
+            else args.add(t);
         }
 
         Command command = commandRegistry.get(cmdKey);
@@ -77,17 +69,17 @@ public abstract class Interpreter {
         int userPri = currentUser.getType().getPriority();
         if (!command.canBeExecutedBy(userPri)) {
             Payload<String> p = Payload.error(
-                "You do not have permissions to execute '" + cmdKey + "'.",
-                "Interpreter: permission denied for " + cmdKey
+                    "You do not have permissions to execute '" + cmdKey + "'.",
+                    "Interpreter: permission denied for " + cmdKey
             );
             p.setCommand(command.getCommandInfo());
             return p;
         }
         if (currentUser.isNew() &&
-            !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
+                !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
             Payload<String> p = Payload.warn(
-                "You must change your password first via 'changepsw [new]'.",
-                "Interpreter: new user blocked for " + cmdKey
+                    "You must change your password first via 'changepsw [new]'.",
+                    "Interpreter: new user blocked for " + cmdKey
             );
             p.setCommand(command.getCommandInfo());
             return p;
@@ -99,23 +91,27 @@ public abstract class Interpreter {
         Payload<?> out = command.execute(options, arguments);
         out.setCommand(command.getCommandInfo());
 
-        if(out != null && out.getLogMessage() != null){
+        if (out.getLogMessage() != null) {
             AssertionControl.logMessage(out.getLogMessage(), out.getStatus(), command.getClassName());
         }
 
         return out;
     }
 
-    public void switchInterpreter(){
-        
+    public void switchInterpreter() {
+
     }
 
-    /** Returns true if all non-setup commands have been executed. */
+    /**
+     * Returns true if all non-setup commands have been executed.
+     */
     public boolean hasExecutedAllCommands() {
         return true;
     }
 
-    /** For setup phase, checks that "done" was executed. */
+    /**
+     * For setup phase, checks that "done" was executed.
+     */
     public boolean isSetupCompleted() {
         return true;
     }

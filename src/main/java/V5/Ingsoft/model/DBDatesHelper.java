@@ -1,16 +1,14 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
-import V5.Ingsoft.controller.item.interfaces.DBMapHelperInterface;
 import V5.Ingsoft.util.Date;
 
 import java.time.Month;
 import java.util.ArrayList;
 
-public class DBDatesHelper extends DBMapHelper<Date>{
+public class DBDatesHelper extends DBMapHelper<Date> {
     private final ArrayList<Date> precludedDates = new ArrayList<>();
 
-    public DBDatesHelper(){
+    public DBDatesHelper() {
         super(Date.PATH, Date.class);
     }
 

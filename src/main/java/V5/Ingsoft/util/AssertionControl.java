@@ -18,6 +18,7 @@ public final class AssertionControl {
 
     /**
      * Logs a message with a given level and origin class name.
+     *
      * @param message   the message to log
      * @param level     log level (ERROR, WARN, INFO, DEBUG)
      * @param className origin class simple name
@@ -27,16 +28,16 @@ public final class AssertionControl {
         try (FileWriter fw = new FileWriter(LOG_FILE, true)) {
             String type = switch (level) {
                 case ERROR -> "ERROR";
-                case WARN  -> "WARNING";
-                case INFO  -> "INFO";
+                case WARN -> "WARNING";
+                case INFO -> "INFO";
                 case DEBUG -> "DEBUG";
             };
             String out = String.format("%4s | %7s | %-20s | %s | %s",
-                VERSION,
-                type,
-                className,
-                LocalDateTime.now(),
-                message
+                    VERSION,
+                    type,
+                    className,
+                    LocalDateTime.now(),
+                    message
             );
             fw.write(out + System.lineSeparator());
         } catch (IOException e) {
@@ -46,21 +47,12 @@ public final class AssertionControl {
         return true;
     }
 
-    /**
-     * Logs a message with a given level and origin class name.
-     * @param message   the message to log
-     * @param level     log level (ERROR, WARN, INFO, DEBUG)
-     * @param className origin class simple name
-     * @return true if written successfully
-     */
-    synchronized public static boolean logPayload(Payload<?> p) {
-        if(p == null) return true;
+    synchronized public static void logPayload(Payload<?> p) {
+        if (p == null) return;
         try (FileWriter fw = new FileWriter(LOG_PAYLOAD, true)) {
-            fw.write(p.toString() + "\n");
+            fw.write(p + "\n");
         } catch (IOException e) {
             print("Log error: " + e.getMessage());
-            return false;
         }
-        return true;
     }
 }

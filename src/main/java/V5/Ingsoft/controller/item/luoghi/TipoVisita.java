@@ -81,13 +81,13 @@ public class TipoVisita extends Deletable {
             throw new Exception("Insufficient number of arguments");
 
         if (args[0].isBlank())
-            throw new Exception("Title name can't be empty");
+            throw new Exception("Title visit can't be empty");
 
         if (args[1].isBlank())
-            throw new Exception("Description can't be empty");
+            throw new Exception("Visit description can't be empty");
 
         if (args[2].isBlank())
-            throw new Exception("Position can't be empty");
+            throw new Exception("Visit position can't be empty");
 
         if (args[3].isBlank())
             throw new Exception("Initial day is empty");
@@ -139,10 +139,6 @@ public class TipoVisita extends Deletable {
 
     public ArrayList<DayOfWeek> getDays() {
         return days;
-    }
-
-    public String getUID() {
-        return this.UID;
     }
 
     public ArrayList<String> getVolontariUIDs() {
@@ -239,36 +235,36 @@ public class TipoVisita extends Deletable {
         return this.luogoUID;
     }
 
-    public int sort(TipoVisita o){
+    public void setLuogo(String luogoUID) {
+        this.luogoUID = luogoUID;
+    }
+
+    public int sort(TipoVisita o) {
         int i = luogoUID == null ? 0 : luogoUID.length();
         int ii = o.luogoUID == null ? 0 : o.luogoUID.length();
         return i - ii;
     }
 
-    public void setLuogo(String luogoUID) {
-        this.luogoUID = luogoUID;
-    }
-
     public String toArray() {
-        return  "\"" + this.title + "\" " +
+        return "\"" + this.title + "\" " +
                 "\"" + this.description + "\" " +
-                "\"" + this.meetingPlace +  "\" " +
-                this.initDay + " " + 
-                this.finishDay + " " + 
-                this.initTime + " " + 
-                this.duration + " " + 
-                this.free + " " + 
+                "\"" + this.meetingPlace + "\" " +
+                this.initDay + " " +
+                this.finishDay + " " +
+                this.initTime + " " +
+                this.duration + " " +
+                this.free + " " +
                 this.numMinPartecipants + " " +
                 this.numMaxPartecipants + " " +
                 StringUtils.arrayToStringClean((String[]) this.days.toArray());
     }
 
     @Override
-    public boolean equals(Object a){
-        if(!(a instanceof TipoVisita))
+    public boolean equals(Object a) {
+        if (!(a instanceof TipoVisita))
             return false;
 
-        return this.title.equals(((TipoVisita)a).getTitle());
+        return this.title.equals(((TipoVisita) a).getTitle());
     }
 
     @Override

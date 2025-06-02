@@ -2,13 +2,13 @@ package V5.Ingsoft.controller.item.persone;
 
 import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.model.DBAbstractPersonaHelper;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public abstract class Persona extends Deletable {
@@ -22,7 +22,7 @@ public abstract class Persona extends Deletable {
 
     public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception {
         super(username);
-        
+
         if (username == null || username.isBlank())
             throw new Exception("Username can't be empty");
 
@@ -70,7 +70,7 @@ public abstract class Persona extends Deletable {
     }
 
     @Override
-    public String getMainInformation(){
+    public String getMainInformation() {
         return this.username;
     }
 }

@@ -34,7 +34,7 @@ public enum CommandList implements ListInterface {
     ASSIGN(ConstString.ASSIGN_INFO, ConstString.ASSIGN_LINE_INFO,
             PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()),
-    
+
     DISASSIGN(ConstString.DISASSIGN_INFO, ConstString.DISASSIGN_LINE_INFO,
             PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()),

@@ -18,8 +18,8 @@ public class PrecludeCommand extends AbstractCommand {
     public Payload<?> execute(String[] options, String[] args) {
         if (options == null || options.length < 1 || args == null || args.length < 1) {
             return Payload.error(
-                "Error using 'preclude'. Missing option or arguments.",
-                "Options or args missing in PRECLUDE command.");
+                    "Error using 'preclude'. Missing option or arguments.",
+                    "Options or args missing in PRECLUDE command.");
         }
 
         Date d;
@@ -27,14 +27,14 @@ public class PrecludeCommand extends AbstractCommand {
             d = new Date(args[0]);
         } catch (Exception e) {
             return Payload.error(
-                "Invalid date format.",
-                "Failed to parse date in PRECLUDE command: " + args[0]);
+                    "Invalid date format.",
+                    "Failed to parse date in PRECLUDE command: " + args[0]);
         }
 
         if (Date.monthsDifference(controller.date, d) > 2) {
             return Payload.error(
-                "Date too distant. Allowed only current month or next two.",
-                "Precluded date too distant: " + d);
+                    "Date too distant. Allowed only current month or next two.",
+                    "Precluded date too distant: " + d);
         }
 
         char option = options[0].charAt(0);
@@ -50,19 +50,19 @@ public class PrecludeCommand extends AbstractCommand {
     private Payload<String> addPrecludedDate(Date d) {
         if (Model.getInstance().dbDatesHelper.addPrecludedDate(d)) {
             return Payload.info(
-                "Successfully added precluded date.",
-                "Added precluded date: " + d);
+                    "Successfully added precluded date.",
+                    "Added precluded date: " + d);
         } else {
             return Payload.error(
-                "Failed to add precluded date.",
-                "Error adding precluded date: " + d);
+                    "Failed to add precluded date.",
+                    "Error adding precluded date: " + d);
         }
     }
 
     private Payload<String> removePrecludedDate(Date d) {
         Model.getInstance().dbDatesHelper.removePrecludedDate(d);
         return Payload.info(
-            "Successfully removed precluded date.",
-            "Removed precluded date: " + d);
+                "Successfully removed precluded date.",
+                "Removed precluded date: " + d);
     }
 }

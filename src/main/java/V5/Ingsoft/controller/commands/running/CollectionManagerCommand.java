@@ -16,23 +16,23 @@ public class CollectionManagerCommand extends AbstractCommand {
         //Non so se lasciarlo
         if (controller == null)
             return Payload.error(
-                "Internal error: controller is null",
-                "Controller reference missing");
+                    "Internal error: controller is null",
+                    "Controller reference missing");
 
         if (options == null || args == null)
             return Payload.error(
-                "Internal error: invalid command structure",
-                "Options or args null");
+                    "Internal error: invalid command structure",
+                    "Options or args null");
 
         if (options.length < 1 || options[0].isBlank())
             return Payload.error(
-                "Usage: collection -<o|c>",
-                "Missing or invalid option");
+                    "Usage: collection -<o|c>",
+                    "Missing or invalid option");
 
         if (!isExecutable()) {
             return Payload.warn(
-                "Cannot edit the status of the collection: action not allowed now. Try Again on the 16th",
-                "CollectionManager: not executable");
+                    "Cannot edit the status of the collection: action not allowed now. Try Again on the 16th",
+                    "CollectionManager: not executable");
         }
 
         char opt = options[0].charAt(0);
@@ -45,12 +45,12 @@ public class CollectionManagerCommand extends AbstractCommand {
                 break;
             default:
                 return Payload.warn(
-                    "Option '-" + opt + "' not recognized for 'collection'",
-                    "Unknown option '" + opt + "'");
+                        "Option '-" + opt + "' not recognized for 'collection'",
+                        "Unknown option '" + opt + "'");
         }
 
         return Payload.info(
-            opt == 'o' ? "Opened collection" : "Closed collection",
-            "Executed '" + opt + "'");
+                opt == 'o' ? "Opened collection" : "Closed collection",
+                "Executed '" + opt + "'");
     }
 }

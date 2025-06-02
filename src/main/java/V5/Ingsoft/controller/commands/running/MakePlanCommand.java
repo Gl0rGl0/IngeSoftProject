@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MakePlanCommand extends AbstractCommand {
-    
+
     public MakePlanCommand(Controller controller) {
         this.controller = controller;
         super.commandInfo = CommandList.MAKEPLAN;
@@ -26,23 +26,23 @@ public class MakePlanCommand extends AbstractCommand {
     public Payload<?> execute(String[] options, String[] args) {
         if (!isExecutable()) {
             return Payload.warn(
-                "Action possible only on the 16th of the month and not on holidays!",
-                "Execution not allowed by schedule");
+                    "Action possible only on the 16th of the month and not on holidays!",
+                    "Execution not allowed by schedule");
         }
         if (controller == null) {
             return Payload.error(
-                "Internal error: controller is null.",
-                "Null controller");
+                    "Internal error: controller is null.",
+                    "Null controller");
         }
         if (controller.date == null || Model.getInstance() == null) {
             return Payload.error(
-                "Internal error: dependencies missing.",
-                "Date or db null");
+                    "Internal error: dependencies missing.",
+                    "Date or db null");
         }
         if (controller.isVolunteerCollectionOpen()) {
             return Payload.warn(
-                "Cannot make plan while collection is open.",
-                "Collection still open");
+                    "Cannot make plan while collection is open.",
+                    "Collection still open");
         }
 
         List<TipoVisita> types = Model.getInstance().dbTipoVisiteHelper.getItems();
@@ -60,14 +60,13 @@ public class MakePlanCommand extends AbstractCommand {
             try {
                 current = new Date(day, nextMonthValue, year);
                 assignedCount += processVisitsForDate(current, types);
-            } catch (Exception e) {
-                continue;
+            } catch (Exception ignored) {
             }
         }
 
         return Payload.info(
-            "Plan created: " + assignedCount + " visits assigned.",
-            "Assigned " + assignedCount + " visits");
+                "Plan created: " + assignedCount + " visits assigned.",
+                "Assigned " + assignedCount + " visits");
     }
 
     private int processVisitsForDate(Date date, List<TipoVisita> types) {

@@ -41,7 +41,7 @@ public class Luogo extends Deletable {
 
     public Luogo(String[] a, Date d) throws Exception {
         super(a[0].hashCode() + "l");
-        
+
         if (a.length < 3)
             throw new Exception("Insufficient number of arguments");
 
@@ -49,11 +49,11 @@ public class Luogo extends Deletable {
             throw new Exception("Title name can't be empty");
 
         if (a[1].isBlank())
-            throw new Exception("Description can't be empty");
+            throw new Exception("Place description can't be empty");
 
         if (a[2].isBlank())
-            throw new Exception("Position can't be empty");
-        
+            throw new Exception("Place position can't be empty");
+
 
         this.name = a[0];
         this.description = a[1];
@@ -106,16 +106,11 @@ public class Luogo extends Deletable {
         return this.description;
     }
 
-    public String getMeetingPlace() {
-        return this.position;
-    }
+    public String getMeetingPlace() { return this.position; }
 
-    public String getUID() {
-        return this.UID;
-    }
 
     public String toArray() {
-        return  "\"" + this.name + "\" " +
+        return "\"" + this.name + "\" " +
                 "\"" + this.description + "\" " +
                 "\"" + this.position + "\" ";
     }

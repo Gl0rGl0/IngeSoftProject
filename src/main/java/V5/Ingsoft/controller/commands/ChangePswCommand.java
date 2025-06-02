@@ -16,17 +16,17 @@ public class ChangePswCommand extends AbstractCommand {
     public Payload<String> execute(String[] options, String[] args) {
         if (args == null || args.length < 1) {
             return Payload.error(
-                "Usage: changepsw <newpassword>",
-                "Missing password argument in ChangePswCommand");
+                    "Usage: changepsw <newpassword>",
+                    "Missing password argument in ChangePswCommand");
         }
         if (Model.getInstance().changePassword(controller.user, args[0])) {
             this.hasBeenExecuted = true;
             return Payload.info(
-                "Password changed successfully!",
-                "Password changed for user: " + controller.user);
+                    "Password changed successfully!",
+                    "Password changed for user: " + controller.user);
         }
         return Payload.error(
-            "Error changing password, please try again...",
-            "Password change failed for user: " + controller.user);
+                "Error changing password, please try again...",
+                "Password change failed for user: " + controller.user);
     }
 }

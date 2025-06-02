@@ -22,8 +22,11 @@ public class AppSettings {
         // Ensure maxPrenotazioni is at least 1
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
 
-        if(ambitoTerritoriale != null)
-            System.out.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona="+maxPrenotazioniPerPersona);
+        if (ambitoTerritoriale != null)
+            System.out.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona=" + maxPrenotazioniPerPersona);
+    }
+
+    public AppSettings() {
     }
 
     // --- Getters ---

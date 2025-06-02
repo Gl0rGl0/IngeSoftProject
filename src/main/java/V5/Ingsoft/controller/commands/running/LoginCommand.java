@@ -21,15 +21,15 @@ public class LoginCommand extends AbstractCommand {
     public Payload<?> execute(String[] options, String[] args) {
         if (args == null || args.length < 2)
             return Payload.error(
-                "Usage: login <username> <password>",
-                CLASSNAME + ": missing credentials");
+                    "Usage: login <username> <password>",
+                    CLASSNAME + ": missing credentials");
 
         if (controller.getCurrentUser().getType() != PersonaType.GUEST)
             return Payload.warn(
-                "Already logged in, please log out first",
-                CLASSNAME + ": login attempted while already logged in");
+                    "Already logged in, please log out first",
+                    CLASSNAME + ": login attempted while already logged in");
 
-        Payload<Persona>  result = Model.getInstance().login(args[0], args[1]);
+        Payload<Persona> result = Model.getInstance().login(args[0], args[1]);
 
         if (result.getStatus() == Payload.Status.ERROR)
             return handleLoginError(result, args);
@@ -37,18 +37,18 @@ public class LoginCommand extends AbstractCommand {
         return handleLoginSuccess(result);
     }
 
-    private Payload<String> handleLoginError(Payload<Persona> result, String[] args) {
+    protected Payload<String> handleLoginError(Payload<Persona> result, String[] args) {
         Persona p = result.getData();
         if (p.getType() != PersonaType.GUEST) {
             return Payload.warn(
-                "Wrong password, please try again",
-                "Invalid password for user " + p.getUsername());
+                    "Wrong password, please try again",
+                    "Invalid password for user " + p.getUsername());
         }
         // user does not exist → allow registration if a second password is provided
         if (args.length < 3) {
             return Payload.error(
-                "User not found",
-                "Registration password missing for new user " + args[0]);
+                    "User not found",
+                    "Registration password missing for new user " + args[0]);
         }
         if (args[2].equals(args[1])) {
             try {
@@ -57,20 +57,20 @@ public class LoginCommand extends AbstractCommand {
                 Model.getInstance().dbFruitoreHelper.addFruitore(f);
                 controller.user = f.getUsername();
                 return Payload.info(
-                    "Account created and logged in as " + f.getUsername(),
-                    "New account registered for " + f.getUsername());
+                        "Account created and logged in as " + f.getUsername(),
+                        "New account registered for " + f.getUsername());
             } catch (Exception e) {
                 return Payload.error(
-                    "Error during registration: " + e.getMessage(),
-                    "Exception creating new user: " + e.getMessage());
+                        "Error during registration: " + e.getMessage(),
+                        "Exception creating new user: " + e.getMessage());
             }
         }
         return Payload.error(
-            "Registration failed: passwords do not match",
-            "Password mismatch during registration for " + args[0]);
+                "Registration failed: passwords do not match",
+                "Password mismatch during registration for " + args[0]);
     }
 
-    private Payload<String> handleLoginSuccess(Payload<Persona> result) {
+    protected Payload<String> handleLoginSuccess(Payload<Persona> result) {
         Persona p = result.getData();
         controller.user = p.getUsername();
         String msg = "Login successful as " + p.getUsername() + " (" + p.getType() + ")";

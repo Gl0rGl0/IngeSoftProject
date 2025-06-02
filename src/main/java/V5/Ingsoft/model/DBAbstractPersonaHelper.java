@@ -68,7 +68,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
         boolean success = saveDB();
         if (success) {
-            if(!toChange.isNew())
+            if (!toChange.isNew())
                 toChange.setAsNotNew();
             AssertionControl.logMessage("Password changed successfully for user: " + username, Payload.Status.INFO, SUB_CLASSNAME);
             return true;

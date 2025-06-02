@@ -17,23 +17,23 @@ public class HelpCommand extends AbstractCommand {
         if (args != null && args.length > 0) {
             try {
                 CommandList cl = CommandList.valueOf(args[0].toUpperCase());
-                    if(cl != null)
-                        helpMsg = cl.toString();
-                    else
-                        helpMsg = CommandList.valueOf("HELP").getHelpMessage(controller.getCurrentUser().getPriority());
+
+                helpMsg = cl.toString();
+                //helpMsg = CommandList.valueOf("HELP").getHelpMessage(controller.getCurrentUser().getPriority());
+
                 return Payload.info(
-                    helpMsg,
-                    "Displayed help for command: " + args[0]);
+                        helpMsg,
+                        "Displayed help for command: " + args[0]);
             } catch (IllegalArgumentException ex) {
                 return Payload.warn(
-                    "Unknown command '" + args[0] + "'. Showing general help.",
-                    "HelpCommand: invalid argument '" + args[0] + "'");
+                        "Unknown command '" + args[0] + "'. Showing general help.",
+                        "HelpCommand: invalid argument '" + args[0] + "'");
             }
         }
         // no args or invalid → general help
         helpMsg = super.commandInfo.getHelpMessage(controller.getCurrentUser().getPriority());
         return Payload.info(
-            helpMsg,
-            "Displayed general help.");
+                helpMsg,
+                "Displayed general help.");
     }
 }

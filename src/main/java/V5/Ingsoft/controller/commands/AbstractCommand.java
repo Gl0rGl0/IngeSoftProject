@@ -25,7 +25,7 @@ public abstract class AbstractCommand implements Command {
         return controller.isActionDay16 || !controller.isSetupCompleted();
     }
 
-    public ListInterface getCommandInfo(){
+    public ListInterface getCommandInfo() {
         return commandInfo;
     }
 }

@@ -5,17 +5,17 @@ import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.util.Payload;
 
 public class InterpreterContext {
+    private final Controller controller;
     private Interpreter current;
-    private Controller controller;
 
-    public InterpreterContext(Controller c){
+    public InterpreterContext(Controller c) {
         this.controller = c;
 
         current = new SetupInterpreter(c);
     }
 
-    public void switchInterpreter(){
-        if(current instanceof RunningInterpreter) return;
+    public void switchInterpreter() {
+        if (current instanceof RunningInterpreter) return;
 
         this.current = new RunningInterpreter(controller);
     }

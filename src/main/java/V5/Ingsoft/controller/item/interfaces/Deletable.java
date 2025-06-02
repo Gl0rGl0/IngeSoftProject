@@ -1,24 +1,22 @@
 package V5.Ingsoft.controller.item.interfaces;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.controller.item.statuses.Statuses;
 import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class Deletable extends Storageble implements Informable{
-    
-    public Deletable(String uid) throws Exception {
-        super(uid);
-    }
+public abstract class Deletable extends Storageble implements Informable {
 
+    private final int monthChange = 2;
     protected Statuses si = StatusItem.ACTIVE;
     protected Date insertionDate;
     protected Date deletionDate;
 
-    private int monthChange = 2;
+    public Deletable(String uid) throws Exception {
+        super(uid);
+    }
 
     public void checkStatus(Date d) {
         switch (si) {
@@ -30,7 +28,7 @@ public abstract class Deletable extends Storageble implements Informable{
                 }
 
                 if (Date.monthsDifference(insertionDate, d) >= monthChange)
-                    this.si = StatusItem.ACTIVE;   
+                    this.si = StatusItem.ACTIVE;
             }
             case StatusItem.PENDING_REMOVE -> {
                 if (deletionDate == null) {
@@ -65,12 +63,12 @@ public abstract class Deletable extends Storageble implements Informable{
         return this.si;
     }
 
-    @JsonIgnore
-    public boolean isUsable(){
-        return si == StatusItem.ACTIVE;
+    public void setStatus(StatusItem si) {
+        this.si = si;
     }
 
-    public void setStatus(StatusItem si){
-        this.si = si;
+    @JsonIgnore
+    public boolean isUsable() {
+        return si == StatusItem.ACTIVE;
     }
 }

@@ -31,10 +31,11 @@ public class Main {
                 case 'A' -> initAvailability(controller);
                 case 'D' -> initDimostrazione(controller);
                 case 'R' -> resetAll(controller);
-            
-                default -> {} // -B o vuoto
+
+                default -> {
+                } // -B o vuoto
             }
-        
+
         initDimostrazione(controller);
         System.out.println();
         view.run();

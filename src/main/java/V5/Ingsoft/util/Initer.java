@@ -92,7 +92,7 @@ public class Initer {
                             r.nextInt(1, meseNum.maxLength()),
                             meseNum.getValue())), true);
                 } catch (Exception ignored) {
-            }
+                }
         }
     }
 
@@ -135,16 +135,16 @@ public class Initer {
         visite.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/25", "15/12/25", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
         visite.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/25", "20/12/25", "18:00", "90", "false", "6", "18", "MeGi"});
         visite.forEach(v -> controller.interpreter("add -T " + StringUtils.arrayToStringClean(v)));
-    
+
         controller.interpreter("add -L \"Foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
-    
+
         controller.interpreter("assign -L \"Foresta Incantata\" \"Tour della Foresta\"");
         controller.interpreter("assign -L \"Foresta Incantata\" \"Avventura sul Fiume\"");
 
         controller.interpreter("assign -V \"Tour della Foresta\" visitaUniverstaria");
         controller.interpreter("assign -V \"Avventura sul Fiume\" visitaUniverstaria");
         controller.interpreter("assign -V \"Avventura sul Fiume\" volTest2");
-        
+
         controller.interpreter("time -m 2");
         initAvailability(controller);
 
@@ -154,7 +154,7 @@ public class Initer {
             meseNum = meseNum.plus(1);
 
         Date toSet = new Date(16, meseNum.getValue(), controller.date.getYear());
-        controller.interpreter("time -s " + toSet.toString());
+        controller.interpreter("time -s " + toSet);
 
         controller.interpreter("collection -c");
         controller.interpreter("makeplan");

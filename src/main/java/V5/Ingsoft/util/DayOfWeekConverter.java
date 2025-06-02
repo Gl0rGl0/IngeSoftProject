@@ -1,8 +1,21 @@
 package V5.Ingsoft.util;
 
 import java.time.DayOfWeek;
+import java.util.HashMap;
 
 public class DayOfWeekConverter {
+
+    private static final HashMap<String, DayOfWeek> daysMap = new HashMap<>();
+
+    static {
+        daysMap.put("Lu", DayOfWeek.MONDAY);
+        daysMap.put("Ma", DayOfWeek.TUESDAY);
+        daysMap.put("Me", DayOfWeek.WEDNESDAY);
+        daysMap.put("Gi", DayOfWeek.THURSDAY);
+        daysMap.put("Ve", DayOfWeek.FRIDAY);
+        daysMap.put("Sa", DayOfWeek.SATURDAY);
+        daysMap.put("Do", DayOfWeek.SUNDAY);
+    }
 
     /**
      * Converts a string formed by 2-letter abbreviations into an array of DayOfWeek.
@@ -19,37 +32,15 @@ public class DayOfWeekConverter {
         if (input == null || input.length() % 2 != 0) {
             throw new IllegalArgumentException("String must be non-null and have a length that is a multiple of 2");
         }
+
         int numDays = input.length() / 2;
         DayOfWeek[] days = new DayOfWeek[numDays];
 
         for (int i = 0; i < numDays; i++) {
             String abbr = input.substring(i * 2, i * 2 + 2);
-            switch (abbr) {
-                case "Lu":
-                    days[i] = DayOfWeek.MONDAY;
-                    break;
-                case "Ma":
-                    days[i] = DayOfWeek.TUESDAY;
-                    break;
-                case "Me":
-                    days[i] = DayOfWeek.WEDNESDAY;
-                    break;
-                case "Gi":
-                    days[i] = DayOfWeek.THURSDAY;
-                    break;
-                case "Ve":
-                    days[i] = DayOfWeek.FRIDAY;
-                    break;
-                case "Sa":
-                    days[i] = DayOfWeek.SATURDAY;
-                    break;
-                case "Do":
-                    days[i] = DayOfWeek.SUNDAY;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unrecognized abbreviation: " + abbr);
-            }
+            days[i] = daysMap.get(abbr);
         }
+
         return days;
     }
 
@@ -66,6 +57,7 @@ public class DayOfWeekConverter {
     public static String daysToString(DayOfWeek[] days) {
         StringBuilder sb = new StringBuilder();
         for (DayOfWeek day : days) {
+            //sb.append(daysMap.keySet().toArray()[day.ordinal()]);
             switch (day) {
                 case MONDAY:
                     sb.append("Lu");

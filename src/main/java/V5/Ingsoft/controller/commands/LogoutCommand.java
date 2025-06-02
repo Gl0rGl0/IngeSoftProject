@@ -17,12 +17,12 @@ public class LogoutCommand extends AbstractCommand {
     public Payload<String> execute(String[] options, String[] args) {
         if (controller.getCurrentUser().getType() == PersonaType.GUEST) {
             return Payload.warn(
-                "No user is logged in. Please log in first.",
-                "Logout attempted with no user logged in.");
+                    "No user is logged in. Please log in first.",
+                    "Logout attempted with no user logged in.");
         }
         controller.user = Guest.getInstance().getUsername();
         return Payload.info(
-            "Logout successful.",
-            "User logged out successfully.");
+                "Logout successful.",
+                "User logged out successfully.");
     }
 }

@@ -19,11 +19,11 @@ public class DoneCommandSETUP extends AbstractCommand {
             this.hasBeenExecuted = true;
             controller.switchInterpreter();
             return Payload.info(
-                "Setup complete, switching to running mode",
-                "All setup commands executed successfully");
+                    "Setup complete, switching to running mode",
+                    "All setup commands executed successfully");
         }
         return Payload.warn(
-            "Cannot complete setup: not all commands executed",
-            "DoneCommandSETUP invoked prematurely");
+                "Cannot complete setup: not all commands executed",
+                "DoneCommandSETUP invoked prematurely");
     }
 }

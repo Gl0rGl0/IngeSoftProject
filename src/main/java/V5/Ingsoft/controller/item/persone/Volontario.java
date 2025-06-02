@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class Volontario extends Persona{
+public class Volontario extends Persona {
     public static final String PATH = "volontari";
 
     private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
@@ -37,7 +37,7 @@ public class Volontario extends Persona{
     public Volontario(String username, String psw, boolean isNew, boolean hash) throws Exception {
         super(username, psw, PersonaType.VOLONTARIO, isNew, hash);
     }
-    
+
     public Volontario(String[] a, Date d) throws Exception {
         this(a[0], a[1], true, true);
         this.insertionDate = d;
