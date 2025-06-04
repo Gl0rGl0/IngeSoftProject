@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
-import GUI.it.proj.utils.interfaces.ListEditer;
+import GUI.it.proj.utils.interfaces.ListDeleter;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
@@ -13,7 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class FruitoriViewController implements ListEditer<Iscrizione> {
+public class FruitoriViewController implements ListDeleter<Iscrizione> {
     public static final String ID = "fruitori";
 
     @FXML

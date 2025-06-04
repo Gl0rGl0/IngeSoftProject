@@ -148,7 +148,7 @@ public class Model {
         }
 
         // --- Cascade: Remove from associated Luogo ---
-        String luogoUID = tipoVisita.getLuogo();
+        String luogoUID = tipoVisita.getLuogoUID();
         if (luogoUID != null) {
             Luogo luogo = dbLuoghiHelper.getItem(luogoUID);
             if (luogo != null) {
@@ -350,7 +350,7 @@ public class Model {
         dbVolontarioHelper.close();
         dbLuoghiHelper.saveDB();
         dbVisiteHelper.close();
-        dbTipoVisiteHelper.close();
+        dbTipoVisiteHelper.saveDB();
     }
 
     public void clearAll() {

@@ -11,6 +11,7 @@ import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
+import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
@@ -42,9 +43,9 @@ public class AddTipoVisiteDialogController {
     @FXML private IntegerInputField numeroMinimoPartecipanti;
     @FXML private IntegerInputField numeroMassimoPartecipanti;
     @FXML private CheckComboBox<String> giorni;
-    @FXML private CheckComboBox<Volontario> volontariUIDs;
+    @FXML private CheckComboBox<Volontario> volontariCheckBox;
 
-    @FXML private ComboBox<String> placeComboBox;
+    @FXML private ComboBox<Luogo> placeComboBox;
 
     private boolean edit = false;
     private TipoVisiteViewController parentController;
@@ -52,11 +53,36 @@ public class AddTipoVisiteDialogController {
     @FXML
     public void initialize() {
         giorni.getItems().addAll("Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do");
-        ObservableList<String> places = FXCollections.observableArrayList("Visita 1", "Visita 2", "Visita 3");
-        placeComboBox.setItems(places);
 
-        ObservableList<Volontario> voloList = FXCollections.observableArrayList(Model.getInstance().dbVolontarioHelper.getItems());
-        volontariUIDs.getItems().addAll(voloList);
+        refreshPlaceList();
+        refreshVolList();
+
+        clearChecks();
+    }
+    
+    private void refreshPlaceList() {
+        List<Luogo> use = Model.getInstance().dbLuoghiHelper.getItems();
+        use.removeIf(l -> !l.isUsable());
+
+        placeComboBox.getItems().clear();
+        ObservableList<Luogo> places = FXCollections.observableArrayList(use);
+        placeComboBox.getItems().addAll(places);
+        
+    }
+
+    private void refreshVolList(){
+        List<Volontario> use = Model.getInstance().dbVolontarioHelper.getItems();
+        use.removeIf(v -> !v.isUsable());
+        
+        volontariCheckBox.getItems().clear();
+        ObservableList<Volontario> voloList = FXCollections.observableArrayList(use);
+        volontariCheckBox.getItems().addAll(voloList);
+    }
+    
+    public void clearChecks(){
+        giorni.getCheckModel().clearChecks();
+        placeComboBox.getSelectionModel().clearSelection();
+        volontariCheckBox.getCheckModel().clearChecks();
     }
 
     // Setter per il controller principale
@@ -67,10 +93,14 @@ public class AddTipoVisiteDialogController {
     // Handler per il pulsante Conferma
     @FXML
     private void onConfirm() {
+        if(edit){
+            onEdit();
+            return;
+        }
         // 1. Lettura testi
-        String titolo = titoloVisita.getText();
-        String descr  = descrizioneVisita.getText();
-        String luogo  = posizione.getText();
+        String titolo    = titoloVisita.getText();
+        String descr     = descrizioneVisita.getText();
+        String pos       = posizione.getText();
         
         // 2. Lettura date e durata
         LocalTime ora    = oraInizio.getTime();
@@ -83,17 +113,19 @@ public class AddTipoVisiteDialogController {
         // 3. Selezioni multichoice
         List<String> giorniSel = giorni.getCheckModel().getCheckedItems();
 
-        List<Volontario> volsSel   = volontariUIDs
+        List<Volontario> volsSel   = volontariCheckBox
             .getCheckModel()
             .getCheckedItems();
 
-        List<Volontario> volNotSel = new ArrayList<>(volontariUIDs.getItems());
+        List<Volontario> volNotSel = new ArrayList<>(volontariCheckBox.getItems());
         volNotSel.removeAll(volsSel);
+
+        Luogo luogo = placeComboBox.getSelectionModel().getSelectedItem();
 
         // 4. Validazione di tutti i campi
         if (titolo    == null || titolo.isBlank() ||
             descr     == null || descr.isBlank() ||
-            luogo     == null || luogo.isBlank() ||
+            pos     == null   || pos.isBlank() ||
             inizio    == null ||
             fine      == null ||
             ora       == null ||
@@ -101,7 +133,8 @@ public class AddTipoVisiteDialogController {
             minPart   == null ||
             maxPart   == null ||
             giorniSel.isEmpty() ||
-            volsSel.isEmpty()) {          
+            volsSel.isEmpty() ||
+            luogo == null) {          
             
             Launcher.toast(Payload.error("Tutti i campi sono obbligatori!",""));
             return;
@@ -132,27 +165,53 @@ public class AddTipoVisiteDialogController {
         // 8. Gestione risultato
         if (res == null || res.getStatus() == Status.ERROR) return;
         
-        TipoVisita nuova = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(titolo);
-        if(nuova == null) return;
-        
-        for(Volontario s : volsSel){
-            if(nuova.assignedTo(s.getUsername())) continue;
-            
-            Launcher.controller.interpreter(String.format("assign -V %s %s", titolo, s));
-        }
+        manageAssign();
 
-        for(Volontario s : volNotSel){
-            if(!nuova.assignedTo(s.getUsername())) continue;
-            
-            Launcher.controller.interpreter(String.format("disassign -V %s %s", titolo, s));
-        }
-        
+        res = Launcher.controller.interpreter(String.format("assign -L \"%s\" %s", luogo.getName(), titolo));
+        Launcher.toast(res);
+
         parentController.refreshItems();
         closeDialog();
     }
+
+    private void manageAssign(){
+        String titolo    = titoloVisita.getText();
+        TipoVisita visit = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(titolo);
+        if(visit == null) return;
+
+        List<Volontario> volsSel   = volontariCheckBox
+            .getCheckModel()
+            .getCheckedItems();
+
+        List<Volontario> volNotSel = new ArrayList<>(volontariCheckBox.getItems());
+        volNotSel.removeAll(volsSel);
+
+        for(Volontario s : volsSel){
+            if(visit.assignedTo(s.getUsername())) continue;
+            
+            Launcher.controller.interpreter(String.format("assign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
+        }
+
+        for(Volontario s : volNotSel){
+            if(!visit.assignedTo(s.getUsername())) continue;
+            
+            Launcher.controller.interpreter(String.format("disassign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
+        }
+    }
         
         
-        // Handler per il pulsante Annulla
+    private void onEdit() {
+        if(volontariCheckBox.getCheckModel().getCheckedItems().isEmpty()){
+            Launcher.toast(Payload.error("Cannot save without any volunteer assigned! Please assign at least one.", ""));
+            return;
+        }
+        
+        manageAssign();
+        parentController.refreshItems();
+        closeDialog();
+    }
+
+    // Handler per il pulsante Annulla
     @FXML
     private void onCancel() {
         closeDialog();
@@ -162,15 +221,68 @@ public class AddTipoVisiteDialogController {
         parentController.closeDialog();
     }
 
-    public void setEdit(boolean edit) {
-        this.edit = true;
-        if (edit) {
-            titleLabel.setText("   MODIFICA  VISITA   ");
+    public void setEdit(boolean e, TipoVisita v) {
+        if (e) {
+            edit = e;
+            titleLabel.setText("   EDIT  VISIT   ");
+
+            disableThings(true);
+
+            titoloVisita.setText(v.getTitle());
+            descrizioneVisita.setText(v.getDescription());
+            posizione.setText(v.getMeetingPlace());
+            inizioGiornoPeriodo.setValue(v.getInitDay().localDate.toLocalDate());
+            fineGiornoPeriodo.setValue(v.getFinishDay().localDate.toLocalDate());
+            oraInizio.setValue(LocalTime.parse(v.getInitTime().toString()));
+            durata.setValue(v.getDuration());
+            gratuito.selectedProperty().set(v.isFree());
+            numeroMinimoPartecipanti.setValue(v.getNumMinPartecipants());
+            numeroMassimoPartecipanti.setValue(v.getNumMaxPartecipants());
+
+            Luogo l = Model.getInstance().dbLuoghiHelper.getItem(v.getLuogoUID());
+            //nullity gestita internamente dal model
+            placeComboBox.getSelectionModel().select(l);
+
+            System.out.println(v);
+            for (String uid : v.getVolontariUIDs()) {
+                for (Volontario vol : volontariCheckBox.getItems()) {
+                    if (vol.getUsername().equals(uid)) {
+                        System.out.println(vol);
+                        volontariCheckBox.getCheckModel().check(vol);
+                    }
+                }
+            }
+
         } else {
-            titleLabel.setText("   AGGIUNGO  VISITA   ");
+            titleLabel.setText("   ADD  VISIT   ");
+            disableThings(false);
+            
+            titoloVisita.clear();
+            descrizioneVisita.clear();
+            posizione.clear();
+            inizioGiornoPeriodo.setValue(LocalDate.now());
+            fineGiornoPeriodo.setValue(LocalDate.now());
+            oraInizio.setValue(LocalTime.now());
+            durata.clear();
+            gratuito.selectedProperty().set(false);
+            numeroMinimoPartecipanti.clear();
+            numeroMassimoPartecipanti.clear();
         }
     }
 
-}
+    private void disableThings(boolean b){
+        titoloVisita.setDisable(b);
+        descrizioneVisita.setDisable(b);
+        posizione.setDisable(b);
+        inizioGiornoPeriodo.setDisable(b);
+        fineGiornoPeriodo.setDisable(b);
+        oraInizio.setDisable(b);
+        durata.setDisable(b);
+        gratuito.setDisable(b);
+        numeroMinimoPartecipanti.setDisable(b);
+        numeroMassimoPartecipanti.setDisable(b);
+        giorni.setDisable(true);
+        placeComboBox.setDisable(b);
+    }
 
-//TODO EDIT
+}

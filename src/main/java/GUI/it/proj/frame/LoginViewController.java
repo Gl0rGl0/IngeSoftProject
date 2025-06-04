@@ -82,7 +82,6 @@ public class LoginViewController implements Initializable {
         }
 
         Payload<?> res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
-        System.out.println(res);
         if (res != null && res.getStatus() != Status.ERROR) {
             userTextField.clear();
             pwField.clear();

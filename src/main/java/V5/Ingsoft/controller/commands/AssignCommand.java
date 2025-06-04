@@ -59,11 +59,11 @@ public class AssignCommand extends AbstractCommand {
                             "No visit type found with title: " + visit,
                             "TipoVisita not found: " + visit);
                 }
-                if (!isExecutable()) {
-                    return Payload.error(
-                            "Operation not permitted at this time.",
-                            "AssignCommand not executable due to state");
-                }
+                // if (!isExecutable()) {
+                //     return Payload.error(
+                //             "Operation not permitted at this time.",
+                //             "AssignCommand not executable due to state");
+                // }
                 if (v.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                             "Cannot assign: volunteer status is DISABLED.",
@@ -84,6 +84,8 @@ public class AssignCommand extends AbstractCommand {
                             "Cannot assign volunteer to visit.",
                             "Failed addVolontario for volunteer: " + volunteer);
                 }
+                Model.getInstance().dbTipoVisiteHelper.saveDB();
+                Model.getInstance().dbLuoghiHelper.saveDB();
                 return Payload.info(
                         "Assigned volunteer " + volunteer + " to visit " + visit,
                         "Assigned in AssignCommand: volunteer " + volunteer + ", visit " + visit);
@@ -131,6 +133,9 @@ public class AssignCommand extends AbstractCommand {
                 }
 
                 t.setLuogo(l.getUID());
+
+                Model.getInstance().dbTipoVisiteHelper.saveDB();
+                Model.getInstance().dbLuoghiHelper.saveDB();
                 return Payload.info(
                         "Assigned visit " + visit + " to place " + place,
                         "Assigned in AssignCommand: visit " + visit + ", place " + place);

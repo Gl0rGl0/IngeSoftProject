@@ -219,6 +219,7 @@ public class TipoVisita extends Deletable {
                 + ", Available Days=" + getDaysString() // Changed "Days disponibilit"
                 + ", Visit Status=" + si // Changed "Stato visita"
                 + ", PlaceUID=" + luogoUID
+                + ", Volunteer=" + volontariUID
                 + "}\n";
     }
 
@@ -231,7 +232,7 @@ public class TipoVisita extends Deletable {
         return false;
     }
 
-    public String getLuogo() {
+    public String getLuogoUID() {
         return this.luogoUID;
     }
 

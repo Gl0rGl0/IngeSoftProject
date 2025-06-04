@@ -94,11 +94,11 @@ public class DisAssignCommand extends AbstractCommand {
                             "No visit type found with title: " + visit,
                             "TipoVisita not found: " + visit);
                 }
-                if (!isExecutable()) {
-                    return Payload.error(
-                            "Operation not permitted at this time.",
-                            "AssignCommand not executable due to state");
-                }
+                // if (!isExecutable()) {
+                //     return Payload.error(
+                //             "Operation not permitted at this time.",
+                //             "AssignCommand not executable due to state");
+                // }
                 if (l.getStatus() == StatusItem.DISABLED) {
                     return Payload.error(
                             "Cannot disassign: place status is DISABLED.",

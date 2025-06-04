@@ -22,7 +22,16 @@
         <Label fx:id="secondaryText" visible="false" managed="false" wrapText="true" />
     </VBox>
 
-    <Button fx:id="deleteButton" styleClass="person-button, red-btn" onAction="#handleDelete">
+    <Button fx:id="editButton" styleClass="person-button, grey-btn" onAction="#handleEdit" visible="false" managed="false">
+        <graphic>
+            <ImageView fx:id="binImage" fitHeight="16" fitWidth="16" pickOnBounds="true"
+                preserveRatio="true">
+                <Image url="@../icon/pencil.png" />
+            </ImageView>
+        </graphic>
+    </Button>
+
+    <Button fx:id="deleteButton" styleClass="person-button, red-btn" onAction="#handleDelete" visible="false" managed="false">
         <graphic>
             <ImageView fx:id="binImage" fitHeight="16" fitWidth="16" pickOnBounds="true"
                 preserveRatio="true">

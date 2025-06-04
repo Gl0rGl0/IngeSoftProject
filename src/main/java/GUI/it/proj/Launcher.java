@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 import org.kordamp.bootstrapfx.BootstrapFX;

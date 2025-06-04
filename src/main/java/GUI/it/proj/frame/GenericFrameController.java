@@ -112,13 +112,13 @@ public class GenericFrameController implements Initializable {
         }
     }
     
-    LuoghiVisiteViewController lEVcontroller;
+    LuoghiTipoVisiteViewController lEVcontroller;
     PersonViewController persController;
     OrarioViewController oController;
     private void loadConfigFrame(){
         try {
-            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-visite-view.fxml"));
-            contentFrames.put(LuoghiVisiteViewController.ID, loader.load());
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-tipovisite-view.fxml"));
+            contentFrames.put(LuoghiTipoVisiteViewController.ID, loader.load());
             lEVcontroller = loader.getController();
 
             loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/persone-view.fxml"));
@@ -257,7 +257,6 @@ public class GenericFrameController implements Initializable {
                 homeController.refreshItems();
         } else {
             System.err.println("Error: Home frame not found in contentFrames.");
-            // Mostra un messaggio di errore nell'area contenuto
         }
     }
 
@@ -265,11 +264,11 @@ public class GenericFrameController implements Initializable {
     @FXML
     private void showDBluoghiEvisite() {
         contentArea.getChildren().clear();
-        Parent frame = contentFrames.get(LuoghiVisiteViewController.ID);
+        Parent frame = contentFrames.get(LuoghiTipoVisiteViewController.ID);
         if (frame != null) {
             contentArea.getChildren().add(frame);
         } else {
-            System.err.println("Error: LuoghiVisiteViewController frame not found in contentFrames.");
+            System.err.println("Error: LuoghiTipoVisiteViewController frame not found in contentFrames.");
         }
         lEVcontroller.refreshItems();
         persController.closeDialog();

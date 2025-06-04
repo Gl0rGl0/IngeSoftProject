@@ -4,8 +4,10 @@ import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
+import GUI.it.proj.utils.interfaces.ListDeleter;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
@@ -13,13 +15,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class TipoVisiteViewController implements ListEditer<TipoVisita> {
+public class TipoVisiteViewController implements ListDeleter<TipoVisita>, ListEditer<TipoVisita> {
     public static final String ID = "visite";
 
     @FXML
     private ListView<TipoVisita> listVisita;
 
-    private LuoghiVisiteViewController parent;
+    private LuoghiTipoVisiteViewController parent;
 
     @FXML
     private void initialize() {
@@ -29,7 +31,7 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
         refreshItems();
     }
 
-    public void setParentController(LuoghiVisiteViewController parent) {
+    public void setParentController(LuoghiTipoVisiteViewController parent) {
         this.parent = parent;
     }
 
@@ -37,7 +39,6 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
     public void removeItem(String tipoVisitaTitle) {
         Payload<?> res = Launcher.controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
 
-        System.out.println("RIMUOVO " + tipoVisitaTitle);
         if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
         
@@ -46,7 +47,13 @@ public class TipoVisiteViewController implements ListEditer<TipoVisita> {
 
     @FXML
     public void onAggiungiVisitaClick() {
-        parent.addVisita();
+        parent.showTipoVisita(false, null);
+    }
+
+    @Override
+    public void editItem(String item) {
+        TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(item);
+        parent.showTipoVisita(true, t);
     }
 
     @Override

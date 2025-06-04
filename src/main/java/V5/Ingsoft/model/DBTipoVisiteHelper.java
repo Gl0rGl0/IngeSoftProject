@@ -46,8 +46,4 @@ public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWit
     public boolean isNew() {
         return cachedItems.isEmpty();
     }
-
-    public void close() {
-        saveDB();
-    }
 }

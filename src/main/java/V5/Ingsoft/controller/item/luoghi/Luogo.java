@@ -65,23 +65,24 @@ public class Luogo extends Deletable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Place {")
-                .append("Name='").append(name).append('\'')
-                .append(", Description='").append(description).append('\'')
-                .append(", Position=").append(position)
-                .append(", UID: ").append(UID)
-                .append(", Status: ").append(si)
-                .append(", Visits=[");
+        // StringBuilder sb = new StringBuilder();
+        // sb.append("Place {")
+        //         .append("Name='").append(name).append('\'')
+        //         .append(", Description='").append(description).append('\'')
+        //         .append(", Position=").append(position)
+        //         .append(", UID: ").append(UID)
+        //         .append(", Status: ").append(si)
+        //         .append(", Visits=[");
 
-        if (!visiteUID.isEmpty()) {
-            visiteUID.forEach(visita -> sb.append("\n    ").append(visita).append(","));
-            sb.setLength(sb.length() - 1); // Removes the last comma
-            sb.append("\n");
-        }
+        // if (!visiteUID.isEmpty()) {
+        //     visiteUID.forEach(visita -> sb.append("\n    ").append(visita).append(","));
+        //     sb.setLength(sb.length() - 1); // Removes the last comma
+        //     sb.append("\n");
+        // }
 
-        sb.append("]}");
-        return sb.toString();
+        // sb.append("]}");
+        // return sb.toString();
+        return this.name;
     }
 
     public boolean addTipoVisita(String tvUID) {

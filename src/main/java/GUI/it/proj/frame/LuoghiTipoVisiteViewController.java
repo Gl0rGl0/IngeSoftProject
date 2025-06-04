@@ -3,13 +3,14 @@ package GUI.it.proj.frame;
 import java.io.IOException;
 
 import GUI.it.proj.Launcher;
+import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class LuoghiVisiteViewController {
+public class LuoghiTipoVisiteViewController {
     public static final String ID = "luoghi-visite";
     @FXML private StackPane contentLuoghi;
     @FXML private StackPane contentVisite;
@@ -44,7 +45,7 @@ public class LuoghiVisiteViewController {
             luoghiDialogController = loader.getController();
             luoghiDialogController.setParentController(luoghiController);
 
-            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-visite-dialog.fxml"));
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-tipovisite-dialog.fxml"));
             dialogVisite = loader.load();
             visiteDialogController = loader.getController();
             visiteDialogController.setParentController(visiteController);
@@ -59,9 +60,11 @@ public class LuoghiVisiteViewController {
     }
 
     //modale visite
-    public void addVisita() {
+    public void showTipoVisita(boolean edit, TipoVisita v) {
         dialog.getChildren().clear();
         dialog.getChildren().add(dialogVisite);
+        visiteDialogController.clearChecks();
+        visiteDialogController.setEdit(edit, v);
         overlayMask.setVisible(true);
         dialog.setVisible(true);
     }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
-import GUI.it.proj.utils.interfaces.ListEditer;
+import GUI.it.proj.utils.interfaces.ListDeleter;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
@@ -22,7 +22,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class PersonViewController implements ListEditer<Persona> {
+public class PersonViewController implements ListDeleter<Persona> {
     public static final String ID = "persone";
 
     @FXML private ListView<Persona> listConfiguratori;

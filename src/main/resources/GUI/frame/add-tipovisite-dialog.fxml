@@ -27,20 +27,41 @@
                 <TextArea fx:id="descrizioneVisita" promptText="Descrizione" prefHeight="100" wrapText="true"/>
                 <TextField fx:id="posizione" promptText="Luogo" />
                 <HBox spacing="15" alignment="CENTER">
-                    <DatePicker fx:id="inizioGiornoPeriodo" promptText="Periodo Inizio" />
-                    <DatePicker fx:id="fineGiornoPeriodo" promptText="Periodo Fine" />
+                    <HBox>
+                        <Label text="From: "/>
+                        <DatePicker fx:id="inizioGiornoPeriodo" promptText="Periodo Inizio" />
+                    </HBox>
+                    <HBox>
+                        <Label text="To: "/>
+                        <DatePicker fx:id="fineGiornoPeriodo" promptText="Periodo Fine" />
+                    </HBox>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
                     <HBox>
-                        <Label text="Ora Inizio: "/>
+                        <Label text="Init time: "/>
                         <TimePicker fx:id="oraInizio" promptText="Ora Inizio (HH:mm)" />
                     </HBox>
-                    <IntegerInputField fx:id="durata" promptText="Durata (min)" />
-                    <CheckBox fx:id="gratuito" text="Gratuito" />
+
+                    <HBox>
+                        <Label text="Duration: "/>
+                        <IntegerInputField fx:id="durata" promptText="Durata (min)" prefWidth="50"/>
+                    </HBox>
+
+                    <HBox>
+                        <Label text="Ticket: "/>
+                        <CheckBox fx:id="gratuito" />
+                    </HBox>
+                    
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
-                    <IntegerInputField fx:id="numeroMinimoPartecipanti" promptText="Min Partecipanti" />
-                    <IntegerInputField fx:id="numeroMassimoPartecipanti" promptText="Max Partecipanti" />
+                    <HBox>
+                        <Label text="MinPartecipants: "/>
+                        <IntegerInputField fx:id="numeroMinimoPartecipanti" promptText="Min Partecipanti" />
+                    </HBox>
+                    <HBox>
+                        <Label text="MaxPartecipants: "/>
+                        <IntegerInputField fx:id="numeroMassimoPartecipanti" promptText="Max Partecipanti" />
+                    </HBox>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
                     <Label text="Giorni: "/>
@@ -48,7 +69,7 @@
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
                     <Label text="Volontari: "/>
-                    <CheckComboBox fx:id="volontariUIDs" />
+                    <CheckComboBox fx:id="volontariCheckBox" />
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
                     <Label text="Luogo: "/>

@@ -4,7 +4,7 @@ import java.util.List;
 
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
-import GUI.it.proj.utils.interfaces.ListEditer;
+import GUI.it.proj.utils.interfaces.ListDeleter;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Payload;
@@ -14,13 +14,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class LuoghiViewController implements ListEditer<Luogo> {
+public class LuoghiViewController implements ListDeleter<Luogo> {
     public static final String ID = "luoghi";
 
     @FXML
     private ListView<Luogo> listLuoghi;
 
-    private LuoghiVisiteViewController parent;
+    private LuoghiTipoVisiteViewController parent;
 
     @FXML
     private void initialize() {
@@ -30,7 +30,7 @@ public class LuoghiViewController implements ListEditer<Luogo> {
         refreshItems();
     }
 
-    public void setParentController(LuoghiVisiteViewController parent) {
+    public void setParentController(LuoghiTipoVisiteViewController parent) {
         this.parent = parent;
     }
 

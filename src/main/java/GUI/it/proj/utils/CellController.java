@@ -4,6 +4,7 @@ import GUI.it.proj.frame.FruitoriViewController;
 import GUI.it.proj.frame.LuoghiViewController;
 import GUI.it.proj.frame.TipoVisiteViewController;
 import GUI.it.proj.utils.interfaces.ListBase;
+import GUI.it.proj.utils.interfaces.ListDeleter;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.interfaces.Informable;
@@ -35,13 +36,39 @@ public class CellController<T extends Informable> {
     @FXML private Label importantDate;
     @FXML private Region spacer;
     @FXML private Button deleteButton;
+    @FXML private Button editButton;
     @FXML private ImageView binImage;
     @FXML private ImageView confirmImage;
-
+    
     private T item;
-    ListBase<T> parentView;
+    ListBase<T> parent;
     ListEditer<T> parentEditer;
+    ListDeleter<T> parentDeleter;
+    
+    @FXML
+    private void initialize() {
+        
+        deleteButton.setVisible(true);
+        deleteButton.setManaged(true);
 
+        textContainer.prefWidthProperty().unbind();
+        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.95));
+
+    }
+    
+    public void showEditButton() {
+        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.55));
+        editButton.setVisible(true);
+        editButton.setManaged(true);
+    }
+    
+    public void showDeleteButton() {
+        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.55));
+        deleteButton.setVisible(true);
+        deleteButton.setManaged(true);
+        deleteButton.setGraphic(binImage);
+    }
+    
     public void setType(String type) {
         switch (type) {
             case   TipoVisiteViewController.ID, 
@@ -74,7 +101,7 @@ public class CellController<T extends Informable> {
             }
             case TipoVisita tvisita -> {
                 primaryText.setText(tvisita.getTitle());
-                Luogo luogo = Model.getInstance().dbLuoghiHelper.getItem(tvisita.getLuogo());
+                Luogo luogo = Model.getInstance().dbLuoghiHelper.getItem(tvisita.getLuogoUID());
                 if(luogo != null)
                     importantDate.setText(luogo.getName());
                 secondaryText.setText(tvisita.getDescription());
@@ -95,7 +122,6 @@ public class CellController<T extends Informable> {
     }
 
     private void handleDisable(Statuses status){
-        System.out.println(this.item);
         switch((StatusItem) status){
             case StatusItem.PENDING_REMOVE, StatusItem.DISABLED -> {
                 if(disabled)
@@ -133,22 +159,12 @@ public class CellController<T extends Informable> {
             default -> {}
         }
     }
-
-    public void setViewController(ListBase<T> p) {
-        if(p instanceof ListEditer){
-            this.parentEditer = (ListEditer<T>) p;
-        } else {
-            this.parentView = p;
-            hideAllButton();
-        }
-    }
-
+    
     private boolean confirm = false;
-
     @FXML
     private void handleDelete() {
         if (confirm) {
-            this.parentEditer.removeItem(item.getMainInformation());
+            this.parentDeleter.removeItem(item.getMainInformation());
             confirm = false;
             deleteButton.setGraphic(binImage);
         } else {
@@ -167,16 +183,21 @@ public class CellController<T extends Informable> {
     }
 
     @FXML
-    private void initialize() {
+    private void handleEdit() {
+        this.parentEditer.editItem(item.getMainInformation());
+        confirm = false;
         deleteButton.setGraphic(binImage);
-
-        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.55));
     }
 
-    public void hideAllButton() {
-        deleteButton.setManaged(false);
-        deleteButton.setVisible(false);
-        textContainer.prefWidthProperty().unbind();
-        textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.95));
+    public void setParent(ListBase<T> parent) {
+        this.parent = parent;
+    }
+
+    public void setParentEditer(ListEditer<T> parente) {
+        this.parentEditer = parente;
+    }
+
+    public void setParentDeleter(ListDeleter<T> parentd) {
+        this.parentDeleter = parentd;
     }
 }

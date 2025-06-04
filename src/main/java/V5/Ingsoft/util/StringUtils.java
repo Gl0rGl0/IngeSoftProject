@@ -1,6 +1,7 @@
 package V5.Ingsoft.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class StringUtils {
@@ -75,6 +76,17 @@ public class StringUtils {
 
         StringBuilder out = new StringBuilder();
         for (String a : s) {
+            out.append("\"").append(a).append("\" ");
+        }
+        return out.toString().stripTrailing();
+    }
+
+    public static String arrayToStringClean(Collection<?> s) {
+        if (s == null)
+            return "";
+
+        StringBuilder out = new StringBuilder();
+        for (Object a : s) {
             out.append("\"").append(a).append("\" ");
         }
         return out.toString().stripTrailing();
