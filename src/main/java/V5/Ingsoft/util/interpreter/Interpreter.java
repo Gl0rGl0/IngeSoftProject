@@ -97,11 +97,7 @@ public abstract class Interpreter {
 
         return out;
     }
-
-    public void switchInterpreter() {
-
-    }
-
+    
     /**
      * Returns true if all non-setup commands have been executed.
      */

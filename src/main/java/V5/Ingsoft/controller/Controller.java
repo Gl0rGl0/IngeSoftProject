@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
+import java.util.List;
+
 public class Controller {
     public static final int SECONDIVIRTUALI_PS = 120; // 12 real minutes are 1 day in the simulation -> 1rs : 120vs =
     // 12rmin : 24hv (Note: This comment explains the virtual time ratio)
@@ -180,12 +182,19 @@ public class Controller {
 
     public double getVolontariStats() {
         double res = 0;
+        List<Volontario> cycle = Model.getInstance().dbVolontarioHelper.getItems();
+        cycle.removeIf(v -> !v.isUsable());
 
-        for (Volontario v : Model.getInstance().dbVolontarioHelper.getItems())
-            res += v.getNAvailability();
+        for (Volontario v : cycle){
+            if(v.isUsable()){
+                res += v.getNAvailability();
+            }
+        }
 
-        double lunghezzaMese = this.date.getMonth().maxLength();
+        return res / (getLunghezzaMeseProssimo() * cycle.size());
+    }
 
-        return res / lunghezzaMese;
+    private int getLunghezzaMeseProssimo() {
+        return this.date.clone().addMonth(1).getMonth().maxLength();
     }
 }

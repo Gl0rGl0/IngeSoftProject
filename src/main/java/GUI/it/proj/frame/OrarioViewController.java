@@ -1,6 +1,7 @@
 package GUI.it.proj.frame;
 
-import java.time.YearMonth;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dlsc.unitfx.IntegerInputField;
@@ -8,6 +9,7 @@ import com.dlsc.unitfx.IntegerInputField;
 import GUI.it.proj.Launcher;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
+import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 import javafx.fxml.FXML;
@@ -21,6 +23,7 @@ public class OrarioViewController {
     public static final String ID = "orario";
 
     private boolean actual_status_isOpen = Launcher.controller.isVolunteerCollectionOpen();
+    private final List<VolontarioRowView> righe = new ArrayList<>();
 
     @FXML VBox container;
     @FXML Label status;
@@ -28,156 +31,144 @@ public class OrarioViewController {
     @FXML TextField ambitoField;
     @FXML IntegerInputField numMaxField;
 
-    @FXML private void initialize() {
-        initAvailability();
+    private Date controllerDate;
 
-        if(actual_status_isOpen){
+    @FXML private void initialize() {
+        controllerDate = Launcher.controller.date;
+        setupStatusLabel();
+        numMaxField.setValue(getNumMax());
+        ambitoField.setText(getAmbito());
+        buildView();
+        refreshStats();
+    }
+
+    private void setupStatusLabel() {
+        if (actual_status_isOpen) {
             status.getStyleClass().remove("error-label");
             status.getStyleClass().add("success-label");
             status.setText("APERTO");
-        }else{
+        } else {
             status.getStyleClass().remove("success-label");
             status.getStyleClass().add("error-label");
             status.setText("CHIUSO");
         }
-        
-        numMaxField.setValue(getNumMax());
-        ambitoField.setText(getAmbito());
     }
 
-    private void initAvailability(){
-        YearMonth yM = YearMonth.now().plusMonths(1);
-        int daysInMonth = yM.lengthOfMonth();
+    private void buildView() {
+            container.getChildren().clear();
+            righe.clear();
     
-        // Recupera la lista dei volontari
-        List<Volontario> lista = Model
-            .getInstance()
-            .dbVolontarioHelper
-            .getItems();
-        lista.removeIf(v -> !v.isUsable());
+            // 1) Calcolo del mese successivo e numero di giorni
+            Month yM = controllerDate.clone().addMonth(1).getMonth();
+            int daysInMonth = yM.maxLength();
     
-        for (Volontario v : lista) {
-            HBox row = new HBox();
-            row.getStyleClass().add("vol-row");
-            row.setSpacing(5);
+            // 2) Creazione dell'HBox di intestazione
+            HBox header = new HBox(5);
+            header.getStyleClass().add("vol-row");  // stessa classe usata per le righe normali
     
-            // Colonna dei nomi
-            Label name = new Label(v.getUsername());
-            name.setPrefWidth(140);
-            row.getChildren().add(name);
+            // 2.a) Prima colonna dell'intestazione: nome del mese e anno
+            String monthName = yM.getDisplayName(
+                java.time.format.TextStyle.FULL,
+                java.util.Locale.getDefault()
+            ).toUpperCase() + " " + controllerDate.getYear();
+            Label lblMonth = new Label(monthName);
+            lblMonth.setPrefWidth(140);
+            header.getChildren().add(lblMonth);
     
-            // Array di 31 booleani (true=disp, false=non disp)
-            boolean[] disponibilita = v.getAvailability();
-    
-            // Crea un box per ciascun giorno effettivo del mese
+            // 2.b) Colonne con i numeri dei giorni (1, 2, 3, …, fino a daysInMonth)
             for (int day = 1; day <= daysInMonth; day++) {
-                Label box = new Label();
-                box.getStyleClass().add("day-box");
-                boolean ok = disponibilita[day - 1];
-                box.getStyleClass().add(ok ? "day-available" : "day-unavailable");
-                
-                // queste due righe in più
-                HBox.setHgrow(box, Priority.ALWAYS);
-                box.setMaxWidth(Double.MAX_VALUE);
-            
-                row.getChildren().add(box);
+                Label lblDay = new Label(String.format("%02d", day));
+                lblDay.getStyleClass().addAll("day-box", "header-day");
+                HBox.setHgrow(lblDay, Priority.ALWAYS);
+                lblDay.setMaxWidth(Double.MAX_VALUE);
+                header.getChildren().add(lblDay);
             }
     
-            container.getChildren().add(row);
-        }
-    }
-
-    public void refreshData(){
-        
-        YearMonth yM = YearMonth.now().plusMonths(1);
-        int daysInMonth = yM.lengthOfMonth();
-        
-        List<Volontario> lista = Model
-            .getInstance()
-            .dbVolontarioHelper
-            .getItems();
-            lista.removeIf(v -> !v.isUsable());
-            
-            // assumiamo che initAvailability abbia aggiunto una riga per ogni volontario
-            for(int i = 0; i < lista.size(); i++){
-                Volontario v = lista.get(i);
-                HBox row = (HBox) container.getChildren().get(i);
-                boolean[] dispon = v.getAvailability();
-                
-                // il primo figlio di row è il Label con il nome, quindi partiamo da 1
-                for(int day = 1; day <= daysInMonth; day++){
-                    Label box = (Label) row.getChildren().get(day);
-                    // rimuovo la classe precedente e ne applico una nuova
-                    box.getStyleClass().removeAll("day-available","day-unavailable");
-                    box.getStyleClass().add(dispon[day-1]
-                    ? "day-available"
-                    : "day-unavailable");
-                }
+            // Aggiungo l'intestazione al container
+            container.getChildren().add(header);
+    
+            // 3) Recupero e filtraggio dei volontari
+            List<Volontario> lista = getVolontariUsabili();
+    
+            // 4) Per ciascun volontario, creo VolontarioRowView e la aggiungo
+            for (Volontario v : lista) {
+                VolontarioRowView row = new VolontarioRowView(v, daysInMonth);
+                righe.add(row);
+                container.getChildren().add(row.getNode());
             }
+        }
+    
 
-        refreshStats(daysInMonth);
+    public void refreshData() {
+        for (VolontarioRowView row : righe) {
+            row.update();
+        }
+        refreshStats();
     }
 
     @FXML private void onOpenCollection() {
-        if(actual_status_isOpen)
-            return;
-
+        if (actual_status_isOpen) return;
+        
         Payload<?> res = Launcher.controller.interpreter("collection -o");
-
-        if(res == null || res.getStatus() != Status.INFO){
+        if (res == null || res.getStatus() != Status.INFO) {
             Launcher.toast(res);
             return;
         }
-
+        
+        actual_status_isOpen = true;
         status.getStyleClass().remove("error-label");
         status.getStyleClass().add("success-label");
         status.setText("APERTO");
     }
 
-    @FXML private void onCloseCollection(){
-        if(!actual_status_isOpen)
-            return;
-
+    @FXML private void onCloseCollection() {
+        if (!actual_status_isOpen) return;
+        
         Payload<?> res = Launcher.controller.interpreter("collection -c");
-
-        if(res == null || res.getStatus() != Status.INFO){
+        if (res == null || res.getStatus() != Status.INFO) {
             Launcher.toast(res);
             return;
         }
-
+        
+        actual_status_isOpen = false;
         status.getStyleClass().remove("success-label");
         status.getStyleClass().add("error-label");
         status.setText("CHIUSO");
     }
-    
+
     @FXML private void onMakeOrario() {
         Payload<?> res = Launcher.controller.interpreter("makeplan");
         Launcher.toast(res);
     }
 
-    private void refreshStats(int lenght){
-        double res = Launcher.controller.getVolontariStats() / lenght;
+    private void refreshStats() {
+        double res = Launcher.controller.getVolontariStats();
         stats.setText(String.format("%.2f%%", res * 100));
     }
 
-    @FXML private void onConfirmNum(){
-        if(numMaxField.getValue() == null)
-            return;
-        
+    @FXML private void onConfirmNum() {
+        if (numMaxField.getValue() == null) return;
         int use = numMaxField.getValue();
-
-        if(use <= 0)
-            return;
+        if (use <= 0) return;
 
         Payload<?> res = Launcher.controller.interpreter("setmax " + use);
         Launcher.toast(res);
     }
 
-    private String getAmbito(){
+    private String getAmbito() {
         return Model.getInstance().appSettings.getAmbitoTerritoriale();
     }
 
-    private int getNumMax(){
+    private int getNumMax() {
         return Model.getInstance().appSettings.getMaxPrenotazioniPerPersona();
+    }
+
+    private List<Volontario> getVolontariUsabili() {
+        List<Volontario> lista = Model
+            .getInstance()
+            .dbVolontarioHelper
+            .getItems();
+        lista.removeIf(v -> !v.isUsable());
+        return lista;
     }
 }

@@ -24,7 +24,7 @@ public class Time {
 
     @Override
     public String toString() {
-        return String.format("%d:%d", hh, mm);
+        return String.format("%02d:%02d", hh, mm);
     }
 
 

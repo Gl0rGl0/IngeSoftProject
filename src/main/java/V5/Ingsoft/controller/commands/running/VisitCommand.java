@@ -98,7 +98,7 @@ public class VisitCommand extends AbstractCommand {
 
                 Iscrizione i;
                 try {
-                    i = new Iscrizione(f.getUsername(), qty);
+                    i = new Iscrizione(v.getUID(), f.getUsername(), qty);
                 } catch (Exception e) {
                     return Payload.error(
                             "Registration successful! Your booking code is",
@@ -205,7 +205,7 @@ public class VisitCommand extends AbstractCommand {
                             "Subscription not found in VisitCommand");
                 }
 
-                if (i.getUIDFruitore().equals(f.getUsername())) {
+                if (!i.getUIDFruitore().equals(f.getUsername())) {
                     return Payload.error(
                             "The subscription doesn't match the current user",
                             "Subscription not found in VisitCommand");

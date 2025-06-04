@@ -22,10 +22,10 @@ import javafx.scene.layout.VBox;
 public class VolontariViewController implements ListBase<TipoVisita> {
     public static final String ID = "volontario";
 
-    @FXML
-    private ListView<TipoVisita> listTipoVisiteAssign;
-    @FXML
-    private StackPane calendar;
+    @FXML private ListView<TipoVisita> listTipoVisiteAssign;
+    @FXML private StackPane calendar;
+
+    private Calendar calendarComponent;
 
     @FXML
     private void initialize() {
@@ -37,7 +37,7 @@ public class VolontariViewController implements ListBase<TipoVisita> {
         if(current.getType().equals(PersonaType.VOLONTARIO))
             listTipoVisiteAssign.getItems().addAll(Model.getInstance().trovaTipoVisiteByVolontario((Volontario)current));
 
-        Calendar calendarComponent = new Calendar();
+        calendarComponent = new Calendar();
         calendar.getChildren().add(calendarComponent.getView());
     }
 

@@ -10,6 +10,7 @@ import V5.Ingsoft.controller.item.interfaces.Informable;
 import V5.Ingsoft.controller.item.luoghi.Luogo;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.controller.item.statuses.Statuses;
@@ -79,12 +80,22 @@ public class CellController<T extends Informable> {
                 secondaryText.setText(tvisita.getDescription());
                 handleDisable(tvisita.getStatus());
             }
+            case Iscrizione iscrizione -> {
+                Visita v = Model.getInstance().dbVisiteHelper.getItem(iscrizione.getVisitaUID());
+                if(v == null) return;
+
+                primaryText.setText(v.getTitle());
+                secondaryText.setText(v.getDate().toString());
+
+                importantDate.setText(iscrizione.getUID());
+            }
             default -> {
             }
         }
     }
 
     private void handleDisable(Statuses status){
+        System.out.println(this.item);
         switch((StatusItem) status){
             case StatusItem.PENDING_REMOVE, StatusItem.DISABLED -> {
                 if(disabled)

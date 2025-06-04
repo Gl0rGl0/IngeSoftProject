@@ -15,7 +15,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
-import GUI.it.proj.utils.Loader; // Potresti non averne più bisogno per caricare i frame principali
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
@@ -118,8 +117,15 @@ public class Launcher extends Application {
     // Nota: questo metodo *non* userà i frame pre-caricati e ricreerà l'UI e il controller
     // ogni volta che viene chiamato.
     public static void setRoot(String fxmlFileName, boolean clear) {
-        // Questa versione ricarica sempre l'FXML
-        Parent root = Loader.loadFXML(String.format("%s-view", fxmlFileName)); // Assumi che Loader.loadFXML ritorni solo Parent
+        FXMLLoader loader = new FXMLLoader(Launcher.class.getResource(String.format("/GUI/frame/%s-view", fxmlFileName)));
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        
         if (root != null) {
             scene.setRoot(root);
             System.out.println("WARNING: setRoot(..., true) does not automatically call setupAfterLogin.");

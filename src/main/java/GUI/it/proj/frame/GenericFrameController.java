@@ -1,7 +1,6 @@
 package GUI.it.proj.frame;
 
 import GUI.it.proj.Launcher;
-import GUI.it.proj.utils.Loader;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.Payload;
@@ -82,27 +81,32 @@ public class GenericFrameController implements Initializable {
         //Refresh content
         switch (Launcher.controller.getCurrentUser().getType()) {
             case CONFIGURATORE -> loadConfigFrame();
-            case VOLONTARIO -> contentFrames.put(VolontariViewController.ID, Loader.loadFXML("volontari-view"));
-            case FRUITORE -> contentFrames.put(FruitoriViewController.ID, Loader.loadFXML("fruitori-view"));
+            case VOLONTARIO -> loadVolontFrame();
+            case FRUITORE -> loadFruitFrame();
             default -> {}
         }
-        
         
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
         
         if(Launcher.controller.getCurrentUser().isNew()){
+            Launcher.toast(Payload.debug("Please change the password, this page will show up everytime until you change it.", ID));
             showChangePassword();
         }
     }
 
     HomeVisiteViewController homeController;
+    ChangePasswordViewController changeController;
     private void loadBaseFrames(){
-        contentFrames.put(ChangePasswordViewController.ID, Loader.loadFXML("changepsw-view"));
 
         try {
             FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/home-view.fxml"));
             contentFrames.put(HomeVisiteViewController.ID, loader.load());
             homeController = loader.getController();
+
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/changepsw-view.fxml"));
+            contentFrames.put(ChangePasswordViewController.ID, loader.load());
+            changeController = loader.getController();
+            changeController.setParentController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,6 +133,27 @@ public class GenericFrameController implements Initializable {
         }
     }
 
+    private FruitoriViewController fruitController;
+    private void loadFruitFrame(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/fruitori-view.fxml"));
+            contentFrames.put(FruitoriViewController.ID, loader.load());
+            fruitController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private VolontariViewController volontController;
+    private void loadVolontFrame(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/volontari-view.fxml"));
+            contentFrames.put(FruitoriViewController.ID, loader.load());
+            volontController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Configura la navbar in base al ruolo corrente.
@@ -213,8 +238,7 @@ public class GenericFrameController implements Initializable {
         }
     }
 
-    @FXML
-    private void showHome() {
+    @FXML void showHome() {
         // Configura la navbar prima di mostrare la home, basandosi sull'utente corrente
         Persona user = Launcher.controller.getCurrentUser();
         if (Launcher.controller != null && user != null) {
@@ -229,8 +253,8 @@ public class GenericFrameController implements Initializable {
         contentArea.getChildren().clear();
         Parent homeFrame = contentFrames.get(HomeVisiteViewController.ID);
         if (homeFrame != null) {
-             contentArea.getChildren().add(homeFrame);
-             homeController.refreshItems();
+                contentArea.getChildren().add(homeFrame);
+                homeController.refreshItems();
         } else {
             System.err.println("Error: Home frame not found in contentFrames.");
             // Mostra un messaggio di errore nell'area contenuto
@@ -280,6 +304,7 @@ public class GenericFrameController implements Initializable {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(ChangePasswordViewController.ID);
         if (frame != null) {
+            changeController.initialize();
             contentArea.getChildren().add(frame);
         } else {
             System.err.println("Error: ChangePasswordViewController frame not found in contentFrames.");
@@ -291,9 +316,10 @@ public class GenericFrameController implements Initializable {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(VolontariViewController.ID);
         if (frame != null) {
-        contentArea.getChildren().add(frame);
+            volontController.refreshItems();
+            contentArea.getChildren().add(frame);
         } else {
-        System.err.println("Error: VolontariViewController frame not found in contentFrames.");
+            System.err.println("Error: VolontariViewController frame not found in contentFrames.");
         }
     }
 
@@ -303,6 +329,7 @@ public class GenericFrameController implements Initializable {
         Parent frame = contentFrames.get(FruitoriViewController.ID);
         if (frame != null) {
             contentArea.getChildren().add(frame);
+            fruitController.refreshItems();
         } else {
             System.err.println("Error: FruitoriViewController frame not found in contentFrames.");
         }

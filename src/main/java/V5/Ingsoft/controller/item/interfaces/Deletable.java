@@ -56,6 +56,7 @@ public abstract class Deletable extends Storageble implements Informable {
     }
 
     public Date getUsableDate() {
+        if(insertionDate == null) return null;
         return this.insertionDate.clone().addMonth(monthChange);
     }
 

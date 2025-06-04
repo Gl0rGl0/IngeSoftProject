@@ -105,7 +105,7 @@ public class Date extends Storageble {
 
     @Override
     public String toString() {
-        return String.format("%d/%d/%d",
+        return String.format("%02d/%02d/%02d",
                 this.localDate.getDayOfMonth(),
                 this.localDate.getMonthValue(),
                 this.localDate.getYear());

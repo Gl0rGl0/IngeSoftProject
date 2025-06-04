@@ -7,6 +7,7 @@ import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListBase;
 import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.model.Model;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -74,6 +75,8 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     public void showVisita(Visita v) {
         if (dialogController == null) return;
 
+        // if(Launcher.controller.getCurrentUser().getType() == PersonaType.VOLONTARIO) return;
+
         // Imposto i valori esistenti (oppure nuovi) nel controller del dialog
         dialogController.setVisitaCorrente(v);
 
@@ -81,6 +84,9 @@ public class HomeVisiteViewController implements ListBase<Visita> {
         overlayMask.setVisible(true);
         dialogContainer.setManaged(true);
         dialogContainer.setVisible(true);
+        
+        boolean disable = Launcher.controller.getCurrentUser().getType() != PersonaType.FRUITORE;
+        dialogController.toggleConfirmBUtton(disable);
     }
 
     /**

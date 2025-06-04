@@ -75,8 +75,8 @@ public class Cell<T extends Informable> extends ListCell<T> {
         this.setOnMouseClicked(e -> {
             T item = getItem();
             if (!isEmpty() && item instanceof Visita) {
-                System.out.println("Cella cliccata all'indice: " + getIndex());
-                System.out.println("Elemento associato: " + item);
+                // System.out.println("Cella cliccata all'indice: " + getIndex());
+                // System.out.println("Elemento associato: " + item);
                 ((HomeVisiteViewController) parent).showVisita((Visita) item);
             }
         });

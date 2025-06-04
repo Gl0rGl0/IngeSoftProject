@@ -20,6 +20,11 @@ public class ViewSE implements Runnable {
     }
 
     public static void payloadOut(Payload<?> out) {
+        if(out.getCommand() == null){
+            println(out.getData());
+            return;
+        }
+
         if (out.getCommand().equals(CommandList.EXIT)) {
             println("Program terminated. Goodbye!");
             ((Runnable) out.getData()).run();

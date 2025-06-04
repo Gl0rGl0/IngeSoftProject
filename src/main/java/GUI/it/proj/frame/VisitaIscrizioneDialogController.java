@@ -7,6 +7,7 @@ import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.util.Payload;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
@@ -23,6 +24,13 @@ public class VisitaIscrizioneDialogController {
     @FXML private Label currentSub;
     @FXML private Label timeStart;
     @FXML private IntegerInputField numSub;
+
+    @FXML private Button btnConferma;
+
+    @FXML
+    public void initialize(){
+        numSub.setValue(1);
+    }
 
     // Riferimento al controller padre (HomeVisiteViewController)
     private HomeVisiteViewController parentController;
@@ -92,9 +100,18 @@ public class VisitaIscrizioneDialogController {
         currentSub.setText("");
         timeStart.setText("");
 
+        numSub.setValue(1);
+
         // Semplicemente chiama il metodo del parent
         if (parentController != null) {
             parentController.closeDialog();
+        }
+    }
+
+    public void toggleConfirmBUtton(boolean b) {
+        if(b != btnConferma.isDisabled()){
+            numSub.setDisable(b);
+            btnConferma.setDisable(b);
         }
     }
 }

@@ -27,26 +27,26 @@ public class LuoghiVisiteViewController {
     @FXML
     private void initialize() {
         try {
-            FXMLLoader loaderLuoghi = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-view.fxml"));
-            Parent luoghiView = loaderLuoghi.load();
-            luoghiController = loaderLuoghi.getController();
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/luoghi-view.fxml"));
+            Parent luoghiView = loader.load();
+            luoghiController = loader.getController();
             contentLuoghi.getChildren().add(luoghiView);
             luoghiController.setParentController(this);
 
-            FXMLLoader loaderVisite = new FXMLLoader(Launcher.class.getResource("/GUI/frame/visite-view.fxml"));
-            Parent visiteView = loaderVisite.load();
-            visiteController = loaderVisite.getController();
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/visite-view.fxml"));
+            Parent visiteView = loader.load();
+            visiteController = loader.getController();
             contentVisite.getChildren().add(visiteView);
             visiteController.setParentController(this);
 
-            FXMLLoader loaderLuoghiDialog = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-luoghi-dialog.fxml"));
-            dialogLuoghi = loaderLuoghiDialog.load();
-            luoghiDialogController = loaderLuoghiDialog.getController();
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-luoghi-dialog.fxml"));
+            dialogLuoghi = loader.load();
+            luoghiDialogController = loader.getController();
             luoghiDialogController.setParentController(luoghiController);
 
-            FXMLLoader loaderVisiteDialog = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-visite-dialog.fxml"));
-            dialogVisite = loaderVisiteDialog.load();
-            visiteDialogController = loaderVisiteDialog.getController();
+            loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/add-visite-dialog.fxml"));
+            dialogVisite = loader.load();
+            visiteDialogController = loader.getController();
             visiteDialogController.setParentController(visiteController);
         } catch (IOException e) {
             e.printStackTrace();
