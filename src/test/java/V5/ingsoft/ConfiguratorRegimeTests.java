@@ -1,10 +1,13 @@
 package V5.ingsoft;
 
-import V4.Ingsoft.controller.item.luoghi.Luogo;
-import V4.Ingsoft.controller.item.luoghi.TipoVisita;
-import V4.Ingsoft.model.Model;
-import V4.Ingsoft.util.AssertionControl;
-import V4.Ingsoft.util.Date;
+import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.model.Model;
+import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Date;
+import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,14 +72,11 @@ public class ConfiguratorRegimeTests extends BaseTest {
         String futureDate = "15/03/2025";
         controller.interpreter("time -s " + today);
         controller.interpreter("preclude -a " + futureDate); // Assumed command - uncommented
-        AssertionControl.logMessage(Model.getInstance().dbDatesHelper.getPrecludedDates(), 0, futureDate);
 
         assertEquals(1, Model.getInstance().dbDatesHelper.getPrecludedDates().size(), "Precluded date should be one");
 
         // Act
-        AssertionControl.logMessage(Model.getInstance().dbDatesHelper.getPrecludedDates(), 0, futureDate);
         controller.interpreter("preclude -a " + futureDate); // Try precluding again
-        AssertionControl.logMessage(Model.getInstance().dbDatesHelper.getPrecludedDates(), 0, futureDate);
 
         // Assert
         // Command should fail gracefully, date should still be precluded.
@@ -121,7 +121,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("setmax 10");
 
         // Assert
-        assertEquals(10, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be updated to 10.");
+        assertEquals(10, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be updated to 10.");
         // Also verify it's saved in the model/settings if applicable
         // assertEquals(10, model.Model.getInstance().getSettings().getMaxPersonePerIscrizione()); // Assuming such getter exists
     }
@@ -134,7 +134,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("setmax 0"); // Should fail
 
         // Assert
-        assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set 0.");
+        assertEquals(5, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set 0.");
     }
 
     @Test
@@ -143,7 +143,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("setmax -2"); // Should fail
 
         // Assert
-        assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set negative value.");
+        assertEquals(5, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 5 after trying to set negative value.");
     }
 
     // UC12 - Elenco Volontari e Tipi Visita Associati
@@ -152,7 +152,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
     @Test
     public void testRegimeListVolontariTipiVisita() {
         // Arrange (VolRegime assigned to TVRegime in setup helper)
-        assertFalse(Model.getInstance().dbVolontarioHelper.getPersonList().isEmpty(), "Prerequisite: Volunteer should exist.");
+        assertFalse(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: Volunteer should exist.");
         assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().isEmpty(), "Prerequisite: Volunteer should be assigned.");
     }
 
@@ -161,7 +161,10 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange
         // Remove the default volunteer added in setup
         controller.interpreter("remove -v VolRegime");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersonList().isEmpty(), "Prerequisite: No volunteers should exist.");
+        assertTrue(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: No volunteers should exist.");
+
+        controller.interpreter("date -m")
+        assertTrue(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: No volunteers should exist.");
     }
 
     @Test
@@ -169,7 +172,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange
         // Remove the default place added in setup
         controller.interpreter("remove -L PlaceRegime"); // This will also cascade-remove TVRegime
-        assertTrue(Model.getInstance().dbLuoghiHelper.getLuoghi().isEmpty(), "Prerequisite: No places should exist.");
+        assertTrue(Model.getInstance().dbLuoghiHelper.getItems().isEmpty(), "Prerequisite: No places should exist.");
     }
 
 

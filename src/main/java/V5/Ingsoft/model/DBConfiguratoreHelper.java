@@ -1,5 +1,7 @@
 package V5.Ingsoft.model;
 
+import java.util.ArrayList;
+
 import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
@@ -9,6 +11,15 @@ public class DBConfiguratoreHelper extends DBAbstractPersonaHelper<Configuratore
 
     public DBConfiguratoreHelper() {
         super(PersonaType.CONFIGURATORE);
+        initConfig();
+    }
+
+    public DBConfiguratoreHelper(ArrayList<Configuratore> list) {
+        super(PersonaType.CONFIGURATORE, list);
+        initConfig();
+    }
+
+    private void initConfig() {
         if (cachedItems.isEmpty()) {
             Configuratore admin;
             try {

@@ -3,7 +3,7 @@ package V5.Ingsoft.controller.item.interfaces;
 import java.util.List;
 
 public interface DBHelperInterface<T extends Storageble> {
-    void loadDB();
+    void loadDBJson();
 
     List<T> getDBfromFile();
 

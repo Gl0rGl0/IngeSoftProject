@@ -18,6 +18,10 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus 
         super(Visita.PATH, Visita.class);
     }
 
+    public DBVisiteHelper(ArrayList<Visita> list) {
+        super(Visita.PATH, Visita.class, list);
+    }
+
     /**
      * Aggiunge una nuova Visita nel file delle proprietà.
      * Simile a addPersona(), ma adattato per Visita.
@@ -264,11 +268,6 @@ public class DBVisiteHelper extends DBMapHelper<Visita> implements DBWithStatus 
         }
 
         return changed;
-    }
-
-    public void close() {
-        // Save the archive before closing
-        saveDB();
     }
 
     public List<Visita> getVisiteByVolontarioAndData(String usernameV, Date d) {

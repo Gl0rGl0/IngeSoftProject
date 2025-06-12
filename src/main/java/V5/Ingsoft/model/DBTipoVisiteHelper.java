@@ -1,5 +1,7 @@
 package V5.Ingsoft.model;
 
+import java.util.ArrayList;
+
 import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
 import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
@@ -9,6 +11,10 @@ public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWit
 
     public DBTipoVisiteHelper() {
         super(TipoVisita.PATH, TipoVisita.class);
+    }
+
+    public DBTipoVisiteHelper(ArrayList<TipoVisita> list) {
+        super(TipoVisita.PATH, TipoVisita.class, list);
     }
 
     /**

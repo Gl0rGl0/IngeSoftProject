@@ -17,10 +17,17 @@ public abstract class DBMapHelper<T extends Storageble> implements DBMapHelperIn
         this.fileJson = path;
         this.clazz = claz;
 
-        loadDB();
+        loadDBJson();
     }
 
-    public void loadDB() {
+    public DBMapHelper(String path, Class<T> claz, ArrayList<T> list) {
+        this.fileJson = path;
+        this.clazz = claz;
+
+        list.forEach(i -> cachedItems.put(i.getUID(), i));
+    }
+
+    public void loadDBJson() {
         getDBfromFile().forEach(i -> cachedItems.put(i.getUID(), i));
     }
 
@@ -37,9 +44,11 @@ public abstract class DBMapHelper<T extends Storageble> implements DBMapHelperIn
     }
 
     public boolean addItem(T item) {
-        if (cachedItems.put(item.getUID(), item) == null)
-            return JsonStorage.saveList(fileJson, getItems());
-        return false;
+        if(cachedItems.containsKey(item.getUID()))
+            return false;
+
+        cachedItems.put(item.getUID(), item);
+        return JsonStorage.saveList(fileJson, getItems());
     }
 
     public boolean removeItem(String id) {

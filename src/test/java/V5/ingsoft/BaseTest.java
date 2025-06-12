@@ -1,47 +1,48 @@
 package V5.ingsoft;
 
-import V4.Ingsoft.controller.Controller;
-import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.model.Model;
+import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.DBConfiguratoreHelper;
+import V5.Ingsoft.model.DBDatesHelper;
+import V5.Ingsoft.model.DBFruitoreHelper;
+import V5.Ingsoft.model.DBIscrizioniHelper;
+import V5.Ingsoft.model.DBLuoghiHelper;
+import V5.Ingsoft.model.DBTipoVisiteHelper;
+import V5.Ingsoft.model.DBVisiteHelper;
+import V5.Ingsoft.model.DBVolontarioHelper;
+import V5.Ingsoft.model.Model;
+import V5.Ingsoft.util.Payload;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseTest {
-    private final String configPath = "data/configuratori.json";
-    private final String volontariPath = "data/volontari.json";
-    private final String fruitoriPath = "data/fruitori.json";
-    private final String luoghiPath = "data/luoghi.json";
-    private final String tipiVisitaPath = "data/tipoVisite.json";
     protected Controller controller;
 
     // Helper to reset data files before each test
     protected void resetDataFiles() {
-        // Delete existing files to ensure clean state for setup
-        try { Files.deleteIfExists(Paths.get(configPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(volontariPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(fruitoriPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(luoghiPath)); } catch (IOException e) { /* Ignore */ }
-        try { Files.deleteIfExists(Paths.get(tipiVisitaPath)); } catch (IOException e) { /* Ignore */ }
-        Model.getInstance().clearAll();
-        Model.appSettings = null;
-        Model.instance = null;
+        Model m = Model.getInstance();
+        m.dbConfiguratoreHelper = new DBConfiguratoreHelper(new ArrayList<>());
+        m.dbDatesHelper = new DBDatesHelper(new ArrayList<>());
+        m.dbFruitoreHelper = new DBFruitoreHelper(new ArrayList<>());
+        m.dbIscrizionisHelper = new DBIscrizioniHelper(new ArrayList<>());
+        m.dbLuoghiHelper = new DBLuoghiHelper(new ArrayList<>());
+        m.dbTipoVisiteHelper = new DBTipoVisiteHelper(new ArrayList<>());
+        m.dbVisiteHelper = new DBVisiteHelper(new ArrayList<>());
+        m.dbVolontarioHelper = new DBVolontarioHelper(new ArrayList<>());
 
-        // Re-initialize model and controller for a fresh start
-        // Implicitly create default ADMIN/PASSWORD if configPath is empty
-        Model model = Model.getInstance();
-        controller = new Controller(model);
+        controller = new Controller(m);
     }
 
     public void enterRegimePhase() {
+        Payload<?> o;
         // 1. First absolute login and password change for ADMIN
-        controller.interpreter("time -s 16/1/2025");
         controller.interpreter("login ADMIN PASSWORD");
+        controller.interpreter("time -s 16/1/2025");
 
         // 2. Complete Setup Steps using known setup commands
         controller.interpreter("setmax 5");
@@ -58,13 +59,13 @@ public class BaseTest {
         controller.interpreter("assign -L PlaceRegime TVRegime");
         controller.interpreter("add -v VolRegime PassVol");
         controller.interpreter("assign -V TVRegime VolRegime");
-        controller.interpreter("add -c configRegime passRegime");
+        controller.interpreter("add -c configRegime passRegimeInit");
         controller.interpreter("collection -o");
 
         // 4. Logout ADMIN and Login as the new configurator
         controller.interpreter("logout");
-        controller.interpreter("login configRegime passRegime");
-        controller.interpreter("changepsw passRegime");
+        o = controller.interpreter("login configRegime passRegimeInit");
+        o = controller.interpreter("changepsw passRegime");
 
         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be of type CONFIGURATORE.");
         controller.interpreter("time -s 17/1/2025");
@@ -80,6 +81,6 @@ public class BaseTest {
     @AfterEach
     public void cleanup() {
         controller.interpreter("logout");
-        Model.getInstance().closeAll();
+        Model.getInstance().saveAll();
     }
 }

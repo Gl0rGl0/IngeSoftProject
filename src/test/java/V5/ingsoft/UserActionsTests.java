@@ -99,7 +99,7 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("assign " + visitUID + " 0"); // Subscribe for 0 people (should fail)
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // int initialParticipants = visita.getCurrentNumber(); // Get initial count before failed attempt
         // assertEquals(initialParticipants, visita.getCurrentNumber(), "Participant count should not change.");
@@ -118,7 +118,7 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("assign " + visitUID + " 6"); // Subscribe for 6 (max is 5)
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // int initialParticipants = visita.getCurrentNumber();
         // assertEquals(initialParticipants, visita.getCurrentNumber(), "Participant count should not change.");
@@ -145,7 +145,7 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("assign " + visitUID + " 6"); // Try to subscribe for 6 (only 5 spots left)
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // assertEquals(5, visita.getCurrentNumber(), "Participant count should remain 5."); // User 2's 5 people
         // assertFalse(visita.hasFruitore("userSubCap1"), "User 1 should not be listed as subscribed.");
@@ -170,11 +170,11 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("assign " + visitUID + " 5"); // Subscribe for the remaining 5 spots
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // assertEquals(10, visita.getCurrentNumber(), "Participant count should be 10.");
         // assertTrue(visita.hasFruitore("userSubComp1"), "User 1 should be subscribed.");
-        // assertEquals(V4.Ingsoft.controller.item.luoghi.StatusVisita.COMPLETED, visita.getStatus(), "Visit status should change to COMPLETED.");
+        // assertEquals(V5.Ingsoft.controller.item.luoghi.StatusVisita.COMPLETED, visita.getStatus(), "Visit status should change to COMPLETED.");
         assertTrue(true, "Executed subscribe command filling capacity (cannot verify state without UC20/Visita access)."); // Placeholder until UC20
     }
 
@@ -227,8 +227,8 @@ public class UserActionsTests extends BaseTest {
         // TODO: Ensure visit exists in 'proposta' state.
         controller.interpreter("assign " + visitUID + " 2"); // Subscribe
         // TODO: Need a reliable way to get the booking code (Iscrizione UID) here.
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
-        // V4.Ingsoft.controller.item.persone.Iscrizione iscrizione = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals(username)).findFirst().orElse(null);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.persone.Iscrizione iscrizione = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals(username)).findFirst().orElse(null);
         // assertNotNull(iscrizione, "Prerequisite: User must have an Iscrizione.");
         // String bookingCode = iscrizione.getUIDIscrizione();
         String bookingCode = "PLACEHOLDER_CODE"; // Placeholder
@@ -263,11 +263,11 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("remove " + bookingCodeUser1);
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // assertFalse(visita.hasFruitore("userCancelComp1"), "User 1 should no longer be subscribed.");
         // assertEquals(5, visita.getCurrentNumber(), "Participant count should be 5 (User 2's).");
-        // assertEquals(V4.Ingsoft.controller.item.luoghi.StatusVisita.PROPOSED, visita.getStatus(), "Visit status should change back to PROPOSED.");
+        // assertEquals(V5.Ingsoft.controller.item.luoghi.StatusVisita.PROPOSED, visita.getStatus(), "Visit status should change back to PROPOSED.");
         assertTrue(true, "Executed cancel command from COMPLETED state (cannot verify state without UC20/Visita/BookingCode access)."); // Placeholder
     }
 
@@ -282,7 +282,7 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("remove INVALID_CODE"); // Try to remove with invalid code
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // assertTrue(visita.hasFruitore("userCancelInvalid"), "User should still be subscribed.");
         // assertEquals(1, visita.getCurrentNumber(), "Participant count should remain 1.");
@@ -309,10 +309,10 @@ public class UserActionsTests extends BaseTest {
         controller.interpreter("remove " + bookingCodeUser2); // User 1 tries to remove User 2's booking
 
         // Assert
-        // V4.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
+        // V5.Ingsoft.controller.item.luoghi.Visita visita = Model.getInstance().dbVisiteHelper.getVisitaByUID(visitUID);
         // assertNotNull(visita, "Prerequisite: Visit must exist.");
         // Check User 2's subscription still exists
-        // V4.Ingsoft.controller.item.persone.Iscrizione iscrizione2 = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals("userCancelOwner2")).findFirst().orElse(null);
+        // V5.Ingsoft.controller.item.persone.Iscrizione iscrizione2 = visita.getIscrizioni().stream().filter(i -> i.getUIDFruitore().equals("userCancelOwner2")).findFirst().orElse(null);
         // assertNotNull(iscrizione2, "User 2's subscription should still exist.");
         // assertEquals(bookingCodeUser2, iscrizione2.getUIDIscrizione(), "User 2's booking code should match.");
         // assertEquals(1, visita.getCurrentNumber(), "Participant count should remain 1.");

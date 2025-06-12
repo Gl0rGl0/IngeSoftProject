@@ -3,6 +3,7 @@ package V5.ingsoft;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
+import V5.Ingsoft.util.Payload;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +32,12 @@ public class LoginTests extends BaseTest {
     @Test
     public void testConfiguratoreLoginSuccess() {
         // Arrange: Use the correct 'add -c' command
-        controller.interpreter("add -c config1 pass1C"); // Corrected command
-        controller.interpreter("logout"); // Logout admin
+        Payload<?> o;
+        o = controller.interpreter("add -c config1 pass1C"); // Corrected command
+        o = controller.interpreter("logout"); // Logout admin
 
         // Act
-        controller.interpreter("login config1 pass1C");
+        o = controller.interpreter("login config1 pass1C");
 
         // Assert
         assertNotNull(controller.getCurrentUser(), "User should be logged in.");

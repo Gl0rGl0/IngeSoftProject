@@ -13,14 +13,14 @@ public class Model {
     public static volatile Model instance = new Model();
 
     public final AppSettings appSettings;
-    public final DBConfiguratoreHelper dbConfiguratoreHelper;
-    public final DBFruitoreHelper dbFruitoreHelper;
-    public final DBVolontarioHelper dbVolontarioHelper;
-    public final DBTipoVisiteHelper dbTipoVisiteHelper;
-    public final DBVisiteHelper dbVisiteHelper;
-    public final DBLuoghiHelper dbLuoghiHelper;
-    public final DBDatesHelper dbDatesHelper;
-    public final DBIscrizioniHelper dbIscrizionisHelper;
+    public DBConfiguratoreHelper dbConfiguratoreHelper;
+    public DBFruitoreHelper dbFruitoreHelper;
+    public DBVolontarioHelper dbVolontarioHelper;
+    public DBTipoVisiteHelper dbTipoVisiteHelper;
+    public DBVisiteHelper dbVisiteHelper;
+    public DBLuoghiHelper dbLuoghiHelper;
+    public DBDatesHelper dbDatesHelper;
+    public DBIscrizioniHelper dbIscrizionisHelper;
 
     // Constructor and helper initialization
     private Model() {
@@ -343,13 +343,12 @@ public class Model {
         return out;
     }
 
-    //TODO rimuovere close()
-    public void closeAll() {
-        dbConfiguratoreHelper.close();
-        dbFruitoreHelper.close();
-        dbVolontarioHelper.close();
+    public void saveAll() {
+        dbConfiguratoreHelper.saveDB();
+        dbFruitoreHelper.saveDB();
+        dbVolontarioHelper.saveDB();
         dbLuoghiHelper.saveDB();
-        dbVisiteHelper.close();
+        dbVisiteHelper.saveDB();
         dbTipoVisiteHelper.saveDB();
     }
 

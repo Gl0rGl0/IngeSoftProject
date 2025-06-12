@@ -1,7 +1,7 @@
 package V5.ingsoft;
 
-import V4.Ingsoft.controller.item.persone.PersonaType;
-import V4.Ingsoft.model.Model;
+import V5.Ingsoft.controller.item.persone.PersonaType;
+import V5.Ingsoft.model.Model;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +37,7 @@ public class SetupPhaseTests extends BaseTest {
         controller.interpreter("setmax 5"); // Correct setup command
 
         // Assert
-        assertEquals(5, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be set to 5.");
+        assertEquals(5, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be set to 5.");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SetupPhaseTests extends BaseTest {
 
         // Assert
         // Default in AppSettings is 1, and setMax ensures it's at least 1.
-        assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be 1 after attempting to set 0.");
+        assertEquals(1, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should be 1 after attempting to set 0.");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class SetupPhaseTests extends BaseTest {
         // Assert
         // Assuming negative is invalid, should remain default (1).
         // Let's assume default 1 for this test.
-        assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set negative value.");
+        assertEquals(1, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set negative value.");
     }
 
     @Test
@@ -78,7 +78,7 @@ public class SetupPhaseTests extends BaseTest {
         // Assert
         // Assuming non-number is invalid, should remain default (1) or previous value (5).
         // Let's assume default 1 for this test.
-        assertEquals(1, Model.appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set non-number.");
+        assertEquals(1, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Max persone should remain 1 after attempting to set non-number.");
     }
 
     // UC7 - Aggiunta Luogo (Setup)
@@ -168,7 +168,7 @@ public class SetupPhaseTests extends BaseTest {
         assertFalse(controller.setupCompleted(), "Setup should not be complete if personeMax is missing.");
         // Verify personeMax can still be set
         controller.interpreter("setmax 10");
-        assertEquals(10, Model.appSettings.getMaxPrenotazioniPerPersona(), "Should be able to set personeMax if 'done' failed.");
+        assertEquals(10, Model.getInstance().appSettings.getMaxPrenotazioniPerPersona(), "Should be able to set personeMax if 'done' failed.");
     }
 
     @Test

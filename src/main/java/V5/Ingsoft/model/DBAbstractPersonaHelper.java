@@ -1,5 +1,7 @@
 package V5.Ingsoft.model;
 
+import java.util.ArrayList;
+
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;
@@ -9,6 +11,10 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     public DBAbstractPersonaHelper(PersonaType personaType) {
         super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass());
+    }
+
+    public DBAbstractPersonaHelper(PersonaType personaType, ArrayList<T> list) {
+        super(personaType.getFilePath(), (Class<T>) personaType.getPersonaClass(), list);
     }
 
     public static String securePsw(String user, String psw) {
@@ -49,7 +55,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
             return false;
         }
 
-        T toChange = cachedItems.get(username);
+        T toChange = super.getItem(username);
 
         if (toChange == null) {
             AssertionControl.logMessage("Attempted to change password for non-existent user: " + username, Payload.Status.WARN, SUB_CLASSNAME);
@@ -68,7 +74,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
         boolean success = saveDB();
         if (success) {
-            if (!toChange.isNew())
+            if (toChange.isNew())
                 toChange.setAsNotNew();
             AssertionControl.logMessage("Password changed successfully for user: " + username, Payload.Status.INFO, SUB_CLASSNAME);
             return true;
@@ -121,13 +127,6 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     public boolean isNew() {
         // Removed duplicated line
-        return cachedItems.isEmpty(); // Use isEmpty() for clarity
-    }
-
-    public void close() {
-        final String SUB_CLASSNAME = getClassName() + ".close<" + clazz.getSimpleName() + ">";
-        // Consider adding logging
-        AssertionControl.logMessage("Closing helper and saving data for " + clazz.getSimpleName(), Payload.Status.INFO, SUB_CLASSNAME);
-        saveDB();
+        return cachedItems.size() == 1 && cachedItems.containsKey("ADMIN");
     }
 }

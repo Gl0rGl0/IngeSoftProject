@@ -12,6 +12,10 @@ public class DBDatesHelper extends DBMapHelper<Date> {
         super(Date.PATH, Date.class);
     }
 
+    public DBDatesHelper(ArrayList<Date> list) {
+        super(Date.PATH, Date.class, list);
+    }
+
     /**
      * Restituisce il set delle date speciali.
      *

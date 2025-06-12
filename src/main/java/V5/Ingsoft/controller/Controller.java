@@ -160,7 +160,7 @@ public class Controller {
     }
 
     public void close() {
-        db.closeAll();
+        db.saveAll();
     }
 
     public void openCollection() {
