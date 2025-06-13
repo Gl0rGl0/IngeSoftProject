@@ -2,10 +2,10 @@ package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
-import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Configuratore;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.real.Luogo;
+import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;

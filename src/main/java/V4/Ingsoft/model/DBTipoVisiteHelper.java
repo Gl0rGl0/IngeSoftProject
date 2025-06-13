@@ -57,7 +57,7 @@ public class DBTipoVisiteHelper extends DBAbstractHelper<TipoVisita> {
             switch (tv.getStatus()) {
                 case PENDING_ADD -> tv.checkStatus(d);
                 case PENDING_REMOVE -> {
-                    Date deletionDate = tv.getdeletionDate();
+                    Date deletionDate = tv.getDeletionDate();
                     if (deletionDate != null && (deletionDate.equals(d) || deletionDate.isBefore(d)))
                         removeTipoVisitaByUID(tv.getUID());
                 }

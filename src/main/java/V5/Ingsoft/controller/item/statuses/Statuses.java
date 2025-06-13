@@ -13,4 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = StatusVisita.class, name = "StatusVisita")
 })
 public interface Statuses {
+
+    String Name();
 }

@@ -4,5 +4,10 @@ public enum StatusItem implements Statuses {
     PENDING_ADD,
     ACTIVE,
     PENDING_REMOVE,
-    DISABLED
+    DISABLED;
+
+    @Override
+    public String Name() {
+        return name();
+    }
 }

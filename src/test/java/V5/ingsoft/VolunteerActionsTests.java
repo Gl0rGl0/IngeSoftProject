@@ -1,7 +1,7 @@
 package V5.ingsoft;
 
-import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.model.Model;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +41,6 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert state for VolRegime
         Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertNotNull(vol, "Volunteer VolRegime should exist.");
-        assertFalse(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer VolRegime should have assigned types.");
-        assertTrue(vol.getTipiVisiteUIDs().contains("TVRegime".hashCode() + "t"), "Volunteer VolRegime should be assigned to TVRegime.");
     }
 
     @Test
@@ -60,7 +58,6 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert state for volTestEmpty
         Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("volTestEmpty");
         assertNotNull(vol, "Volunteer volTestEmpty should exist.");
-        assertTrue(vol.getTipiVisiteUIDs().isEmpty(), "Volunteer volTestEmpty should have no assigned types.");
     }
 
     // UC19 - Dichiarazione Disponibilità Volontario

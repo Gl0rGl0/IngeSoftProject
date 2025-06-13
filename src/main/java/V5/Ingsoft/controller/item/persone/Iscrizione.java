@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-import java.util.UUID;
+import java.util.Objects; // Per equals/hashCode
+import java.util.UUID; // Per UID robusto
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
@@ -27,6 +28,10 @@ public class Iscrizione extends Deletable {
             @JsonProperty("quantity") int quantity,
             @JsonProperty("UID") String uid) throws Exception {
         super(uid);
+
+        if (visitaUID == null || visitaUID.isEmpty() || fruitoreUID == null || fruitoreUID.isEmpty() || quantity <= 0) {
+            throw new IllegalArgumentException("Iscrizione cannot have null/empty UIDs or zero/negative quantity.");
+        }
 
         this.visitaUID = visitaUID;
         this.fruitoreUID = fruitoreUID;
@@ -61,6 +66,21 @@ public class Iscrizione extends Deletable {
     public String toString() {
         return "ID=" + super.UID +
                 "\nFruitore=" + fruitoreUID +
-                "\nQuantity=" + quantity;
+                "\nQuantity=" + quantity +
+                "\nVisita UID=" + visitaUID;
+    }
+
+    // Aggiungi equals e hashCode per una corretta gestione nelle collezioni
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Iscrizione that = (Iscrizione) o;
+        return Objects.equals(this.UID, that.UID); // Confronta per l'UID
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.UID); // Hash sull'UID
     }
 }

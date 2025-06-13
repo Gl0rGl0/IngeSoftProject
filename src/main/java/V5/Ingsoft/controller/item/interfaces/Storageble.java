@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.item.interfaces;
 
 public abstract class Storageble {
-    public final String UID;
+    public final String UID;//
 
     public Storageble(String uid) throws Exception {
         this.UID = uid;

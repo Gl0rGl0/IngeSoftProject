@@ -1,9 +1,9 @@
 package V5.Ingsoft.model;
 
-import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
-import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.*;
+import V5.Ingsoft.controller.item.real.Luogo;
+import V5.Ingsoft.controller.item.real.TipoVisita;
+import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.factory.DBHelperFactory;
 import V5.Ingsoft.util.*;
 
@@ -104,7 +104,7 @@ public class Model {
 
         // --- Cascade: Remove volunteer from associated TipoVisita ---
         // Iterate through a copy to avoid concurrent modification if removeTipoVisitaByUID is called
-        ArrayList<String> tipiVisitaUIDsCopy = new ArrayList<>(volontario.getTipiVisiteUIDs());
+        ArrayList<String> tipiVisitaUIDsCopy = new ArrayList<>(volontario.getTipivisiteAssignedUIDs());
         for (String tipoVisitaUID : tipiVisitaUIDsCopy) {
             TipoVisita tipoVisita = dbTipoVisiteHelper.getItem(tipoVisitaUID);
             if (tipoVisita != null) {
@@ -169,7 +169,7 @@ public class Model {
             if (volontario != null) {
                 volontario.removeTipoVisita(tipoVisitaUID); // Corrected method name based on Volontario.java
                 // Check if Volontario is now unassigned
-                if (volontario.getTipiVisiteUIDs().isEmpty()) {
+                if (volontario.getTipivisiteAssignedUIDs().isEmpty()) {
                     // If unassigned, trigger its removal cascade
                     removeVolontario(volontarioUID);
                 }

@@ -1,13 +1,11 @@
 package V5.ingsoft;
 
-import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.real.Luogo;
+import V5.Ingsoft.controller.item.real.TipoVisita;
+import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.model.Model;
-import V5.Ingsoft.util.AssertionControl;
 import V5.Ingsoft.util.Date;
-import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.util.Payload.Status;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -153,7 +151,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
     public void testRegimeListVolontariTipiVisita() {
         // Arrange (VolRegime assigned to TVRegime in setup helper)
         assertFalse(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: Volunteer should exist.");
-        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().isEmpty(), "Prerequisite: Volunteer should be assigned.");
+        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().isEmpty(), "Prerequisite: Volunteer should be assigned.");
     }
 
     @Test
@@ -161,10 +159,14 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange
         // Remove the default volunteer added in setup
         controller.interpreter("remove -v VolRegime");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: No volunteers should exist.");
+        assertFalse(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: volunteers should exist but be inactive.");
 
-        controller.interpreter("date -m")
-        assertTrue(Model.getInstance().dbVolontarioHelper.getItems().isEmpty(), "Prerequisite: No volunteers should exist.");
+        Volontario toRemove =  Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
+        assertNotNull(toRemove, "Prerequisite: volunteers should exist");
+        assertEquals(StatusItem.PENDING_REMOVE.name(),toRemove.getStatus().Name());
+
+        controller.interpreter("time -s 17/6/2025");
+        assertEquals(StatusItem.DISABLED.name(), toRemove.getStatus().Name(), "Prerequisite: No volunteers should exist.");
     }
 
     @Test
@@ -172,7 +174,12 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange
         // Remove the default place added in setup
         controller.interpreter("remove -L PlaceRegime"); // This will also cascade-remove TVRegime
-        assertTrue(Model.getInstance().dbLuoghiHelper.getItems().isEmpty(), "Prerequisite: No places should exist.");
+        Luogo toRemove = Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime");
+        assertNotNull(toRemove);
+        assertEquals(StatusItem.PENDING_REMOVE.name(), toRemove.getStatus().Name(), "Prerequisite: No usable places should exist.");
+
+        controller.interpreter("time -m 2");
+        assertEquals(StatusItem.DISABLED.name(), toRemove.getStatus().Name(), "Prerequisite: PlaceRegime should be DISABLED.");
     }
 
 
@@ -293,7 +300,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("assign -V TVRegime NewVolRegime"); // NOTE: Assuming 'assign Vol TV' format
         // Assert
         assertNotNull(Model.getInstance().dbVolontarioHelper.getPersona("NewVolRegime"), "New volunteer should exist in DB.");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("NewVolRegime").getTipiVisiteUIDs().contains(tipo.getUID()), "Volunteer should be assigned to TVRegime.");
+        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("NewVolRegime").getTipivisiteAssignedUIDs().contains(tipo.getUID()), "Volunteer should be assigned to TVRegime.");
         // assertTrue(Model.getInstance().dbTipoVisiteHelper.getTipoVisita("TVRegime").getVolontariAssociati().contains("NewVolRegime"), "TVRegime should list NewVolRegime as assigned.");
     }
 
@@ -305,13 +312,13 @@ public class ConfiguratorRegimeTests extends BaseTest {
 
         TipoVisita t2 = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime2");
         assertNotNull(t2, "Prerequisite: Type TVRegime2 should exist.");
-        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: VolRegime should not be assigned to TVRegime2 yet.");
+        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().contains(t2.getUID()), "Prerequisite: VolRegime should not be assigned to TVRegime2 yet.");
 
         // Act
         controller.interpreter("assign -V TVRegime2 VolRegime"); // NOTE: Assuming 'assign -V TV Vol' format
 
         // Assert
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "VolRegime should now be assigned to TVRegime2.");
+        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().contains(t2.getUID()), "VolRegime should now be assigned to TVRegime2.");
         // assertTrue(Model.getInstance().dbTipoVisiteHelper.getTipoVisita("TVRegime2").getVolontariAssociati().contains("VolRegime"), "TVRegime2 should list VolRegime as assigned.");
     }
 
@@ -320,14 +327,14 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange (VolRegime exists from setup)
         assertNotNull(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime"), "Prerequisite: Volunteer VolRegime should exist.");
         assertNull(Model.getInstance().dbTipoVisiteHelper.findTipoVisita("NonExistentTV"), "Prerequisite: Type NonExistentTV should not exist.");
-        int initialAssignments = Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().size();
+        int initialAssignments = Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().size();
 
         // Act
         controller.interpreter("assign VolRegime NonExistentTV"); // Should fail
 
         // Assert
-        assertEquals(initialAssignments, Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().size(), "Volunteer assignment count should not change.");
-        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains("NonExistentTV"), "Volunteer should not be assigned to non-existent type.");
+        assertEquals(initialAssignments, Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().size(), "Volunteer assignment count should not change.");
+        assertFalse(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().contains("NonExistentTV"), "Volunteer should not be assigned to non-existent type.");
     }
 
     @Test
@@ -350,15 +357,15 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Arrange (VolRegime assigned to TVRegime in setup helper)
         TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime");
         assertNotNull(t, "Prerequisite: Type should already exists");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should already be assigned.");
-        int initialAssignments = Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().size();
+        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().contains(t.getUID()), "Prerequisite: Volunteer should already be assigned.");
+        int initialAssignments = Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().size();
 
         // Act
         controller.interpreter("assign VolRegime TVRegime"); // Try assigning again, should fail gracefully
 
         // Assert
-        assertEquals(initialAssignments, Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().size(), "Volunteer assignment count should not change on duplicate attempt.");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Volunteer should remain assigned.");
+        assertEquals(initialAssignments, Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().size(), "Volunteer assignment count should not change on duplicate attempt.");
+        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipivisiteAssignedUIDs().contains(t.getUID()), "Volunteer should remain assigned.");
     }
 
 
@@ -382,28 +389,37 @@ public class ConfiguratorRegimeTests extends BaseTest {
 
     @Test
     public void testRegimeRemoveLuogoCascadeButVolunteerAsAnotherVisitAssigned() {
-        TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime");
-
+        
         controller.interpreter("add -L PlaceRegime2 \"Regime Place\" 10.0:20.0");
         controller.interpreter("add -T TVRegime2 Description2 1:1 20/06/2025 27/08/2025 10:00 60 false 1 10 Ma"); // Add another type
         controller.interpreter("assign -L PlaceRegime2 TVRegime2");
         controller.interpreter("assign -V TVRegime2 VolRegime"); // Assign volunteer to it too
-        TipoVisita t2 = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime2");
+        
+        Luogo l1 = Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime");
+        Luogo l2 = Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime2");
+        TipoVisita tv1 = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime");
+        TipoVisita tv2 = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime2");
+        Volontario vol = Model.getInstance().dbVolontarioHelper.getPersona("VolRegime");
 
-        // Arrange (PlaceRegime, TVRegime, VolRegime linked in setup helper)
-        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime"), "Prerequisite: Place should exist.");
-        assertNotNull(Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Prerequisite: Type should exist.");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t.getUID()), "Prerequisite: Volunteer should be assigned.");
-        assertTrue(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime").getTipiVisiteUIDs().contains(t2.getUID()), "Prerequisite: Volunteer should be assigned.");
+        assertNotNull(l1);
+        assertNotNull(l2);
+        assertNotNull(tv1);
+        assertNotNull(tv2);
+        assertNotNull(vol);
+
+        assertTrue(vol.getTipivisiteAssignedUIDs().contains(tv1.getUID()), "Prerequisite: Volunteer should be assigned.");
+        assertTrue(vol.getTipivisiteAssignedUIDs().contains(tv2.getUID()), "Prerequisite: Volunteer should be assigned.");
 
         // Act
         controller.interpreter("remove -L PlaceRegime");
+        controller.interpreter("time -m 2");
 
         // Assert
-        assertNull(Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime"), "Place should be removed.");
-        assertNotNull(Model.getInstance().dbLuoghiHelper.findLuogo("PlaceRegime2"), "Place shouldn't be removed.");
-        assertNull(Model.getInstance().dbTipoVisiteHelper.findTipoVisita("TVRegime"), "Associated type should be removed (cascade).");
-        assertNotNull(Model.getInstance().dbVolontarioHelper.getPersona("VolRegime"), "Associated Volunteer shouldn't be removed.");
+
+        assertEquals(StatusItem.DISABLED.name(), l1.getStatus().Name(), "Place should be removed.");
+        assertNotNull(l2, "Place shouldn't be removed.");        
+        assertNotNull(tv1, "Associated type should be removed (cascade).");
+        assertNotNull(vol, "Associated Volunteer shouldn't be removed.");
     }
 
     @Test

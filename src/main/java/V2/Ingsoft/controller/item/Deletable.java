@@ -40,7 +40,7 @@ public abstract class Deletable {
         this.deletionDate = d;
     }
 
-    public Date getdeletionDate() {
+    public Date getDeletionDate() {
         return this.deletionDate;
     }
 

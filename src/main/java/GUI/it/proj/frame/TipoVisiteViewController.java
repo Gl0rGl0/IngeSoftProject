@@ -6,7 +6,7 @@ import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListDeleter;
 import GUI.it.proj.utils.interfaces.ListEditer;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;

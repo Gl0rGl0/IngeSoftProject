@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Volontario extends Persona {
     public static final String PATH = "volontari";
 
-    private final ArrayList<String> UIDvisitePresentabili = new ArrayList<>();
+    private ArrayList<String> visiteAssignedUIDs = new ArrayList<>();
     private boolean[] availability = new boolean[31];
 
     @JsonCreator
@@ -26,7 +26,7 @@ public class Volontario extends Persona {
             @JsonProperty("insertionDate") Date insertionDate,
             @JsonProperty("deletionDate") Date deletionDate) throws Exception {
         this(username, psw, isNew, false);
-        this.visiteUIDs = visite;
+        this.visiteAssignedUIDs = visite;
         if (disponibilita != null)
             this.availability = disponibilita;
         this.si = status;
@@ -45,18 +45,18 @@ public class Volontario extends Persona {
     }
 
     public boolean addTipoVisita(String uidTipoVisita) {
-        if (!UIDvisitePresentabili.contains(uidTipoVisita)) {
-            return UIDvisitePresentabili.add(uidTipoVisita);
+        if (!visiteAssignedUIDs.contains(uidTipoVisita)) {
+            return visiteAssignedUIDs.add(uidTipoVisita);
         }
         return false;
     }
 
     public boolean removeTipoVisita(String uidTipoVisita) {
-        return this.UIDvisitePresentabili.remove(uidTipoVisita);
+        return this.visiteAssignedUIDs.remove(uidTipoVisita);
     }
 
-    public ArrayList<String> getTipiVisiteUIDs() {
-        return this.UIDvisitePresentabili;
+    public ArrayList<String> getTipivisiteAssignedUIDs() {
+        return this.visiteAssignedUIDs;
     }
 
     /**

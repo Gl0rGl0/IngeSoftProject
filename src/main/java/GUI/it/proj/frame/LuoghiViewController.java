@@ -5,7 +5,7 @@ import java.util.List;
 import GUI.it.proj.Launcher;
 import GUI.it.proj.utils.Cell;
 import GUI.it.proj.utils.interfaces.ListDeleter;
-import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.real.Luogo;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;

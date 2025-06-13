@@ -3,8 +3,8 @@ package GUI.it.proj.frame;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
-import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.real.TipoVisita;
+import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.util.Payload;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

@@ -5,5 +5,10 @@ public enum StatusVisita implements Statuses {
     CONFIRMED,  // CONFERMATA
     COMPLETED,  // COMPLETA
     CANCELLED,  // CANCELLATA
-    PERFORMED  // EFFETTUATA
+    PERFORMED;  // EFFETTUATA
+
+    @Override
+    public String Name() {
+        return name();
+    }
 }

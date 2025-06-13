@@ -167,6 +167,10 @@ public class Date extends Storageble {
         return this.localDate.toLocalDate().isBefore(other.localDate.toLocalDate());
     }
 
+    public boolean isBeforeOrEqual(Date other){
+        return isBefore(other) || equals(other);
+    }
+
     /**
      * Returns a new Date object representing this date minus the specified number of days.
      *

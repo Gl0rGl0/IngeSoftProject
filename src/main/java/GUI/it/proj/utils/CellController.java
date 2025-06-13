@@ -8,11 +8,11 @@ import GUI.it.proj.utils.interfaces.ListDeleter;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.interfaces.Informable;
-import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
-import V5.Ingsoft.controller.item.luoghi.Visita;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.Persona;
+import V5.Ingsoft.controller.item.real.Luogo;
+import V5.Ingsoft.controller.item.real.TipoVisita;
+import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.controller.item.statuses.Statuses;
 import V5.Ingsoft.model.Model;
@@ -131,7 +131,7 @@ public class CellController<T extends Informable> {
                 if(status == StatusItem.PENDING_REMOVE) {
                     Tooltip tip = new Tooltip("Questo oggetto verrà rimosso.");
                     Tooltip.install(deleteButton, tip);
-                    importantDate.setText("REMOVE: " + ((Deletable) item).getdeletionDate());
+                    importantDate.setText("REMOVE: " + ((Deletable) item).getDeletionDate());
                 }
 
                 deleteButton.getStyleClass().remove("red-btn");

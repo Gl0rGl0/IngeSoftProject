@@ -3,7 +3,7 @@ package V5.Ingsoft.model;
 import java.util.ArrayList;
 
 import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.util.Date;
 
@@ -38,7 +38,7 @@ public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWit
             switch (tv.getStatus()) {
                 case StatusItem.PENDING_ADD -> tv.checkStatus(d);
                 case StatusItem.PENDING_REMOVE -> {
-                    Date deletionDate = tv.getdeletionDate();
+                    Date deletionDate = tv.getDeletionDate();
                     if (deletionDate != null && (deletionDate.equals(d) || deletionDate.isBefore(d)))
                         removeItem(tv.getUID());
                 }

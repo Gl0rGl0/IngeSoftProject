@@ -1,4 +1,4 @@
-package V5.Ingsoft.controller.item.luoghi;
+package V5.Ingsoft.controller.item.real;
 
 import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.persone.Iscrizione;

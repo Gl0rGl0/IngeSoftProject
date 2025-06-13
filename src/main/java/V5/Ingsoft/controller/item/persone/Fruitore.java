@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public class Fruitore extends Persona {
+    private ArrayList<String> visiteUIDs = new ArrayList<>();
 
     @JsonCreator
     public Fruitore(

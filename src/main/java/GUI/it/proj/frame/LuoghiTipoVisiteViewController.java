@@ -3,7 +3,7 @@ package GUI.it.proj.frame;
 import java.io.IOException;
 
 import GUI.it.proj.Launcher;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
+import V5.Ingsoft.controller.item.real.TipoVisita;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

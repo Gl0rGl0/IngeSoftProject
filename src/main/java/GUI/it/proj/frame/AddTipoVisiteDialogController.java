@@ -11,9 +11,9 @@ import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
-import V5.Ingsoft.controller.item.luoghi.Luogo;
-import V5.Ingsoft.controller.item.luoghi.TipoVisita;
 import V5.Ingsoft.controller.item.persone.Volontario;
+import V5.Ingsoft.controller.item.real.Luogo;
+import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;

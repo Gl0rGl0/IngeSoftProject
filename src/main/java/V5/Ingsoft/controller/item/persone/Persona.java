@@ -7,16 +7,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.ArrayList;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE)
 public abstract class Persona extends Deletable {
     @JsonIgnore
     private final PersonaType personaType;
     private final String username;
-    @JsonIgnore
-    protected ArrayList<String> visiteUIDs = new ArrayList<>();
     private String psw;
     private boolean isNew;
 

@@ -39,7 +39,7 @@ public class BaseTest {
     }
 
     public void enterRegimePhase() {
-        Payload<?> o;
+        Payload<?> o; //check with debugger
         // 1. First absolute login and password change for ADMIN
         controller.interpreter("login ADMIN PASSWORD");
         controller.interpreter("time -s 16/1/2025");

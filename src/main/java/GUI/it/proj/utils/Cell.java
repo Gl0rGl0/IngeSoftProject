@@ -5,7 +5,7 @@ import GUI.it.proj.utils.interfaces.ListBase;
 import GUI.it.proj.utils.interfaces.ListDeleter;
 import GUI.it.proj.utils.interfaces.ListEditer;
 import V5.Ingsoft.controller.item.interfaces.Informable;
-import V5.Ingsoft.controller.item.luoghi.Visita;
+import V5.Ingsoft.controller.item.real.Visita;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

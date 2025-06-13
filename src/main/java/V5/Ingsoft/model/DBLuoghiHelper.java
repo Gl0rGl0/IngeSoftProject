@@ -3,7 +3,7 @@ package V5.Ingsoft.model;
 import java.util.ArrayList;
 
 import V5.Ingsoft.controller.item.interfaces.DBWithStatus;
-import V5.Ingsoft.controller.item.luoghi.Luogo;
+import V5.Ingsoft.controller.item.real.Luogo;
 
 public class DBLuoghiHelper extends DBMapHelper<Luogo> implements DBWithStatus {
 

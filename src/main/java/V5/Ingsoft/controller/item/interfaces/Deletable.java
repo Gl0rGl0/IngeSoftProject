@@ -38,7 +38,7 @@ public abstract class Deletable extends Storageble implements Informable {
                     return;
                 }
 
-                if (deletionDate.equals(d))
+                if (deletionDate.isBeforeOrEqual(d))
                     this.si = StatusItem.DISABLED;
             }
             default -> {
@@ -51,7 +51,7 @@ public abstract class Deletable extends Storageble implements Informable {
         si = StatusItem.PENDING_REMOVE;
     }
 
-    public Date getdeletionDate() {
+    public Date getDeletionDate() {
         return this.deletionDate;
     }
 
