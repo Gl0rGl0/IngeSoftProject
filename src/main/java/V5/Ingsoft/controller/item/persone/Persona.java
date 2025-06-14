@@ -19,11 +19,8 @@ public abstract class Persona extends Deletable {
     public Persona(String username, String psw, PersonaType personaType, boolean isNew, boolean hash) throws Exception {
         super(username);
 
-        if (username == null || username.isBlank())
-            throw new Exception("Username can't be empty");
-
-        if (psw == null || psw.isEmpty())
-            throw new Exception("Password can't be empty");
+        if (username == null || username.isBlank()) throw new Exception("Username can't be empty");
+        if (psw == null || psw.isEmpty()) throw new Exception("Password can't be empty");
 
         this.username = username;
         this.psw = hash ? DBAbstractPersonaHelper.securePsw(username, psw) : psw;
@@ -31,42 +28,17 @@ public abstract class Persona extends Deletable {
         this.isNew = isNew;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
+    public String getUsername()     { return this.username; }
+    public String getPsw()          { return this.psw; }
+    public void setPsw(String psw)  { this.psw = psw; }
+    public void setAsNotNew()       { this.isNew = false; }
+    public PersonaType getType()    { return this.personaType; }
+    public int getPriority()        { return this.personaType.getPriority(); }
+    
+    // Jackson saves is[something] as [something]: return value...
+    @JsonIgnore public boolean isNew() { return this.isNew; }
+    @Override public String getMainInformation() { return this.username; }
+    @Override public String toString() { return "Username: " + getUsername(); }
 
-    public String getPsw() {
-        return this.psw;
-    }
 
-    public void setPsw(String psw) {
-        this.psw = psw;
-    }
-
-    @JsonIgnore // Jackson saves is[something] as [something]: return value...
-    public boolean isNew() {
-        return this.isNew;
-    }
-
-    public void setAsNotNew() {
-        this.isNew = false;
-    }
-
-    public PersonaType getType() {
-        return this.personaType;
-    }
-
-    @Override
-    public String toString() {
-        return "Username: " + getUsername();
-    }
-
-    public int getPriority() {
-        return this.personaType.getPriority();
-    }
-
-    @Override
-    public String getMainInformation() {
-        return this.username;
-    }
 }

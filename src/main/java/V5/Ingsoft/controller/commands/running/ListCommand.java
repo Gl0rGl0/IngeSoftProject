@@ -1,8 +1,8 @@
 package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.real.Luogo;
 import V5.Ingsoft.controller.item.real.TipoVisita;
@@ -34,7 +34,7 @@ public class ListCommand extends AbstractCommand {
             case 'T' -> listTipoVisite();
             case 'L' -> listLuoghi();
             case 'V' -> listVisite(options);
-            default -> Payload.warn("Option '" + opt + "' not recognized for 'list'",
+            default  -> Payload.warn("Option '" + opt + "' not recognized for 'list'",
                     "Unknown option '" + opt + "'");
         };
     }
@@ -74,21 +74,13 @@ public class ListCommand extends AbstractCommand {
         char sub = (options.length > 1 && options[1] != null && !options[1].isEmpty())
                 ? options[1].charAt(0) : 'a';
         return switch (sub) {
-            case 'a' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getItems(), "List of all visit categories returned");
-            case 'p' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteProposte(), "List of proposed visits returned");
-            case 'c' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteComplete(), "List of complete visits returned");
-            case 'C' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteConfermate(), "List of confirmed visits returned");
-            case 'd' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteCancellate(), "List of cancelled visits returned");
-            case 'e' ->
-                    Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteEffettuate(), "List of performed visits returned");
-            default -> Payload.warn(
-                    "Option '" + sub + "' not recognized for 'list V'",
-                    "Unknown sub-option '" + sub + "'");
+            case 'a' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getItems(), "List of all visit categories returned");
+            case 'p' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteProposte(), "List of proposed visits returned");
+            case 'c' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteComplete(), "List of complete visits returned");
+            case 'C' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteConfermate(), "List of confirmed visits returned");
+            case 'd' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteCancellate(), "List of cancelled visits returned");
+            case 'e' -> Payload.<Collection<Visita>>info(Model.getInstance().dbVisiteHelper.getVisiteEffettuate(), "List of performed visits returned");
+            default -> Payload.warn( "Option '" + sub + "' not recognized for 'list V'", "Unknown sub-option '" + sub + "'" );
         };
     }
 }

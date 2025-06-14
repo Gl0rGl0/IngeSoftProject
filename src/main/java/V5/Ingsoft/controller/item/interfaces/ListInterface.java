@@ -1,4 +1,4 @@
-package V5.Ingsoft.controller.commands;
+package V5.Ingsoft.controller.item.interfaces;
 
 public interface ListInterface {
     String getHelpMessage(int userPriority);

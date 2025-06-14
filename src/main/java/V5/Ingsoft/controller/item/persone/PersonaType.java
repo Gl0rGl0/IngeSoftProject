@@ -20,20 +20,8 @@ public enum PersonaType {
         this.priority = priority;
     }
 
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public Class<? extends Persona> getPersonaClass() {
-        return this.personaClass;
-    }
-
-    public int getPriority() {
-        return this.priority;
-    }
-
-    @Override
-    public String toString() {
-        return this.filePath;
-    }
+    public Class<? extends Persona> getPersonaClass() { return this.personaClass; }
+    public String getFilePath()        { return this.filePath; }
+    public int getPriority()           { return this.priority; }
+    @Override public String toString() { return this.filePath; }
 }

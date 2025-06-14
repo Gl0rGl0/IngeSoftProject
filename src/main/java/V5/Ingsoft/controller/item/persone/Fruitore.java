@@ -22,13 +22,11 @@ public class Fruitore extends Persona {
         super(username, psw, PersonaType.FRUITORE, isNew, hash);
     }
 
-    public Fruitore(String[] a) throws Exception {    //added with command
+    public Fruitore(String[] a) throws Exception {
         this(a[0], a[1], true, true);
     }
 
-    public ArrayList<String> getVisiteUIDs() {
-        return this.visiteUIDs;
-    }
+    public ArrayList<String> getVisiteUIDs() { return this.visiteUIDs; }
 
     public void subscribeToVisit(String uid) {
         if (visiteUIDs.contains(uid))
@@ -37,7 +35,5 @@ public class Fruitore extends Persona {
         visiteUIDs.add(uid);
     }
 
-    public void removeFromVisita(String uid) {
-        visiteUIDs.remove(uid);
-    }
+    public void removeFromVisita(String uid) { visiteUIDs.remove(uid); }
 }

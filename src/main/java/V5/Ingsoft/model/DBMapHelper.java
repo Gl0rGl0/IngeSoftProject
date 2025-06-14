@@ -1,6 +1,7 @@
 package V5.Ingsoft.model;
 
 import V5.Ingsoft.controller.item.interfaces.DBMapHelperInterface;
+import V5.Ingsoft.controller.item.interfaces.StorageManager;
 import V5.Ingsoft.controller.item.interfaces.Storageble;
 import V5.Ingsoft.util.JsonStorage;
 
@@ -9,21 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DBMapHelper<T extends Storageble> implements DBMapHelperInterface<T> {
-    protected final Class<T> clazz;
     protected final HashMap<String, T> cachedItems = new HashMap<>();
-    private final String fileJson;
+    private StorageManager<T> sm;
+
+    private StorageManager<T> createSM(String path, Class<T> claz){
+        return new JsonStorage<>(path, claz);
+    }
 
     public DBMapHelper(String path, Class<T> claz) {
-        this.fileJson = path;
-        this.clazz = claz;
-
+        this.sm = createSM(path, claz);
         loadDBJson();
     }
 
     public DBMapHelper(String path, Class<T> claz, ArrayList<T> list) {
-        this.fileJson = path;
-        this.clazz = claz;
-
+        this.sm = createSM(path, claz);
         list.forEach(i -> cachedItems.put(i.getUID(), i));
     }
 
@@ -32,7 +32,7 @@ public abstract class DBMapHelper<T extends Storageble> implements DBMapHelperIn
     }
 
     public List<T> getDBfromFile() {
-        return JsonStorage.loadList(fileJson, clazz);
+        return sm.loadList();
     }
 
     public List<T> getItems() {
@@ -48,21 +48,21 @@ public abstract class DBMapHelper<T extends Storageble> implements DBMapHelperIn
             return false;
 
         cachedItems.put(item.getUID(), item);
-        return JsonStorage.saveList(fileJson, getItems());
+        return saveDB();
     }
 
     public boolean removeItem(String id) {
         if (cachedItems.remove(id) != null)
-            return JsonStorage.saveList(fileJson, getItems());
+            return saveDB();
         return false;
     }
 
     public boolean saveDB() {
-        return JsonStorage.saveList(fileJson, getItems());
+        return sm.saveList(getItems());
     }
 
     public void clear() {
-        JsonStorage.clearList(fileJson);
+        sm.clearList();
     }
 
     public String getClassName() {

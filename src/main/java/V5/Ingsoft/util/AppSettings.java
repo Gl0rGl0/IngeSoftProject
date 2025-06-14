@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import V5.Ingsoft.controller.item.interfaces.StorageManager;
+
 /**
  * Simple class to hold application settings that need to be persisted.
  */
@@ -13,6 +15,9 @@ public class AppSettings {
 
     private String ambitoTerritoriale = "default";
     private int maxPrenotazioniPerPersona = 1; // Default value if not loaded
+
+    @JsonIgnore
+    private StorageManager<AppSettings> sm;
 
     @JsonCreator
     public AppSettings(
@@ -48,7 +53,7 @@ public class AppSettings {
         this.ambitoTerritoriale = ambito.trim();
 
         if (isAmbitoSet())
-            JsonStorage.saveObject(PATH, this);
+            save();
     }
 
     public int getMaxPrenotazioniPerPersona() {
@@ -64,7 +69,7 @@ public class AppSettings {
      */
     public void setMaxPrenotazioniPerPersona(int max) {
         this.maxPrenotazioniPerPersona = Math.max(1, max);
-        JsonStorage.saveObject(PATH, this);
+        save();
     }
 
     @JsonIgnore
@@ -75,5 +80,13 @@ public class AppSettings {
     public void clear() {
         setAmbitoTerritoriale(null);
         setMaxPrenotazioniPerPersona(1);
+    }
+
+    public void setLoader(StorageManager<AppSettings> settingsLoader) {
+        this.sm = settingsLoader;
+    }
+
+    public boolean save() {
+        return sm.saveObject(this);
     }
 }

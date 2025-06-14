@@ -1,6 +1,7 @@
-package V5.Ingsoft.controller.commands;
+package V5.Ingsoft.controller.item.interfaces;
 
 import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.controller.commands.Command;
 
 public abstract class AbstractCommand implements Command {
 
@@ -11,21 +12,16 @@ public abstract class AbstractCommand implements Command {
     // when creating ADD, SETMAX, SETAMBITO, LOGINSETUP,
     // CHANGEPSW, and DONE commands, set it to false, but only for these
 
-    @Override
-    public boolean canBeExecutedBy(int userPriority) {
+    @Override public boolean canBeExecutedBy(int userPriority) {
         return commandInfo.canBeExecutedBy(userPriority);
-    }
-
-    @Override
-    public boolean hasBeenExecuted() {
-        return hasBeenExecuted; // SO THOSE IMPLEMENTED IN SETUP CAN MODIFY IT
     }
 
     protected boolean isExecutable() {
         return controller.isActionDay16 || !controller.isSetupCompleted();
     }
-
-    public ListInterface getCommandInfo() {
-        return commandInfo;
-    }
+    
+    // SO THOSE IMPLEMENTED IN SETUP CAN MODIFY IT
+    @Override
+    public boolean hasBeenExecuted() { return hasBeenExecuted; }
+    public ListInterface getCommandInfo() { return commandInfo; }
 }

@@ -2,6 +2,7 @@ package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.real.Luogo;
 import V5.Ingsoft.controller.item.real.TipoVisita;
@@ -12,6 +13,7 @@ import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.StringUtils;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
 public class AssignCommand extends AbstractCommand {
 
@@ -24,143 +26,138 @@ public class AssignCommand extends AbstractCommand {
     public Payload<String> execute(String[] options, String[] args) {
         if (options == null || options.length < 1) {
             return Payload.error(
-                    "Usage: assign -V <VisitName> <VolunteerUsername> or -L <PlaceName> <VisitName>",
-                    "Missing option for AssignCommand");
+                "Usage: assign -V <VisitName> <VolunteerUsername> or -L <PlaceName> <VisitName>",
+                "Missing option for AssignCommand" );
         }
         String opt = options[0];
-        String[] arg = StringUtils.joinQuotedArguments(args);
-        if (arg == null || arg.length < 2) {
+        String[] parsedArgs = StringUtils.joinQuotedArguments(args);
+        if (parsedArgs == null || parsedArgs.length < 2) {
             if ("V".equals(opt)) {
                 return Payload.warn(
-                        "Usage: assign -V <VisitName> <VolunteerUsername>",
-                        "Insufficient args for assign -V");
+                    "Usage: assign -V <VisitName> <VolunteerUsername>",
+                    "Insufficient args for assign -V" );
             } else if ("L".equals(opt)) {
                 return Payload.warn(
-                        "Usage: assign -L <PlaceName> <VisitName>",
-                        "Insufficient args for assign -L");
+                    "Usage: assign -L <PlaceName> <VisitName>",
+                    "Insufficient args for assign -L" );
             }
             return Payload.warn(
+                "Unknown option '-" + opt + "'. Use -V or -L.",
+                "Unknown option in AssignCommand: " + opt );
+        }
+
+        return switch (opt) {
+            case "V" -> handleVolunteerAssignment(parsedArgs[0], parsedArgs[1]);
+            case "L" -> handlePlaceAssignment(parsedArgs[0], parsedArgs[1]);
+            default ->  Payload.warn(
                     "Unknown option '-" + opt + "'. Use -V or -L.",
-                    "Unknown option in AssignCommand: " + opt);
+                    "Unknown option in AssignCommand: " + opt );
+        };
+    }
+
+    private Payload<String> handleVolunteerAssignment(String visitName, String volunteerUsername) {
+        Model model = Model.getInstance();
+        Volontario volunteer = model.dbVolontarioHelper.getPersona(volunteerUsername);
+        if (volunteer == null) {
+            return Payload.warn(
+                "No volunteer found with username: " + volunteerUsername,
+                "Volunteer not found: " + volunteerUsername );
         }
-
-        switch (opt) {
-            case "V": {
-                String visit = arg[0], volunteer = arg[1];
-                Volontario v = Model.getInstance().dbVolontarioHelper.getPersona(volunteer);
-                if (v == null) {
-                    return Payload.warn(
-                            "No volunteer found with username: " + volunteer,
-                            "Volunteer not found: " + volunteer);
-                }
-                TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(visit);
-                if (t == null) {
-                    return Payload.warn(
-                            "No visit type found with title: " + visit,
-                            "TipoVisita not found: " + visit);
-                }
-                // if (!isExecutable()) {
-                //     return Payload.error(
-                //             "Operation not permitted at this time.",
-                //             "AssignCommand not executable due to state");
-                // }
-                if (v.getStatus() == StatusItem.DISABLED) {
-                    return Payload.error(
-                            "Cannot assign: volunteer status is DISABLED.",
-                            "Volunteer disabled: " + volunteer);
-                }
-                if (t.getStatus() == StatusItem.DISABLED) {
-                    return Payload.error(
-                            "Cannot assign: visit type status is DISABLED.",
-                            "Visit type disabled: " + visit);
-                }
-                if (!v.addTipoVisita(t.getUID())) {
-                    return Payload.error(
-                            "Cannot assign volunteer to visit.",
-                            "Failed addTipoVisita for volunteer: " + volunteer);
-                }
-                if (!t.addVolontario(volunteer)) {
-                    return Payload.error(
-                            "Cannot assign volunteer to visit.",
-                            "Failed addVolontario for volunteer: " + volunteer);
-                }
-                Model.getInstance().dbTipoVisiteHelper.saveDB();
-                Model.getInstance().dbLuoghiHelper.saveDB();
-                return Payload.info(
-                        "Assigned volunteer " + volunteer + " to visit " + visit,
-                        "Assigned in AssignCommand: volunteer " + volunteer + ", visit " + visit);
-            }
-            case "L": {
-                String place = arg[0], visit = arg[1];
-                Luogo l = Model.getInstance().getLuogoByName(place);
-                if (l == null) {
-                    return Payload.warn(
-                            "No place found with name: " + place,
-                            "Luogo not found: " + place);
-                }
-                TipoVisita t = Model.getInstance().dbTipoVisiteHelper.findTipoVisita(visit);
-                if (t == null) {
-                    return Payload.warn(
-                            "No visit type found with title: " + visit,
-                            "TipoVisita not found: " + visit);
-                }
-                // if (!isExecutable()) {
-                //     return Payload.error(
-                //         "Operation not permitted at this time.",
-                //         "AssignCommand not executable due to state");
-                // }
-                if (l.getStatus() == StatusItem.DISABLED) {
-                    return Payload.error(
-                            "Cannot assign: place status is DISABLED.",
-                            "Luogo disabled: " + place);
-                }
-                if (t.getStatus() == StatusItem.DISABLED) {
-                    return Payload.error(
-                            "Cannot assign: visit type status is DISABLED.",
-                            "Visit type disabled: " + visit);
-                }
-                for (DayOfWeek day : t.getDays()) {
-                    if (!isAssignmentPlausibleOnDay(t, l, day)) {
-                        return Payload.error(
-                                "Cannot assign visit: time overlap detected.",
-                                "Scheduling conflict for visit " + visit + " at place " + place);
-                    }
-                }
-                if (!l.addTipoVisita(t.getUID())) {
-                    return Payload.error(
-                            "Cannot assign visit to place.",
-                            "Failed addTipoVisita for place: " + place);
-                }
-
-                t.setLuogo(l.getUID());
-
-                Model.getInstance().dbTipoVisiteHelper.saveDB();
-                Model.getInstance().dbLuoghiHelper.saveDB();
-                return Payload.info(
-                        "Assigned visit " + visit + " to place " + place,
-                        "Assigned in AssignCommand: visit " + visit + ", place " + place);
-            }
-            default:
-                return Payload.warn(
-                        "Unknown option '-" + opt + "'. Use -V or -L.",
-                        "Unknown option in AssignCommand: " + opt);
+        TipoVisita tipoVisita = model.dbTipoVisiteHelper.findTipoVisita(visitName);
+        if (tipoVisita == null) {
+            return Payload.warn(
+                "No visit type found with title: " + visitName,
+                "TipoVisita not found: " + visitName );
         }
+        if (volunteer.getStatus() == StatusItem.DISABLED) {
+            return Payload.error(
+                "Cannot assign: volunteer status is DISABLED.",
+                "Volunteer disabled: " + volunteerUsername );
+        }
+        if (tipoVisita.getStatus() == StatusItem.DISABLED) {
+            return Payload.error(
+                "Cannot assign: visit type status is DISABLED.",
+                "Visit type disabled: " + visitName );
+        }
+        boolean addedToVolunteer = volunteer.addTipoVisita(tipoVisita.getUID());
+        if (!addedToVolunteer) {
+            return Payload.error(
+                "Cannot assign volunteer to visit.",
+                "Failed addTipoVisita for volunteer: " + volunteerUsername );
+        }
+        boolean addedToVisit = tipoVisita.addVolontario(volunteerUsername);
+        if (!addedToVisit) {
+            return Payload.error(
+                "Cannot assign volunteer to visit.",
+                "Failed addVolontario for volunteer: " + volunteerUsername );
+        }
+        model.dbTipoVisiteHelper.saveDB();
+        model.dbLuoghiHelper.saveDB();
+        return Payload.info(
+            "Assigned volunteer " + volunteerUsername + " to visit " + visitName,
+            "Assigned in AssignCommand: volunteer " + volunteerUsername + ", visit " + visitName );
+    }
+
+    private Payload<String> handlePlaceAssignment(String placeName, String visitName) {
+        Model model = Model.getInstance();
+        Luogo luogo = model.getLuogoByName(placeName);
+        if (luogo == null) {
+            return Payload.warn(
+                "No place found with name: " + placeName,
+                "Luogo not found: " + placeName );
+        }
+        TipoVisita tipoVisita = model.dbTipoVisiteHelper.findTipoVisita(visitName);
+        if (tipoVisita == null) {
+            return Payload.warn(
+                "No visit type found with title: " + visitName,
+                "TipoVisita not found: " + visitName );
+        }
+        if (luogo.getStatus() == StatusItem.DISABLED) {
+            return Payload.error(
+                "Cannot assign: place status is DISABLED.",
+                "Luogo disabled: " + placeName );
+        }
+        if (tipoVisita.getStatus() == StatusItem.DISABLED) {
+            return Payload.error(
+                "Cannot assign: visit type status is DISABLED.",
+                "Visit type disabled: " + visitName );
+        }
+        for (DayOfWeek day : tipoVisita.getDays()) {
+            if (!isAssignmentPlausibleOnDay(tipoVisita, luogo, day)) {
+                return Payload.error(
+                    "Cannot assign visit: time overlap detected.",
+                    "Scheduling conflict for visit " + visitName + " at place " + placeName );
+            }
+        }
+        boolean added = luogo.addTipoVisita(tipoVisita.getUID());
+        if (!added) {
+            return Payload.error(
+                "Cannot assign visit to place.",
+                "Failed addTipoVisita for place: " + placeName );
+        }
+        tipoVisita.setLuogo(luogo.getUID());
+        model.dbTipoVisiteHelper.saveDB();
+        model.dbLuoghiHelper.saveDB();
+        return Payload.info(
+            "Assigned visit " + visitName + " to place " + placeName,
+            "Assigned in AssignCommand: visit " + visitName + ", place " + placeName );
     }
 
     private boolean isAssignmentPlausibleOnDay(TipoVisita visitaDaAssegnare, Luogo luogo, DayOfWeek day) {
-        for (String uidTipoVisita : luogo.getTipoVisitaUID()) {
-            // Se è la stessa visita, la saltiamo
-            if (uidTipoVisita.equals(visitaDaAssegnare.getUID()))
+        List<String> assignedUIDs = luogo.getTipoVisitaUID();
+        for (String uidTipoVisita : assignedUIDs) {
+            if (uidTipoVisita.equals(visitaDaAssegnare.getUID())) {
                 continue;
-
+            }
             TipoVisita altraVisita = Model.getInstance().dbTipoVisiteHelper.getItem(uidTipoVisita);
-            // Se l'altra visita non è programmata per questo giorno, continuiamo
-            if (!altraVisita.getDays().contains(day))
+            if (!altraVisita.getDays().contains(day)) {
                 continue;
-
-            // Sfrutta il metodo overlaps definito in TipoVisita
+            }
             if (visitaDaAssegnare.overlaps(altraVisita)) {
-                AssertionControl.logMessage("Overlapping with " + altraVisita.getTitle(), Payload.Status.WARN, getClassName());
+                AssertionControl.logMessage(
+                    "Overlapping with " + altraVisita.getTitle(),
+                    Payload.Status.WARN,
+                    getClassName() );
                 return false;
             }
         }

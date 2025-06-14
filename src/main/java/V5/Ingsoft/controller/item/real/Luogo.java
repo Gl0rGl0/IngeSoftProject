@@ -42,18 +42,10 @@ public class Luogo extends Deletable {
     public Luogo(String[] a, Date d) throws Exception {
         super(a[0].hashCode() + "l");
 
-        if (a.length < 3)
-            throw new Exception("Insufficient number of arguments");
-
-        if (a[0].isBlank())
-            throw new Exception("Title name can't be empty");
-
-        if (a[1].isBlank())
-            throw new Exception("Place description can't be empty");
-
-        if (a[2].isBlank())
-            throw new Exception("Place position can't be empty");
-
+        if (a.length < 3) throw new Exception("Insufficient number of arguments");
+        if (a[0].isBlank()) throw new Exception("Title name can't be empty");
+        if (a[1].isBlank()) throw new Exception("Place description can't be empty");
+        if (a[2].isBlank()) throw new Exception("Place position can't be empty");
 
         this.name = a[0];
         this.description = a[1];
@@ -63,6 +55,26 @@ public class Luogo extends Deletable {
         this.si = StatusItem.PENDING_ADD;
     }
 
+    public boolean addTipoVisita(String tvUID) {
+        if (visiteUID.contains(tvUID))
+        return false;
+        return this.visiteUID.add(tvUID);
+    }
+    
+    public void removeTipoVisita(String tvUID) { this.visiteUID.remove(tvUID); }
+    
+    public ArrayList<String> getTipoVisitaUID()  { return this.visiteUID; }
+    public String getName()                      { return this.name; }
+    public String getDescription()               { return this.description; }
+    public String getMeetingPlace()              { return this.position; }
+    @Override public String getMainInformation() { return this.name; }
+    
+    public String toArray() {
+        return "\"" + this.name + "\" " +
+        "\"" + this.description + "\" " +
+        "\"" + this.position + "\" ";
+    }
+    
     @Override
     public String toString() {
         // StringBuilder sb = new StringBuilder();
@@ -82,42 +94,6 @@ public class Luogo extends Deletable {
 
         // sb.append("]}");
         // return sb.toString();
-        return this.name;
-    }
-
-    public boolean addTipoVisita(String tvUID) {
-        if (visiteUID.contains(tvUID))
-            return false;
-        return this.visiteUID.add(tvUID);
-    }
-
-    public void removeTipoVisita(String tvUID) {
-        this.visiteUID.remove(tvUID);
-    }
-
-    public ArrayList<String> getTipoVisitaUID() {
-        return this.visiteUID;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getMeetingPlace() { return this.position; }
-
-
-    public String toArray() {
-        return "\"" + this.name + "\" " +
-                "\"" + this.description + "\" " +
-                "\"" + this.position + "\" ";
-    }
-
-    @Override
-    public String getMainInformation() {
         return this.name;
     }
 }

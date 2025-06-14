@@ -9,7 +9,5 @@ public abstract class Storageble {
         if (uid == null) throw new Exception("Null UID");
     }
 
-    public String getUID() {
-        return this.UID;
-    }
+    public String getUID() { return this.UID; }
 }

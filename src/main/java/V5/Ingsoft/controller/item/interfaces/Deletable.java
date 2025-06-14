@@ -51,25 +51,17 @@ public abstract class Deletable extends Storageble implements Informable {
         si = StatusItem.PENDING_REMOVE;
     }
 
-    public Date getDeletionDate() {
-        return this.deletionDate;
-    }
+    public Date getDeletionDate() { return this.deletionDate; }
 
     public Date getUsableDate() {
         if(insertionDate == null) return null;
         return this.insertionDate.clone().addMonth(monthChange);
     }
 
-    public Statuses getStatus() {
-        return this.si;
-    }
+    public Statuses getStatus() { return this.si; }
+    public void setStatus(StatusItem si) { this.si = si; }
 
-    public void setStatus(StatusItem si) {
-        this.si = si;
-    }
-
-    @JsonIgnore
-    public boolean isUsable() {
+    @JsonIgnore public boolean isUsable() {
         return si == StatusItem.ACTIVE;
     }
 }

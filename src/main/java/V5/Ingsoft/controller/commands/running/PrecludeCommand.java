@@ -1,8 +1,8 @@
 package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
@@ -41,7 +41,7 @@ public class PrecludeCommand extends AbstractCommand {
         return switch (option) {
             case 'a' -> addPrecludedDate(d);
             case 'r' -> removePrecludedDate(d);
-            default -> Payload.error(
+            default  -> Payload.error(
                     "Option not recognized for 'preclude'.",
                     "Received invalid option: " + option);
         };

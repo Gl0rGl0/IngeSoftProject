@@ -1,6 +1,6 @@
 package V5.Ingsoft.controller.commands.running.list;
 
-import V5.Ingsoft.controller.commands.ListInterface;
+import V5.Ingsoft.controller.item.interfaces.ListInterface;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.ConstString;
 

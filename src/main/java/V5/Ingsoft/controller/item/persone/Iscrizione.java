@@ -1,6 +1,7 @@
 package V5.Ingsoft.controller.item.persone;
 
 import V5.Ingsoft.controller.item.interfaces.Deletable;
+import V5.Ingsoft.controller.item.interfaces.Storageble;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,9 +30,8 @@ public class Iscrizione extends Deletable {
             @JsonProperty("UID") String uid) throws Exception {
         super(uid);
 
-        if (visitaUID == null || visitaUID.isEmpty() || fruitoreUID == null || fruitoreUID.isEmpty() || quantity <= 0) {
+        if (visitaUID == null || visitaUID.isEmpty() || fruitoreUID == null || fruitoreUID.isEmpty() || quantity <= 0)
             throw new IllegalArgumentException("Iscrizione cannot have null/empty UIDs or zero/negative quantity.");
-        }
 
         this.visitaUID = visitaUID;
         this.fruitoreUID = fruitoreUID;
@@ -46,21 +46,10 @@ public class Iscrizione extends Deletable {
         this.quantity = quantity;
     }
 
-    public String getUIDFruitore() {
-        return this.fruitoreUID;
-    }
-
-    public int getQuantity() {
-        return this.quantity;
-    }
-
-    public String getMainInformation() {
-        return super.UID;
-    }
-
-    public String getVisitaUID() {
-        return visitaUID;
-    }
+    public String getUIDFruitore()      { return this.fruitoreUID; }
+    public int getQuantity()            { return this.quantity; }
+    public String getMainInformation()  { return super.UID; }
+    public String getVisitaUID()        { return visitaUID; }
 
     @Override
     public String toString() {
@@ -70,17 +59,12 @@ public class Iscrizione extends Deletable {
                 "\nVisita UID=" + visitaUID;
     }
 
-    // Aggiungi equals e hashCode per una corretta gestione nelle collezioni
-    @Override
-    public boolean equals(Object o) {
+    public boolean equals(Storageble o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Iscrizione that = (Iscrizione) o;
-        return Objects.equals(this.UID, that.UID); // Confronta per l'UID
+        return this.UID.equals(o.getUID());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(this.UID); // Hash sull'UID
-    }
+    public int hashCode() { return Objects.hash(this.UID); }
 }

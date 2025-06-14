@@ -31,7 +31,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     @Override
     synchronized public boolean removeItem(String username) {
-        final String SUB_CLASSNAME = getClassName() + ".removePersona<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".removePersona<" + getClass().getSimpleName() + ">";
         if (username == null || username.trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to remove persona with null or empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
@@ -49,7 +49,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public boolean changePassword(String username, String newPsw) {
-        final String SUB_CLASSNAME = getClassName() + ".changePassword<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".changePassword<" + getClass().getSimpleName() + ">";
         if (username == null || username.trim().isEmpty() || newPsw == null || newPsw.isEmpty()) {
             AssertionControl.logMessage("Attempted to change password with null/empty username or new password.", Payload.Status.ERROR, SUB_CLASSNAME);
             return false;
@@ -86,7 +86,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
     }
 
     public T getPersona(String user) {
-        final String SUB_CLASSNAME = getClassName() + ".getPersona<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".getPersona<" + getClass().getSimpleName() + ">";
         if (user == null || user.trim().isEmpty()) {
             AssertionControl.logMessage("Attempted to get persona with null or empty username.", Payload.Status.ERROR, SUB_CLASSNAME);
             return null;
@@ -96,7 +96,7 @@ public abstract class DBAbstractPersonaHelper<T extends Persona> extends DBAbstr
 
     // Login logic seems reasonable, but add null checks
     public Payload<Persona> login(String user, String psw) {
-        final String SUB_CLASSNAME = getClassName() + ".login<" + clazz.getSimpleName() + ">";
+        final String SUB_CLASSNAME = getClassName() + ".login<" + getClass().getSimpleName() + ">";
         if (user == null || user.trim().isEmpty() || psw == null || psw.isEmpty()) {
             return Payload.warn(null, "Attempted login with null/empty username or password.");
         }

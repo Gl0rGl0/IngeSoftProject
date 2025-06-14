@@ -1,5 +1,6 @@
 package V5.Ingsoft.model;
 
+import V5.Ingsoft.controller.item.interfaces.StorageManager;
 import V5.Ingsoft.controller.item.persone.*;
 import V5.Ingsoft.controller.item.real.Luogo;
 import V5.Ingsoft.controller.item.real.TipoVisita;
@@ -38,7 +39,9 @@ public class Model {
         dbDatesHelper = factory.factoryMethod(DBDatesHelper.class);
         dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.class);
 
-        appSettings = JsonStorage.loadObject(AppSettings.PATH, AppSettings.class);
+        StorageManager<AppSettings> settingsLoader = new JsonStorage<>(AppSettings.PATH, AppSettings.class);
+        appSettings = settingsLoader.loadObject();
+        appSettings.setLoader(settingsLoader);
     }
 
     synchronized public static Model getInstance() {

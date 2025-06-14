@@ -1,6 +1,6 @@
 package V5.Ingsoft.util;
 
-import V5.Ingsoft.controller.commands.ListInterface;
+import V5.Ingsoft.controller.item.interfaces.ListInterface;
 
 public class Payload<T> {
     private final Status status;

@@ -1,8 +1,8 @@
 package V5.Ingsoft.controller.commands.running;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.AbstractCommand;
 import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.util.Payload;
 
 public class CollectionManagerCommand extends AbstractCommand {
@@ -37,16 +37,11 @@ public class CollectionManagerCommand extends AbstractCommand {
 
         char opt = options[0].charAt(0);
         switch (opt) {
-            case 'o':
-                controller.openCollection();
-                break;
-            case 'c':
-                controller.closeCollection();
-                break;
-            default:
-                return Payload.warn(
+            case 'o' -> controller.openCollection();
+            case 'c' -> controller.closeCollection();
+            default -> { return Payload.warn(
                         "Option '-" + opt + "' not recognized for 'collection'",
-                        "Unknown option '" + opt + "'");
+                        "Unknown option '" + opt + "'"); }
         }
 
         return Payload.info(

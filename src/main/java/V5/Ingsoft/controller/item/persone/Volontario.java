@@ -45,9 +45,8 @@ public class Volontario extends Persona {
     }
 
     public boolean addTipoVisita(String uidTipoVisita) {
-        if (!visiteAssignedUIDs.contains(uidTipoVisita)) {
+        if (!visiteAssignedUIDs.contains(uidTipoVisita))
             return visiteAssignedUIDs.add(uidTipoVisita);
-        }
         return false;
     }
 
@@ -55,9 +54,7 @@ public class Volontario extends Persona {
         return this.visiteAssignedUIDs.remove(uidTipoVisita);
     }
 
-    public ArrayList<String> getTipivisiteAssignedUIDs() {
-        return this.visiteAssignedUIDs;
-    }
+    public ArrayList<String> getTipivisiteAssignedUIDs() { return this.visiteAssignedUIDs; }
 
     /**
      * Imposta la disponibilità per una data specifica nel periodo updatebile.
@@ -81,24 +78,15 @@ public class Volontario extends Persona {
         return Payload.Status.INFO;
     }
 
-    public void clearAvailability() {
-        availability = new boolean[31];
-    }
-
-    public boolean[] getAvailability() {
-        return availability;
-    }
+    public void clearAvailability()      { availability = new boolean[31]; }
+    public boolean[] getAvailability()   { return availability; }
+    public boolean isAvailabile(int day) { return availability[day - 1]; }
 
     public int getNAvailability() {
         int n = 0;
-        for (boolean b : getAvailability()) {
-            if (b)
-                n++;
-        }
+        for (boolean available : getAvailability())
+            if (available) n++;
         return n;
     }
 
-    public boolean isAvailabile(int day) {
-        return availability[day - 1];
-    }
 }
