@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.commands.list.CommandList;
 import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
@@ -104,8 +104,7 @@ public class TimeCommand extends AbstractCommand {
         }
         return Payload.info(
             "Added " + days + " days, current date: " + controller.date,
-            "AddDays: +" + days
-        );
+            "AddDays: +" + days );
     }
 
     private Payload<String> handleAddMonths(String[] args) {
@@ -128,14 +127,12 @@ public class TimeCommand extends AbstractCommand {
         }
         return Payload.info(
             "Added " + months + " months, current date: " + controller.date,
-            "AddMonths: +" + months
-        );
+            "AddMonths: +" + months );
     }
 
     private Payload<String> usageWarning() {
         return Payload.warn(
             "Correct usage: 'time' or 'time -<s|d|m> [arg]'.",
-            "Invalid combination of options/args in TimeCommand"
-        );
+            "Invalid combination of options/args in TimeCommand" );
     }
 }

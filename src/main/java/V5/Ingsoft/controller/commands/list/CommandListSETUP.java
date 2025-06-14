@@ -1,4 +1,4 @@
-package V5.Ingsoft.controller.commands.setup.list;
+package V5.Ingsoft.controller.commands.list;
 
 import V5.Ingsoft.controller.item.interfaces.ListInterface;
 import V5.Ingsoft.controller.item.persone.PersonaType;
@@ -66,14 +66,13 @@ public enum CommandListSETUP implements ListInterface {
     }
 
     @Override
-    public String toString() {
-        return this == HELP ? getHelpMessage(minRequiredPermission) : (this.lineInfo + "\n" + this.message);
-    }
+//     public String toString() {
+//         return this == HELP ? getHelpMessage(minRequiredPermission) : (this.lineInfo + "\n" + this.message);
+//     }
+    public String toString() { return this.lineInfo + "\n" + this.message; }
 
     @Override
-    public String getInfo() {
-        return this.lineInfo;
-    }
+    public String getInfo() { return this.lineInfo; }
 
     @Override
     public boolean canBeExecutedBy(int userPriority) {

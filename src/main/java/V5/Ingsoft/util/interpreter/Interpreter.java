@@ -70,8 +70,7 @@ public abstract class Interpreter {
         if (!command.canBeExecutedBy(userPri)) {
             Payload<String> p = Payload.error(
                     "You do not have permissions to execute '" + cmdKey + "'.",
-                    "Interpreter: permission denied for " + cmdKey
-            );
+                    "Interpreter: permission denied for " + cmdKey );
             p.setCommand(command.getCommandInfo());
             return p;
         }
@@ -79,8 +78,7 @@ public abstract class Interpreter {
                 !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
             Payload<String> p = Payload.warn(
                     "You must change your password first via 'changepsw [new]'.",
-                    "Interpreter: new user blocked for " + cmdKey
-            );
+                    "Interpreter: new user blocked for " + cmdKey );
             p.setCommand(command.getCommandInfo());
             return p;
         }
@@ -101,14 +99,10 @@ public abstract class Interpreter {
     /**
      * Returns true if all non-setup commands have been executed.
      */
-    public boolean hasExecutedAllCommands() {
-        return true;
-    }
+    public boolean hasExecutedAllCommands() { return true; }
 
     /**
      * For setup phase, checks that "done" was executed.
      */
-    public boolean isSetupCompleted() {
-        return true;
-    }
+    public boolean isSetupCompleted() { return true; }
 }

@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.commands.setup;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.setup.list.CommandListSETUP;
+import V5.Ingsoft.controller.commands.list.CommandListSETUP;
 import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.util.Payload;
 

@@ -1,7 +1,7 @@
 package V5.Ingsoft.controller.commands;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.running.list.CommandList;
+import V5.Ingsoft.controller.commands.list.CommandList;
 import V5.Ingsoft.controller.item.interfaces.AbstractCommand;
 import V5.Ingsoft.controller.item.persone.Guest;
 import V5.Ingsoft.controller.item.persone.PersonaType;
