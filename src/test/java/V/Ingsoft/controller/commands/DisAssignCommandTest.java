@@ -92,7 +92,7 @@ public class DisAssignCommandTest extends DefaultTest {
 
         o = c.interpreter("disassign -V \"VISIT_NOT_ASSIGNED\" VOL_NOT_ASSIGNED");
         assertEquals(Status.ERROR, o.getStatus());
-        assertEquals("Failed addTipoVisita for volunteer: VOL_NOT_ASSIGNED", o.getLogMessage()); // Message for add, but likely means remove failed
+        assertEquals("Failed disassignTipoVisita for volunteer: VOL_NOT_ASSIGNED", o.getLogMessage()); // Message for add, but likely means remove failed
     }
 
     @Test
