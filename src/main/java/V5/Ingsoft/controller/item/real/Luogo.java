@@ -61,7 +61,7 @@ public class Luogo extends Deletable {
         return this.visiteUID.add(tvUID);
     }
     
-    public void removeTipoVisita(String tvUID) { this.visiteUID.remove(tvUID); }
+    public boolean removeTipoVisita(String tvUID) { return this.visiteUID.remove(tvUID); }
     
     public ArrayList<String> getTipoVisitaUID()  { return this.visiteUID; }
     public String getName()                      { return this.name; }

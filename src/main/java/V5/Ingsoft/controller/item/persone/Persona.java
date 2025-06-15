@@ -34,6 +34,7 @@ public abstract class Persona extends Deletable {
     public void setAsNotNew()       { this.isNew = false; }
     public PersonaType getType()    { return this.personaType; }
     public int getPriority()        { return this.personaType.getPriority(); }
+    public void setNew(boolean b)   { this.isNew = b; }
     
     // Jackson saves is[something] as [something]: return value...
     @JsonIgnore public boolean isNew() { return this.isNew; }

@@ -1,7 +1,6 @@
 package V5.Ingsoft.controller.item.interfaces;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.controller.commands.Command;
 
 public abstract class AbstractCommand implements Command {
 

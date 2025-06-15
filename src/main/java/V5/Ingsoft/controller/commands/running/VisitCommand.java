@@ -7,6 +7,7 @@ import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.real.Visita;
+import V5.Ingsoft.controller.item.statuses.Result;
 import V5.Ingsoft.controller.item.statuses.StatusVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
@@ -113,26 +114,33 @@ public class VisitCommand extends AbstractCommand {
                 "Booking successful in VisitCommand" );
         }
 
-        String result = v.addPartecipants(iscrizione);
-        if ("capacity".equals(result)) {
-            return Payload.warn(
-                "Not enough capacity remaining for " + qty + " people.",
-                "Capacity limit in VisitCommand" );
-        } else if ("present".equals(result)) {
-            return Payload.warn(
+        Result result = v.addPartecipants(iscrizione);
+        return switch (result) {
+            case ALREADY_SIGNED -> Payload.warn(
                 "You are already registered for this visit.",
                 "Already registered in VisitCommand" );
-        } else {
-            f.subscribeToVisit(v.getUID());
+        
+            case NOTENOUGH_CAPACITY -> Payload.warn(
+                        "Not enough capacity remaining for " + qty + " people.",
+                "Capacity limit exceded in VisitCommand" );
+            case FULL_CAPACITY -> Payload.error(
+                        "Full visit.",
+                "Capacity limit in VisitCommand" );
+
+            case SUCCESS -> successBook(f, v, iscrizione);
+        };
+    }
+
+    private Payload<?> successBook(Fruitore f, Visita v, Iscrizione i){
+        f.subscribeToVisit(v.getUID());
             Model m = Model.getInstance();
-            m.dbIscrizionisHelper.addItem(iscrizione);
+            m.dbIscrizionisHelper.addItem(i);
             m.dbVisiteHelper.saveDB();
             m.dbFruitoreHelper.saveDB();
             this.hasBeenExecuted = true;
             return Payload.info(
-                "Registration successful! Your booking code is: " + result,
+                "Registration successful! Your booking code is: " + i.getUID(),
                 "Booking successful in VisitCommand" );
-        }
     }
 
     private Payload<?> handleRemoveByNameDate(String[] parsed) {

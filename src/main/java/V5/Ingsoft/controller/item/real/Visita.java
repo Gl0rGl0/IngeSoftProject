@@ -2,6 +2,7 @@ package V5.Ingsoft.controller.item.real;
 
 import V5.Ingsoft.controller.item.interfaces.Deletable;
 import V5.Ingsoft.controller.item.persone.Iscrizione;
+import V5.Ingsoft.controller.item.statuses.Result;
 import V5.Ingsoft.controller.item.statuses.StatusVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
@@ -47,32 +48,15 @@ public class Visita extends Deletable {
         this.date = date;
     }
 
-    public StatusVisita getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(StatusVisita status) {
-        this.status = status;
-    }
-
-    public String getVolontarioUID() {
-        return this.volontarioUID;
-    }
-
-    public String getTipoVisitaUID() {
-        return this.tipoVisitaUID;
-    }
+    public StatusVisita getStatus() { return this.status; }
+    public void setStatus(StatusVisita status) { this.status = status; }
+    public String getVolontarioUID() { return this.volontarioUID; }
+    public String getTipoVisitaUID() { return this.tipoVisitaUID; }
+    public Date getDate() { return date; }
+    public String getTitle() { return getTipoVisita().getTitle(); }
 
     public TipoVisita getTipoVisita() {
         return Model.getInstance().dbTipoVisiteHelper.getItem(this.tipoVisitaUID);
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getTitle() {
-        return getTipoVisita().getTitle();
     }
 
     public boolean hasFruitore(String userF) {
@@ -83,15 +67,19 @@ public class Visita extends Deletable {
         return false;
     }
 
-    public String addPartecipants(Iscrizione i) {
+    public Result addPartecipants(Iscrizione i) {
         int max = getTipoVisita().getNumMaxPartecipants();
 
         if (max - getCurrentNumber() < i.getQuantity()) {
-            return "capacity"; // Indicates full capacity
+            return Result.NOTENOUGH_CAPACITY; // Indicates not enough capacity
+        }
+
+        if (max - getCurrentNumber() == 0) {
+            return Result.FULL_CAPACITY; // Indicates full capacity
         }
 
         if (hasFruitore(i.getUIDFruitore())) {
-            return "present"; // Indicates user already registered
+            return Result.ALREADY_SIGNED; // Indicates user already registered
         }
 
         fruitori.add(i);
@@ -99,7 +87,7 @@ public class Visita extends Deletable {
         if (getCurrentNumber() == max) {
             setStatus(StatusVisita.COMPLETED); // Updated enum constant
         }
-        return i.getUID();
+        return Result.SUCCESS;
     }
 
     /**
@@ -116,24 +104,6 @@ public class Visita extends Deletable {
         for (Iscrizione i : fruitori) {
             // Ensure null safety for user comparison
             if (user != null && user.equals(i.getUIDFruitore())) {
-                boolean removed = fruitori.remove(i);
-                if (removed && capienzaAttuale == max && this.status == StatusVisita.COMPLETED) {
-                    // If removed and was full, set back to proposed
-                    setStatus(StatusVisita.PROPOSED);
-                }
-                return removed; // Return true if removal was successful
-            }
-        }
-        return false; // Return false if no matching participant was found
-    }
-
-    public boolean removePartecipantBySubscription(String userSubUID) {
-        int max = getTipoVisita().getNumMaxPartecipants();
-
-        int capienzaAttuale = getCurrentNumber();
-        for (Iscrizione i : fruitori) {
-            // Ensure null safety for user comparison
-            if (userSubUID != null && userSubUID.equals(i.getUID())) {
                 boolean removed = fruitori.remove(i);
                 if (removed && capienzaAttuale == max && this.status == StatusVisita.COMPLETED) {
                     // If removed and was full, set back to proposed

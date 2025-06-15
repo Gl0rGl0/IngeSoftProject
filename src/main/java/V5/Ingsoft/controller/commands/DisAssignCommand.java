@@ -70,12 +70,12 @@ public class DisAssignCommand extends AbstractCommand {
                 if (!v.removeTipoVisita(t.getUID())) {
                     return Payload.error(
                             "Cannot deassign volunteer to visit.",
-                            "Failed addTipoVisita for volunteer: " + volunteer);
+                            "Failed disassignTipoVisita for volunteer: " + volunteer);
                 }
                 if (!t.removeVolontario(volunteer)) {
                     return Payload.error(
                             "Cannot disassign volunteer to visit.",
-                            "Failed addVolontario for volunteer: " + volunteer);
+                            "Failed disassignVolontario for volunteer: " + volunteer);
                 }
                 return Payload.info(
                         "Disassigned volunteer " + volunteer + " to visit " + visit,
@@ -110,7 +110,7 @@ public class DisAssignCommand extends AbstractCommand {
                             "Cannot disassign: visit type status is DISABLED.",
                             "Visit type disabled: " + visit);
                 }
-                if (!l.addTipoVisita(t.getUID())) {
+                if (!l.removeTipoVisita(t.getUID())) {
                     return Payload.error(
                             "Cannot disassign visit to place.",
                             "Failed addTipoVisita for place: " + place);

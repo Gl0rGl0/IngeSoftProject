@@ -2,6 +2,7 @@ package V5.Ingsoft.util.interpreter;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.commands.*;
+import V5.Ingsoft.controller.item.interfaces.Command;
 import V5.Ingsoft.controller.item.persone.Persona;
 import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.util.AssertionControl;

@@ -91,6 +91,12 @@ public class Controller {
         return out;
     }
 
+    //SOLO PER TESTING
+    public void skipSetup(){
+        db.appSettings.setAmbitoTerritoriale("test");
+        switchInterpreter();
+    }
+
     public void switchInterpreter() {
         // db.dbConfiguratoreHelper.removePersona("ADMIN"); //è il primo configuratore... lo lasciamo
         this.interpreter.switchInterpreter();

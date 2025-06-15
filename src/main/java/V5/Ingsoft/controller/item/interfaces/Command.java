@@ -1,6 +1,5 @@
-package V5.Ingsoft.controller.commands;
+package V5.Ingsoft.controller.item.interfaces;
 
-import V5.Ingsoft.controller.item.interfaces.ListInterface;
 import V5.Ingsoft.util.Payload;
 
 public interface Command {

@@ -45,8 +45,9 @@ public class Volontario extends Persona {
     }
 
     public boolean addTipoVisita(String uidTipoVisita) {
-        if (!visiteAssignedUIDs.contains(uidTipoVisita))
+        if (!visiteAssignedUIDs.contains(uidTipoVisita)) {
             return visiteAssignedUIDs.add(uidTipoVisita);
+        }
         return false;
     }
 

@@ -10,7 +10,6 @@ import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
 
 public class LoginCommand extends AbstractCommand {
-    private static final String CLASSNAME = LoginCommand.class.getSimpleName();
 
     public LoginCommand(Controller controller) {
         this.controller = controller;
@@ -22,12 +21,12 @@ public class LoginCommand extends AbstractCommand {
         if (args == null || args.length < 2)
             return Payload.error(
                     "Usage: login <username> <password>",
-                    CLASSNAME + ": missing credentials");
+                    "Login error, missing credentials");
 
         if (controller.getCurrentUser().getType() != PersonaType.GUEST)
             return Payload.warn(
                     "Already logged in, please log out first",
-                    CLASSNAME + ": login attempted while already logged in");
+                    "Login error, login attempted while already logged in");
 
         Payload<Persona> result = Model.getInstance().login(args[0], args[1]);
 

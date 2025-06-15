@@ -6,8 +6,8 @@
 .idea/
 data/
 target/
-src/test/java/V/
-
+src/test/java/V/**
+!src/test/java/V/**/*Test.java
 # Package Files #
 *.jar
 *.war

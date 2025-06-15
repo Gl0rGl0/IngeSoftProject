@@ -146,9 +146,11 @@ public class TipoVisita extends Deletable {
     public boolean removeVolontario(String uidVolontario) { return this.volontariUID.remove(uidVolontario); }
 
     public boolean assignedTo(String userNameVolontario) {
-        for (String v : getVolontariUIDs())
-            if (v.equals(userNameVolontario)) return true;
-        return false;
+        // for (String v : getVolontariUIDs())
+        //     if (v.equals(userNameVolontario)) return true;
+        // return false;
+
+        return getVolontariUIDs().contains(userNameVolontario);
     }
     
     public int sort(TipoVisita o) {

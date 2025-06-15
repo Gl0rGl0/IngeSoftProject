@@ -85,7 +85,10 @@ public class Date extends Storageble {
         return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
     }
 
-    private void setDate(String[] in) throws NumberFormatException, DateTimeException {
+    private void setDate(String[] in) throws Exception {
+        if(in == null || in.length != 3)
+            throw new Exception("Error in parsing Date.");
+
         int day = Integer.parseInt(in[0]);
         int month = Integer.parseInt(in[1]);
         int year = Integer.parseInt(in[2]);
