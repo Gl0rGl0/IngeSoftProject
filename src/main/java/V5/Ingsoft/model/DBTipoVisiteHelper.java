@@ -39,7 +39,7 @@ public class DBTipoVisiteHelper extends DBMapHelper<TipoVisita> implements DBWit
                 case StatusItem.PENDING_ADD -> tv.checkStatus(d);
                 case StatusItem.PENDING_REMOVE -> {
                     Date deletionDate = tv.getDeletionDate();
-                    if (deletionDate != null && (deletionDate.equals(d) || deletionDate.isBefore(d)))
+                    if (deletionDate != null && deletionDate.isBeforeOrEqual(d))
                         removeItem(tv.getUID());
                 }
                 case StatusItem.DISABLED -> removeItem(tv.getUID());

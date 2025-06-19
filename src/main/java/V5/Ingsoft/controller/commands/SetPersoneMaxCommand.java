@@ -26,6 +26,7 @@ public class SetPersoneMaxCommand extends AbstractCommand {
         int max;
         try {
             max = Integer.parseInt(args[0]);
+            //NON POTRÀ MAI ENTRARCI PERCHè -9 è visto come un'option...
             if (max < 1)
                 return Payload.warn(
                         "Invalid value: must be at least 1",

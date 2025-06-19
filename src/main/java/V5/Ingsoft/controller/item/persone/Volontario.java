@@ -69,7 +69,7 @@ public class Volontario extends Persona {
      * @param disp la data per cui si vuole impostare la disponibilità
      */
     public Payload.Status setAvailability(Date oggi, Date disp, boolean toAdd) {
-        if (Date.monthsDifference(oggi, disp) > 1) {
+        if (Date.monthsDifference(oggi, disp) != 1) {
             System.out.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return Payload.Status.ERROR;
         }
@@ -81,7 +81,7 @@ public class Volontario extends Persona {
 
     public void clearAvailability()      { availability = new boolean[31]; }
     public boolean[] getAvailability()   { return availability; }
-    public boolean isAvailabile(int day) { return availability[day - 1]; }
+    public boolean isAvailable(int day) { return availability[day - 1]; }
 
     public int getNAvailability() {
         int n = 0;

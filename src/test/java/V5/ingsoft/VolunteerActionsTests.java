@@ -3,6 +3,7 @@ package V5.ingsoft;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.model.Model;
+import V5.Ingsoft.util.Payload;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,15 +72,15 @@ public class VolunteerActionsTests extends BaseTest {
 
         // Set current date to be within the allowed window for July (e.g., May 16th)
         controller.interpreter("time -s 16/05/2025");
-        String futureDate = "07/07/2025"; // A Monday in July
+        String futureDate = "07/06/2025"; // A Monday in July
 
         // Act
-        controller.interpreter("setav -a " + futureDate); // Use correct command
+        Payload<?> o = controller.interpreter("setav -a " + futureDate); // Use correct command
 
         // Assert: Check internal state if possible, otherwise assume command worked
         Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
         assertNotNull(vol, "Volunteer should still exist.");
-        assertTrue(vol.getAvailability()[7 - 1], "Executed availability command successfully (verification of future state requires specific getters).");
+        assertTrue(vol.isAvailable(7), "Executed availability command successfully (verification of future state requires specific getters).");
     }
 
     @Test
@@ -161,7 +162,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Assert
         // The AvailabilityCommand.manageDate checks precluded dates and should skip the update.
         Volontario vol = Model.getInstance().dbVolontarioHelper.getItem("VolRegime");
-        assertFalse(vol.isAvailabile(1), "Executed setav for a precluded date (verify internal logic prevents update).");
+        assertFalse(vol.isAvailable(1), "Executed setav for a precluded date (verify internal logic prevents update).");
     }
 
 

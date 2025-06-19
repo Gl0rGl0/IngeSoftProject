@@ -87,7 +87,7 @@ public class MakePlanCommand extends AbstractCommand {
         for (String uid : tv.getVolontariUIDs()) {
             Volontario v = Model.getInstance().dbVolontarioHelper.getPersona(uid);
             if (v == null) continue;
-            if (!v.isAvailabile(date.getDay())) continue;
+            if (!v.isAvailable(date.getDay())) continue;
             if (Model.getInstance().dbVisiteHelper.volontarioHaConflitto(v, date, tv)) continue;
             Visita newVisit;
             try {

@@ -111,7 +111,7 @@ public class MakePlanCommand extends AbstractCommand {
                 continue;
 
             // Check volunteer availability for the current day
-            if (!volontario.isAvailabile(date.getDay()))
+            if (!volontario.isAvailable(date.getDay()))
                 continue;
 
             // Check conflicts for the volunteer and the date

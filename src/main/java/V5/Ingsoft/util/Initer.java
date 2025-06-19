@@ -80,9 +80,9 @@ public class Initer {
     }
 
     public static void initAvailability(Controller c) {
-        Month meseNum = c.date.getMonth().plus(1);
+        Month meseNum = c.date.clone().getMonth().plus(1);
 
-        if (c.date.getDay() >= 16)
+        if (c.date.getDay() > 16)
             meseNum = meseNum.plus(1);
 
         for (Volontario v : Model.getInstance().dbVolontarioHelper.getItems()) {

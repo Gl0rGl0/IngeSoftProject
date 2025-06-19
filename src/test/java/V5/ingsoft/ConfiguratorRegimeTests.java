@@ -38,7 +38,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         assertTrue(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date should be precluded after command.");
 
         // Arrange
-        today = "16/1/2025";
+        today = "17/1/2025";
         futureDate = "15/04/2025";   //Every april's day
 
         // Act

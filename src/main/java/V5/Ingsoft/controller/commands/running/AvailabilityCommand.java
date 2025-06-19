@@ -8,6 +8,7 @@ import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
+import V5.Ingsoft.util.Payload.Status;
 
 public class AvailabilityCommand extends AbstractCommand {
 
@@ -46,17 +47,23 @@ public class AvailabilityCommand extends AbstractCommand {
 
         Volontario v = (Volontario) controller.getCurrentUser();
         StringBuilder feedback = new StringBuilder();
+        Model m = Model.getInstance();
+        Status status;
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                if (Model.getInstance().dbDatesHelper.getPrecludedDates().contains(d)) {
+                if (m.dbDatesHelper.getPrecludedDates().contains(d)) {
                     feedback.append("Date ").append(d).append(" is precluded and was ignored\n");
                     continue;
                 }
-                v.setAvailability(controller.date, d, toAdd);
-                feedback.append(toAdd ? "Added " : "Removed ")
-                        .append(d)
-                        .append("\n");
+                status = v.setAvailability(controller.date, d, toAdd);
+                if(status == Status.ERROR){
+                    feedback.append("OutOfRange").append(d);
+                }else{
+                    feedback.append(toAdd ? "Added " : "Removed ")
+                    .append(d)
+                    .append("\n");
+                }
             } catch (Exception e) {
                 feedback.append("Invalid date format: ").append(s).append("\n");
             }

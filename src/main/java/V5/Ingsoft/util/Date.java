@@ -71,7 +71,9 @@ public class Date extends Storageble {
         Month beforeMonth = before.clone().getMonth();
         Month afterMonth = after.clone().getMonth();
 
-        if (before.getDay() >= 16)
+        beforeMonth.compareTo(afterMonth);
+
+        if (before.getDay() > 16)
             beforeMonth = beforeMonth.plus(1);
 
         int out = afterMonth.compareTo(beforeMonth);
@@ -82,6 +84,7 @@ public class Date extends Storageble {
     }
 
     public static boolean between(Date initDay, Date date, Date finishDay) {
+        if(date.getYear() < finishDay.getYear() && initDay.isBeforeOrEqual(date)) return true;
         return initDay.dayOfTheYear() <= date.dayOfTheYear() && date.dayOfTheYear() <= finishDay.dayOfTheYear();
     }
 

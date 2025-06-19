@@ -27,6 +27,7 @@ public abstract class Deletable extends Storageble implements Informable {
                     return;
                 }
 
+                int a = Date.monthsDifference(insertionDate, d);
                 if (Date.monthsDifference(insertionDate, d) >= monthChange)
                     this.si = StatusItem.ACTIVE;
             }

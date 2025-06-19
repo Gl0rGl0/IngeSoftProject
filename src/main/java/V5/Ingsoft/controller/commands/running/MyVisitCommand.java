@@ -9,8 +9,6 @@ import V5.Ingsoft.controller.item.persone.PersonaType;
 import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
-import V5.Ingsoft.util.StringUtils;
-
 import java.util.ArrayList;
 
 public class MyVisitCommand extends AbstractCommand {
@@ -25,10 +23,11 @@ public class MyVisitCommand extends AbstractCommand {
         PersonaType tipo = controller.getCurrentUser().getType();
         return switch (tipo) {
             case FRUITORE -> listFruitore();
-            case VOLONTARIO -> listVolontari(args);
+            case VOLONTARIO -> listVolontari();
             default -> Payload.warn(
                     "Option valid only for volunteers and visitors.",
                     "Invalid persona type " + tipo);
+                    //NON PUÒ ARRIVARE QUA PERCHÈ IL CONFIGURATORE NON HA I PERMESSI NECESSARI
         };
     }
 
@@ -55,20 +54,8 @@ public class MyVisitCommand extends AbstractCommand {
         return Payload.info(out, "Listed fruitore subscriptions for " + userF);
     }
 
-    private Payload<?> listVolontari(String[] args) {
+    private Payload<?> listVolontari() {
         String userV = controller.getCurrentUser().getUsername();
-
-        if (args == null) {
-            return Payload.error(
-                    "No args for volunteer list",
-                    "Args null for volunteer list");
-        }
-        String[] a = StringUtils.joinQuotedArguments(args);
-        if (a.length < 2) {
-            return Payload.error(
-                    "Invalid args for volunteer list",
-                    "Invalid args for volunteer list");
-        }
 
         ArrayList<TipoVisita> out = new ArrayList<>();
         for (TipoVisita tv : Model.getInstance().dbTipoVisiteHelper.getItems()) {
