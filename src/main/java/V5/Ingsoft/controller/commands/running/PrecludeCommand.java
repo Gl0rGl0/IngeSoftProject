@@ -48,7 +48,7 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private Payload<String> addPrecludedDate(Date d) {
-        if (Model.getInstance().dbDatesHelper.addPrecludedDate(d)) {
+        if (Model.getInstance().dbDatesHelper.addItem(d)) {
             return Payload.info(
                     "Successfully added precluded date.",
                     "Added precluded date: " + d);
@@ -60,7 +60,7 @@ public class PrecludeCommand extends AbstractCommand {
     }
 
     private Payload<String> removePrecludedDate(Date d) {
-        Model.getInstance().dbDatesHelper.removePrecludedDate(d);
+        Model.getInstance().dbDatesHelper.removeItem(d);
         return Payload.info(
                 "Successfully removed precluded date.",
                 "Removed precluded date: " + d);

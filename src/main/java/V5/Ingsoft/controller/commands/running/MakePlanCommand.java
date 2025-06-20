@@ -75,7 +75,7 @@ public class MakePlanCommand extends AbstractCommand {
             if (tv == null) continue;
             if (tv.getStatus() != StatusItem.ACTIVE) continue;
             if (!tv.getDays().contains(date.dayOfTheWeek())) continue;
-            if (Model.getInstance().dbDatesHelper.getPrecludedDates().contains(date)) continue;
+            if (Model.getInstance().dbDatesHelper.getItems().contains(date)) continue;
             if (!Date.between(tv.getInitDay(), date, tv.getFinishDay())) continue;
             count += assignVisitForDate(tv, date);
         }

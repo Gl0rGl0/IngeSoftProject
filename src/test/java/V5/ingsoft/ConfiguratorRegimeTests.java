@@ -35,7 +35,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("preclude -a " + futureDate);
 
         // Assert
-        assertTrue(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date should be precluded after command.");
+        assertTrue(Model.getInstance().dbDatesHelper.getItems().contains(new Date(futureDate)), "Date should be precluded after command.");
 
         // Arrange
         today = "17/1/2025";
@@ -46,7 +46,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("preclude -a " + futureDate);
 
         // Assert
-        assertTrue(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date should be precluded after command.");
+        assertTrue(Model.getInstance().dbDatesHelper.getItems().contains(new Date(futureDate)), "Date should be precluded after command.");
     }
 
     // @Test
@@ -60,7 +60,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
     //     controller.interpreter("preclude -a " + futureDate);
 
     //     // Assert
-    //     assertFalse(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date shouldn't be precluded after command.");
+    //     assertFalse(Model.getInstance().dbDatesHelper.getItems().contains(new Date(futureDate)), "Date shouldn't be precluded after command.");
     // }
 
     @Test
@@ -71,15 +71,15 @@ public class ConfiguratorRegimeTests extends BaseTest {
         controller.interpreter("time -s " + today);
         controller.interpreter("preclude -a " + futureDate); // Assumed command - uncommented
 
-        assertEquals(1, Model.getInstance().dbDatesHelper.getPrecludedDates().size(), "Precluded date should be one");
+        assertEquals(1, Model.getInstance().dbDatesHelper.getItems().size(), "Precluded date should be one");
 
         // Act
         controller.interpreter("preclude -a " + futureDate); // Try precluding again
 
         // Assert
         // Command should fail gracefully, date should still be precluded.
-        assertTrue(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date(futureDate)), "Date should remain precluded after duplicate attempt.");
-        assertEquals(1, Model.getInstance().dbDatesHelper.getPrecludedDates().size(), "Precluded date should be one");
+        assertTrue(Model.getInstance().dbDatesHelper.getItems().contains(new Date(futureDate)), "Date should remain precluded after duplicate attempt.");
+        assertEquals(1, Model.getInstance().dbDatesHelper.getItems().size(), "Precluded date should be one");
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Command should fail, date should not be added.
         // Need to be careful comparing Date objects if format matters internally.
         // Let's assume Date("15/07/2025") is the canonical form if added.
-        assertFalse(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date("15/07/2025")), "Date with invalid format should not be precluded.");
+        assertFalse(Model.getInstance().dbDatesHelper.getItems().contains(new Date("15/07/2025")), "Date with invalid format should not be precluded.");
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
         // Command should fail, date should not be added.
         // We cannot easily check if "31/02/2025" is precluded as Date constructor might throw error.
         // Check size or specific known valid dates.
-        assertFalse(Model.getInstance().dbDatesHelper.getPrecludedDates().contains(new Date("01/03/2025")), "A valid date should not be precluded by an invalid one."); // Example check
+        assertFalse(Model.getInstance().dbDatesHelper.getItems().contains(new Date("01/03/2025")), "A valid date should not be precluded by an invalid one."); // Example check
     }
 
     // UC11 - Modifica Numero Massimo Persone per Iscrizione

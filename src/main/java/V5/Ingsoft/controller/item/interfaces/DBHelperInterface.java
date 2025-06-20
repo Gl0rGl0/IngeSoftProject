@@ -11,7 +11,7 @@ public interface DBHelperInterface<T extends Storageble> {
 
     boolean addItem(T item);
 
-    boolean removeItem(String id);
+    boolean removeItem(T item);
 
     boolean saveDB();
 

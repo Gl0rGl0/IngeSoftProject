@@ -25,7 +25,7 @@ public class CollectionManagerCommand extends AbstractCommand {
                     "Options or args null");
 
         if (options.length < 1 || options[0].isBlank())
-            return Payload.error(
+            return Payload.warn(
                     "Usage: collection -<o|c>",
                     "Missing or invalid option");
 

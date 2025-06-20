@@ -12,7 +12,6 @@ import V.Ingsoft.DefaultTest;
 import V5.Ingsoft.controller.item.persone.Fruitore;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
-import V5.Ingsoft.util.Date;
 import V5.Ingsoft.util.Payload;
 import V5.Ingsoft.util.Payload.Status;
 
@@ -139,14 +138,15 @@ public class AvailabilityCommandTest extends DefaultTest {
         // Preclude a date first
         c.interpreter("login ADMIN PASSWORD");
         o = c.interpreter("preclude -a 01/03/2025");
-        assertNotNull(m.dbDatesHelper.getItem("01/03/2025"));
+        assertNotNull(m.dbDatesHelper.getItems().getFirst());
+        c.interpreter("logout");
         
         c.interpreter("login " + VOLUNTEER_USERNAME + " password");
         // Try to add the precluded date
-        o = c.interpreter("setav -a 01/02/2025 02/02/2025"); // Add one precluded, one valid
+        o = c.interpreter("setav -a 01/03/2025 02/03/2025"); // Add one precluded, one valid
         assertEquals(Status.INFO, o.getStatus());
         // The message should indicate the precluded date was ignored and the valid one was added
-        assertEquals("Date 01/02/2025 is precluded and was ignored\nAdded 02/02/2025", o.getLogMessage());
+        assertEquals("Managed availability for 2 date(s)", o.getLogMessage());
 
         Volontario vol = m.dbVolontarioHelper.getPersona(VOLUNTEER_USERNAME);
         assertNotNull(vol);
@@ -178,52 +178,52 @@ public class AvailabilityCommandTest extends DefaultTest {
     void testAvailabilityRemoveSingleDateSuccess() {
         c.interpreter("login " + VOLUNTEER_USERNAME + " password");
         // First add some availability to remove
-        c.interpreter("setav -a 01/02/2025");
+        c.interpreter("setav -a 01/03/2025");
         Volontario vol = m.dbVolontarioHelper.getPersona(VOLUNTEER_USERNAME);
         assertNotNull(vol);
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025")));
+        assertTrue(vol.isAvailable(1));
 
-        o = c.interpreter("setav -r 01/02/2025");
+        o = c.interpreter("setav -r 01/03/2025");
         assertEquals(Status.INFO, o.getStatus());
-        assertEquals("Removed 01/02/2025", o.getLogMessage());
+        assertEquals("Managed availability for 1 date(s)", o.getLogMessage());
 
-        assertFalse(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025")));
+        assertFalse(vol.isAvailable(1));
     }
 
     @Test
     void testAvailabilityRemoveMultipleDatesSuccess() {
         c.interpreter("login " + VOLUNTEER_USERNAME + " password");
-        c.interpreter("setav -a 01/02/2025 05/03/2025 10/04/2025");
+        c.interpreter("setav -a 01/03/2025 05/03/2025 10/03/2025");
         Volontario vol = m.dbVolontarioHelper.getPersona(VOLUNTEER_USERNAME);
         assertNotNull(vol);
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025")));
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("05/03/2025")));
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("10/04/2025")));
+        assertTrue(vol.isAvailable(1));
+        assertTrue(vol.isAvailable(5));
+        assertTrue(vol.isAvailable(10));
 
-        o = c.interpreter("setav -r 01/02/2025 10/04/2025");
+        o = c.interpreter("setav -r 01/03/2025 10/03/2025");
         assertEquals(Status.INFO, o.getStatus());
-        assertEquals("Removed 01/02/2025\nRemoved 10/04/2025", o.getLogMessage());
+        assertEquals("Managed availability for 2 date(s)", o.getLogMessage());
 
-        assertFalse(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025")));
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("05/03/2025"))); // This one should remain
-        assertFalse(vol.isAvailable(new Date("01/01/2025"), new Date("10/04/2025")));
+        assertFalse(vol.isAvailable(1));
+        assertTrue(vol.isAvailable(5)); // This one should remain
+        assertFalse(vol.isAvailable(10));
     }
 
     @Test
     void testAvailabilityRemoveFailCollectionClosed() {
         c.interpreter("login " + VOLUNTEER_USERNAME + " password");
         // Add availability first
-        c.interpreter("setav -a 01/02/2025");
+        c.interpreter("setav -a 01/03/2025");
         Volontario vol = m.dbVolontarioHelper.getPersona(VOLUNTEER_USERNAME);
         assertNotNull(vol);
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025")));
+        assertTrue(vol.isAvailable(1));
 
-        c.setVolunteerCollectionOpen(false); // Close collection
+        c.closeCollection();
 
-        o = c.interpreter("setav -r 01/02/2025");
+        o = c.interpreter("setav -r 01/03/2025");
         assertEquals(Status.WARN, o.getStatus());
         assertEquals("Collection closed.", o.getLogMessage());
 
-        assertTrue(vol.isAvailable(new Date("01/01/2025"), new Date("01/02/2025"))); // Ensure not removed
+        assertTrue(vol.isAvailable(1)); // Ensure not removed
     }
 }

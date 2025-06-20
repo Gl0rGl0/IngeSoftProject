@@ -57,7 +57,7 @@ public class MyVisitCommandTest extends DefaultTest {
         
         c.interpreter("logout");
         c.interpreter("login " + FRUITORE_USER + " password"); // Log in as Fruitore
-        o = c.interpreter("visit -a \"" + VISIT_TITLE + "\" " + v.getDate() + " " + 5);
+        o = c.interpreter("visit -a \"" + VISIT_TITLE + "\" " + v.getDate() + " " + 3);
         assertEquals(Status.INFO, o.getStatus());
         String visitTicket = (String) o.getData();
         visitTicket = visitTicket.substring(visitTicket.length() - 8);

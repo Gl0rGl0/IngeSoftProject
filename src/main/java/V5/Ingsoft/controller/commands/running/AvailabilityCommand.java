@@ -52,7 +52,7 @@ public class AvailabilityCommand extends AbstractCommand {
         for (String s : args) {
             try {
                 Date d = new Date(s);
-                if (m.dbDatesHelper.getPrecludedDates().contains(d)) {
+                if (m.dbDatesHelper.getItems().contains(d)) {
                     feedback.append("Date ").append(d).append(" is precluded and was ignored\n");
                     continue;
                 }
