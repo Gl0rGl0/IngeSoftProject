@@ -58,7 +58,7 @@ public class LoginViewController implements Initializable {
      */
     @FXML
     private void handleLoginAction() {
-        if(!Launcher.controller.setupCompleted()){
+        if(!Launcher.getInstance().controller.setupCompleted()){
             messageLabel.setText("Se sei un Configuratore, si prega di completare la fase di SETUP da terminale prima di accedere all'applicazione.");
             messageLabel.setVisible(true);
             return;
@@ -81,11 +81,11 @@ public class LoginViewController implements Initializable {
             pwField.getStyleClass().remove("error-border");
         }
 
-        Payload<?> res = Launcher.controller.interpreter(String.format("login %s %s", username, password));
+        Payload<?> res = Launcher.getInstance().controller.interpreter(String.format("login %s %s", username, password));
         if (res != null && res.getStatus() != Status.ERROR) {
             userTextField.clear();
             pwField.clear();
-            Launcher.setRoot(GenericFrameController.ID);
+            Launcher.getInstance().setRoot(GenericFrameController.ID);
         } else {
             messageLabel.setVisible(true);
         }

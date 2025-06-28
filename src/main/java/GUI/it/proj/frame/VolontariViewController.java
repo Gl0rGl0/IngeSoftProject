@@ -36,11 +36,11 @@ public class VolontariViewController implements ListBase<TipoVisita>, Calendarab
 
         listTipoVisiteAssign.setCellFactory(e -> new Cell<TipoVisita>(this, TipoVisiteViewController.ID));
         
-        Persona current = Launcher.controller.getCurrentUser();
+        Persona current = Launcher.getInstance().controller.getCurrentUser();
         if(current.getType().equals(PersonaType.VOLONTARIO))
             listTipoVisiteAssign.getItems().addAll(Model.getInstance().trovaTipoVisiteByVolontario((Volontario)current));
 
-        calendarComponent = new Calendar(Launcher.controller.date.clone().addMonth(1), dates -> {
+        calendarComponent = new Calendar(Launcher.getInstance().controller.date.clone().addMonth(1), dates -> {
             updateCalendar(dates);
         });
         calendar.getChildren().add(calendarComponent.getView());
@@ -48,7 +48,7 @@ public class VolontariViewController implements ListBase<TipoVisita>, Calendarab
 
     @Override
     public void refreshItems() {
-        Payload<?> res = Launcher.controller.interpreter("myvisit");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("myvisit");
 
         if(res != null && res.getStatus() == Status.INFO){
             this.listTipoVisiteAssign.getItems().clear();
@@ -62,7 +62,7 @@ public class VolontariViewController implements ListBase<TipoVisita>, Calendarab
         for (LocalDate localDate : dates) {
             out.append(String.format(" %s/%s/%s", localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear()));
         }
-        Payload<?> res = Launcher.controller.interpreter("setav -b " + out);
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("setav -b " + out);
+        Launcher.getInstance().toast(res);
     }
 }

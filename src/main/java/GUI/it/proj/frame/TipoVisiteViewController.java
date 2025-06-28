@@ -37,12 +37,12 @@ public class TipoVisiteViewController implements ListDeleter<TipoVisita>, ListEd
 
     @Override
     public void removeItem(String tipoVisitaTitle) {
-        Payload<?> res = Launcher.controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("remove -T \"" + tipoVisitaTitle + "\"");
 
         if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
         
-        Launcher.toast(res);
+        Launcher.getInstance().toast(res);
     }
 
     @FXML
@@ -58,7 +58,7 @@ public class TipoVisiteViewController implements ListDeleter<TipoVisita>, ListEd
 
     @Override
     public void refreshItems() {
-        Payload<?> res = Launcher.controller.interpreter("list -T");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("list -T");
 
         if(res != null && res.getStatus() == Status.INFO){
             this.listVisita.getItems().clear();

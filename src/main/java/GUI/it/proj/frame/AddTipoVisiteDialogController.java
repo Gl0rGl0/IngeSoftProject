@@ -136,7 +136,7 @@ public class AddTipoVisiteDialogController {
             volsSel.isEmpty() ||
             luogo == null) {          
             
-            Launcher.toast(Payload.error("Tutti i campi sono obbligatori!",""));
+            Launcher.getInstance().toast(Payload.error("Tutti i campi sono obbligatori!",""));
             return;
         }
 
@@ -159,16 +159,16 @@ public class AddTipoVisiteDialogController {
             maxPart,
             giorniCsv );
 
-        Payload<?> res = Launcher.controller.interpreter("add -T " + cmd);
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("add -T " + cmd);
+        Launcher.getInstance().toast(res);
 
         // 8. Gestione risultato
         if (res == null || res.getStatus() == Status.ERROR) return;
         
         manageAssign();
 
-        res = Launcher.controller.interpreter(String.format("assign -L \"%s\" %s", luogo.getName(), titolo));
-        Launcher.toast(res);
+        res = Launcher.getInstance().controller.interpreter(String.format("assign -L \"%s\" %s", luogo.getName(), titolo));
+        Launcher.getInstance().toast(res);
 
         parentController.refreshItems();
         closeDialog();
@@ -189,20 +189,20 @@ public class AddTipoVisiteDialogController {
         for(Volontario s : volsSel){
             if(visit.assignedTo(s.getUsername())) continue;
             
-            Launcher.controller.interpreter(String.format("assign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
+            Launcher.getInstance().controller.interpreter(String.format("assign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
         }
 
         for(Volontario s : volNotSel){
             if(!visit.assignedTo(s.getUsername())) continue;
             
-            Launcher.controller.interpreter(String.format("disassign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
+            Launcher.getInstance().controller.interpreter(String.format("disassign -V \"%s\" %s", visit.getTitle(), s.getUsername()));
         }
     }
         
         
     private void onEdit() {
         if(volontariCheckBox.getCheckModel().getCheckedItems().isEmpty()){
-            Launcher.toast(Payload.error("Cannot save without any volunteer assigned! Please assign at least one.", ""));
+            Launcher.getInstance().toast(Payload.error("Cannot save without any volunteer assigned! Please assign at least one.", ""));
             return;
         }
         

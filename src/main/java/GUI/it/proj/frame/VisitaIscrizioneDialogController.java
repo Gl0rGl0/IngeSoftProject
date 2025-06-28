@@ -61,7 +61,7 @@ public class VisitaIscrizioneDialogController {
     }
     
     private void error() {
-        Launcher.toast(Payload.error("Cannot load visit now. Try again later.", null));
+        Launcher.getInstance().toast(Payload.error("Cannot load visit now. Try again later.", null));
         closeDialog();
     }
 
@@ -77,8 +77,8 @@ public class VisitaIscrizioneDialogController {
         String date = dateVisit.getText();
         int quantity = numSub.getValue();
 
-        Payload<?> res = Launcher.controller.interpreter(String.format("visit -a \"%s\" %s %s", title, date, quantity));
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter(String.format("visit -a \"%s\" %s %s", title, date, quantity));
+        Launcher.getInstance().toast(res);
 
         // Se l’operazione è andata a buon fine (INFO), ricaricare la lista delle visite
         if (res != null && res.getStatus() == Payload.Status.INFO) {

@@ -39,7 +39,7 @@ public class AddPersonDialogController {
 
         if (username == null || username.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
-            Launcher.toast(Payload.error("Entrambi i campi sono obbligatori!",""));
+            Launcher.getInstance().toast(Payload.error("Entrambi i campi sono obbligatori!",""));
             return;
         }
 
@@ -53,8 +53,8 @@ public class AddPersonDialogController {
         if(prompt == null)
             return;
 
-        Payload<?> out = Launcher.controller.interpreter(prompt);
-        Launcher.toast(out);
+        Payload<?> out = Launcher.getInstance().controller.interpreter(prompt);
+        Launcher.getInstance().toast(out);
 
         switch (role) {
             case CONFIGURATORE -> parentController.refreshConfiguratori();

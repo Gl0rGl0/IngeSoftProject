@@ -33,18 +33,35 @@ public class Launcher extends Application {
     private static final String SETUP_DIALOG_TITLE = "Setup iniziale";
     private static final String ERROR_BORDER_STYLE = "error-border";
 
+    private static Launcher instance = new Launcher();
+
+    public Launcher(){
+        if(instance == null){
+            
+            System.out.println("creo il launcher");
+            instance = this;
+        }
+        if(instance.controller == null){
+            System.out.println("creo il controller");
+            controller = new Controller(Model.getInstance());
+        }
+    }
+
+    synchronized public static Launcher getInstance() {
+        return Launcher.instance;
+    }
+
     private Scene scene;
     public final Map<String, Parent> frames = new HashMap<>();
-    public final Map<String, Launchable> controllers = new HashMap<>();
+    public final Map<String, Initializable> controllers = new HashMap<>();
     public Controller controller;
     private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        controller = new Controller();
 
-        if (true || !controller.isSetupCompleted()) {
+        if (true || !getInstance().controller.isSetupCompleted()) {
             if (!showSetupDialog()) {
                 Platform.exit();
                 return;
@@ -57,7 +74,7 @@ public class Launcher extends Application {
     }
 
     private void setupPrimaryStage() throws IOException {
-        Parent initialRoot = frames.get(LoginViewController.ID);
+        Parent initialRoot = getInstance().frames.get(LoginViewController.ID);
         if (initialRoot == null) {
             handleFatalError("Login frame non pre-caricato!");
             return;
@@ -73,7 +90,7 @@ public class Launcher extends Application {
         primaryStage.show();
 
         // Rimuovere per ambiente di produzione
-        controller.interpreter("login ADMIN PASSWORD");
+        getInstance().controller.interpreter("login ADMIN PASSWORD");
         setRoot(GenericFrameController.ID);
     }
 
@@ -104,7 +121,7 @@ public class Launcher extends Application {
 
         setupDialogScene(dialog, root);
         dialog.showAndWait();
-        return controller.isSetupCompleted();
+        return getInstance().controller.isSetupCompleted();
     }
 
     private void handleSetupConfirmation(TextField ambitoField, TextField maxField, Stage dialog) {
@@ -120,7 +137,7 @@ public class Launcher extends Application {
             int maxIscr = Integer.parseInt(maxTxt);
             Model.getInstance().appSettings.setAmbitoTerritoriale(ambito);
             Model.getInstance().appSettings.setMaxPrenotazioniPerPersona(maxIscr);
-            controller.skipSetup();
+            getInstance().controller.skipSetup();
             dialog.close();
         } catch (NumberFormatException ex) {
             addErrorStyle(maxField);
@@ -234,10 +251,10 @@ public class Launcher extends Application {
     }
 
     public void setRoot(String id) {
-        Parent root = frames.get(id);
+        Parent root = getInstance().frames.get(id);
         if (root != null && scene != null) {
             scene.setRoot(root);
-            if (controllers.get(id) instanceof GenericFrameController frameController) {
+            if (getInstance().controllers.get(id) instanceof GenericFrameController frameController) {
                 frameController.setupAfterLogin();
             }
         }
@@ -253,11 +270,8 @@ public class Launcher extends Application {
             
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
-            frames.put(id, root);
-            Launchable add = loader.getController();
-            controllers.put(id, add);
-
-            add.setLauncher(this);
+            getInstance().frames.put(id, root);
+            getInstance().controllers.put(id, loader.getController());
         } catch (IOException e) {
             handleResourceError("Fallito caricamento FXML: " + fxmlName);
         }
@@ -265,7 +279,7 @@ public class Launcher extends Application {
 
     private void handleFatalError(String message) {
         System.err.println("FATAL ERROR: " + message);
-        controller.interpreter("exit");
+        getInstance().controller.interpreter("exit");
         Platform.exit();
     }
 
@@ -299,14 +313,14 @@ public class Launcher extends Application {
     private void executeCommand(TextField input, TextArea output) {
         String command = input.getText().trim();
         if (!command.isEmpty()) {
-            Payload<?> result = controller.interpreter(command);
+            Payload<?> result = getInstance().controller.interpreter(command);
             output.appendText("> " + command + "\n" + result + "\n\n");
             input.clear();
         }
     }
 
-    public static void toast(Payload<?> p) {
-        if (p != null && controllers.get(GenericFrameController.ID) instanceof GenericFrameController gf) {
+    public void toast(Payload<?> p) {
+        if (p != null && getInstance().controllers.get(GenericFrameController.ID) instanceof GenericFrameController gf) {
             gf.toast(p);
         }
     }

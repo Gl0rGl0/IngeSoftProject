@@ -26,7 +26,7 @@ import javafx.scene.layout.VBox;
 public class OrarioViewController implements Calendarable{
     public static final String ID = "orario";
 
-    private boolean actual_status_isOpen = Launcher.controller.isVolunteerCollectionOpen();
+    private boolean actual_status_isOpen = Launcher.getInstance().controller.isVolunteerCollectionOpen();
     private final List<VolontarioRowView> righe = new ArrayList<>();
 
     @FXML VBox container;
@@ -40,13 +40,13 @@ public class OrarioViewController implements Calendarable{
     private Calendar calendarComponent;
 
     @FXML private void initialize() {
-        controllerDate = Launcher.controller.date;
+        controllerDate = Launcher.getInstance().controller.date;
         setupStatusLabel();
         numMaxField.setValue(getNumMax());
         ambitoField.setText(getAmbito());
         buildView();
 
-        calendarComponent = new Calendar(Launcher.controller.date.clone().addMonth(2), dates -> {
+        calendarComponent = new Calendar(Launcher.getInstance().controller.date.clone().addMonth(2), dates -> {
             updateCalendar(dates);
         });
 
@@ -125,9 +125,9 @@ public class OrarioViewController implements Calendarable{
     @FXML private void onOpenCollection() {
         if (actual_status_isOpen) return;
         
-        Payload<?> res = Launcher.controller.interpreter("collection -o");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("collection -o");
         if (res == null || res.getStatus() != Status.INFO) {
-            Launcher.toast(res);
+            Launcher.getInstance().toast(res);
             return;
         }
         
@@ -140,9 +140,9 @@ public class OrarioViewController implements Calendarable{
     @FXML private void onCloseCollection() {
         if (!actual_status_isOpen) return;
         
-        Payload<?> res = Launcher.controller.interpreter("collection -c");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("collection -c");
         if (res == null || res.getStatus() != Status.INFO) {
-            Launcher.toast(res);
+            Launcher.getInstance().toast(res);
             return;
         }
         
@@ -153,8 +153,8 @@ public class OrarioViewController implements Calendarable{
     }
 
     @FXML private void onMakeOrario() {
-        Payload<?> res = Launcher.controller.interpreter("makeplan");
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("makeplan");
+        Launcher.getInstance().toast(res);
     }
 
     @FXML private void onConfirmNum() {
@@ -162,8 +162,8 @@ public class OrarioViewController implements Calendarable{
         int use = numMaxField.getValue();
         if (use <= 0) return;
 
-        Payload<?> res = Launcher.controller.interpreter("setmax " + use);
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("setmax " + use);
+        Launcher.getInstance().toast(res);
     }
 
     private String getAmbito() {
@@ -192,11 +192,11 @@ public class OrarioViewController implements Calendarable{
         
         if(dates.isEmpty()){
             Model.getInstance().dbDatesHelper.clear();
-            Launcher.toast(Payload.info("Cleared all precluded dates", "Cleared all precluded dates"));
+            Launcher.getInstance().toast(Payload.info("Cleared all precluded dates", "Cleared all precluded dates"));
             return;
         }
 
-        Payload<?> res = Launcher.controller.interpreter("preclude -b " + out);
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("preclude -b " + out);
+        Launcher.getInstance().toast(res);
     }
 }

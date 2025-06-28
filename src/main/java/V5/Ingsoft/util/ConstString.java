@@ -67,7 +67,7 @@ public class ConstString {
     public static final String LOGOUT_LINE_INFO = "Log out from the system";
 
     public static final String CHANGEPSW_INFO = """
-            changepsw [String: newpassword]
+            changepsw [String: newpassword] [String: confirmnewpassword]
                 newpassword  Specifies the new password for the account
             """;
 

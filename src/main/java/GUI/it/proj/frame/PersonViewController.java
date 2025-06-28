@@ -81,8 +81,8 @@ public class PersonViewController implements ListDeleter<Persona> {
         if(prompt == null)
             return;
 
-        Payload<?> out = Launcher.controller.interpreter(prompt);
-        Launcher.toast(out);
+        Payload<?> out = Launcher.getInstance().controller.interpreter(prompt);
+        Launcher.getInstance().toast(out);
 
         if(out != null && out.getStatus() == Status.INFO)
             refreshItems();

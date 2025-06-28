@@ -32,18 +32,18 @@ public class ChangePasswordViewController {
         String confirmPass = confirmPasswordField.getText();
 
         if (newPass.length() < 6) {
-            Launcher.toast(Payload.error("The password lenght must be at least 6 char.", confirmPass));
+            Launcher.getInstance().toast(Payload.error("The password lenght must be at least 6 char.", confirmPass));
             return;
         }
 
         if (!newPass.equals(confirmPass)) {
-            Launcher.toast(Payload.error("The passwords must be equals.", confirmPass));
+            Launcher.getInstance().toast(Payload.error("The passwords must be equals.", confirmPass));
             return;
         }
         
-        Payload<?> res = Launcher.controller.interpreter("changepsw " + newPass);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("changepsw " + newPass);
         
-        Launcher.toast(res);
+        Launcher.getInstance().toast(res);
 
         if(res != null && res.getStatus() == Status.INFO)
             parent.showHome();

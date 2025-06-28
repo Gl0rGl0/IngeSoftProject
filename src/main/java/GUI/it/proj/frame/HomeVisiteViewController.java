@@ -75,7 +75,7 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     public void showVisita(Visita v) {
         if (dialogController == null) return;
 
-        // if(Launcher.controller.getCurrentUser().getType() == PersonaType.VOLONTARIO) return;
+        // if(Launcher.getInstance().controller.getCurrentUser().getType() == PersonaType.VOLONTARIO) return;
 
         // Imposto i valori esistenti (oppure nuovi) nel controller del dialog
         dialogController.setVisitaCorrente(v);
@@ -85,7 +85,7 @@ public class HomeVisiteViewController implements ListBase<Visita> {
         dialogContainer.setManaged(true);
         dialogContainer.setVisible(true);
         
-        boolean disable = Launcher.controller.getCurrentUser().getType() != PersonaType.FRUITORE;
+        boolean disable = Launcher.getInstance().controller.getCurrentUser().getType() != PersonaType.FRUITORE;
         dialogController.toggleConfirmBUtton(disable);
     }
 

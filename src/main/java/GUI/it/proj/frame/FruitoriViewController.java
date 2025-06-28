@@ -31,17 +31,17 @@ public class FruitoriViewController implements ListDeleter<Iscrizione> {
     public void refreshItems() {
         listIscrizioni.getItems().clear();
 
-        Payload<?> res = Launcher.controller.interpreter("myvisit");
+        Payload<?> res = Launcher.getInstance().controller.interpreter("myvisit");
         if(res != null && res.getStatus() == Status.INFO)
             listIscrizioni.getItems().addAll((Collection<Iscrizione>) res.getData());
     }
 
     @Override
     public void removeItem(String item) {
-        Payload<?> res = Launcher.controller.interpreter("visit -i " + item);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("visit -i " + item);
         if(res != null && res.getStatus() == Status.INFO)
             refreshItems();
 
-        Launcher.toast(res);
+        Launcher.getInstance().toast(res);
     }
 }

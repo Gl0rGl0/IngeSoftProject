@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 public class GenericFrameController implements Initializable {
     public final static String ID = "generic";
-    protected Launcher parent;
+    private Launcher launcher;
 
     // Mappa degli FXML caricati (esempio per change password, ecc.)
     // NOTA: Mantieni static se vuoi che sia popolata UNA SOLA VOLTA all'inizializzazione del primo GenericFrameController
@@ -53,8 +53,8 @@ public class GenericFrameController implements Initializable {
     @FXML private AnchorPane toastContainer;  // Overlay for toasts
 
     // Questa variabile conterrà il riferimento a questa istanza del controller,
-    // utile per accedere a questo controller da metodi statici di Launcher.
-    // MA con il nuovo approccio in Launcher.setRoot non è strettamente necessario.
+    // utile per accedere a questo controller da metodi statici di Launcher.getInstance().
+    // MA con il nuovo approccio in Launcher.getInstance().setRoot non è strettamente necessario.
     // private static GenericFrameController instance;
 
     @Override
@@ -63,6 +63,9 @@ public class GenericFrameController implements Initializable {
     
         // Caricamenti FXML esistenti…
         loadBaseFrames();
+        launcher = Launcher.getInstance();
+        
+        System.out.println("uso il launcher in generic");
 
         // Posiziona il toastContainer in alto a destra
         AnchorPane.setTopAnchor(toastContainer, 0.0);
@@ -80,7 +83,7 @@ public class GenericFrameController implements Initializable {
         System.out.println("GenericFrameController: Setup after login called.");
         
         //Refresh content
-        switch (parent.controller.getCurrentUser().getType()) {
+        switch (launcher.controller.getCurrentUser().getType()) {
             case CONFIGURATORE -> loadConfigFrame();
             case VOLONTARIO -> loadVolontFrame();
             case FRUITORE -> loadFruitFrame();
@@ -89,8 +92,8 @@ public class GenericFrameController implements Initializable {
         
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
         
-        if(parent.controller.getCurrentUser().isNew()){
-            parent.toast(Payload.debug("Please change the password, this page will show up everytime until you change it.", ID));
+        if(launcher.controller.getCurrentUser().isNew()){
+            launcher.toast(Payload.debug("Please change the password, this page will show up everytime until you change it.", ID));
             showChangePassword();
         }
     }
@@ -200,9 +203,9 @@ public class GenericFrameController implements Initializable {
         }
 
         // Aggiorna il testo dell'utente nella navbar
-        // Assicurati che Launcher.controller.getCurrentUser() non sia null qui
-        if (parent.controller != null && parent.controller.getCurrentUser() != null) {
-            userMenuButton.setText(parent.controller.getCurrentUser().getUsername());
+        // Assicurati che Launcher.getInstance().controller.getCurrentUser() non sia null qui
+        if (launcher.controller != null && launcher.controller.getCurrentUser() != null) {
+            userMenuButton.setText(launcher.controller.getCurrentUser().getUsername());
         } else {
             userMenuButton.setText("Utente Sconosciuto"); // Placeholder o errore
             System.err.println("WARNING: User not logged in when configuring navbar.");
@@ -215,24 +218,24 @@ public class GenericFrameController implements Initializable {
     public void cycleRole() {
         String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit2 pass2F"};
 
-        Payload<?> res = parent.controller.interpreter("logout");
+        Payload<?> res = launcher.controller.interpreter("logout");
 
         if(res != null && res.getStatus() != Status.ERROR) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null);
             
             toast(res);
-            //Launcher.setRoot(LoginViewController.ID);
+            //Launcher.getInstance().setRoot(LoginViewController.ID);
         } else {
             toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();
             return;
         }
 
-        Payload<?> loginRes = parent.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
+        Payload<?> loginRes = launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
 
         if (loginRes != null && loginRes.getStatus() != Status.ERROR) {
-            toast(Payload.info("Role login successful: " + parent.controller.getCurrentUser().getUsername(), ""));
+            toast(Payload.info("Role login successful: " + launcher.controller.getCurrentUser().getUsername(), ""));
             setupAfterLogin();
         } else {
             System.err.println("Cycled role login failed." + loginRes);
@@ -241,8 +244,8 @@ public class GenericFrameController implements Initializable {
 
     @FXML void showHome() {
         // Configura la navbar prima di mostrare la home, basandosi sull'utente corrente
-        Persona user = parent.controller.getCurrentUser();
-        if (parent.controller != null && user != null) {
+        Persona user = launcher.controller.getCurrentUser();
+        if (launcher.controller != null && user != null) {
             configureNavbarForRole(user.getType());
         } else {
             // Questo caso non dovrebbe verificarsi se setupAfterLogin è chiamato solo post-login
@@ -337,14 +340,14 @@ public class GenericFrameController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        Payload<?> res = parent.controller.interpreter("logout");
+        Payload<?> res = launcher.controller.interpreter("logout");
 
         if(res != null && res.getStatus() == Status.INFO) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null); // Or some other placeholder state
             
             toast(res);
-            parent.setRoot(LoginViewController.ID);
+            launcher.setRoot(LoginViewController.ID);
         } else {
             toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();

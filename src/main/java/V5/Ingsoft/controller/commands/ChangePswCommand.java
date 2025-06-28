@@ -15,10 +15,15 @@ public class ChangePswCommand extends AbstractCommand {
 
     @Override
     public Payload<String> execute(String[] options, String[] args) {
-        if (args == null || args.length < 1) {
+        if (args == null || args.length < 2) {
             return Payload.error(
-                    "Usage: changepsw <newpassword>",
+                    "Usage: changepsw <newpassword> <newpassword>",
                     "Missing password argument in ChangePswCommand");
+        }
+        if(!args[0].equals(args[1])){
+            return Payload.error(
+                "The passwords aren't equal, please try again...",
+                "Password inequality failed for user: " + controller.user);
         }
         if (Model.getInstance().changePassword(controller.user, args[0])) {
             this.hasBeenExecuted = true;

@@ -28,12 +28,12 @@ public class AddLuoghiDialogController {
         if (titoloLuogo == null      || titoloLuogo.isBlank() ||
             descrizioneLuogo == null || descrizioneLuogo.isBlank() ||
             posizione == null        || posizione.isBlank()) {
-            Launcher.toast(Payload.error("Tutti i campi sono obbligatori!", ""));
+            Launcher.getInstance().toast(Payload.error("Tutti i campi sono obbligatori!", ""));
             return;
         }
 
-        Payload<?> res = Launcher.controller.interpreter(String.format("add -L %s %s %s", titoloLuogo, descrizioneLuogo, posizione));
-        Launcher.toast(res);
+        Payload<?> res = Launcher.getInstance().controller.interpreter(String.format("add -L %s %s %s", titoloLuogo, descrizioneLuogo, posizione));
+        Launcher.getInstance().toast(res);
 
         closeDialog();
     }

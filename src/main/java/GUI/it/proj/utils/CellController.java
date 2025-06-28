@@ -129,9 +129,9 @@ public class CellController<T extends Informable> {
                 
                 // Solo se è PENDING_REMOVE, aggiungi un tooltip
                 if(status == StatusItem.PENDING_REMOVE) {
-                    Tooltip tip = new Tooltip("Questo oggetto verrà rimosso.");
+                    Tooltip tip = new Tooltip("This item will be removed.");
                     Tooltip.install(deleteButton, tip);
-                    importantDate.setText("REMOVE: " + ((Deletable) item).getDeletionDate());
+                    importantDate.setText("PENDING REMOVE: " + ((Deletable) item).getDeletionDate());
                 }
 
                 deleteButton.getStyleClass().remove("red-btn");
@@ -153,7 +153,7 @@ public class CellController<T extends Informable> {
             }
 
             case StatusItem.PENDING_ADD -> {
-                importantDate.setText("PENDING: " + ((Deletable) item).getUsableDate());
+                importantDate.setText("PENDING ADD: " + ((Deletable) item).getUsableDate());
             }
             
             default -> {}
