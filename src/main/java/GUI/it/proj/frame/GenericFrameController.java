@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 
 public class GenericFrameController implements Initializable {
     public final static String ID = "generic";
+    protected Launcher parent;
 
     // Mappa degli FXML caricati (esempio per change password, ecc.)
     // NOTA: Mantieni static se vuoi che sia popolata UNA SOLA VOLTA all'inizializzazione del primo GenericFrameController
@@ -79,7 +80,7 @@ public class GenericFrameController implements Initializable {
         System.out.println("GenericFrameController: Setup after login called.");
         
         //Refresh content
-        switch (Launcher.controller.getCurrentUser().getType()) {
+        switch (parent.controller.getCurrentUser().getType()) {
             case CONFIGURATORE -> loadConfigFrame();
             case VOLONTARIO -> loadVolontFrame();
             case FRUITORE -> loadFruitFrame();
@@ -88,8 +89,8 @@ public class GenericFrameController implements Initializable {
         
         showHome(); // Chiama showHome() che a sua volta configurerà la navbar
         
-        if(Launcher.controller.getCurrentUser().isNew()){
-            Launcher.toast(Payload.debug("Please change the password, this page will show up everytime until you change it.", ID));
+        if(parent.controller.getCurrentUser().isNew()){
+            parent.toast(Payload.debug("Please change the password, this page will show up everytime until you change it.", ID));
             showChangePassword();
         }
     }
@@ -200,8 +201,8 @@ public class GenericFrameController implements Initializable {
 
         // Aggiorna il testo dell'utente nella navbar
         // Assicurati che Launcher.controller.getCurrentUser() non sia null qui
-        if (Launcher.controller != null && Launcher.controller.getCurrentUser() != null) {
-            userMenuButton.setText(Launcher.controller.getCurrentUser().getUsername());
+        if (parent.controller != null && parent.controller.getCurrentUser() != null) {
+            userMenuButton.setText(parent.controller.getCurrentUser().getUsername());
         } else {
             userMenuButton.setText("Utente Sconosciuto"); // Placeholder o errore
             System.err.println("WARNING: User not logged in when configuring navbar.");
@@ -214,24 +215,24 @@ public class GenericFrameController implements Initializable {
     public void cycleRole() {
         String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit2 pass2F"};
 
-        Payload<?> res = Launcher.controller.interpreter("logout");
+        Payload<?> res = parent.controller.interpreter("logout");
 
         if(res != null && res.getStatus() != Status.ERROR) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null);
             
-            Launcher.toast(res);
+            toast(res);
             //Launcher.setRoot(LoginViewController.ID);
         } else {
-            Launcher.toast(Payload.error("Logout failed", res.getLogMessage()));
+            toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();
             return;
         }
 
-        Payload<?> loginRes = Launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
+        Payload<?> loginRes = parent.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
 
         if (loginRes != null && loginRes.getStatus() != Status.ERROR) {
-            Launcher.toast(Payload.info("Role login successful: " + Launcher.controller.getCurrentUser().getUsername(), ""));
+            toast(Payload.info("Role login successful: " + parent.controller.getCurrentUser().getUsername(), ""));
             setupAfterLogin();
         } else {
             System.err.println("Cycled role login failed." + loginRes);
@@ -240,8 +241,8 @@ public class GenericFrameController implements Initializable {
 
     @FXML void showHome() {
         // Configura la navbar prima di mostrare la home, basandosi sull'utente corrente
-        Persona user = Launcher.controller.getCurrentUser();
-        if (Launcher.controller != null && user != null) {
+        Persona user = parent.controller.getCurrentUser();
+        if (parent.controller != null && user != null) {
             configureNavbarForRole(user.getType());
         } else {
             // Questo caso non dovrebbe verificarsi se setupAfterLogin è chiamato solo post-login
@@ -336,16 +337,16 @@ public class GenericFrameController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        Payload<?> res = Launcher.controller.interpreter("logout");
+        Payload<?> res = parent.controller.interpreter("logout");
 
         if(res != null && res.getStatus() == Status.INFO) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null); // Or some other placeholder state
             
-            Launcher.toast(res);
-            Launcher.setRoot(LoginViewController.ID);
+            toast(res);
+            parent.setRoot(LoginViewController.ID);
         } else {
-            Launcher.toast(Payload.error("Logout failed", res.getLogMessage()));
+            toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();
         }
     }

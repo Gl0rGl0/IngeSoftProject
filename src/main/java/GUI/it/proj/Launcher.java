@@ -2,202 +2,280 @@ package GUI.it.proj;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader; // Importa FXMLLoader
-import javafx.fxml.Initializable; // Importa Initializable
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GUI.it.proj.frame.GenericFrameController;
 import GUI.it.proj.frame.LoginViewController;
 import V5.Ingsoft.controller.Controller;
+import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Payload;
-
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map; // Usa Map invece di HashMap per le dichiarazioni
+import java.util.Map;
 
 public class Launcher extends Application {
-    private static Scene scene;
-    private static Map<String, Parent> frames = new HashMap<>();
-    // Mappa per tenere i controller associati ai frame principali pre-caricati
-    private static Map<String, Initializable> controllers = new HashMap<>();
+    private static final double INITIAL_WIDTH = 1480;
+    private static final double INITIAL_HEIGHT = 960;
+    private static final String SETUP_DIALOG_TITLE = "Setup iniziale";
+    private static final String ERROR_BORDER_STYLE = "error-border";
 
+    private Scene scene;
+    public final Map<String, Parent> frames = new HashMap<>();
+    public final Map<String, Launchable> controllers = new HashMap<>();
+    public Controller controller;
+    private Stage primaryStage;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        // Imposta la scena iniziale sul frame di login
-        Parent initialRoot = frames.get(LoginViewController.ID);
+    public void start(Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
+        controller = new Controller();
 
-        
-        if (initialRoot == null) {
-            System.err.println("FATAL ERROR: Login frame not pre-loaded!");
-            // Potresti voler uscire o gestire l'errore
-            controller.interpreter("exit");
-            Platform.exit();
-            return;
+        if (true || !controller.isSetupCompleted()) {
+            if (!showSetupDialog()) {
+                Platform.exit();
+                return;
+            }
         }
         
-        scene = new Scene(initialRoot, 1480, 960);
-
-        var screens = Screen.getScreens();
-        if (screens.size() > 1) {
-            Screen secondScreen = screens.get(1);
-            Rectangle2D bounds = secondScreen.getVisualBounds();
-
-            stage.setX(bounds.getMinX());
-            stage.setY(bounds.getMinY());
-        }
-        
-        
-        stage.setScene(scene);
-        stage.setTitle("App visite guidate");
-        
-        // Prima pulisci e aggiungi BootstrapFX
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        
-        // Poi carichi il tuo CSS qui
-        URL cssUrl = Launcher.class.getResource("/GUI/style/app.css");
-        if (cssUrl != null) {
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-        } else {
-            // WARNING: Assicurati che il lesscss-maven-plugin compili in /GUI/style/app.css
-            System.err.println("WARNING: /GUI/style/app.css non trovato nel classpath.");
-        }
-        
-        stage.centerOnScreen();
-        stage.setMaximized(true);
-        stage.show();
-        
-        // Non chiamare setupAfterLogin o showHome qui.
-        // Questo avviene solo quando il GenericFrame viene impostato come root DOPO il login.
-        controller.interpreter("login ADMIN PASSWORD");
-        setRoot(GenericFrameController.ID);
+        preloadFrames();
+        setupPrimaryStage();
         openInterpreterWindow();
     }
 
-    /**
-     * Imposta un frame pre-caricato come root della scena.
-     * Chiama setupAfterLogin sul controller del frame se appropriato.
-     * @param id L'ID del frame (chiave nella mappa 'frames').
-     */
-    public static void setRoot(String id) {
-        Parent root = frames.get(id);
-        if (root != null) {
-            scene.setRoot(root);
-
-            // Ottieni il controller associato
-            Initializable controllerView = controllers.get(id);
-
-            // Se il controller è GenericFrameController, chiama il suo metodo di setup post-login
-            if (controllerView instanceof GenericFrameController) {
-                ((GenericFrameController) controllerView).setupAfterLogin();
-            }
-            // Puoi aggiungere altri 'else if' qui per altri tipi di controller
-            // che potrebbero aver bisogno di setup quando vengono mostrati
-
-        } else {
-            System.err.println("Error: FXML frame '" + id + "' not found in pre-loaded frames.");
-            // Potresti voler mostrare uno stato di errore o tornare al login
-            // Esempio: setRoot(LoginViewController.ID);
-        }
-    }
-
-    // Metodo originale setRoot con clear (per ricaricare FXML, se necessario) - Lascialo se lo usi altrove
-    // Nota: questo metodo *non* userà i frame pre-caricati e ricreerà l'UI e il controller
-    // ogni volta che viene chiamato.
-    public static void setRoot(String fxmlFileName, boolean clear) {
-        FXMLLoader loader = new FXMLLoader(Launcher.class.getResource(String.format("/GUI/frame/%s-view", fxmlFileName)));
-        Parent root;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void setupPrimaryStage() throws IOException {
+        Parent initialRoot = frames.get(LoginViewController.ID);
+        if (initialRoot == null) {
+            handleFatalError("Login frame non pre-caricato!");
             return;
         }
+
+        scene = new Scene(initialRoot, INITIAL_WIDTH, INITIAL_HEIGHT);
+        applyStylesheet(scene);
+
+        positionStageOnSecondaryScreen();
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("App visite guidate");
+        primaryStage.setMaximized(true);
+        primaryStage.show();
+
+        // Rimuovere per ambiente di produzione
+        controller.interpreter("login ADMIN PASSWORD");
+        setRoot(GenericFrameController.ID);
+    }
+
+    private void preloadFrames() {
+        loadFrame(GenericFrameController.ID, "generic-view");
+        loadFrame(LoginViewController.ID, "login-view");
+    }
+
+    private boolean showSetupDialog() {
+        Stage dialog = new Stage();
+        dialog.initOwner(primaryStage);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle(SETUP_DIALOG_TITLE);
+
+        TextField ambitoField = createInputField("Inserisci ambito territoriale");
+        TextField maxField = createNumericField("Es. 100");
         
-        if (root != null) {
-            scene.setRoot(root);
-            System.out.println("WARNING: setRoot(..., true) does not automatically call setupAfterLogin.");
-        } else {
-            System.err.println("Error: Failed to load FXML file '" + fxmlFileName + "-view.fxml'");
+        HBox ambitoBox = createInputRow("Ambito Territoriale:", ambitoField);
+        HBox maxBox = createInputRow("Numero massimo iscrizioni:", maxField);
+
+        Button confirm = new Button("Conferma");
+        confirm.setDefaultButton(true);
+        confirm.setOnAction(e -> handleSetupConfirmation(ambitoField, maxField, dialog));
+
+        VBox root = new VBox(15, ambitoBox, maxBox, confirm);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
+
+        setupDialogScene(dialog, root);
+        dialog.showAndWait();
+        return controller.isSetupCompleted();
+    }
+
+    private void handleSetupConfirmation(TextField ambitoField, TextField maxField, Stage dialog) {
+        String ambito = ambitoField.getText().trim();
+        String maxTxt = maxField.getText().trim();
+        
+        boolean valid = validateInput(ambitoField, ambito.isEmpty());
+        valid &= validateInput(maxField, maxTxt.isEmpty());
+        
+        if (!valid) return;
+        
+        try {
+            int maxIscr = Integer.parseInt(maxTxt);
+            Model.getInstance().appSettings.setAmbitoTerritoriale(ambito);
+            Model.getInstance().appSettings.setMaxPrenotazioniPerPersona(maxIscr);
+            controller.skipSetup();
+            dialog.close();
+        } catch (NumberFormatException ex) {
+            addErrorStyle(maxField);
         }
     }
 
-
-    public static Controller controller;
-
-    public static void main(String[] args) {
-        // Inizializza il modello e il controller PRIMA di caricare gli FXML
-        controller = new Controller();
-        
-        // Pre-carica i frame principali e i loro controller
-        // Usa un helper locale per caricare e memorizzare sia il Parent che il Controller
-        storeFrame(GenericFrameController.ID, "generic-view");
-        storeFrame(LoginViewController.ID, "login-view");
-
-        // Avvia l'applicazione JavaFX
-        launch();
-        // System.exit(0);
+    private boolean validateInput(TextField field, boolean isEmpty) {
+        if (isEmpty) {
+            addErrorStyle(field);
+            return false;
+        }
+        return true;
     }
 
-    /**
-     * Helper per caricare un FXML, memorizzare il Parent e il Controller associato.
-     */
-    private static void storeFrame(String id, String fxmlFileName) {
-        try {
-            URL fxmlUrl = Launcher.class.getResource("/GUI/frame/" + fxmlFileName + ".fxml");
-            if (fxmlUrl == null) {
-                 System.err.println("FATAL ERROR: FXML file not found: /GUI/frame/" + fxmlFileName + ".fxml");
-                 // Puoi lanciare un'eccezione o uscire
-                 return;
+    private void addErrorStyle(TextField field) {
+        if (!field.getStyleClass().contains(ERROR_BORDER_STYLE)) {
+            field.getStyleClass().add(ERROR_BORDER_STYLE);
+        }
+    }
+
+    private TextField createInputField(String prompt) {
+        TextField field = new TextField();
+        field.setPromptText(prompt);
+        field.textProperty().addListener((obs, oldVal, newVal) -> 
+            field.getStyleClass().remove(ERROR_BORDER_STYLE)
+        );
+        return field;
+    }
+
+    private TextField createNumericField(String prompt) {
+        TextField field = createInputField(prompt);
+        field.setTextFormatter(new TextFormatter<>(change -> 
+            change.getControlNewText().matches("\\d*") ? change : null
+        ));
+        return field;
+    }
+
+    private HBox createInputRow(String labelText, TextField field) {
+        Label label = new Label(labelText);
+        label.setMinWidth(180);
+        HBox row = new HBox(10, label, field);
+        row.setAlignment(Pos.CENTER_LEFT);
+        return row;
+    }
+
+    private void setupDialogScene(Stage dialog, VBox root) {
+        Scene dialogScene = new Scene(root);
+        applyStylesheet(dialogScene);
+        dialog.setScene(dialogScene);
+        dialog.setOnShown(evt -> centerDialog(dialog));
+    }
+
+    private void centerDialog(Stage dialog) {
+        // Forza il calcolo delle dimensioni
+        dialog.sizeToScene();
+        
+        // Ottieni i bounds dello schermo corrente
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        
+        // Calcola le dimensioni del dialogo
+        double dialogWidth = dialog.getWidth();
+        double dialogHeight = dialog.getHeight();
+
+        dialog.setWidth(dialogWidth * 1.1);
+        dialog.setHeight(dialogHeight * 1.1);
+        
+        double centerX, centerY;
+        
+        if (primaryStage.isShowing()) {
+            // Usa la posizione dello stage principale se visibile
+            double ownerX = primaryStage.getX();
+            double ownerY = primaryStage.getY();
+            double ownerWidth = primaryStage.getWidth();
+            double ownerHeight = primaryStage.getHeight();
+            
+            centerX = ownerX + (ownerWidth - dialogWidth) / 2;
+            centerY = ownerY + (ownerHeight - dialogHeight) / 2;
+        } else {
+            // Centra sullo schermo primario
+            centerX = (screenBounds.getWidth() - dialogWidth) / 2;
+            centerY = (screenBounds.getHeight() - dialogHeight) / 2;
+        }
+        
+        // Assicurati che il dialogo sia dentro lo schermo
+        centerX = Math.max(screenBounds.getMinX(), 
+                        Math.min(centerX, screenBounds.getMaxX() - dialogWidth));
+        centerY = Math.max(screenBounds.getMinY(), 
+                        Math.min(centerY, screenBounds.getMaxY() - dialogHeight));
+        
+        dialog.setX(centerX);
+        dialog.setY(centerY);
+    }
+
+    private void positionStageOnSecondaryScreen() {
+        Screen.getScreens().stream()
+            .skip(1)
+            .findFirst()
+            .ifPresent(screen -> {
+                Rectangle2D bounds = screen.getVisualBounds();
+                primaryStage.setX(bounds.getMinX());
+                primaryStage.setY(bounds.getMinY());
+            });
+    }
+
+    private void applyStylesheet(Scene scene) {
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        URL cssUrl = getClass().getResource("/GUI/style/app.css");
+        if (cssUrl != null) {
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+        }
+    }
+
+    public void setRoot(String id) {
+        Parent root = frames.get(id);
+        if (root != null && scene != null) {
+            scene.setRoot(root);
+            if (controllers.get(id) instanceof GenericFrameController frameController) {
+                frameController.setupAfterLogin();
             }
+        }
+    }
+
+    private void loadFrame(String id, String fxmlName) {
+        try {
+            URL fxmlUrl = getClass().getResource("/GUI/frame/" + fxmlName + ".fxml");
+            if (fxmlUrl == null) {
+                handleResourceError("FXML non trovato: /GUI/frame/" + fxmlName + ".fxml");
+                return;
+            }
+            
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             Parent root = loader.load();
-            Initializable ctrl = loader.getController(); // Ottieni il controller
-
             frames.put(id, root);
-            controllers.put(id, ctrl); // Memorizza il controller
+            Launchable add = loader.getController();
+            controllers.put(id, add);
 
-            System.out.println("Pre-loaded frame: " + id + " with controller: " + (ctrl != null ? ctrl.getClass().getSimpleName() : "None"));
-
+            add.setLauncher(this);
         } catch (IOException e) {
-            System.err.println("FATAL ERROR: Failed to load FXML: " + fxmlFileName);
-            e.printStackTrace();
-            // Puoi lanciare un'eccezione o uscire
-        } catch (Exception e) {
-             System.err.println("FATAL ERROR: An unexpected error occurred while loading FXML: " + fxmlFileName);
-             e.printStackTrace();
+            handleResourceError("Fallito caricamento FXML: " + fxmlName);
         }
     }
 
-    // Potresti voler esporre i controller se necessario (ad es. per chiamare metodi specifici su un controller)
-    public static <T extends Initializable> T getController(String id) {
-         // Esegui un cast sicuro se conosci il tipo atteso
-         return (T) controllers.get(id);
+    private void handleFatalError(String message) {
+        System.err.println("FATAL ERROR: " + message);
+        controller.interpreter("exit");
+        Platform.exit();
     }
 
-    public static void toast(Payload<?> p){
-        if(p == null)
-            return;
-        ((GenericFrameController) getController(GenericFrameController.ID)).toast(p);
+    private void handleResourceError(String message) {
+        System.err.println("RESOURCE ERROR: " + message);
     }
 
     private void openInterpreterWindow() {
         Stage interpreterStage = new Stage();
         interpreterStage.setTitle("Interprete comandi");
-
-        VBox layout = new VBox(10);
-        layout.setPadding(new javafx.geometry.Insets(10));
 
         TextArea output = new TextArea();
         output.setEditable(false);
@@ -207,21 +285,33 @@ public class Launcher extends Application {
         input.setPromptText("Scrivi comando...");
 
         Button sendButton = new Button("Invia");
-        sendButton.setOnAction(e -> {
-            String command = input.getText();
-            if (!command.isBlank()) {
-                Payload<?> result = controller.interpreter(command);
-                output.appendText("> " + command + "\n" + result + "\n\n");
-                input.clear();
-            }
-        });
+        sendButton.setOnAction(e -> executeCommand(input, output));
 
-        input.setOnAction(sendButton.getOnAction()); // Invio con ENTER
+        VBox layout = new VBox(10, output, input, sendButton);
+        layout.setPadding(new Insets(10));
 
-        layout.getChildren().addAll(output, input, sendButton);
         Scene scene = new Scene(layout, 500, 400);
+        applyStylesheet(scene);
         interpreterStage.setScene(scene);
         interpreterStage.show();
     }
 
+    private void executeCommand(TextField input, TextArea output) {
+        String command = input.getText().trim();
+        if (!command.isEmpty()) {
+            Payload<?> result = controller.interpreter(command);
+            output.appendText("> " + command + "\n" + result + "\n\n");
+            input.clear();
+        }
+    }
+
+    public static void toast(Payload<?> p) {
+        if (p != null && controllers.get(GenericFrameController.ID) instanceof GenericFrameController gf) {
+            gf.toast(p);
+        }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

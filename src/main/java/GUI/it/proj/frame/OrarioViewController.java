@@ -1,5 +1,6 @@
 package GUI.it.proj.frame;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import com.dlsc.unitfx.IntegerInputField;
 
 import GUI.it.proj.Launcher;
+import GUI.it.proj.utils.Calendar;
+import GUI.it.proj.utils.Calendarable;
 import V5.Ingsoft.controller.item.persone.Volontario;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
@@ -17,9 +20,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class OrarioViewController {
+public class OrarioViewController implements Calendarable{
     public static final String ID = "orario";
 
     private boolean actual_status_isOpen = Launcher.controller.isVolunteerCollectionOpen();
@@ -30,8 +34,10 @@ public class OrarioViewController {
     @FXML Label stats;
     @FXML TextField ambitoField;
     @FXML IntegerInputField numMaxField;
+    @FXML StackPane calendar;
 
     private Date controllerDate;
+    private Calendar calendarComponent;
 
     @FXML private void initialize() {
         controllerDate = Launcher.controller.date;
@@ -39,7 +45,12 @@ public class OrarioViewController {
         numMaxField.setValue(getNumMax());
         ambitoField.setText(getAmbito());
         buildView();
-        refreshStats();
+
+        calendarComponent = new Calendar(Launcher.controller.date.clone().addMonth(2), dates -> {
+            updateCalendar(dates);
+        });
+
+        calendar.getChildren().add(calendarComponent.getView());
     }
 
     private void setupStatusLabel() {
@@ -103,7 +114,12 @@ public class OrarioViewController {
         for (VolontarioRowView row : righe) {
             row.update();
         }
-        refreshStats();
+        refreshCalendar();
+    }
+
+    private void refreshCalendar() {
+        List<Date> dates = Model.getInstance().dbDatesHelper.getItems();
+        calendarComponent.setSelected(dates);
     }
 
     @FXML private void onOpenCollection() {
@@ -141,11 +157,6 @@ public class OrarioViewController {
         Launcher.toast(res);
     }
 
-    private void refreshStats() {
-        double res = Launcher.controller.getVolontariStats();
-        stats.setText(String.format("%.2f%%", res * 100));
-    }
-
     @FXML private void onConfirmNum() {
         if (numMaxField.getValue() == null) return;
         int use = numMaxField.getValue();
@@ -170,5 +181,22 @@ public class OrarioViewController {
             .getItems();
         lista.removeIf(v -> !v.isUsable());
         return lista;
+    }
+
+    @Override
+    public void updateCalendar(List<LocalDate> dates) {
+        StringBuilder out = new StringBuilder();
+        for (LocalDate localDate : dates) {
+            out.append(String.format(" %s/%s/%s", localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear()));
+        }
+        
+        if(dates.isEmpty()){
+            Model.getInstance().dbDatesHelper.clear();
+            Launcher.toast(Payload.info("Cleared all precluded dates", "Cleared all precluded dates"));
+            return;
+        }
+
+        Payload<?> res = Launcher.controller.interpreter("preclude -b " + out);
+        Launcher.toast(res);
     }
 }

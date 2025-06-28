@@ -243,11 +243,9 @@ public class AddTipoVisiteDialogController {
             //nullity gestita internamente dal model
             placeComboBox.getSelectionModel().select(l);
 
-            System.out.println(v);
             for (String uid : v.getVolontariUIDs()) {
                 for (Volontario vol : volontariCheckBox.getItems()) {
                     if (vol.getUsername().equals(uid)) {
-                        System.out.println(vol);
                         volontariCheckBox.getCheckModel().check(vol);
                     }
                 }

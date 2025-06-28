@@ -28,23 +28,29 @@ public class AvailabilityCommand extends AbstractCommand {
             return Payload.error(
                     "Usage: setav -<a|r> <date1> [date2 ...]",
                     "Missing options or arguments");
+        
+        if (!controller.isVolunteerCollectionOpen())
+            return Payload.warn(
+                    "Cannot edit availability while collection is closed.",
+                    "Collection closed.");
 
         char opt = options[0].charAt(0);
         return switch (opt) {
             case 'a' -> manageDate(args, true);
             case 'r' -> manageDate(args, false);
+            case 'b' -> manageBulk(args);
             default -> Payload.error(
                     "Option '-" + opt + "' not recognized for 'setav'",
                     "Unknown option '" + opt + "'");
         };
     }
 
-    private Payload<String> manageDate(String[] args, boolean toAdd) {
-        if (!controller.isVolunteerCollectionOpen())
-            return Payload.warn(
-                    "Cannot edit availability while collection is closed.",
-                    "Collection closed.");
+    private Payload<String> manageBulk(String[] args) {
+        ((Volontario) controller.getCurrentUser()).clearAvailability();
+        return manageDate(args, true);
+    }
 
+    private Payload<String> manageDate(String[] args, boolean toAdd) {
         Volontario v = (Volontario) controller.getCurrentUser();
         StringBuilder feedback = new StringBuilder();
         Model m = Model.getInstance();

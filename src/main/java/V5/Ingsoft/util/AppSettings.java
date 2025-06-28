@@ -46,8 +46,8 @@ public class AppSettings {
      * @param ambito The territorial scope string.
      */
     public void setAmbitoTerritoriale(String ambito) {
-        if (isAmbitoSet() || ambito == null || ambito.isBlank()) {
-            return; // Cannot set if already set or invalid input
+        if (ambito == null || ambito.isBlank()) {
+            return;
         }
 
         this.ambitoTerritoriale = ambito.trim();

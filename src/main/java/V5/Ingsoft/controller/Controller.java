@@ -93,7 +93,7 @@ public class Controller {
 
     //SOLO PER TESTING
     public void skipSetup(){
-        db.appSettings.setAmbitoTerritoriale("test");
+        //db.appSettings.setAmbitoTerritoriale("test");
         switchInterpreter();
     }
 
