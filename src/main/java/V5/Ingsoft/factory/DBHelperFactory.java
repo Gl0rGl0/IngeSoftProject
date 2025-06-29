@@ -2,6 +2,14 @@ package V5.Ingsoft.factory;
 
 import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
 import V5.Ingsoft.model.*;
+import V5.Ingsoft.model.helper.DBConfiguratoreHelper;
+import V5.Ingsoft.model.helper.DBDatesHelper;
+import V5.Ingsoft.model.helper.DBFruitoreHelper;
+import V5.Ingsoft.model.helper.DBIscrizioniHelper;
+import V5.Ingsoft.model.helper.DBLuoghiHelper;
+import V5.Ingsoft.model.helper.DBTipoVisiteHelper;
+import V5.Ingsoft.model.helper.DBVisiteHelper;
+import V5.Ingsoft.model.helper.DBVolontarioHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +35,7 @@ public final class DBHelperFactory implements BaseFactory {
         Supplier<? extends DBHelperInterface<?>> supplier = registry.get(clazz);
         if (supplier == null) {
             throw new UnsupportedOperationException(
-                    "Factory non implementata per il tipo: " + clazz.getSimpleName()
-            );
+                    "Factory non implementata per il tipo: " + clazz.getSimpleName());
         }
         DBHelperInterface<?> p = supplier.get();
         if (!clazz.isInstance(p)) {

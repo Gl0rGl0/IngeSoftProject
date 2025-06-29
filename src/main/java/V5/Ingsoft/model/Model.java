@@ -6,12 +6,20 @@ import V5.Ingsoft.controller.item.real.Luogo;
 import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.controller.item.real.Visita;
 import V5.Ingsoft.factory.DBHelperFactory;
+import V5.Ingsoft.model.helper.DBConfiguratoreHelper;
+import V5.Ingsoft.model.helper.DBDatesHelper;
+import V5.Ingsoft.model.helper.DBFruitoreHelper;
+import V5.Ingsoft.model.helper.DBIscrizioniHelper;
+import V5.Ingsoft.model.helper.DBLuoghiHelper;
+import V5.Ingsoft.model.helper.DBTipoVisiteHelper;
+import V5.Ingsoft.model.helper.DBVisiteHelper;
+import V5.Ingsoft.model.helper.DBVolontarioHelper;
 import V5.Ingsoft.util.*;
 
 import java.util.ArrayList;
 
 public class Model {
-    public static volatile Model instance = new Model();
+    public static volatile Model instance = null;
 
     public final AppSettings appSettings;
     public DBConfiguratoreHelper dbConfiguratoreHelper;
@@ -40,12 +48,18 @@ public class Model {
         dbIscrizionisHelper = factory.factoryMethod(DBIscrizioniHelper.class);
 
         StorageManager<AppSettings> settingsLoader = new JsonStorage<>(AppSettings.PATH, AppSettings.class);
-        appSettings = settingsLoader.loadObject();
+        appSettings = new AppSettings(settingsLoader.loadObject());
         appSettings.setLoader(settingsLoader);
     }
 
     synchronized public static Model getInstance() {
-        return Model.instance;
+        if (instance == null) {
+            synchronized (Model.class){
+                if (instance == null)
+                    instance = new Model();
+            }
+        }
+        return instance;
     }
 
     public void setAmbito(String ambito) {

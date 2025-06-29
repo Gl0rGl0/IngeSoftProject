@@ -13,10 +13,20 @@ import java.util.Scanner;
 public class ViewSE implements Runnable {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String MESSAGGIO_START = "Welcome to the Guided Tours management system, type 'help' for assistance";
-    private final Controller controller;
+    public final Controller controller;
 
-    public ViewSE(Controller controller) {
-        this.controller = controller;
+    public ViewSE() {
+        insertAmbito();
+
+        this.controller = new Controller();
+    }
+
+    public ViewSE(String ambito) {
+        if (!Objects.requireNonNull(Model.getInstance().appSettings).isAmbitoSet()) {
+            Model.getInstance().setAmbito(ambito);
+        }
+
+        this.controller = new Controller();
     }
 
     public static void payloadOut(Payload<?> out) {
@@ -31,8 +41,6 @@ public class ViewSE implements Runnable {
         } else {
             println(out.getData());
         }
-        // if(out.getCommand().equals(CommandList.LOGIN))
-        //     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     public static void print(Object out) {
@@ -57,14 +65,6 @@ public class ViewSE implements Runnable {
     public void run() {
         println(MESSAGGIO_START);
 
-        if (!Objects.requireNonNull(Model.getInstance().appSettings).isAmbitoSet()) {
-            String ambito;
-            do {
-                ambito = ViewSE.read("Inserisci l'ambito territoriale per iniziare la fase di setup dell'applicazione: ");
-            } while (ambito.isBlank());
-            Model.getInstance().setAmbito(ambito);
-        }
-
         while (!controller.isSetupCompleted())
             payloadOut(controller.interpreter(read("\n[SETUP] " + controller.getCurrentUser().getUsername() + "> ")));
 
@@ -75,5 +75,15 @@ public class ViewSE implements Runnable {
                 payloadOut(controller.interpreter(read("\n" + controller.getCurrentUser().getUsername() + "> ")));
             }
         }).start();
+    }
+
+    private void insertAmbito(){
+        while (!Objects.requireNonNull(Model.getInstance().appSettings).isAmbitoSet()) {
+            String ambito;
+            do {
+                ambito = ViewSE.read("Inserisci l'ambito territoriale per inizializzare l'applicazione: ");
+            } while (ambito.isBlank());
+            Model.getInstance().setAmbito(ambito);
+        }
     }
 }

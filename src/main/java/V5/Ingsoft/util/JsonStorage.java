@@ -24,6 +24,12 @@ public final class JsonStorage<T> implements StorageManager<T> {
     public JsonStorage(String path, Class<T> clazz){
         this.path = path;
         this.clazz = clazz;
+
+        if (!new File(BASE_PATH + path + ".json").exists()) {
+            try {
+                new File(BASE_PATH + path + ".json").createNewFile();
+            } catch (IOException e) { }
+        }
     }
 
     static {
@@ -51,9 +57,8 @@ public final class JsonStorage<T> implements StorageManager<T> {
             return objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
         } catch (IOException e) {
-            System.out.println("Error loading JSON file: " + e.getMessage());
-            // Considera di lanciare un'eccezione specifica per la persistenza o usare un Payload di ritorno.
-            // AssertionControl.logMessage("Error loading JSON file", Payload.Status.ERROR, "JsonStorage");
+            //System.out.println("Error loading JSON file: " + e.getMessage());
+            AssertionControl.logMessage("Error loading JSON file" + e.getMessage(), Payload.Status.ERROR, "JsonStorage");
             return new ArrayList<>();
         }
     }
@@ -65,8 +70,8 @@ public final class JsonStorage<T> implements StorageManager<T> {
                     collection);
             return true;
         } catch (IOException e) {
-            // AssertionControl.logMessage("Error saving JSON file", Payload.Status.ERROR, "JsonStorage");
-            System.out.println("Error saving JSON file: " + e.getMessage());
+            AssertionControl.logMessage("Error saving JSON file" + e.getMessage(), Payload.Status.ERROR, "JsonStorage");
+            //System.out.println("Error saving JSON file: " + e.getMessage());
             return false;
         }
     }
@@ -77,14 +82,14 @@ public final class JsonStorage<T> implements StorageManager<T> {
             objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(BASE_PATH + path + ".json"), new ArrayList<T>());
         } catch (IOException e) {
-            // AssertionControl.logMessage("Error clearing JSON file", Payload.Status.ERROR, "JsonStorage");
-            System.out.println("Error clearing JSON file: " + e.getMessage());
+            AssertionControl.logMessage("Error clearing JSON file" + e.getMessage(), Payload.Status.ERROR, "JsonStorage");
+            //System.out.println("Error clearing JSON file: " + e.getMessage());
         }
     }
 
     @Override
     synchronized public T loadObject() {
-        File file = new File(BASE_PATH + path); // Assuming filePath includes .json
+        File file = new File(BASE_PATH + path + ".json");
         if (!file.exists()) {
             return null; // File not found
         }
@@ -92,8 +97,8 @@ public final class JsonStorage<T> implements StorageManager<T> {
         try {
             return objectMapper.readValue(file, clazz);
         } catch (IOException e) {
-            // AssertionControl.logMessage("Error loading JSON object file: " + filePath, Payload.Status.ERROR, "JsonStorage");
-            System.out.println("Error loading JSON object file: " + e.getMessage());
+            AssertionControl.logMessage("Error loading JSON object file: " + e.getMessage(), Payload.Status.ERROR, "JsonStorage");
+            //System.out.println("Error loading JSON object file: " + e.getMessage());
             return null;
         }
     }
@@ -101,11 +106,11 @@ public final class JsonStorage<T> implements StorageManager<T> {
     @Override
     synchronized public boolean saveObject(T object) {
         try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(BASE_PATH + path), object); // Assuming filePath includes .json
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(BASE_PATH + path + ".json"), object); // Assuming filePath includes .json
             return true;
         } catch (IOException e) {
-            // AssertionControl.logMessage("Error saving JSON object file: " + filePath, Payload.Status.ERROR, "JsonStorage");
-            System.out.println("Error saving JSON object file: " + e.getMessage());
+            AssertionControl.logMessage("Error saving JSON object file: " + e.getMessage(), Payload.Status.ERROR, "JsonStorage");
+            //System.out.println("Error saving JSON object file: " + e.getMessage());
             return false;
         }
     }

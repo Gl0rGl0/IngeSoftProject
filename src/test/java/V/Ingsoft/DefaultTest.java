@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 
 import V5.Ingsoft.controller.Controller;
-import V5.Ingsoft.model.DBConfiguratoreHelper;
-import V5.Ingsoft.model.DBDatesHelper;
-import V5.Ingsoft.model.DBFruitoreHelper;
-import V5.Ingsoft.model.DBIscrizioniHelper;
-import V5.Ingsoft.model.DBLuoghiHelper;
-import V5.Ingsoft.model.DBTipoVisiteHelper;
-import V5.Ingsoft.model.DBVisiteHelper;
-import V5.Ingsoft.model.DBVolontarioHelper;
 import V5.Ingsoft.model.Model;
+import V5.Ingsoft.model.helper.DBConfiguratoreHelper;
+import V5.Ingsoft.model.helper.DBDatesHelper;
+import V5.Ingsoft.model.helper.DBFruitoreHelper;
+import V5.Ingsoft.model.helper.DBIscrizioniHelper;
+import V5.Ingsoft.model.helper.DBLuoghiHelper;
+import V5.Ingsoft.model.helper.DBTipoVisiteHelper;
+import V5.Ingsoft.model.helper.DBVisiteHelper;
+import V5.Ingsoft.model.helper.DBVolontarioHelper;
 
 public class DefaultTest {
     protected Controller c;

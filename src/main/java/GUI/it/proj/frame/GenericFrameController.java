@@ -64,8 +64,6 @@ public class GenericFrameController implements Initializable {
         // Caricamenti FXML esistenti…
         loadBaseFrames();
         launcher = Launcher.getInstance();
-        
-        System.out.println("uso il launcher in generic");
 
         // Posiziona il toastContainer in alto a destra
         AnchorPane.setTopAnchor(toastContainer, 0.0);
@@ -223,9 +221,9 @@ public class GenericFrameController implements Initializable {
         if(res != null && res.getStatus() != Status.ERROR) {
             contentArea.getChildren().clear();
             configureNavbarForRole(null);
-            
+
             toast(res);
-            //Launcher.getInstance().setRoot(LoginViewController.ID);
+            Launcher.getInstance().setRoot(LoginViewController.ID);
         } else {
             toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();

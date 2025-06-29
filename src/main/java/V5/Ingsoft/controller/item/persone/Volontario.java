@@ -70,7 +70,7 @@ public class Volontario extends Persona {
      */
     public Payload.Status setAvailability(Date oggi, Date disp, boolean toAdd) {
         if (Date.monthsDifference(oggi, disp) != 1) {
-            System.out.println("Errore, non puoi inserire una data al di fuori del mese successivo");
+            System.err.println("Errore, non puoi inserire una data al di fuori del mese successivo");
             return Payload.Status.ERROR;
         }
 

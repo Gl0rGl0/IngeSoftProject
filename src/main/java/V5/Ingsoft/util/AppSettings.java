@@ -11,9 +11,9 @@ import V5.Ingsoft.controller.item.interfaces.StorageManager;
  */
 public class AppSettings {
 
-    public static final String PATH = "settings.json"; // Define the settings file path
+    public static final String PATH = "settings"; // Define the settings file path
 
-    private String ambitoTerritoriale = "default";
+    private String ambitoTerritoriale;
     private int maxPrenotazioniPerPersona = 1; // Default value if not loaded
 
     @JsonIgnore
@@ -28,13 +28,20 @@ public class AppSettings {
         this.maxPrenotazioniPerPersona = Math.max(1, maxPrenotazioniPerPersona);
 
         if (ambitoTerritoriale != null)
-            System.out.println("Imported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona=" + maxPrenotazioniPerPersona);
-    }
-
-    public AppSettings() {
+            System.out.println("\nImported settings from data: AmbitoTerritoriale=" + ambitoTerritoriale + " maxPrenotazioniPerPersona=" + maxPrenotazioniPerPersona);
     }
 
     // --- Getters ---
+
+    public AppSettings(AppSettings as) {
+        if(as == null){
+            //Ambito non assegnato
+            return;
+        }
+
+        ambitoTerritoriale = as.ambitoTerritoriale;
+        maxPrenotazioniPerPersona = as.maxPrenotazioniPerPersona;
+    }
 
     public String getAmbitoTerritoriale() {
         return ambitoTerritoriale;

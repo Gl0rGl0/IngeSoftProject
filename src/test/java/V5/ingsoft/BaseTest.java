@@ -2,15 +2,15 @@ package V5.ingsoft;
 
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.controller.item.persone.PersonaType;
-import V5.Ingsoft.model.DBConfiguratoreHelper;
-import V5.Ingsoft.model.DBDatesHelper;
-import V5.Ingsoft.model.DBFruitoreHelper;
-import V5.Ingsoft.model.DBIscrizioniHelper;
-import V5.Ingsoft.model.DBLuoghiHelper;
-import V5.Ingsoft.model.DBTipoVisiteHelper;
-import V5.Ingsoft.model.DBVisiteHelper;
-import V5.Ingsoft.model.DBVolontarioHelper;
 import V5.Ingsoft.model.Model;
+import V5.Ingsoft.model.helper.DBConfiguratoreHelper;
+import V5.Ingsoft.model.helper.DBDatesHelper;
+import V5.Ingsoft.model.helper.DBFruitoreHelper;
+import V5.Ingsoft.model.helper.DBIscrizioniHelper;
+import V5.Ingsoft.model.helper.DBLuoghiHelper;
+import V5.Ingsoft.model.helper.DBTipoVisiteHelper;
+import V5.Ingsoft.model.helper.DBVisiteHelper;
+import V5.Ingsoft.model.helper.DBVolontarioHelper;
 import V5.Ingsoft.util.Payload;
 
 import org.junit.jupiter.api.AfterEach;

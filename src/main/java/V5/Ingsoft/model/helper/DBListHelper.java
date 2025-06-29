@@ -1,4 +1,4 @@
-package V5.Ingsoft.model;
+package V5.Ingsoft.model.helper;
 
 import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
 import V5.Ingsoft.controller.item.interfaces.StorageManager;

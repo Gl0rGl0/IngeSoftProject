@@ -2,7 +2,6 @@ package V4.Ingsoft;
 
 import V4.Ingsoft.controller.Controller;
 import V4.Ingsoft.model.Model;
-import V4.Ingsoft.util.Initer;
 import V4.Ingsoft.view.ViewSE;
 
 //USAGE TYPE
@@ -22,53 +21,6 @@ public class Main {
         Controller controller = new Controller(model);
         ViewSE view = new ViewSE(controller);
 
-        controller.interpreter("time -s 20/4/2025");
-
-        if (args.length > 0 && args[0] != null && args[0].startsWith("-"))
-            switch (args[0].charAt(1)) {
-                case 'S' -> initSetup(controller);
-                case 'I' -> initPeoplePlaces(controller);
-                case 'A' -> initAvailability(controller);
-                case 'D' -> initDimostrazione(controller);
-                case 'R' -> resetAll(controller);
-            
-                default -> {} // -B o vuoto
-            }
-        
-        //initDimostrazione(controller);
-        //System.out.println();
-
-        initDimostrazione(controller);
-        System.out.println();
         view.run();
-    }
-
-    private static void resetAll(Controller controller) {
-        controller.getDB().clearAll();
-        Model.deleteInstance();
-        controller.setDB(Model.getInstance());
-    }
-
-    private static void initDimostrazione(Controller controller) {
-        resetAll(controller);
-        Initer.dimostrazione(controller);
-    }
-
-    private static void initAvailability(Controller controller) {
-        initPeoplePlaces(controller);
-
-        Initer.initAvailability(controller);
-    }
-
-    private static void initPeoplePlaces(Controller controller) {
-        initSetup(controller);
-
-        Initer.initPersone(controller);
-        Initer.initVisiteLuoghi(controller);
-    }
-
-    private static void initSetup(Controller controller) {
-        resetAll(controller);
-        Initer.setupPhase(controller);
     }
 }

@@ -1,18 +1,26 @@
 package V5.Ingsoft.util;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 public final class AssertionControl {
     public final static String VERSION = "V5";
-    private static final String LOG_FILE = JsonStorage.BASE_PATH + "log.log";
-    private static final String LOG_PAYLOAD = JsonStorage.BASE_PATH + "payload.log";
+    private static final String BASE_PATH = "log/";
+    private static final String LOG_FILE = BASE_PATH + "log.log";
+    private static final String LOG_PAYLOAD = BASE_PATH + "payload.log";
+
+    static {
+        if (!new File(BASE_PATH).exists()) {
+            new File(BASE_PATH).mkdirs();
+        }
+    }
 
     /**
      * Prints a message to the standard view.
      */
-    public static void print(Object out) {
+    private static void print(Object out) {
         System.out.println(out);
     }
 
@@ -32,7 +40,7 @@ public final class AssertionControl {
                 case INFO -> "INFO";
                 case DEBUG -> "DEBUG";
             };
-            String out = String.format("%4s | %7s | %-20s | %s | %s",
+            String out = String.format("%4s | %7s | %-30s | %29s | %s",
                     VERSION,
                     type,
                     className,

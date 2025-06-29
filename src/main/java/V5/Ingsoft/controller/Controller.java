@@ -47,19 +47,7 @@ public class Controller {
     }
 
     public Controller() {
-        db = Model.getInstance();
-
-        try {
-            this.date = new Date();
-        } catch (Exception e) {
-            System.exit(1);
-        }
-
-        initVirtualTime();
-        initDailyScheduler();
-
-        if (db.isInitialized())
-            switchInterpreter();
+        this(Model.getInstance());
     }
 
     private void initDailyScheduler() {

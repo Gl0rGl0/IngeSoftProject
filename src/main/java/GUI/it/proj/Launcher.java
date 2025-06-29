@@ -252,8 +252,9 @@ public class Launcher extends Application {
 
     public void setRoot(String id) {
         Parent root = getInstance().frames.get(id);
-        if (root != null && scene != null) {
-            scene.setRoot(root);
+        if (root != null && getInstance().scene != null) {
+            System.out.println("imposto " + id);
+            getInstance().scene.setRoot(root);
             if (getInstance().controllers.get(id) instanceof GenericFrameController frameController) {
                 frameController.setupAfterLogin();
             }

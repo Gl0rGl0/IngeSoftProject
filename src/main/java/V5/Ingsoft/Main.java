@@ -1,8 +1,12 @@
 package V5.Ingsoft;
 
+import java.util.Arrays;
+
 import V5.Ingsoft.controller.Controller;
 import V5.Ingsoft.model.Model;
-import V5.Ingsoft.util.Initer;
+import V5.Ingsoft.model.seeder.Initer;
+import V5.Ingsoft.util.AssertionControl;
+import V5.Ingsoft.util.Payload.Status;
 import V5.Ingsoft.view.ViewSE;
 
 //USAGE TYPE
@@ -18,54 +22,28 @@ import V5.Ingsoft.view.ViewSE;
 // going through the keyboard
 public class Main {
     public static void main(String[] args) throws Exception {
-        Model model = Model.getInstance();
-        Controller controller = new Controller(model);
-        ViewSE view = new ViewSE(controller);
+        AssertionControl.logMessage("INITED WITH: " + Arrays.toString(args), Status.DEBUG, "main");
+        ViewSE view;
 
-        controller.interpreter("time -s 20/4/2025");
+        if(args.length > 0 && args[0] != null && args[0].matches("[a-zA-Z]+")){
+            view = new ViewSE(args[0]);
+        }else{
+            view = new ViewSE();
+        }
 
-        if (args.length > 0 && args[0] != null && args[0].startsWith("-"))
-            switch (args[0].charAt(1)) {
-                case 'S' -> initSetup(controller);
-                case 'I' -> initPeoplePlaces(controller);
-                case 'A' -> initAvailability(controller);
-                case 'D' -> initDimostrazione(controller);
-                case 'R' -> resetAll(controller);
+        Controller c = view.controller;
 
-                default -> {
-                } // -B o vuoto
-            }
+        if (args.length > 0 && args[0] != null){
+            for(String a : args)
+                if(a.equals("-d"))
+                    initDimostrazione(c);
+        }
 
-        initDimostrazione(controller);
-        System.out.println();
         view.run();
     }
 
-    private static void resetAll(Controller controller) {
-        Model.getInstance().clearAll();
-        controller.setDB(Model.getInstance());
-    }
-
     private static void initDimostrazione(Controller controller) throws Exception {
-        resetAll(controller);
+        Model.getInstance().clearAll();
         Initer.dimostrazione(controller);
-    }
-
-    private static void initAvailability(Controller controller) {
-        initPeoplePlaces(controller);
-
-        Initer.initAvailability(controller);
-    }
-
-    private static void initPeoplePlaces(Controller controller) {
-        initSetup(controller);
-
-        Initer.initPersone(controller);
-        Initer.initVisiteLuoghi(controller);
-    }
-
-    private static void initSetup(Controller controller) {
-        resetAll(controller);
-        Initer.setupPhase(controller);
     }
 }
