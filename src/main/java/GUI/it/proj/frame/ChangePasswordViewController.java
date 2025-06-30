@@ -41,7 +41,7 @@ public class ChangePasswordViewController {
             return;
         }
         
-        Payload<?> res = Launcher.getInstance().controller.interpreter("changepsw " + newPass);
+        Payload<?> res = Launcher.getInstance().controller.interpreter("changepsw " + newPass + " " + newPass);
         
         Launcher.getInstance().toast(res);
 

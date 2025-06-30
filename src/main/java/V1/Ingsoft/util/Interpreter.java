@@ -78,7 +78,7 @@ public abstract class Interpreter {
             if (currentUser.isNew() &&
                     !command.canBeExecutedBy(PersonaType.CAMBIOPSW.getPriority())) {
                 ViewSE.println("You do not have the necessary permissions to execute the command '" + cmd +
-                        "' until the password is changed using 'changepsw [newpassword]'.");
+                        "' until the password is changed using 'changepsw [newpassword] [newpassword]'.");
                 return;
             }
             // Execute the command

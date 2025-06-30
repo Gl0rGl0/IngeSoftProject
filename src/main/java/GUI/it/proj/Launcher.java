@@ -36,19 +36,20 @@ public class Launcher extends Application {
     private static Launcher instance = new Launcher();
 
     public Launcher(){
-        if(instance == null){
-            
-            System.out.println("creo il launcher");
-            instance = this;
-        }
-        if(instance.controller == null){
+        if(controller == null){
             System.out.println("creo il controller");
             controller = new Controller(Model.getInstance());
         }
     }
 
     synchronized public static Launcher getInstance() {
-        return Launcher.instance;
+        if (instance == null) {
+            synchronized (Launcher.class){
+                if (instance == null)
+                    instance = new Launcher();
+            }
+        }
+        return instance;
     }
 
     private Scene scene;
@@ -61,12 +62,14 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
 
-        if (true || !getInstance().controller.isSetupCompleted()) {
+        if (!getInstance().controller.isSetupCompleted()) {
             if (!showSetupDialog()) {
-                Platform.exit();
-                return;
+                // Platform.exit();
+                // return;
             }
         }
+
+        System.out.println("S");
         
         preloadFrames();
         setupPrimaryStage();

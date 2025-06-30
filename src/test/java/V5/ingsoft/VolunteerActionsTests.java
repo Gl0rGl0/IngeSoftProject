@@ -34,7 +34,7 @@ public class VolunteerActionsTests extends BaseTest {
         // We need to log in as VolRegime.
         controller.interpreter("logout"); // Logout configRegime
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass"); // Change default pass
+        controller.interpreter("changepsw newVolPass newVolPass"); // Change default pass
 
         // Act
         controller.interpreter("list -v"); // Run general list command (will list all volunteers)
@@ -51,7 +51,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Login as the new empty volunteer
         controller.interpreter("logout"); // Logout configRegime
         controller.interpreter("login volTestEmpty passVTE");
-        controller.interpreter("changepsw newEmptyVolPass");
+        controller.interpreter("changepsw newEmptyVolPass newEmptyVolPass");
 
         // Act
         controller.interpreter("list -v"); // Run general list command
@@ -68,7 +68,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Login as VolRegime
         controller.interpreter("logout"); // Logout configRegime
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
 
         // Set current date to be within the allowed window for July (e.g., May 16th)
         controller.interpreter("time -s 16/05/2025");
@@ -88,7 +88,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Arrange: Log in as VolRegime
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
         controller.interpreter("time -s 16/05/2025"); // Set valid date context
 
         // Act
@@ -106,7 +106,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Arrange: Log in as VolRegime
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
         controller.interpreter("time -s 16/01/2025"); // Set valid date context
 
         // Act
@@ -124,7 +124,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Arrange: Log in as VolRegime
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
 
         // Set current date OUTSIDE the allowed window (e.g., July 1st, trying to set for September)
         controller.interpreter("time -s 01/07/2025");
@@ -154,7 +154,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Login as VolRegime
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
 
         // Act
         controller.interpreter("setav -a " + precludedDateStr);
@@ -184,7 +184,7 @@ public class VolunteerActionsTests extends BaseTest {
     //     // 1. Volunteer Declares Availability (as Volunteer)
     //     controller.interpreter("logout"); // Logout configRegime
     //     controller.interpreter("login VolRegime PassVol");
-    //     controller.interpreter("changepsw newVolPass");
+    //     controller.interpreter("changepsw newVolPass newVolPass");
     //     controller.interpreter("time -s 16/05/2025"); // Window to declare for July
     //     controller.interpreter("setav -a " + visitDate);
     //     controller.interpreter("logout");
@@ -232,7 +232,7 @@ public class VolunteerActionsTests extends BaseTest {
         // Arrange: Log in as VolRegime, ensure no visits assigned
         controller.interpreter("logout");
         controller.interpreter("login VolRegime PassVol");
-        controller.interpreter("changepsw newVolPass");
+        controller.interpreter("changepsw newVolPass newVolPass");
 
         // Act
         controller.interpreter("myvisit"); // Use correct command

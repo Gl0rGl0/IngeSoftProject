@@ -6,6 +6,8 @@ import V5.Ingsoft.controller.item.real.TipoVisita;
 import V5.Ingsoft.controller.item.statuses.StatusItem;
 import V5.Ingsoft.model.Model;
 import V5.Ingsoft.util.Date;
+import V5.Ingsoft.util.Payload;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +34,7 @@ public class ConfiguratorRegimeTests extends BaseTest {
 
         // Act
         controller.interpreter("time -s " + today);
-        controller.interpreter("preclude -a " + futureDate);
+        Payload<?> o = controller.interpreter("preclude -a " + futureDate);
 
         // Assert
         assertTrue(Model.getInstance().dbDatesHelper.getItems().contains(new Date(futureDate)), "Date should be precluded after command.");

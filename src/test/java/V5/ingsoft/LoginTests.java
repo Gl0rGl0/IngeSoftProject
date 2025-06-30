@@ -91,7 +91,7 @@ public class LoginTests extends BaseTest {
 
         assertEquals(nConfig, Model.getInstance().dbConfiguratoreHelper.getItems().size(), "Size of configuratore should remain the same");
         // Act: Change password
-        controller.interpreter("changepsw newSecurePassword");
+        controller.interpreter("changepsw newSecurePassword newSecurePassword");
         controller.interpreter("add -c dont add");
 
         assertEquals(nConfig + 1, Model.getInstance().dbConfiguratoreHelper.getItems().size(), "Size of configuratore should remain the same");
@@ -114,7 +114,7 @@ public class LoginTests extends BaseTest {
         // Cannot reliably assert pre-condition due to potential login bug/state
 
         // Act
-        controller.interpreter("changepsw pass_new");
+        controller.interpreter("changepsw pass_new pass_new");
 
         // Assert: Check by logging out and back in with new password
 
@@ -139,7 +139,7 @@ public class LoginTests extends BaseTest {
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
 
         // Act
-        controller.interpreter("changepsw new_pass");
+        controller.interpreter("changepsw new_pass new_pass");
 
         // Assert
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should remain GUEST after failed password change attempt.");
@@ -214,7 +214,7 @@ public class LoginTests extends BaseTest {
         assertEquals(nVol, v.getNAvailability());
 
         // Act
-        controller.interpreter("changepsw newSecurePassword");
+        controller.interpreter("changepsw newSecurePassword newSecurePassword");
         controller.interpreter("setav -a 5/6/2025");
 
         // Assert: Verify success
@@ -238,7 +238,7 @@ public class LoginTests extends BaseTest {
         // Cannot reliably assert pre-condition
 
         // Act
-        controller.interpreter("changepsw pass_new");
+        controller.interpreter("changepsw pass_new pass_new");
 
         // Assert: Check by logging out and back in with new password
 
@@ -263,7 +263,7 @@ public class LoginTests extends BaseTest {
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
 
         // Act
-        controller.interpreter("changepsw new_pass");
+        controller.interpreter("changepsw new_pass new_pass");
 
         // Assert
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should remain GUEST after failed password change attempt.");
@@ -349,7 +349,7 @@ public class LoginTests extends BaseTest {
         controller.interpreter("login fruit_change pass_old pass_old");
 
         // Act
-        controller.interpreter("changepsw pass_new");
+        controller.interpreter("changepsw pass_new pass_new");
 
         // Assert: Check by logging out and back in with new password
 
@@ -377,7 +377,7 @@ public class LoginTests extends BaseTest {
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should be GUEST initially.");
 
         // Act
-        controller.interpreter("changepsw new_pass");
+        controller.interpreter("changepsw new_pass new_pass");
 
         // Assert: Check that user is still GUEST
         assertEquals(PersonaType.GUEST, controller.getCurrentUser().getType(), "User should remain GUEST after failed password change attempt.");

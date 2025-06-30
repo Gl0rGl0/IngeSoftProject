@@ -78,7 +78,7 @@ public class LoginCommand extends AbstractCommand {
         ViewSE.println("Login successful (" + controller.getCurrentUser().getType() + ") " + controller.getCurrentUser().getUsername());
         if (controller.getCurrentUser().isNew()) {
             ViewSE.println(
-                    "First login detected, you are required to change your password using the 'changepsw [newpassword]' command to use the services");
+                    "First login detected, you are required to change your password using the 'changepsw [newpassword] [newpassword]' command to use the services");
         }
     }
 

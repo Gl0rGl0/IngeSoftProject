@@ -65,7 +65,7 @@ public class BaseTest {
         // 4. Logout ADMIN and Login as the new configurator
         controller.interpreter("logout");
         o = controller.interpreter("login configRegime passRegimeInit");
-        o = controller.interpreter("changepsw passRegime");
+        o = controller.interpreter("changepsw passRegime passRegime");
 
         assertEquals(PersonaType.CONFIGURATORE, controller.getCurrentUser().getType(), "User should be of type CONFIGURATORE.");
         controller.interpreter("time -s 17/1/2025");
