@@ -25,6 +25,8 @@ public class Main {
         AssertionControl.logMessage("INITED WITH: " + Arrays.toString(args), Status.DEBUG, "main");
         ViewSE view;
 
+        args = new String[]{"-d"};
+
         if(args.length > 0 && args[0] != null && args[0].matches("[a-zA-Z]+")){
             view = new ViewSE(args[0]);
         }else{

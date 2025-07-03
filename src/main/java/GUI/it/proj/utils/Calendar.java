@@ -75,8 +75,17 @@ public class Calendar {
 
     public void setSelected(List<Date> dates) {
         calendarView.getSelectionModel().clearSelection();
+
+        if(dates == null) return;
+        
         for (Date date : dates) {
                 calendarView.getSelectionModel().select(date.localDate.toLocalDate());
         }
+    }
+
+    public void setSingleSelected(Date set) {
+        if(set == null) return;
+        
+        calendarView.getSelectionModel().select(set.localDate.toLocalDate());
     }
 }

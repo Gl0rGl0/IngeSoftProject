@@ -78,7 +78,7 @@ public class GenericFrameController implements Initializable {
      */
     public void setupAfterLogin() {
         // Esegui qui le azioni che vuoi succedano ogni volta che il frame viene "mostrato" post-login
-        System.out.println("GenericFrameController: Setup after login called.");
+        System.out.println("GenericFrameController: Setup after login called. " + launcher.controller.getCurrentUser().getType().name());
         
         //Refresh content
         switch (launcher.controller.getCurrentUser().getType()) {
@@ -150,7 +150,7 @@ public class GenericFrameController implements Initializable {
     private void loadVolontFrame(){
         try {
             FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("/GUI/frame/volontari-view.fxml"));
-            contentFrames.put(FruitoriViewController.ID, loader.load());
+            contentFrames.put(VolontariViewController.ID, loader.load());
             volontController = loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
@@ -210,10 +210,9 @@ public class GenericFrameController implements Initializable {
         }
     }
 
-    // Metodo di test, lascialo pure come lo hai, solo per debug
+    // Metodo di test
     int i = 0;
-    @FXML
-    public void cycleRole() {
+    @FXML public void cycleRole() {
         String[] usersTest = {"ADMIN PASSWORD", "volTest2 v2Test", "fruit2 pass2F"};
 
         Payload<?> res = launcher.controller.interpreter("logout");
@@ -223,14 +222,14 @@ public class GenericFrameController implements Initializable {
             configureNavbarForRole(null);
 
             toast(res);
-            Launcher.getInstance().setRoot(LoginViewController.ID);
+            //Launcher.getInstance().setRoot(LoginViewController.ID);
         } else {
             toast(Payload.error("Logout failed", res.getLogMessage()));
             showHome();
             return;
         }
 
-        Payload<?> loginRes = launcher.controller.interpreter("login " + usersTest[(i++)%3]); // Poi login
+        Payload<?> loginRes = launcher.controller.interpreter("login " + usersTest[(i++)%3]);
 
         if (loginRes != null && loginRes.getStatus() != Status.ERROR) {
             toast(Payload.info("Role login successful: " + launcher.controller.getCurrentUser().getUsername(), ""));
@@ -250,7 +249,6 @@ public class GenericFrameController implements Initializable {
             System.err.println("WARNING: showHome called without a logged-in user.");
             configureNavbarForRole(null); // Esempio: passa null o un tipo 'unknown'
         }
-
 
         contentArea.getChildren().clear();
         Parent homeFrame = contentFrames.get(HomeVisiteViewController.ID);
@@ -317,6 +315,7 @@ public class GenericFrameController implements Initializable {
         contentArea.getChildren().clear();
         Parent frame = contentFrames.get(VolontariViewController.ID);
         if (frame != null) {
+            System.out.println("REFRESHO?");
             volontController.refreshItems();
             contentArea.getChildren().add(frame);
         } else {

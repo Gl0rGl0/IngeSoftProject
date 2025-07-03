@@ -39,7 +39,7 @@
             </ImageView>
             <ImageView fx:id="confirmImage" fitHeight="16" fitWidth="16" pickOnBounds="true"
                 preserveRatio="true">
-                <Image url="@../icon/logo.png" />
+                <Image url="@../icon/fire.png" />
             </ImageView>
         </graphic>
     </Button>

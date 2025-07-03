@@ -33,23 +33,15 @@ public class Launcher extends Application {
     private static final String SETUP_DIALOG_TITLE = "Setup iniziale";
     private static final String ERROR_BORDER_STYLE = "error-border";
 
-    private static Launcher instance = new Launcher();
-
-    public Launcher(){
-        if(controller == null){
-            System.out.println("creo il controller");
-            controller = new Controller(Model.getInstance());
-        }
-    }
+    private static Launcher instance;
 
     synchronized public static Launcher getInstance() {
-        if (instance == null) {
-            synchronized (Launcher.class){
-                if (instance == null)
-                    instance = new Launcher();
-            }
-        }
         return instance;
+    }
+
+    @Override public void init(){
+        instance = this;
+        controller = new Controller(Model.getInstance());
     }
 
     private Scene scene;
@@ -62,14 +54,14 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
 
+        // System.out.println(getInstance().controller.isSetupCompleted());
+
         if (!getInstance().controller.isSetupCompleted()) {
             if (!showSetupDialog()) {
-                // Platform.exit();
-                // return;
+                Platform.exit();
+                return;
             }
         }
-
-        System.out.println("S");
         
         preloadFrames();
         setupPrimaryStage();
@@ -86,14 +78,17 @@ public class Launcher extends Application {
         scene = new Scene(initialRoot, INITIAL_WIDTH, INITIAL_HEIGHT);
         applyStylesheet(scene);
 
-        positionStageOnSecondaryScreen();
         primaryStage.setScene(scene);
-        primaryStage.setTitle("App visite guidate");
+        primaryStage.setTitle("GuidedTours App");
         primaryStage.setMaximized(true);
         primaryStage.show();
 
         // Rimuovere per ambiente di produzione
-        getInstance().controller.interpreter("login ADMIN PASSWORD");
+        Controller c = getInstance().controller;
+        c.interpreter("login ADMIN PASSWORD");
+        c.interpreter("time -s 16/07/2025");
+        //c.interpreter("collection -o");
+
         setRoot(GenericFrameController.ID);
     }
 
@@ -232,17 +227,6 @@ public class Launcher extends Application {
         
         dialog.setX(centerX);
         dialog.setY(centerY);
-    }
-
-    private void positionStageOnSecondaryScreen() {
-        Screen.getScreens().stream()
-            .skip(1)
-            .findFirst()
-            .ifPresent(screen -> {
-                Rectangle2D bounds = screen.getVisualBounds();
-                primaryStage.setX(bounds.getMinX());
-                primaryStage.setY(bounds.getMinY());
-            });
     }
 
     private void applyStylesheet(Scene scene) {

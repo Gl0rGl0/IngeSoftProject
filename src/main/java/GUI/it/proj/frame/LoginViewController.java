@@ -22,15 +22,10 @@ import javafx.scene.layout.StackPane;
 public class LoginViewController implements Initializable {
     public final static String ID = "login";
 
-    @FXML
-    private TextField userTextField;
-    @FXML
-    // private PasswordField pwField;
-    EnhancedPasswordField pwField;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Label messageLabel;
+    @FXML private TextField userTextField;
+    @FXML private EnhancedPasswordField pwField;
+    @FXML private Button loginButton;
+    @FXML private Label messageLabel;
 
     /**
      * Metodo chiamato automaticamente dopo l'iniezione degli elementi FXML.

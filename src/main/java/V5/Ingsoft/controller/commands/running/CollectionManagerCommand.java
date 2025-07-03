@@ -29,11 +29,11 @@ public class CollectionManagerCommand extends AbstractCommand {
                     "Usage: collection -<o|c>",
                     "Missing or invalid option");
 
-        if (!isExecutable()) {
-            return Payload.warn(
-                    "Cannot edit the status of the collection: action not allowed now. Try Again on the 16th",
-                    "CollectionManager: not executable");
-        }
+        // if (!isExecutable()) {
+        //     return Payload.warn(
+        //             "Cannot edit the status of the collection: action not allowed now. Try Again on the 16th",
+        //             "CollectionManager: not executable");
+        // }
 
         char opt = options[0].charAt(0);
         switch (opt) {

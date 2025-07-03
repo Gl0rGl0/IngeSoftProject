@@ -22,23 +22,22 @@
             <HBox fx:id="navbar" alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="TOP_LEFT"
                 styleClass="navbar">
 
-                <!-- Logo Giorgio Felappi a sinistra (Easter Egg) -->
                 <HBox styleClass="logo-container" alignment="CENTER">
                     <Button fx:id="easterEggButton" styleClass="root" onAction="#cycleRole">
                         <graphic>
-                            <ImageView fitHeight="32" fitWidth="32">
-                                <Image url="@../icon/logo.png" />
+                            <ImageView fitHeight="64" preserveRatio="true">
+                                <Image url="@../icon/logo1.png" />
                             </ImageView>
                         </graphic>
                     </Button>
                 </HBox>
 
                 <!-- Logo sito -->
-                <HBox styleClass="logo-container" alignment="CENTER">
+                <!-- <HBox styleClass="logo-container" alignment="CENTER">
                     <ImageView fitHeight="64" preserveRatio="true">
                         <Image url="@../icon/logo_real_nobg.png" />
                     </ImageView>
-                </HBox>
+                </HBox> -->
 
                 <!-- Bottone Home (visibile a tutti) -->
                 <Button fx:id="homeButton" text="Home" styleClass="btn, label" onAction="#showHome">

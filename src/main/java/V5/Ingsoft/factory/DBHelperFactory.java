@@ -1,7 +1,6 @@
 package V5.Ingsoft.factory;
 
 import V5.Ingsoft.controller.item.interfaces.DBHelperInterface;
-import V5.Ingsoft.model.*;
 import V5.Ingsoft.model.helper.DBConfiguratoreHelper;
 import V5.Ingsoft.model.helper.DBDatesHelper;
 import V5.Ingsoft.model.helper.DBFruitoreHelper;

@@ -16,7 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class TipoVisiteViewController implements ListDeleter<TipoVisita>, ListEditer<TipoVisita> {
-    public static final String ID = "visite";
+    public static final String ID = "tipoVisite";
 
     @FXML
     private ListView<TipoVisita> listVisita;

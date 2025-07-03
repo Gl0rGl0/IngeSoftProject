@@ -47,10 +47,6 @@ public class CellController<T extends Informable> {
     
     @FXML
     private void initialize() {
-        
-        deleteButton.setVisible(true);
-        deleteButton.setManaged(true);
-
         textContainer.prefWidthProperty().unbind();
         textContainer.prefWidthProperty().bind(Bindings.multiply(container.widthProperty(), 0.95));
 

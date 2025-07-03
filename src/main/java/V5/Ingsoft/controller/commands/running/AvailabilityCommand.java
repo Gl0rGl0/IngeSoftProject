@@ -64,8 +64,8 @@ public class AvailabilityCommand extends AbstractCommand {
                 }
                 status = v.setAvailability(controller.date, d, toAdd);
                 if(status == Status.ERROR){
-                    feedback.append("OutOfRange").append(d);
-                }else{
+                    feedback.append("OutOfRange").append(d).append("\n");
+                }else if(status == Status.INFO){
                     feedback.append(toAdd ? "Added " : "Removed ")
                     .append(d)
                     .append("\n");
@@ -75,8 +75,16 @@ public class AvailabilityCommand extends AbstractCommand {
             }
         }
         String result = feedback.toString().trim();
-        return Payload.info(
-                result.isEmpty() ? "No changes applied" : result,
-                "Managed availability for " + args.length + " date(s)");
+
+        if(result.isEmpty()){
+            return Payload.info(
+                    "No changes applied",
+                    "Managed availability for " + args.length + " date(s)");
+        }else{
+            System.out.println( Model.getInstance().dbVolontarioHelper.saveDB() );
+            return Payload.info(
+                    result,
+                    "Managed availability for " + args.length + " date(s)");
+        }
     }
 }
