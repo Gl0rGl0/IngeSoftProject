@@ -24,8 +24,13 @@ public class LoginViewController implements Initializable {
 
     @FXML private TextField userTextField;
     @FXML private EnhancedPasswordField pwField;
+    @FXML private EnhancedPasswordField confirmPwField;
     @FXML private Button loginButton;
+    @FXML private Button cancelButton;
+    @FXML private Button registerButton;
     @FXML private Label messageLabel;
+
+    private String defRegister;
 
     /**
      * Metodo chiamato automaticamente dopo l'iniezione degli elementi FXML.
@@ -46,13 +51,27 @@ public class LoginViewController implements Initializable {
         });
 
         pwField.setRight(right);
+
+        fontIcon = new FontIcon();
+        fontIcon.iconCodeProperty().bind(confirmPwField.showPasswordProperty().map(it -> it ? MaterialDesign.MDI_EYE : MaterialDesign.MDI_EYE_OFF));
+
+        StackPane right2 = new StackPane(fontIcon);
+        right2.getStyleClass().add("right-icon-wrapper");
+        right2.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                confirmPwField.setShowPassword(!confirmPwField.isShowPassword());
+            }
+        });
+
+        confirmPwField.setRight(right2);
+
+        defRegister = registerButton.getText();
     }
 
     /**
      * Gestisce il click sul bottone di login.
      */
-    @FXML
-    private void handleLoginAction() {
+    @FXML private void handleLoginAction() {
         if(!Launcher.getInstance().controller.setupCompleted()){
             messageLabel.setText("Se sei un Configuratore, si prega di completare la fase di SETUP da terminale prima di accedere all'applicazione.");
             messageLabel.setVisible(true);
@@ -81,8 +100,94 @@ public class LoginViewController implements Initializable {
             userTextField.clear();
             pwField.clear();
             Launcher.getInstance().setRoot(GenericFrameController.ID);
+            clearAll();
         } else {
-            messageLabel.setVisible(true);
+            Launcher.getInstance().toast(res);
         }
+    }
+
+    @FXML private void handleRegisterAction() {
+        
+        if(registerButton.getText().equals(defRegister)){
+            clearAll();
+            registerButton.setText("Confirm Registration");
+            confirmPwField.setVisible(true);
+            confirmPwField.setManaged(true);
+
+            cancelButton.setVisible(true);
+            cancelButton.setManaged(true);
+
+            loginButton.setVisible(false);
+            loginButton.setManaged(false);
+            return;
+        }
+
+        String username = userTextField.getText();
+        String password = pwField.getText();
+        String confirmPassword = confirmPwField.getText();
+
+        if(username == null || username.isEmpty()){
+            userTextField.getStyleClass().add("error-border");
+            return;
+        }else{
+            userTextField.getStyleClass().remove("error-border");
+        }
+
+        if(password == null || password.isEmpty()){
+            pwField.getStyleClass().add("error-border");
+            return;
+        }else{
+            pwField.getStyleClass().remove("error-border");
+        }
+
+        if(confirmPassword == null || confirmPassword.isEmpty()){
+            confirmPwField.getStyleClass().add("error-border");
+            return;
+        }else{
+            confirmPwField.getStyleClass().remove("error-border");
+        }
+
+        if(confirmPassword != password){
+            Launcher.getInstance().toast(Payload.warn("The password must concide!", "confirmPassword != password"));
+        }
+
+        Payload<?> res = Launcher.getInstance().controller.interpreter(String.format("login %s %s %s", username, password, confirmPassword));
+        if (res != null && res.getStatus() != Status.ERROR) {
+            userTextField.clear();
+            pwField.clear();
+            confirmPwField.clear();
+            Launcher.getInstance().setRoot(GenericFrameController.ID);
+        } else {
+            Launcher.getInstance().toast(res);
+            return;
+        }
+
+        handleCancelAction();
+    }
+
+    @FXML private void handleCancelAction(){
+        clearAll();
+
+        cancelButton.setVisible(false);
+        cancelButton.setManaged(false);
+        
+        confirmPwField.setVisible(false);
+        confirmPwField.setManaged(false);
+
+        loginButton.setVisible(true);
+        loginButton.setManaged(true);
+        
+        registerButton.setText(defRegister);
+    }
+    
+    private void clearAll(){
+        confirmPwField.clear();
+        pwField.clear();
+        userTextField.clear();
+
+        userTextField.getStyleClass().remove("error-border");
+        pwField.getStyleClass().remove("error-border");
+        confirmPwField.getStyleClass().remove("error-border");
+
     }
 }

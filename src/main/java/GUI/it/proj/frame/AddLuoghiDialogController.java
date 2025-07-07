@@ -18,7 +18,7 @@ public class AddLuoghiDialogController {
         this.parentController = controller;
     }
 
-    // Handler per il pulsante Conferma
+    // Handler per il pulsante Confirm
     @FXML
     private void onConfirm() {
         String titoloLuogo = this.titoloLuogo.getText();
@@ -38,7 +38,7 @@ public class AddLuoghiDialogController {
         closeDialog();
     }
 
-    // Handler per il pulsante Annulla
+    // Handler per il pulsante Cancel
     @FXML
     private void onCancel() {
         closeDialog();

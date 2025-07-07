@@ -79,8 +79,8 @@
             </VBox>
             <HBox alignment="CENTER" spacing="15">
                 <children>
-                    <Button fx:id="btnConferma" onAction="#onConfirm" styleClass="person-button" text="Conferma" />
-                    <Button fx:id="btnAnnulla" onAction="#onCancel" style="-fx-text-fill: white;" styleClass="person-button, grey-btn" text="Annulla" />
+                    <Button fx:id="btnConferma" onAction="#onConfirm" styleClass="person-button" text="Confirm" />
+                    <Button fx:id="btnAnnulla" onAction="#onCancel" style="-fx-text-fill: white;" styleClass="person-button, grey-btn" text="Cancel" />
                 </children>
             </HBox>
         </VBox>

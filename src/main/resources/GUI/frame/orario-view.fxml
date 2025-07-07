@@ -52,22 +52,22 @@
         <VBox spacing="50" alignment="CENTER" styleClass="section-box-full"
                    GridPane.columnIndex="1" GridPane.rowIndex="1">
             <HBox spacing="15" alignment="CENTER">
-                <Label text="Disponibilità volontari attuale:" style="-fx-font-size:20px;"/>
-                <Label fx:id="status" text="STATO" styleClass="fill-label"/>
+                <Label text="Current collection availability status:" style="-fx-font-size:20px;"/>
+                <Label fx:id="status" text="STATUS" styleClass="status-label"/>
                 <Region prefWidth="10"/>
-                <Button text="Apri" onAction="#onOpenCollection"
+                <Button text="Open" onAction="#onOpenCollection"
                         styleClass="person-button, green-btn"/>
-                <Button text="Chiudi" onAction="#onCloseCollection"
+                <Button text="Close" onAction="#onCloseCollection"
                         styleClass="person-button, red-btn"/>
             </HBox>
             <HBox spacing="15" alignment="CENTER">
-                <Label text="Ambito Territoriale: " style="-fx-font-size:20px;"/>
+                <Label text="Territorial Field: " style="-fx-font-size:20px;"/>
                 <TextField fx:id="ambitoField" disable="true" style="-fx-font-size:20px;"/>
             </HBox>      
-            <Button text="Componi Orario" onAction="#onMakeOrario"
+            <Button text="Compose Visit Schedule" onAction="#onMakeOrario"
                     styleClass="person-button" style="-fx-font-size:18px;"/>
             <HBox spacing="15" alignment="CENTER">
-                <Label text="Numero massimo di iscrizioni/fruitore: " style="-fx-font-size:18px;"/>
+                <Label text="Max subscribers for each Booking: " style="-fx-font-size:18px;"/>
                 
                 <HBox spacing="10" alignment="CENTER">
                     <IntegerInputField fx:id="numMaxField" prefWidth="50" prefHeight="30" style="-fx-font-size:16px;"/>

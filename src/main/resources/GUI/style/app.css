@@ -186,7 +186,6 @@
 }
 .grey-btn {
   -fx-background-color: derive(#3a3e42, 20%);
-  -fx-text-fill: #333333;
 }
 .grey-btn:hover {
   -fx-background-color: #3a3e42;
@@ -241,6 +240,17 @@
 }
 .modify-button:hover {
   -fx-background-color: #4caf50;
+}
+.status-label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-padding: 5px;
+}
+.red-text {
+  -fx-text-fill: #da0f0f;
+}
+.green-text {
+  -fx-text-fill: #4caf50;
 }
 .overlay {
   -fx-background-color: rgba(0, 0, 0, 0.3);

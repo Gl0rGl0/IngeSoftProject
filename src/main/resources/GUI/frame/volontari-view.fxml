@@ -21,23 +21,25 @@
 
     <!-- List of visits in first column -->
     <VBox spacing="15" styleClass="section-box" GridPane.columnIndex="0" VBox.vgrow="ALWAYS" fillWidth="true">
-        <Label text="Visite a cui sei associato" styleClass="section-title" />
+        <Label text="Visit Type you are assigned to" styleClass="section-title" />
         <ListView fx:id="listTipoVisiteAssign" styleClass="checklist-view" />
     </VBox>
 
     <!-- Calendar section with title -->
-    <VBox GridPane.columnIndex="1" spacing="10" styleClass="section-box" VBox.vgrow="ALWAYS" fillWidth="true">
-        <!-- New title above the calendar -->
-        <Label text="Assegna la tua disponibilità" styleClass="section-title" />
+    <VBox GridPane.columnIndex="1" spacing="10" styleClass="section-box" alignment="CENTER" fillWidth="true">
+        
+        <VBox>
+            <Label text="Register your availability for the next month" styleClass="section-title" />
 
-        <!-- Existing calendar container, now set to grow fully horizontally -->
-        <StackPane fx:id="calendar"
-                   style="-fx-padding: 20;"
-                   VBox.vgrow="ALWAYS"
-                   GridPane.hgrow="ALWAYS"
-                   maxWidth="Infinity"
-                   minWidth="0">
-            <Label text="Calendario" />
-        </StackPane>
+            <!-- Existing calendar container, now set to grow fully horizontally -->
+            <StackPane fx:id="calendar"
+                    style="-fx-padding: 20;"
+                    VBox.vgrow="ALWAYS"
+                    GridPane.hgrow="ALWAYS"
+                    maxWidth="Infinity"
+                    minWidth="0">
+                <Label text="Calendar" />
+            </StackPane>
+        </VBox>
     </VBox>
 </GridPane>

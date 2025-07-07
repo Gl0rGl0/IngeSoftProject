@@ -21,7 +21,7 @@
             <Label text="Luoghi" styleClass="section-title" />
             <ListView fx:id="listLuoghi" styleClass="checklist-view" />
             <Button fx:id="btnAggiungiLuogo"
-                text="+ Aggiungi Luogo"
+                text="+ Add Place"
                 styleClass="person-button"
                 onAction="#onAggiungiLuogoClick" />
         </VBox>

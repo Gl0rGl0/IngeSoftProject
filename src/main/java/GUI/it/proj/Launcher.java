@@ -109,7 +109,7 @@ public class Launcher extends Application {
         HBox ambitoBox = createInputRow("Ambito Territoriale:", ambitoField);
         HBox maxBox = createInputRow("Numero massimo iscrizioni:", maxField);
 
-        Button confirm = new Button("Conferma");
+        Button confirm = new Button("Confirm");
         confirm.setDefaultButton(true);
         confirm.setOnAction(e -> handleSetupConfirmation(ambitoField, maxField, dialog));
 

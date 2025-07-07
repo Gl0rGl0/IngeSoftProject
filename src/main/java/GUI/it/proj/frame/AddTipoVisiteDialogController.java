@@ -90,7 +90,7 @@ public class AddTipoVisiteDialogController {
         this.parentController = controller;
     }
 
-    // Handler per il pulsante Conferma
+    // Handler per il pulsante Confirm
     @FXML
     private void onConfirm() {
         if(edit){
@@ -211,7 +211,7 @@ public class AddTipoVisiteDialogController {
         closeDialog();
     }
 
-    // Handler per il pulsante Annulla
+    // Handler per il pulsante Cancel
     @FXML
     private void onCancel() {
         closeDialog();
@@ -224,7 +224,7 @@ public class AddTipoVisiteDialogController {
     public void setEdit(boolean e, TipoVisita v) {
         if (e) {
             edit = e;
-            titleLabel.setText("   EDIT  VISIT   ");
+            titleLabel.setText("EDIT VISIT TYPE");
 
             disableThings(true);
 
@@ -252,7 +252,7 @@ public class AddTipoVisiteDialogController {
             }
 
         } else {
-            titleLabel.setText("   ADD  VISIT   ");
+            titleLabel.setText("ADD VISIT TYPE");
             disableThings(false);
             
             titoloVisita.clear();

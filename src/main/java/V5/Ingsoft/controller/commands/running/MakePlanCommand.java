@@ -64,6 +64,9 @@ public class MakePlanCommand extends AbstractCommand {
             }
         }
 
+        if(assignedCount > 0)
+            Model.getInstance().dbVisiteHelper.saveDB();
+
         return Payload.info(
                 "Plan created: " + assignedCount + " visits assigned.",
                 "Assigned " + assignedCount + " visits");

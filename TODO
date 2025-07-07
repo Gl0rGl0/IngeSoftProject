@@ -1,2 +1,6 @@
 - Modificare la logica delle iscrizioni in modo da essere centrali tra visita e fruitore. Cosi da avere SOLO una lista di iscrizioni senza che nella visita sia salvato il fruitore e viceversa. Coerenza
 - idem con le assegnazioni, rivedere a chi viene assegnato cosa. NO Luogo <-> TipoVisita ma Luogo <- TipoVisita(Luogo). NO Volontario <-> TipoVisita ma TipoVisita(Volontari) -> Volontario. MIgliore Coerenza e semplicità
+
+
+Cambiare "bottone" in OrarioViewController dello status -> label
+Uniformare italiano-inglese***

@@ -11,7 +11,7 @@
 
     <!-- Contenitore principale con titolo e lista -->
     <VBox spacing="15" styleClass="section-box" VBox.vgrow="ALWAYS">
-        <Label text="Visite disponibili" styleClass="section-title" />
+        <Label text="Available visit" styleClass="section-title" />
         <ListView fx:id="listVisite" styleClass="checklist-view" />
     </VBox>
 

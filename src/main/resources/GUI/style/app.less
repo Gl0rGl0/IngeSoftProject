@@ -417,7 +417,7 @@
 
 .grey-btn {
   -fx-background-color: derive(@color-grey-dark-accent, 20%);
-  .themed-text-fill(@theme);
+  .themed-text-fill(@color-white);
   &:hover {
     -fx-background-color: @color-grey-dark-accent;
   }
@@ -483,6 +483,20 @@
   &:hover {
     -fx-background-color: @color-success-green;
   }
+}
+
+.status-label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-padding: @padding-extra-small;
+}
+
+.red-text {
+  -fx-text-fill: @color-danger-red;
+}
+
+.green-text {
+  -fx-text-fill: @color-success-green;
 }
 
 

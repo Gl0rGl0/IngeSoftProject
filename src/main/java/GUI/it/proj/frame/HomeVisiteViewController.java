@@ -90,7 +90,7 @@ public class HomeVisiteViewController implements ListBase<Visita> {
     }
 
     /**
-     * Nasconde il dialog, invocato dal dialog stesso quando clicchi “Annulla” o “Conferma” con successo.
+     * Nasconde il dialog, invocato dal dialog stesso quando clicchi “Cancel” o “Confirm” con successo.
      */
     public void closeDialog() {
         overlayMask.setVisible(false);

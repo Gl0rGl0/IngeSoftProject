@@ -39,7 +39,7 @@ public class Calendar {
         // Se vuoi un listener immediato, puoi tenerlo; altrimenti saltalo.
         // Qui non registriamo listener immediato, ci limitiamo al bottone.
 
-        Button confirmButton = new Button("Conferma Selezione");
+        Button confirmButton = new Button("Confirm Selection");
         confirmButton.setOnAction(e -> {
             onConfirm.accept(getSelected());
         });

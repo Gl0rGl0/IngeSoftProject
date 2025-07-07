@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 /**
  * Controller del dialog per creare/modificare una Visita.
  * Contiene i campi: titoloVisita, descrizioneVisita, posizione; 
- * e bottoni Conferma/Annulla.
+ * e bottoni Confirm/Cancel.
  */
 public class VisitaIscrizioneDialogController {
 
@@ -66,7 +66,7 @@ public class VisitaIscrizioneDialogController {
     }
 
     /**
-     * Handler per il pulsante "Conferma".
+     * Handler per il pulsante "Confirm".
      * Se visitaCorrente == null -> comando "add"
      * Altrimenti -> comando "update" (ipotizzando che l’interprete supporti 
      * l’update con id o simile).

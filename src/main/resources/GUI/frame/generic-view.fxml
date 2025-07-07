@@ -49,7 +49,7 @@
                 </Button>
 
                 <!-- CONFIGURATORE: MenuButton Database -->
-                <MenuButton fx:id="databaseButton" text="Pannello Configuratore" styleClass="menu-button, btn"
+                <MenuButton fx:id="databaseButton" text="Admin Panel" styleClass="menu-button, btn"
                     visible="false" managed="false">
                     <graphic>
                         <ImageView fitHeight="28" fitWidth="28">
@@ -57,7 +57,7 @@
                         </ImageView>
                     </graphic>
                     <items>
-                        <MenuItem fx:id="luoghiMenuItem" text="Luoghi e Visite"
+                        <MenuItem fx:id="luoghiMenuItem" text="Places and Visit Type"
                             styleClass="menu-item, btn"
                             onAction="#showDBluoghiEvisite">
                             <graphic>
@@ -66,7 +66,7 @@
                                 </ImageView>
                             </graphic>
                         </MenuItem>
-                        <MenuItem fx:id="personeMenuItem" text="Persone" styleClass="menu-item, btn"
+                        <MenuItem fx:id="personeMenuItem" text="People" styleClass="menu-item, btn"
                             onAction="#showDBpersone">
                             <graphic>
                                 <ImageView fitHeight="28" fitWidth="28">
@@ -78,7 +78,7 @@
                 </MenuButton>
 
                 <!-- Bottone OrarioManager (Configuratore) -->
-                <Button fx:id="orarioManagerButton" text="Orario Manager" styleClass="btn, label" onAction="#showOrarioManager">
+                <Button fx:id="orarioManagerButton" text="Monthly Planning &amp; Settings" styleClass="btn, label" onAction="#showOrarioManager">
                     <graphic>
                         <ImageView fitHeight="28" fitWidth="28">
                             <Image url="@../icon/calendar-clock.png" />
@@ -87,7 +87,7 @@
                 </Button>
 
                 <!-- VOLONTARIO: Bottone Visite Lavoro -->
-                <Button fx:id="volontarioButton" text="Area Personale" styleClass="btn"
+                <Button fx:id="volontarioButton" text="Volunteer Dashboard" styleClass="btn"
                     visible="false" managed="false" onAction="#showVolontario">
                     <graphic>
                         <ImageView fitHeight="28" fitWidth="28">
@@ -97,7 +97,7 @@
                 </Button>
 
                 <!-- FRUITORE: Bottone Prenotazioni -->
-                <Button fx:id="prenotazioniButton" text="Prenotazioni" styleClass="btn"
+                <Button fx:id="prenotazioniButton" text="My Bookings" styleClass="btn"
                     visible="false" managed="false" onAction="#showFruitore">
                     <graphic>
                         <ImageView fitHeight="28" fitWidth="28">

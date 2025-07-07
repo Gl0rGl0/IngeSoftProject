@@ -20,35 +20,35 @@
            fx:controller="GUI.it.proj.frame.AddTipoVisiteDialogController">
     <Group>
         <VBox spacing="10" alignment="CENTER" styleClass="section-box-full">
-            <Label fx:id="titleLabel" text="AGGIUNGI VISITA" style="-fx-font-size: 20px;" prefWidth="400"/>
+            <Label fx:id="titleLabel" text="ADD VISIT TYPE" style="-fx-font-size: 20px;" prefWidth="400"/>
 
             <VBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="titoloVisita" promptText="Titolo visita" />
-                <TextArea fx:id="descrizioneVisita" promptText="Descrizione" prefHeight="100" wrapText="true"/>
-                <TextField fx:id="posizione" promptText="Luogo" />
+                <TextField fx:id="titoloVisita" promptText="Type Visit Title" />
+                <TextArea fx:id="descrizioneVisita" promptText="Description" prefHeight="100" wrapText="true"/>
+                <TextField fx:id="posizione" promptText="Position" />
                 <HBox spacing="15" alignment="CENTER">
                     <HBox>
                         <Label text="From: "/>
-                        <DatePicker fx:id="inizioGiornoPeriodo" promptText="Periodo Inizio" />
+                        <DatePicker fx:id="inizioGiornoPeriodo" promptText="Starting Date" />
                     </HBox>
                     <HBox>
                         <Label text="To: "/>
-                        <DatePicker fx:id="fineGiornoPeriodo" promptText="Periodo Fine" />
+                        <DatePicker fx:id="fineGiornoPeriodo" promptText="Ending Date" />
                     </HBox>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
                     <HBox>
                         <Label text="Init time: "/>
-                        <TimePicker fx:id="oraInizio" promptText="Ora Inizio (HH:mm)" />
+                        <TimePicker fx:id="oraInizio" promptText="(HH:mm)" />
                     </HBox>
 
                     <HBox>
                         <Label text="Duration: "/>
-                        <IntegerInputField fx:id="durata" promptText="Durata (min)" prefWidth="50"/>
+                        <IntegerInputField fx:id="durata" promptText="Duration (min)" prefWidth="50"/>
                     </HBox>
 
                     <HBox>
-                        <Label text="Ticket: "/>
+                        <Label text="Free: "/>
                         <CheckBox fx:id="gratuito" />
                     </HBox>
                     
@@ -56,31 +56,31 @@
                 <HBox spacing="15" alignment="CENTER">
                     <HBox>
                         <Label text="MinPartecipants: "/>
-                        <IntegerInputField fx:id="numeroMinimoPartecipanti" promptText="Min Partecipanti" />
+                        <IntegerInputField fx:id="numeroMinimoPartecipanti" promptText="Min subscribers" />
                     </HBox>
                     <HBox>
                         <Label text="MaxPartecipants: "/>
-                        <IntegerInputField fx:id="numeroMassimoPartecipanti" promptText="Max Partecipanti" />
+                        <IntegerInputField fx:id="numeroMassimoPartecipanti" promptText="Max subscribers" />
                     </HBox>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
-                    <Label text="Giorni: "/>
+                    <Label text="Days: "/>
                     <CheckComboBox fx:id="giorni" styleClass="check-box"/>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
-                    <Label text="Volontari: "/>
-                    <CheckComboBox fx:id="volontariCheckBox" />
+                    <Label text="Volunteer: "/>
+                    <CheckComboBox fx:id="volontariCheckBox"/>
                 </HBox>
                 <HBox spacing="15" alignment="CENTER">
-                    <Label text="Luogo: "/>
-                    <ComboBox fx:id="placeComboBox" promptText="Seleziona Luogo" />
+                    <Label text="Place: "/>
+                    <ComboBox fx:id="placeComboBox" promptText="Select Place" />
                 </HBox>
                 <Label fx:id="errorLabel" text="" style="-fx-text-fill: red;" />
             </VBox>
 
             <HBox spacing="15" alignment="CENTER">
-                <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;" />
+                <Button text="Confirm" onAction="#onConfirm" styleClass="person-button" />
+                <Button text="Cancel" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;" />
             </HBox>
         </VBox>
     </Group>

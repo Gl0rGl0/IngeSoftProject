@@ -55,13 +55,13 @@ public class OrarioViewController implements Calendarable{
 
     private void setupStatusLabel() {
         if (actual_status_isOpen) {
-            status.getStyleClass().remove("error-label");
-            status.getStyleClass().add("success-label");
-            status.setText("APERTO");
+            status.getStyleClass().remove("red-text");
+            status.getStyleClass().add("green-text");
+            status.setText("OPEN");
         } else {
-            status.getStyleClass().remove("success-label");
-            status.getStyleClass().add("error-label");
-            status.setText("CHIUSO");
+            status.getStyleClass().remove("green-text");
+            status.getStyleClass().add("red-text");
+            status.setText("CLOSED");
         }
     }
 
@@ -81,7 +81,7 @@ public class OrarioViewController implements Calendarable{
             String monthName = yM.getDisplayName(
                 java.time.format.TextStyle.FULL,
                 java.util.Locale.getDefault()
-            ).toUpperCase() + " " + controllerDate.getYear();
+            ) + " " + controllerDate.getYear();
             Label lblMonth = new Label(monthName);
             lblMonth.setPrefWidth(140);
             header.getChildren().add(lblMonth);
@@ -132,9 +132,9 @@ public class OrarioViewController implements Calendarable{
         }
         
         actual_status_isOpen = true;
-        status.getStyleClass().remove("error-label");
-        status.getStyleClass().add("success-label");
-        status.setText("APERTO");
+        status.getStyleClass().remove("red-text");
+        status.getStyleClass().add("green-text");
+        status.setText("OPEN");
     }
 
     @FXML private void onCloseCollection() {
@@ -147,9 +147,9 @@ public class OrarioViewController implements Calendarable{
         }
         
         actual_status_isOpen = false;
-        status.getStyleClass().remove("success-label");
-        status.getStyleClass().add("error-label");
-        status.setText("CHIUSO");
+        status.getStyleClass().remove("green-text");
+        status.getStyleClass().add("red-text");
+        status.setText("CLOSED");
     }
 
     @FXML private void onMakeOrario() {

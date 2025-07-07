@@ -29,7 +29,7 @@
                 <Label text="Configuratori" styleClass="section-title" />
                 <ListView fx:id="listConfiguratori" styleClass="checklist-view" />
                 <Button fx:id="btnAggiungiConfiguratore"
-                    text="+ Aggiungi Configuratore"
+                    text="+ Add Configurator"
                     styleClass="person-button"
                     onAction="#onAggiungiConfiguratoreClick" />
             </VBox>
@@ -45,7 +45,7 @@
                 <Label text="Volontari" styleClass="section-title" />
                 <ListView fx:id="listVolontari" styleClass="checklist-view" />
                 <Button fx:id="btnAggiungiVolontario"
-                    text="+ Aggiungi Volontario"
+                    text="+ Add Volunteer"
                     styleClass="person-button"
                     onAction="#onAggiungiVolontarioClick" />
             </VBox>

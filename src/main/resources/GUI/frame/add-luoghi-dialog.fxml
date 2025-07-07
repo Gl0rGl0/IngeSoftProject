@@ -19,14 +19,14 @@
         <VBox spacing="10" alignment="CENTER" styleClass="section-box-full">
             <Label fx:id="titleLabel" text="AGGIUNGI LUOGO" style="-fx-font-size: 20px" />
             <VBox spacing="10" alignment="CENTER" style="-fx-padding: 0 10 0 10;">
-                <TextField fx:id="titoloLuogo" promptText="Titolo" />
-                <TextArea fx:id="descrizioneLuogo" promptText="Descrizione" prefHeight="100" wrapText="true" />
-                <TextField fx:id="posizione" promptText="Posizione"/>
+                <TextField fx:id="titoloLuogo" promptText="Title" />
+                <TextArea fx:id="descrizioneLuogo" promptText="Description" prefHeight="100" wrapText="true" />
+                <TextField fx:id="posizione" promptText="Location"/>
                 <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
             </VBox>
             <HBox spacing="15" alignment="CENTER">
-                <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;" />
+                <Button text="Confirm" onAction="#onConfirm" styleClass="person-button" />
+                <Button text="Cancel" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;" />
             </HBox>
         </VBox>
     </Group>

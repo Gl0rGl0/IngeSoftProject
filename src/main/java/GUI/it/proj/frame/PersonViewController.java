@@ -98,11 +98,13 @@ public class PersonViewController implements ListDeleter<Persona> {
     }
 
     private void showAddPersonDialog(PersonaType role) {
-        try {
-            addPersonDialog = loaderPerson.load();
-        } catch (IOException e) {
-            return;
-        }
+        // try {
+        //     addPersonDialog = null;
+        //     addPersonDialog = loaderPerson.load();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     return;
+        // }
         
         addPersonDialogController.setRole(role);
         overlayMask.setVisible(true);
@@ -115,6 +117,8 @@ public class PersonViewController implements ListDeleter<Persona> {
         overlayMask.setVisible(false);
         dialog.getChildren().clear();
         dialog.setVisible(false);
+
+        addPersonDialogController.clear();
     }
 
     @Override

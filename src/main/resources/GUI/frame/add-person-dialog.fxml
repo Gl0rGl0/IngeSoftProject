@@ -24,8 +24,8 @@
                 <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 12px;" />
             </VBox>
             <HBox spacing="15" alignment="CENTER">
-                <Button text="Conferma" onAction="#onConfirm" styleClass="person-button" />
-                <Button text="Annulla" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;"/>
+                <Button text="Confirm" onAction="#onConfirm" styleClass="person-button" />
+                <Button text="Cancel" onAction="#onCancel" styleClass="person-button, grey-btn" style="-fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </Group>

@@ -31,7 +31,7 @@ public class AddPersonDialogController {
         this.parentController = controller;
     }
 
-    // Handler per il pulsante Conferma
+    // Handler per il pulsante Confirm
     @FXML
     private void onConfirm() {
         String username = txtUsername.getText();
@@ -65,7 +65,7 @@ public class AddPersonDialogController {
         closeDialog();
     }
 
-    // Handler per il pulsante Annulla
+    // Handler per il pulsante Cancel
     @FXML
     private void onCancel() {
         closeDialog();
@@ -73,5 +73,10 @@ public class AddPersonDialogController {
 
     private void closeDialog() {
         parentController.closeDialog();
+    }
+
+    public void clear() {
+        txtUsername.clear();
+        txtPassword.clear();
     }
 }
