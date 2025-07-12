@@ -123,7 +123,7 @@ public class ConstString {
                         [-e]  List of Performed visits (past)
             """;
 
-    public static final String LIST_LINE_INFO = "Displays the desired list";
+    public static final String LIST_LINE_INFO = "Displays the requested list based on the chosen flags";
 
     public static final String PRECLUDE_INFO = """
             preclude [-a | -r ] [Date: toManage]
@@ -142,13 +142,13 @@ public class ConstString {
 
     public static final String VISIT_INFO = """
             visit [[-a] [-r]] [String: username_Fruitore] [String: visit_title] [Date: visit_date]
-                [-a]                Adds a fruitore (visitor/user) to the selected visit
-                [-r]                Removes a fruitore from the selected visit
+                [-a]                Register to the selected visit
+                [-r]                Removes from the selected visit
                 username_Fruitore   Username of the fruitore to add/remove
                 visit_title         Title of the visit to operate on
                 visit_date          Date of the visit to operate on
             """;
-    public static final String VISIT_LINE_INFO = "Register a fruitore (visitor/user) for a visit";
+    public static final String VISIT_LINE_INFO = "Register for a visit";
 
     public static final String MYVISIT_INFO = """
             myvisit

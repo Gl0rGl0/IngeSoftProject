@@ -63,7 +63,7 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER_RIGHT" spacing="15">
                             <children>
-                                <Label text="Current Subscription:" />
+                                <Label text="Current Registrations:" />
                                 <Label fx:id="currentSub" text="num" />
                             </children>
                         </HBox>
@@ -71,7 +71,7 @@
                     </HBox>
                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Label prefHeight="20.0" prefWidth="178.0" text="Number of subscriber:" />
+                        <Label prefHeight="20.0" prefWidth="178.0" text="Number of partecipants:" />
                         <IntegerInputField fx:id="numSub" prefHeight="25.0" prefWidth="81.0" />
                     </children>
                     </HBox>

@@ -23,23 +23,21 @@ import V5.Ingsoft.view.ViewSE;
 public class Main {
     public static void main(String[] args) throws Exception {
         AssertionControl.logMessage("INITED WITH: " + Arrays.toString(args), Status.DEBUG, "main");
-        ViewSE view;
+        ViewSE view = new ViewSE();
 
-        args = new String[]{"-d"};
+        // args = new String[]{"-d"};
 
-        if(args.length > 0 && args[0] != null && args[0].matches("[a-zA-Z]+")){
-            view = new ViewSE(args[0]);
-        }else{
-            view = new ViewSE();
-        }
+        // if(args.length > 0 && args[0] != null && args[0].matches("[a-zA-Z]+")){
+        //     view = new ViewSE(args[0]);
+        // }
 
         Controller c = view.controller;
 
-        if (args.length > 0 && args[0] != null){
-            for(String a : args)
-                if(a.equals("-d"))
-                    initDimostrazione(c);
-        }
+        // if (args.length > 0 && args[0] != null){
+        //     for(String a : args)
+        //         if(a.equals("-d"))
+        //             initDimostrazione(c);
+        // }
 
         view.run();
     }

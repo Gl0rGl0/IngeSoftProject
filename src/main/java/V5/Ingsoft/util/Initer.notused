@@ -161,7 +161,7 @@ public class Initer {
 
         controller.interpreter("logout");
 
-        controller.interpreter("login fruit1 pass1F pass1F");
+        controller.interpreter("login fruitore password password");
         controller.interpreter("logout");
         controller.interpreter("login fruit2 pass2F pass2F");
         controller.interpreter("logout");

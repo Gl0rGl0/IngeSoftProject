@@ -15,7 +15,7 @@ public class UserSeeder implements Seedable{
             c.interpreter(String.format("add -v volont%d pass%dV", i, i));
 
         c.interpreter("logout");
-        c.interpreter("login fruit1 pass1F pass1F");
+        c.interpreter("login fruitore password password");
         c.interpreter("logout");
         c.interpreter("login fruit2 pass2F pass2F");
         c.interpreter("logout");

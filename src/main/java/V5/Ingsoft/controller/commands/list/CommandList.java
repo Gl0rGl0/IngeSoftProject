@@ -19,10 +19,6 @@ public enum CommandList implements ListInterface {
             PersonaType.GUEST.getPriority(),
             PersonaType.GUEST.getPriority()),
 
-    LOGOUT(ConstString.LOGOUT_INFO, ConstString.LOGOUT_LINE_INFO,
-            PersonaType.CAMBIOPSW.getPriority(),
-            PersonaType.MAX.getPriority()),
-
     CHANGEPSW(ConstString.CHANGEPSW_INFO, ConstString.CHANGEPSW_LINE_INFO,
             PersonaType.CAMBIOPSW.getPriority(),
             PersonaType.MAX.getPriority()),
@@ -30,6 +26,10 @@ public enum CommandList implements ListInterface {
     TIME(ConstString.TIME_INFO, ConstString.TIME_LINE_INFO,
             PersonaType.GUEST.getPriority(),
             PersonaType.MAX.getPriority()),
+
+    VISIT(ConstString.VISIT_INFO, ConstString.VISIT_LINE_INFO,
+            PersonaType.FRUITORE.getPriority(),
+            PersonaType.FRUITORE.getPriority()),
 
     ASSIGN(ConstString.ASSIGN_INFO, ConstString.ASSIGN_LINE_INFO,
             PersonaType.CONFIGURATORE.getPriority(),
@@ -63,9 +63,9 @@ public enum CommandList implements ListInterface {
             PersonaType.CONFIGURATORE.getPriority(),
             PersonaType.CONFIGURATORE.getPriority()),
 
-    VISIT(ConstString.VISIT_INFO, ConstString.VISIT_LINE_INFO,
-            PersonaType.FRUITORE.getPriority(),
-            PersonaType.FRUITORE.getPriority()),
+    LOGOUT(ConstString.LOGOUT_INFO, ConstString.LOGOUT_LINE_INFO,
+            PersonaType.CAMBIOPSW.getPriority(),
+            PersonaType.MAX.getPriority()),
 
     EXIT(ConstString.EXIT_INFO, ConstString.EXIT_LINE_INFO,
             PersonaType.GUEST.getPriority(),
@@ -92,7 +92,10 @@ public enum CommandList implements ListInterface {
         StringBuilder out = new StringBuilder();
         for (CommandList element : CommandList.values()) {
             if (element.canBeExecutedBy(userPriority)) {
-                out.append(element.name()).append(" ").append(element.lineInfo).append("\n");
+                out.append(element.name());
+                if(element.name().length() > 8)
+                        out.append("\t").append(element.lineInfo).append("\n");
+                else  out.append("\t\t").append(element.lineInfo).append("\n");
             }
         }
         return out.substring(0, out.length() - 2); // removes the last "\n"

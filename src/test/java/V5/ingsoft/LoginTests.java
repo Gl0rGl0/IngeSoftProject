@@ -279,7 +279,7 @@ public class LoginTests extends BaseTest {
         controller.interpreter("logout"); // Logout admin first
 
         // Assert: Check if fruitore exists by trying to log in
-        controller.interpreter("login fruit1 pass1F pass1F");
+        controller.interpreter("login fruitore password password");
         assertNotNull(controller.getCurrentUser(), "Fruitore should be able to login after registration.");
         assertEquals(PersonaType.FRUITORE, controller.getCurrentUser().getType(), "User should be of type FRUITORE.");
     }
@@ -309,7 +309,7 @@ public class LoginTests extends BaseTest {
         controller.interpreter("logout"); // Logout admin
 
         // Act
-        controller.interpreter("login fruit1 pass1F pass1F");
+        controller.interpreter("login fruitore password password");
 
         // Assert
         assertNotNull(controller.getCurrentUser(), "User should be logged in.");
