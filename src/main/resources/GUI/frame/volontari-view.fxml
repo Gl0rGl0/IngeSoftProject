@@ -21,7 +21,7 @@
 
     <!-- List of visits in first column -->
     <VBox spacing="15" styleClass="section-box" GridPane.columnIndex="0" VBox.vgrow="ALWAYS" fillWidth="true">
-        <Label text="Visit Type you are assigned to" styleClass="section-title" />
+        <Label text="Tour Types you are assigned to" styleClass="section-title" />
         <ListView fx:id="listTipoVisiteAssign" styleClass="checklist-view" />
     </VBox>
 

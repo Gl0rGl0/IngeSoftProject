@@ -12,8 +12,8 @@ public class TypeVisitSeeder implements Seedable{
     public void seed(Controller c) {
         List<String[]> visitTypes = new ArrayList<>();
 
-        visitTypes.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/25", "15/06/25", "08:30", "120", "true", "5", "20", "LuMa"});
-        visitTypes.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/06/25", "20/06/25", "09:00", "90", "false", "6", "18", "MeGi"});
+        visitTypes.add(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/25", "15/06/25", "08:30", "120", "true", "5", "20", "LuMa"});
+        visitTypes.add(new String[]{"Avventura sul fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/06/25", "20/06/25", "09:00", "90", "false", "6", "18", "MeGi"});
         visitTypes.add(new String[]{"Esplorazione Montagna", "Scopri le vette e i panorami mozzafiato.", "34.56:78.90", "10/06/25", "25/06/25", "07:45", "150", "true", "8", "25", "VeSa"});
         visitTypes.add(new String[]{"Scoperta del Bosco", "Percorso guidato attraverso un bosco secolare.", "45.67:89.01", "12/06/25", "27/06/25", "10:15", "110", "false", "4", "15", "DoLu"});
         visitTypes.add(new String[]{"Giro dei Laghi", "Visita ai laghi più suggestivi della zona.", "56.78:90.12", "15/06/25", "30/06/25", "08:00", "100", "true", "7", "22", "MaMe"});

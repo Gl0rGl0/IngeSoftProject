@@ -43,18 +43,18 @@ public class Initer {
         controller.interpreter("add -v volTest2 v2Test");
 
         List<String[]> visite = new ArrayList<>();
-        visite.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/25", "15/12/25", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
-        visite.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/25", "20/12/25", "18:00", "90", "false", "6", "18", "MeGi"});
+        visite.add(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/25", "15/12/25", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
+        visite.add(new String[]{"Avventura sul fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/25", "20/12/25", "18:00", "90", "false", "6", "18", "MeGi"});
         visite.forEach(v -> controller.interpreter("add -T " + StringUtils.arrayToStringClean(v)));
     
-        controller.interpreter("add -L \"Foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
+        controller.interpreter("add -L \"foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
     
-        controller.interpreter("assign -L \"Foresta Incantata\" \"Tour della Foresta\"");
-        controller.interpreter("assign -L \"Foresta Incantata\" \"Avventura sul Fiume\"");
+        controller.interpreter("assign -L \"foresta Incantata\" \"Tour della foresta\"");
+        controller.interpreter("assign -L \"foresta Incantata\" \"Avventura sul fiume\"");
 
-        controller.interpreter("assign -V \"Tour della Foresta\" visitaUniverstaria");
-        controller.interpreter("assign -V \"Avventura sul Fiume\" visitaUniverstaria");
-        controller.interpreter("assign -V \"Avventura sul Fiume\" volTest2");
+        controller.interpreter("assign -V \"Tour della foresta\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul fiume\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul fiume\" volTest2");
         
         controller.interpreter("time -m 2");
 

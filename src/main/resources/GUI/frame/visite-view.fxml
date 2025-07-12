@@ -21,7 +21,7 @@
             <Label text="Visite" styleClass="section-title" />
             <ListView fx:id="listVisita" styleClass="checklist-view" />
             <Button fx:id="btnAggiungiVisita"
-                text="+ Add Visit Type"
+                text="+ Add Tour Types"
                 styleClass="person-button"
                 onAction="#onAggiungiVisitaClick" />
         </VBox>

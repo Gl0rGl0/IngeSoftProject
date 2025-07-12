@@ -19,7 +19,7 @@ public class VisitaTest {
     private TipoVisita tv;
     
     public VisitaTest() throws Exception{
-        tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         Model.getInstance().dbTipoVisiteHelper.addItem(tv);
     }
 

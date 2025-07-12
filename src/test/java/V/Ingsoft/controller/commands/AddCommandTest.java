@@ -95,20 +95,20 @@ public class AddCommandTest extends DefaultTest{
 
     @Test
     void addTipoVisita(){
-        c.interpreter("add -T \"Tour della Foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
-        TipoVisita tv = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("Tour della Foresta");
+        c.interpreter("add -T \"Tour della foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
+        TipoVisita tv = Model.getInstance().dbTipoVisiteHelper.findTipoVisita("Tour della foresta");
         assertNotNull(tv);
     }
 
     @Test
     void addFailTipoVisita(){
-       o = c.interpreter("add -T \"Tour della Foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20");
+       o = c.interpreter("add -T \"Tour della foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20");
         assertEquals(Status.WARN, o.getStatus());
         assertEquals("Insufficient args for add -T", o.getLogMessage());
 
-        c.interpreter("add -T \"Tour della Foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
-        o = c.interpreter("add -T \"Tour della Foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
+        c.interpreter("add -T \"Tour della foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
+        o = c.interpreter("add -T \"Tour della foresta\" \"Esplora i sentieri nascosti della foresta.\" 12.34:56.78 01/06/2025 15/06/2025 08:30 120 true 5 20 LuMa");
         assertEquals(Status.WARN, o.getStatus());
-        assertEquals("Failed to add TipoVisita: Tour della Foresta", o.getLogMessage());
+        assertEquals("Failed to add TipoVisita: Tour della foresta", o.getLogMessage());
     }
 }

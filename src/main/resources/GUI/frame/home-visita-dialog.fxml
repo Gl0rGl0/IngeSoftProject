@@ -20,7 +20,7 @@
               maxWidth="600" maxHeight="400"
               styleClass="section-box-full"
               style="-fx-padding: 20px">
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px;" text="BOOK VISIT" textAlignment="CENTER" />
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10px;" text="BOOK A TOUR" textAlignment="CENTER" />
             <VBox alignment="CENTER" prefWidth="400" spacing="20">
                 <children>
                     <HBox alignment="CENTER" spacing="10">

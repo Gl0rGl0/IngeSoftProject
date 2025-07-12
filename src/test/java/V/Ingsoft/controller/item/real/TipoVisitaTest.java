@@ -14,7 +14,7 @@ import V5.Ingsoft.util.Date;
 public class TipoVisitaTest {
     @Test
     void successTipoVisita() throws Exception{
-        TipoVisita tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        TipoVisita tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         assertNotNull(tv);
     }
 
@@ -35,73 +35,73 @@ public class TipoVisitaTest {
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Visit description can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Visit position can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Initial day is empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Last day can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Starting time can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Duration can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Cost is empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Minumum number of partecipants can't be empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Maximum number of partecipants day is empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", ""}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", ""}, new Date());
         } catch (Exception e) {
             assertEquals("Day of visit is empty", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01-06-2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01-06-2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertEquals("Error in TipoVisita constructor while parsing: Error in parsing Date.", e.getMessage());
         }
 
         try {
-            tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "a", "true", "5", "20", "LuMa"}, new Date());
+            tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "a", "true", "5", "20", "LuMa"}, new Date());
         } catch (Exception e) {
             assertTrue(e != null);
         }
@@ -111,17 +111,17 @@ public class TipoVisitaTest {
 
     @Test
     void overlapTest() throws Exception{
-        TipoVisita tv1 = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
-        TipoVisita tv2 = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        TipoVisita tv1 = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        TipoVisita tv2 = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         assertTrue(tv1.overlaps(tv2));
 
-        tv2 = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "18:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        tv2 = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "18:30", "120", "true", "5", "20", "LuMa"}, new Date());
         assertFalse(tv1.overlaps(tv2));
     }
 
     @Test
     void volontariList() throws Exception{
-        TipoVisita tv = new TipoVisita(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
+        TipoVisita tv = new TipoVisita(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"}, new Date());
         assertTrue(tv.getVolontariUIDs().isEmpty());
         
         tv.addVolontario("prova");

@@ -45,14 +45,14 @@
 
         <VBox spacing="20" alignment="CENTER" styleClass="section-box-full"
               GridPane.columnIndex="0" GridPane.rowIndex="1">
-            <Label>Precluded dates:</Label>
+            <Label>Precluded dates</Label>
             <StackPane fx:id="calendar"/>
         </VBox>
 
         <VBox spacing="50" alignment="CENTER" styleClass="section-box-full"
                    GridPane.columnIndex="1" GridPane.rowIndex="1">
             <HBox spacing="15" alignment="CENTER">
-                <Label text="Current collection availability status:" style="-fx-font-size:20px;"/>
+                <Label text="Current Availability Recording:" style="-fx-font-size:20px;"/>
                 <Label fx:id="status" text="STATUS" styleClass="status-label"/>
                 <Region prefWidth="10"/>
                 <Button text="Open" onAction="#onOpenCollection"
@@ -64,7 +64,7 @@
                 <Label text="Territorial Field: " style="-fx-font-size:20px;"/>
                 <TextField fx:id="ambitoField" disable="true" style="-fx-font-size:20px;"/>
             </HBox>      
-            <Button text="Compose Visit Schedule" onAction="#onMakeOrario"
+            <Button text="Create Monthly Schedule" onAction="#onMakeOrario"
                     styleClass="person-button" style="-fx-font-size:18px;"/>
             <HBox spacing="15" alignment="CENTER">
                 <Label text="Max subscribers for each Booking: " style="-fx-font-size:18px;"/>

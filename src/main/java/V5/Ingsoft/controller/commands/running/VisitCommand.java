@@ -110,8 +110,8 @@ public class VisitCommand extends AbstractCommand {
         } catch (Exception e) {
             // Comportamento identico all'originale: in caso di eccezione, restituire comunque payload di successo
             return Payload.error(
-                "Registration successful! Your booking code is",
-                "Booking successful in VisitCommand" );
+                "Registration error, try later",
+                "Booking error in VisitCommand" );
         }
 
         Result result = v.addPartecipants(iscrizione);
@@ -139,7 +139,7 @@ public class VisitCommand extends AbstractCommand {
             m.dbFruitoreHelper.saveDB();
             this.hasBeenExecuted = true;
             return Payload.info(
-                "Registration successful! Your booking code is: " + i.getUID(),
+                "Registration successful! Your booking code is " + i.getUID(),
                 "Booking successful in VisitCommand" );
     }
 

@@ -57,7 +57,7 @@
                         </ImageView>
                     </graphic>
                     <items>
-                        <MenuItem fx:id="luoghiMenuItem" text="Places and Visit Type"
+                        <MenuItem fx:id="luoghiMenuItem" text="Places and Tour Types"
                             styleClass="menu-item, btn"
                             onAction="#showDBluoghiEvisite">
                             <graphic>

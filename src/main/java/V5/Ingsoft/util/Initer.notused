@@ -28,8 +28,8 @@ public class Initer {
         List<String[]> visite = new ArrayList<>();
         List<String[]> luoghi = new ArrayList<>();
 
-        visite.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"});
-        visite.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/06/2025", "20/06/2025", "09:00", "90", "false", "6", "18", "MeGi"});
+        visite.add(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/06/2025", "15/06/2025", "08:30", "120", "true", "5", "20", "LuMa"});
+        visite.add(new String[]{"Avventura sul fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/06/2025", "20/06/2025", "09:00", "90", "false", "6", "18", "MeGi"});
         visite.add(new String[]{"Esplorazione Montagna", "Scopri le vette e i panorami mozzafiato.", "34.56:78.90", "10/06/2025", "2025/06/2025", "07:45", "150", "true", "8", "25", "VeSa"});
         visite.add(new String[]{"Scoperta del Bosco", "Percorso guidato attraverso un bosco secolare.", "45.67:89.01", "12/06/2025", "27/06/2025", "10:15", "110", "false", "4", "15", "DoLu"});
         visite.add(new String[]{"Giro dei Laghi", "Visita ai laghi più suggestivi della zona.", "56.78:90.12", "15/06/2025", "30/06/2025", "08:00", "100", "true", "7", "22", "MaMe"});
@@ -52,7 +52,7 @@ public class Initer {
         luoghi.add(new String[]{"Parco delle Meraviglie", "Un parco straordinario con natura rigogliosa e sentieri pittoreschi.", "45.12:10.34"});
         luoghi.add(new String[]{"Riserva Naturale Aurora", "Un'area protetta dove la natura si risveglia con colori unici.", "46.23:11.45"});
         luoghi.add(new String[]{"Lago di Serenita", "Un lago tranquillo che incanta per la sua bellezza e calma.", "44.56:9.87"});
-        luoghi.add(new String[]{"Foresta Incantata", "Una fitta foresta ricca di miti e leggende antiche.", "47.89:12.34"});
+        luoghi.add(new String[]{"foresta Incantata", "Una fitta foresta ricca di miti e leggende antiche.", "47.89:12.34"});
         luoghi.add(new String[]{"Monti del Silenzio", "Montagne maestose dove la quiete e la bellezza si fondono.", "48.01:13.45"});
         luoghi.add(new String[]{"Deserto dei Sogni", "Un paesaggio surreale tra dune e oasi nascoste.", "33.33:44.44"});
         luoghi.add(new String[]{"Vulcani d'Argento", "Un territorio affascinante dominato da antichi vulcani.", "50.55:14.22"});
@@ -132,18 +132,18 @@ public class Initer {
         controller.interpreter("add -v volTest2 v2Test");
 
         List<String[]> visite = new ArrayList<>();
-        visite.add(new String[]{"Tour della Foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/2025", "15/12/2025", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
-        visite.add(new String[]{"Avventura sul Fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/2025", "20/12/2025", "18:00", "90", "false", "6", "18", "MeGi"});
+        visite.add(new String[]{"Tour della foresta", "Esplora i sentieri nascosti della foresta.", "12.34:56.78", "01/01/2025", "15/12/2025", "08:30", "120", "true", "5", "20", "LuMaMeVe"});
+        visite.add(new String[]{"Avventura sul fiume", "Un emozionante percorso lungo il fiume in piena natura.", "23.45:67.89", "05/01/2025", "20/12/2025", "18:00", "90", "false", "6", "18", "MeGi"});
         visite.forEach(v -> controller.interpreter("add -T " + StringUtils.arrayToStringClean(v)));
 
-        controller.interpreter("add -L \"Foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
+        controller.interpreter("add -L \"foresta Incantata\" \"Una fitta foresta ricca di miti e leggende antiche.\" 47.89:12.34");
 
-        controller.interpreter("assign -L \"Foresta Incantata\" \"Tour della Foresta\"");
-        controller.interpreter("assign -L \"Foresta Incantata\" \"Avventura sul Fiume\"");
+        controller.interpreter("assign -L \"foresta Incantata\" \"Tour della foresta\"");
+        controller.interpreter("assign -L \"foresta Incantata\" \"Avventura sul fiume\"");
 
-        controller.interpreter("assign -V \"Tour della Foresta\" visitaUniverstaria");
-        controller.interpreter("assign -V \"Avventura sul Fiume\" visitaUniverstaria");
-        controller.interpreter("assign -V \"Avventura sul Fiume\" volTest2");
+        controller.interpreter("assign -V \"Tour della foresta\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul fiume\" visitaUniverstaria");
+        controller.interpreter("assign -V \"Avventura sul fiume\" volTest2");
 
         controller.interpreter("time -m 2");
         initAvailability(controller);
